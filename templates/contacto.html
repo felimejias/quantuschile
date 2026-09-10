@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto Oficial | Quantus Chile SpA</title>
+  <meta name="description" content="Canales oficiales de atención, contacto comercial y soporte corporativo de Quantus Chile SpA.">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .contact-container {
+      max-width: 900px;
+      margin: 48px auto;
+      padding: 0 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .contact-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .contact-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .contact-box h3 {
+      font-size: 17px;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .contact-box p {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .contact-box a {
+      color: #0284c7;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .contact-box a:hover {
+      text-decoration: underline;
+    }
+    .corp-data {
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 32px;
+      font-size: 13.5px;
+      color: #475569;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body style="background:#f8fafc; margin:0;">
+  {% include "partials/nav_header.html" %}
+
+  <main class="contact-container">
+    <div class="contact-card">
+      <span style="background:rgba(2,132,199,0.1); color:#0284c7; font-size:12px; font-weight:800; padding:4px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px;">Atención y Soporte</span>
+      <h1 style="font-size:32px; font-weight:800; color:#0f172a; margin:12px 0 16px 0;">Contáctate con Quantus Chile</h1>
+      <p style="font-size:16px; color:#64748b; line-height:1.6; margin:0;">
+        Estamos a tu disposición para resolver dudas comerciales, soporte de radares normativos, integración de sistemas y ejercicio de derechos de privacidad.
+      </p>
+
+      <div class="contact-grid">
+        <div class="contact-box">
+          <h3>📬 Soporte y Ventas</h3>
+          <p>Para consultas comerciales, cotizaciones del Plan Empresa o asistencia en tu suscripción activa:</p>
+          <p style="margin-top:12px;"><a href="mailto:contacto@quantuschile.cl">contacto@quantuschile.cl</a></p>
+        </div>
+
+        <div class="contact-box">
+          <h3>⚖️ Privacidad y Derechos ARCOP</h3>
+          <p>Para solicitudes de la Ley N° 21.719 (Acceso, Rectificación, Supresión, Portabilidad):</p>
+          <p style="margin-top:12px;"><a href="mailto:privacidad@quantuschile.cl">privacidad@quantuschile.cl</a></p>
+          <p style="margin-top:6px; font-size:12px;"><a href="/privacidad/derechos-arcop">Ir al Portal ARCOP →</a></p>
+        </div>
+
+        <div class="contact-box">
+          <h3>🏢 Oficina y Operaciones</h3>
+          <p>Atención administrativa y jurídica coordinada para clientes y entidades corporativas:</p>
+          <p style="margin-top:12px;"><strong>Horario:</strong> Lun a Vie, 08:30 - 18:00 hrs.</p>
+        </div>
+      </div>
+
+      <div class="corp-data">
+        <strong>Identificación Societaria Oficial:</strong><br>
+        <strong>Razón Social:</strong> Quantus Chile SpA &bull; <strong>RUT:</strong> 78.478.612-9<br>
+        <strong>Domicilio Societario:</strong> Rancagua, Región del Libertador General Bernardo O'Higgins, Chile.<br>
+        <strong>Representación y Cumplimiento:</strong> Plataforma registrada en cumplimiento de la Ley N° 19.628 y Ley N° 21.719 de Protección de Datos Personales.
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro Tributario Maestro | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06101f;
+      --panel: rgba(15, 23, 42, 0.86);
+      --panel-2: rgba(30, 41, 59, 0.82);
+      --line: rgba(56, 189, 248, 0.24);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --faint: #64748b;
+      --cyan: #38bdf8;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(56, 189, 248, .10), transparent 32%),
+        radial-gradient(circle at 92% 8%, rgba(245, 158, 11, .08), transparent 28%),
+        linear-gradient(180deg, #06101f 0%, #0b1220 100%);
+    }
+    .shell { max-width: 1180px; margin: 0 auto; padding: 18px 22px 56px; }
+    .topbar, .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 18px 48px rgba(0,0,0,.28);
+    }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 18px; margin-bottom: 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; }
+    .brand img { width: 38px; height: 38px; filter: drop-shadow(0 0 10px rgba(56,189,248,.35)); }
+    .brand strong { display: block; font-size: 15px; letter-spacing: .02em; }
+    .brand span { display: block; font-size: 11px; color: var(--cyan); font-weight: 700; }
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 9px 14px; border-radius: 10px; border: 1px solid rgba(148,163,184,.22); background: rgba(30,41,59,.72); color: var(--text); text-decoration: none; font-size: 12px; font-weight: 800; }
+    .btn.primary { background: linear-gradient(135deg, #0284c7, #075985); border-color: rgba(56,189,248,.42); }
+    .btn.warn { color: #fed7aa; border-color: rgba(245,158,11,.42); background: rgba(120,53,15,.24); }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); gap: 18px; margin-bottom: 18px; }
+    .card { padding: 22px; }
+    .eyebrow { color: var(--cyan); font: 800 12px/1 JetBrains Mono, monospace; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+    h1 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 48px); line-height: 1.02; letter-spacing: 0; }
+    h2 { margin: 0; font-size: 18px; }
+    p { color: var(--muted); line-height: 1.58; margin: 0; }
+    .hero-copy { max-width: 760px; font-size: 15px; }
+    .status-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+    .status { background: var(--panel-2); border: 1px solid rgba(148,163,184,.18); border-radius: 14px; padding: 15px; }
+    .label { color: var(--muted); font: 800 11px/1.2 JetBrains Mono, monospace; text-transform: uppercase; }
+    .value { margin-top: 8px; font-weight: 900; font-size: 18px; }
+    .sub { color: var(--faint); font-size: 12px; margin-top: 6px; line-height: 1.45; }
+    .ok { color: var(--green); }
+    .pending { color: var(--amber); }
+    .danger { color: var(--red); }
+    .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+    .list { display: grid; gap: 10px; margin-top: 16px; }
+    .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: start; padding: 13px 0; border-bottom: 1px solid rgba(148,163,184,.14); }
+    .row:last-child { border-bottom: 0; }
+    .row strong { display: block; font-size: 14px; }
+    .pill { display: inline-flex; align-items: center; min-height: 26px; padding: 5px 9px; border-radius: 999px; font-size: 11px; font-weight: 900; white-space: nowrap; border: 1px solid rgba(148,163,184,.24); color: #cbd5e1; }
+    .pill.ok { border-color: rgba(34,197,94,.45); background: rgba(22,101,52,.20); }
+    .pill.pending { border-color: rgba(245,158,11,.45); background: rgba(120,53,15,.22); }
+    .callout { border-color: rgba(245,158,11,.45); background: rgba(120,53,15,.20); }
+    .mono { font-family: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace; }
+    @media (max-width: 900px) { .hero, .section-grid, .status-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .topbar { align-items: flex-start; flex-direction: column; } .nav { width: 100%; } .btn { flex: 1; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/maestro">
+        <img src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <strong>QUANTUS CHILE</strong>
+          <span>Centro Maestro Tributario</span>
+        </div>
+      </a>
+      <nav class="nav">
+        <a class="btn" href="/maestro">Volver a Maestro</a>
+        <a class="btn" href="/maestro/salud-entregas">Salud de entregas</a>
+        <a class="btn warn" href="/maestro/logout">Cerrar sesión</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <div class="eyebrow">{{ tax.company }} · {{ tax.month }}</div>
+        <h1>Control tributario propio, sin mezclar clientes ni ERP</h1>
+        <p class="hero-copy">Este módulo es para ordenar cómo declara y controla Quantus Chile SpA: lectura de RCV, estado F29, carpeta mensual, alertas de cambios del SII y preparación de evidencia. El ERP, Don Manolo y los rubros comerciales quedan fuera de este flujo.</p>
+        <div class="status-grid">
+          <div class="status">
+            <div class="label">API Gateway</div>
+            <div class="value {{ 'ok' if tax.gateway_ready else 'pending' }}">{{ 'Configurado' if tax.gateway_ready else 'Pendiente' }}</div>
+            <div class="sub">Token solo en servidor/entorno seguro. Nunca en frontend ni en clientes.</div>
+          </div>
+          <div class="status">
+            <div class="label">Credenciales SII</div>
+            <div class="value {{ 'ok' if tax.sii_ready else 'pending' }}">{{ 'Disponibles' if tax.sii_ready else 'No guardadas aqui' }}</div>
+            <div class="sub">Separadas del ERP. La declaración o pago siempre requiere aprobación humana.</div>
+          </div>
+          <div class="status">
+            <div class="label">Alertas</div>
+            <div class="value {{ 'ok' if tax.alert_ready else 'pending' }}">{{ 'Canal listo' if tax.alert_ready else 'Falta canal' }}</div>
+            <div class="sub">Para avisarte si SII cambia estructura, falla la lectura o se acerca un vencimiento.</div>
+          </div>
+        </div>
+      </div>
+      <aside class="card callout">
+        <div class="eyebrow">Regla de seguridad</div>
+        <h2>Una sola empresa: Quantus Chile</h2>
+        <p style="margin-top:10px;">No se usan tenants, rubros ni clientes del ERP. Si aparece una credencial tributaria aqui, pertenece al manejo interno de Quantus Chile SpA.</p>
+      </aside>
+    </section>
+
+    <section class="section-grid">
+      <div class="card">
+        <div class="eyebrow">Operación mensual</div>
+        <h2>Qué debe pasar cada mes</h2>
+        <div class="list">
+          {% for step in tax.monthly_steps %}
+          <div class="row">
+            <div>
+              <strong>{{ step.name }}</strong>
+              <div class="sub">Responsable: {{ step.owner }}</div>
+            </div>
+            <span class="pill {{ 'ok' if step.status.startswith('Listo') else 'pending' }}">{{ step.status }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">Vigia SII</div>
+        <h2>{{ tax.watcher.label }}</h2>
+        <div class="list">
+          <div class="row">
+            <div><strong>Frecuencia</strong><div class="sub">{{ tax.watcher.cadence }}</div></div>
+            <span class="pill pending">Horario</span>
+          </div>
+          <div class="row">
+            <div><strong>Ultimo reporte</strong><div class="sub">{{ tax.watcher.last_run }}</div></div>
+            <span class="pill pending">{{ tax.watcher.status }}</span>
+          </div>
+          <div class="row">
+            <div><strong>Patrones de cambio</strong><div class="sub">{{ tax.patterns.summary }}</div></div>
+            <span class="pill pending">{{ tax.patterns.total_changes }} cambios</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:18px;">
+      <div class="eyebrow">Arquitectura recomendada</div>
+      <h2>Automatizar sin perder control</h2>
+      <div class="list">
+        <div class="row">
+          <div><strong>Lectura automatica</strong><div class="sub">API Gateway trae RCV y estados F29 para preparar la carpeta mensual.</div></div>
+          <span class="pill pending">Sin emitir DTE</span>
+        </div>
+        <div class="row">
+          <div><strong>Vigia estructural</strong><div class="sub">El worker horario detecta cambios visuales del SII y te avisa antes de que falle una revision mensual.</div></div>
+          <span class="pill pending">07-22 hrs</span>
+        </div>
+        <div class="row">
+          <div><strong>Cierre humano</strong><div class="sub">Quantus prepara evidencia; Felipe decide declarar, pagar o consultar al contador cuando haya diferencia.</div></div>
+          <span class="pill ok">Controlado</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

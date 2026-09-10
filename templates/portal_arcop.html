@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Portal de Derechos ARCOP | Quantus Chile (Ley N° 21.719)</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: #1e293b;
+      --card-bg-glass: rgba(30, 41, 59, 0.75);
+      --accent-blue: #38bdf8;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-orange: #f59e0b;
+      --border-color: rgba(56, 189, 248, 0.25);
+    }
+    body { background: var(--bg-dark); color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 0; margin: 0; }
+    .container { max-width: 880px; margin: 0 auto; padding: 28px 16px; }
+
+    .hero-box {
+      text-align: center;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 70%);
+      border: 1px solid rgba(56,189,248,0.35);
+      border-radius: 20px;
+      padding: 36px 20px;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .hero-title { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 10px; line-height: 1.25; }
+    .hero-sub { font-size: 14px; color: #94a3b8; line-height: 1.6; max-width: 720px; margin: 0 auto; }
+
+    /* Formulario ARCOP */
+    .form-card {
+      background: var(--card-bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+    }
+    .form-section-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(56,189,248,0.15);
+      padding-bottom: 8px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input, .form-select, .form-textarea {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.2s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56,189,248,0.25);
+    }
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    /* Selector Visual de Derechos */
+    .rights-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .right-opt {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .right-opt:hover {
+      border-color: #38bdf8;
+      background: #131d31;
+    }
+    .right-opt.selected {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+    .right-opt-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .right-opt-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .form-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.5;
+      cursor: pointer;
+      margin-bottom: 24px;
+    }
+    .form-checkbox-label input {
+      margin-top: 3px;
+      accent-color: #38bdf8;
+    }
+
+    .btn-submit-arcop {
+      width: 100%;
+      background: linear-gradient(90deg, #38bdf8, #0284c7);
+      color: #090d16;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+    }
+    .btn-submit-arcop:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+    }
+
+    /* Comprobante de Recepción */
+    .receipt-card {
+      display: none;
+      background: #0f172a;
+      border: 1px solid #10b981;
+      border-radius: 18px;
+      padding: 28px;
+      margin-top: 24px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .receipt-header {
+      text-align: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(16,185,129,0.25);
+      padding-bottom: 16px;
+    }
+    .receipt-folio {
+      font-size: 26px;
+      font-weight: 900;
+      color: #10b981;
+      letter-spacing: 1px;
+    }
+    .receipt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+      background: #1e293b;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+    .receipt-item-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .receipt-item-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .receipt-hash-box {
+      background: #090d16;
+      border: 1px dashed #334155;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #38bdf8;
+      word-break: break-all;
+      margin-bottom: 20px;
+    }
+    .receipt-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-receipt-print {
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid rgba(56,189,248,0.4);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-receipt-print:hover {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .quantus-nav-bar, .hero-box, .form-card, footer { display: none !important; }
+      .receipt-card { display: block !important; border: 1px solid #000 !important; color: #000 !important; background: #fff !important; }
+      .receipt-grid { background: #f8fafc !important; color: #000 !important; border: 1px solid #ccc !important; }
+      .receipt-item-val { color: #000 !important; }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  {% include "partials/nav_header.html" %}
+
+  <main class="container">
+
+    <div class="hero-box">
+      <div class="badge-pill">🛡️ Canal Oficial de Privacidad · Ley N° 21.719</div>
+      <div class="hero-title">Portal de Derechos ARCOP</div>
+      <div class="hero-sub">
+        Ejerce tus derechos legales de <strong>Acceso, Rectificación, Cancelación/Supresión, Oposición, Portabilidad y Bloqueo</strong> sobre tus datos personales conforme a la Ley N° 21.719 de Chile. Plazo legal de respuesta: <strong>10 días hábiles</strong>.
+      </div>
+    </div>
+
+    <!-- Formulario ARCOP -->
+    <div id="form-container" class="form-card">
+      <form id="arcop-form" onsubmit="enviarSolicitudArcop(event)">
+
+        <div class="form-section-title">
+          <span>1. Selecciona el Derecho a Ejercer</span>
+        </div>
+
+        <input type="hidden" id="selected-right" name="tipo_derecho" value="acceso" required>
+
+        <div class="rights-selector-grid">
+          <div class="right-opt selected" onclick="selectRight('acceso', this)">
+            <div class="right-opt-title">🔍 Acceso</div>
+            <div class="right-opt-desc">Conocer qué datos personales tuyos están registrados y con qué finalidad.</div>
+          </div>
+          <div class="right-opt" onclick="selectRight('rectificacion', this)">
+            <div class="right-opt-title">✏️ Rectificación</div>
+            <div class="right-opt-desc">Actualizar o corregir datos personales inexactos, erróneos o incompletos.</div>
+          </div>
+          <div class="right-opt" onclick="selectRight('supresion', this)">
+            <div class="right-opt-title">🗑️ Supresión / Borrado</div>
+            <div class="right-opt-desc">Eliminar tus datos personales (derecho al olvido) cuando no exista deber legal.</div>
+          </div>
+          <div class="right-opt" onclick="selectRight('oposicion', this)">
+            <div class="right-opt-title">✋ Oposición</div>
+            <div class="right-opt-desc">Veto al uso de datos para fines comerciales, marketing o perfilamiento.</div>
+          </div>
+          <div class="right-opt" onclick="selectRight('portabilidad', this)">
+            <div class="right-opt-title">📦 Portabilidad</div>
+            <div class="right-opt-desc">Obtener copia de tus datos en formato digital estructurado (JSON/CSV).</div>
+          </div>
+          <div class="right-opt" onclick="selectRight('bloqueo', this)">
+            <div class="right-opt-title">🔒 Bloqueo Temporal</div>
+            <div class="right-opt-desc">Suspender temporalmente el uso mientras se tramita una rectificación.</div>
+          </div>
+        </div>
+
+        <div class="form-section-title">
+          <span>2. Identificación del Titular de Datos</span>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="nombre">Nombre Completo *</label>
+            <input type="text" id="nombre" name="nombre" class="form-input" placeholder="Ej: Juan Pérez González" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rut">RUT del Titular *</label>
+            <input type="text" id="rut" name="rut" class="form-input" placeholder="Ej: 12.345.678-9" required onblur="formatearRUT(this)">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Correo Electrónico de Notificación *</label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="juan.perez@email.cl" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="telefono">Teléfono / WhatsApp de Contacto</label>
+            <input type="tel" id="telefono" name="telefono" class="form-input" placeholder="+56 9 1234 5678">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="calidad">Calidad del Solicitante</label>
+            <select id="calidad" name="calidad" class="form-select">
+              <option value="cliente">Cliente Activo</option>
+              <option value="excliente">Ex-Cliente / Usuario Histórico</option>
+              <option value="trabajador">Trabajador / Ex-Trabajador</option>
+              <option value="proveedor">Proveedor / Tercero</option>
+              <option value="prospecto">Contacto Web / Prospecto</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="empresa_referencia">Empresa / Servicio Relacionado</label>
+            <input type="text" id="empresa_referencia" name="empresa_referencia" class="form-input" placeholder="Ej: Quantus ERP, Diario Oficial, etc.">
+          </div>
+          <div class="form-group full">
+            <label class="form-label" for="fundamento">Detalle y Fundamento de la Solicitud *</label>
+            <textarea id="fundamento" name="fundamento" class="form-textarea" placeholder="Describe claramente qué datos específicos deseas consultar, rectificar o eliminar, y cualquier antecedente relevante..." required></textarea>
+          </div>
+        </div>
+
+        <label class="form-checkbox-label">
+          <input type="checkbox" id="declaracion_veracidad" required>
+          <span>Declaro bajo juramento que soy el titular legítimo de los datos o cuento con la representación legal correspondiente. Entiendo que la entrega de información falsa constituye una infracción legal.</span>
+        </label>
+
+        <button type="submit" id="btn-submit" class="btn-submit-arcop">
+          🚀 Enviar Solicitud y Generar Comprobante Legal
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Comprobante Oficial Generado -->
+    <div id="receipt-container" class="receipt-card">
+      <div class="receipt-header">
+        <span class="badge-pill" style="background:rgba(16,185,129,0.15); border-color:#10b981; color:#10b981;">✅ SOLICITUD INGRESADA EXITOSAMENTE</span>
+        <div style="font-size:12px; color:#94a3b8; margin-top:6px;">Comprobante de Recepción Ley N° 21.719</div>
+        <div class="receipt-folio" id="receipt-folio">ARCOP-2026-0000</div>
+      </div>
+
+      <div class="receipt-grid">
+        <div>
+          <div class="receipt-item-label">Titular</div>
+          <div class="receipt-item-val" id="receipt-nombre">-</div>
+        </div>
+        <div>
+          <div class="receipt-item-label">RUT</div>
+          <div class="receipt-item-val" id="receipt-rut">-</div>
+        </div>
+        <div>
+          <div class="receipt-item-label">Derecho Ejercido</div>
+          <div class="receipt-item-val" id="receipt-tipo">-</div>
+        </div>
+        <div>
+          <div class="receipt-item-label">Fecha de Ingreso</div>
+          <div class="receipt-item-val" id="receipt-fecha">-</div>
+        </div>
+        <div>
+          <div class="receipt-item-label">Plazo Legal de Respuesta</div>
+          <div class="receipt-item-val" style="color:#38bdf8;" id="receipt-plazo">10 Días Hábiles</div>
+        </div>
+        <div>
+          <div class="receipt-item-label">Fecha Límite Legal</div>
+          <div class="receipt-item-val" style="color:#f59e0b;" id="receipt-fecha-limite">-</div>
+        </div>
+      </div>
+
+      <div style="font-size:11px; font-weight:700; color:#94a3b8; margin-bottom:4px; text-transform:uppercase;">
+        🔐 Huella Criptográfica SHA-256 (Evidencia Inmutable de Recepción):
+      </div>
+      <div class="receipt-hash-box" id="receipt-hash">
+        0000000000000000000000000000000000000000000000000000000000000000
+      </div>
+
+      <p style="font-size:12px; color:#94a3b8; line-height:1.5; text-align:center; margin-bottom:20px;">
+        Hemos enviado una copia de este comprobante a tu correo electrónico. Conserva el <strong>N° de Folio</strong> para dar seguimiento a tu solicitud ante el responsable y la Agencia de Protección de Datos Personales.
+      </p>
+
+      <div class="receipt-actions">
+        <button type="button" onclick="window.print()" class="btn-receipt-print">🖨️ Imprimir / Guardar Comprobante PDF</button>
+        <a href="/checklist-ley-21719" class="btn-receipt-print" style="background:#0f172a;">📊 Diagnosticar Empresa</a>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function selectRight(tipo, element) {
+      document.getElementById('selected-right').value = tipo;
+      document.querySelectorAll('.right-opt').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
+    }
+
+    function formatearRUT(input) {
+      let valor = input.value.replace(/[^0-9kK]/g, '');
+      if (valor.length > 1) {
+        let cuerpo = valor.slice(0, -1);
+        let dv = valor.slice(-1).toUpperCase();
+        input.value = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "-" + dv;
+      }
+    }
+
+    async function enviarSolicitudArcop(event) {
+      event.preventDefault();
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.innerText = "⏳ Procesando y sellando criptográficamente...";
+
+      const payload = {
+        tipo_derecho: document.getElementById('selected-right').value,
+        nombre: document.getElementById('nombre').value.trim(),
+        rut: document.getElementById('rut').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        telefono: document.getElementById('telefono').value.trim(),
+        calidad: document.getElementById('calidad').value,
+        empresa_referencia: document.getElementById('empresa_referencia').value.trim(),
+        fundamento: document.getElementById('fundamento').value.trim()
+      };
+
+      try {
+        const response = await fetch('/api/arcop/solicitud', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === 'success') {
+          // Mostrar comprobante
+          document.getElementById('form-container').style.display = 'none';
+          const rc = document.getElementById('receipt-container');
+          rc.style.display = 'block';
+
+          document.getElementById('receipt-folio').innerText = data.folio;
+          document.getElementById('receipt-nombre').innerText = payload.nombre;
+          document.getElementById('receipt-rut').innerText = payload.rut;
+          document.getElementById('receipt-tipo').innerText = data.tipo_derecho_label || payload.tipo_derecho.toUpperCase();
+          document.getElementById('receipt-fecha').innerText = data.fecha_ingreso;
+          document.getElementById('receipt-fecha-limite').innerText = data.fecha_limite;
+          document.getElementById('receipt-hash').innerText = data.hash_sha256;
+
+          rc.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          alert("Error al procesar la solicitud: " + (data.message || 'Intente nuevamente'));
+          btn.disabled = false;
+          btn.innerText = "🚀 Enviar Solicitud y Generar Comprobante Legal";
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error de conexión. Por favor revisa tu conexión e intenta nuevamente.");
+        btn.disabled = false;
+        btn.innerText = "🚀 Enviar Solicitud y Generar Comprobante Legal";
+      }
+    }
+  </script>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

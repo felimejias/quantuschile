@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantus Marketing Center</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .mkt-container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+        .mkt-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .mkt-header h1 { font-size: 1.75rem; color: #f0f0f0; margin: 0; }
+        .mkt-header .badge { background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; color: #fff; }
+        .mkt-nav { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .mkt-nav a { padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; color: #c4c4c4; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); transition: all 0.2s; font-size: 0.875rem; }
+        .mkt-nav a:hover, .mkt-nav a.active { background: rgba(99,102,241,0.15); color: #a5b4fc; border-color: rgba(99,102,241,0.3); }
+        .mkt-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 1.25rem; }
+        .stat-card .label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; color: #f0f0f0; margin-top: 0.25rem; }
+        .stat-card .sub { font-size: 0.8rem; color: #666; margin-top: 0.25rem; }
+        .mkt-table-wrap { overflow-x: auto; }
+        .mkt-table { width: 100%; border-collapse: collapse; }
+        .mkt-table th { text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #888; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .mkt-table td { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: #d0d0d0; font-size: 0.875rem; }
+        .mkt-table tr:hover td { background: rgba(255,255,255,0.03); }
+        .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+        .status-DRAFT { background: rgba(156,163,175,0.2); color: #9ca3af; }
+        .status-ACTIVE { background: rgba(52,211,153,0.15); color: #34d399; }
+        .status-GENERATED { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .status-COMPLIANCE_REVIEW { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .status-COMPLIANCE_BLOCKED { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .status-HUMAN_REVIEW { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .status-APPROVED { background: rgba(52,211,153,0.15); color: #34d399; }
+        .status-SCHEDULED { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .status-PUBLISHED { background: rgba(52,211,153,0.2); color: #34d399; }
+        .status-FAILED { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .status-CANCELLED { background: rgba(156,163,175,0.15); color: #6b7280; }
+        .status-NEW { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; border: none; padding: 0.5rem 1.25rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; text-decoration: none; display: inline-block; transition: opacity 0.2s; }
+        .btn-primary:hover { opacity: 0.85; }
+        .btn-secondary { background: rgba(255,255,255,0.08); color: #c4c4c4; border: 1px solid rgba(255,255,255,0.12); padding: 0.5rem 1.25rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; text-decoration: none; display: inline-block; transition: all 0.2s; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+        .section-title { font-size: 1.1rem; color: #e0e0e0; margin: 2rem 0 1rem; }
+        .back-link { color: #a5b4fc; text-decoration: none; font-size: 0.875rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body style="background: #0f0f14; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif; min-height: 100vh;">
+    <div class="mkt-container">
+        <div class="mkt-header">
+            <div>
+                <a href="/maestro" class="back-link">← Panel Maestro</a>
+                <h1>📊 Quantus Marketing Center</h1>
+            </div>
+            <span class="badge">Fase 1 — MVP Staging</span>
+        </div>
+
+        <nav class="mkt-nav">
+            <a href="/marketing/" class="active">Dashboard</a>
+            <a href="/marketing/campaigns/">Campañas</a>
+            <a href="/marketing/calendar">Calendario</a>
+            <a href="/marketing/leads">Prospectos</a>
+            <a href="/marketing/suppressions">Supresiones</a>
+        </nav>
+
+        <!-- Estadísticas -->
+        <div class="mkt-stats">
+            <div class="stat-card">
+                <div class="label">Campañas</div>
+                <div class="value">{{ campaign_stats | sum(attribute='cnt') if campaign_stats else 0 }}</div>
+                <div class="sub">
+                    {% for s in campaign_stats %}
+                        <span class="status-badge status-{{ s.status }}">{{ s.status }}: {{ s.cnt }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Contenidos</div>
+                <div class="value">{{ content_stats | sum(attribute='cnt') if content_stats else 0 }}</div>
+                <div class="sub">
+                    {% for s in content_stats %}
+                        <span class="status-badge status-{{ s.status }}">{{ s.status }}: {{ s.cnt }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Prospectos</div>
+                <div class="value">{{ lead_stats | sum(attribute='cnt') if lead_stats else 0 }}</div>
+                <div class="sub">
+                    {% for s in lead_stats %}
+                        <span class="status-badge status-{{ s.lead_status }}">{{ s.lead_status }}: {{ s.cnt }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Tu Rol</div>
+                <div class="value" style="font-size: 1rem;">{{ role }}</div>
+                <div class="sub">Permisos del Marketing Center</div>
+            </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div style="display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap;">
+            <a href="/marketing/campaigns/new" class="btn-primary">+ Nueva Campaña</a>
+            <a href="/marketing/calendar" class="btn-secondary">📅 Calendario</a>
+            <a href="/marketing/leads" class="btn-secondary">👥 Prospectos</a>
+        </div>
+
+        <!-- Últimas campañas -->
+        <h2 class="section-title">Últimas Campañas</h2>
+        {% if recent_campaigns %}
+        <div class="mkt-table-wrap">
+            <table class="mkt-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Servicio</th>
+                        <th>Flujo</th>
+                        <th>Estado</th>
+                        <th>Creada</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in recent_campaigns %}
+                    <tr>
+                        <td><strong>{{ c.name }}</strong></td>
+                        <td>{{ c.service_category }}</td>
+                        <td>{{ c.flow_type }}</td>
+                        <td><span class="status-badge status-{{ c.status }}">{{ c.status }}</span></td>
+                        <td>{{ c.created_at[:10] }}</td>
+                        <td><a href="/marketing/campaigns/{{ c.id }}" class="btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">Ver</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 3rem; color: #666;">
+            <p style="font-size: 1.5rem;">📭</p>
+            <p>No hay campañas todavía.</p>
+            <a href="/marketing/campaigns/new" class="btn-primary" style="margin-top: 1rem;">Crear primera campaña</a>
+        </div>
+        {% endif %}
+
+        <!-- Footer legal -->
+        <div style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 0.7rem; color: #555;">
+            Quantus Chile SpA — Plataforma privada de servicios empresariales.<br>
+            Marketing Center Fase 1 — MVP en Staging. Sin publicación real automática.
+        </div>
+    </div>
+</body>
+</html>

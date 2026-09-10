@@ -1,0 +1,33 @@
+<div class="form-group full">
+  <div class="data-consent-box">
+    <details>
+      <summary>Autorización de tratamiento de datos personales Ley 21.719</summary>
+      <div class="data-consent-content">
+        <p>
+          Para contratar {{ service_label }}, autorizas a Quantus Chile / quantuschile.cl a recolectar,
+          almacenar y tratar los datos personales y documentos necesarios para prestar el servicio.
+        </p>
+        <ul>
+          <li>Datos: nombre, RUT, correo, teléfono, WhatsApp, documentos, pagos, alertas, informes, configuraciones e historial operativo.</li>
+          <li>Finalidad: prestar el servicio, enviar alertas, generar reportes, mantener respaldo, trazabilidad, soporte, cobranza y seguridad.</li>
+          <li>Almacenamiento: la información se guarda en servidor y carpeta privada por cliente o RUT, no en archivadores físicos.</li>
+          <li>No divulgación: Quantus no venderá ni divulgará la información a terceros ajenos al servicio, salvo obligación legal, proveedor necesario o autorización expresa.</li>
+          <li>Derechos: puedes solicitar acceso, rectificación, supresión, oposición, portabilidad o bloqueo escribiendo a privacidad@quantuschile.cl.</li>
+        </ul>
+        <p class="law21719-note">
+          Al aceptar, se genera una evidencia digital con fecha, servicio, IP, navegador y versión del consentimiento en la carpeta del cliente.
+        </p>
+      </div>
+    </details>
+    <label class="consent-row required-consent">
+      <input type="checkbox" name="data_consent" value="1" required>
+      <span>Acepto la autorización de tratamiento de datos personales para {{ service_label }} y declaro haber leído sus finalidades.</span>
+    </label>
+    {% if "Diario Oficial" in service_label %}
+    <label class="consent-row required-consent" style="margin-top:10px;">
+      <input type="checkbox" name="source_limitation_ack" value="1" required>
+      <span>Entiendo que el Diario Oficial u organismos publicadores pueden publicar RUT errados u omitidos, nombres incompletos, abreviaturas o referencias indirectas. Quantus aplicará búsqueda multicriterio, pero pueden existir alertas por posible coincidencia y casos no detectables si la fuente oficial impide una vinculación razonable.</span>
+    </label>
+    {% endif %}
+  </div>
+</div>

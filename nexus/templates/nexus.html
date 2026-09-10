@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QUANTUS NEXUS</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0b0e14;color:#e6e9f0;padding:22px;max-width:1180px;margin:auto}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+h1{font-size:22px;margin:0}
+h1 b{color:#4dd2ff}
+.info{color:#7d8797;font-size:12.5px}
+button.act{background:#4dd2ff;color:#081018;border:0;padding:9px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+button.act:hover{background:#79dfff}
+a.link{color:#7fb3ff;text-decoration:none;font-size:13px;padding:7px 10px;border:1px solid #2a3345;border-radius:8px;display:inline-block;margin:4px 4px 0 0;background:#11151f}
+a.link:hover{border-color:#4dd2ff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.st{background:#11151f;border:1px solid #232a3a;border-radius:12px;padding:16px}
+h2.stitle{font-size:14px;margin:0 0 10px;color:#9fb0c5;text-transform:uppercase;letter-spacing:.8px;display:flex;justify-content:space-between}
+.badge{padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.ok{background:#0f3d2e;color:#58e8a2}
+.bad{background:#47181a;color:#ff8a8a}
+.warn{background:#4a3403;color:#ffd166}
+.kv{display:grid;grid-template-columns:220px 1fr;gap:6px 10px;font-size:13.5px;margin-top:8px}
+.kv dt{color:#7d8797}
+.kv dd{margin:0}
+pre{background:#0b0e14;border:1px solid #232a3a;border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap;max-height:220px;overflow:auto}
+footer{margin-top:20px;color:#566072;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap}
+.flash{background:#123fd0;border:1px solid #4dd2ff;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:14px;display:none}
+</style>
+</head>
+<body>
+<header>
+<h1>QUANTUS <b>NEXUS</b></h1>
+<div class="info">Snapshot: {{ snap.generado }} · Alertas a <b>{{ email }}</b></div>
+<div>
+<button class="act" id="btnBrief" onclick="enviarBrief()">Enviar briefing diario</button>
+<button class="act" onclick="location.reload()">Actualizar</button>
+<a class="link" href="/logout" style="border-color:#47181a;color:#ff8a8a">Salir</a>
+</div>
+</header>
+<div class="flash" id="flash"></div>
+
+<div class="grid">
+
+<div class="st" style="grid-column:1/-1;border-color:#3b4a3f">
+<h2 class="stitle">MAESTRO <span class="badge ok">tu panel de control</span></h2>
+{% if snap.maestro.ok %}
+<dl class="kv">
+<dt>Clientes DO activos</dt><dd>{{ snap.maestro.clientes.activos }} / {{ snap.maestro.clientes.total }}</dd>
+<dt>Pagos pendientes / pagados</dt><dd>{{ snap.maestro.pagos.pendientes }} / {{ snap.maestro.pagos.pagados }} ({{ snap.maestro.pagos.eventos }} eventos)</dd>
+<dt>Alertas IA (riesgo alto/critico)</dt><dd id="mRiesgos">{{ snap.maestro.riesgos_reports }}</dd>
+<dt>Registro ERP sincronizado</dt><dd>{{ snap.maestro.registry_total }} registros</dd>
+</dl>
+{% else %}<p class="info">No se pudo leer maestro: {{ snap.maestro.error }}</p>{% endif %}
+<div style="margin-top:10px">
+<a class="link" href="{{ WEB_URL }}/maestro" target="_blank">Abrir PANEL MAESTRO</a>
+<a class="link" href="{{ WEB_URL }}/maestro/salud-entregas" target="_blank">Salud entregas</a>
+<a class="link" href="{{ WEB_URL }}/maestro/auditoria-cumplimiento" target="_blank">Auditoria cumplimiento</a>
+</div>
+</div>
+
+<div class="st">
+<h2 class="stitle">Sitio web <span class="badge warn">produccion</span></h2>
+<dl class="kv">
+<dt>Estado</dt><dd id="wEstado">{{ snap.web.produccion.estado }}</dd>
+<dt>Ultimo check</dt><dd id="wCheck">{{ snap.web.produccion.ultimo_check or "-" }}</dd>
+<dt>Detalle</dt><dd id="wDetail">{{ snap.web.produccion.detalle or "-" }}</dd>
+<dt>Web local (8095)</dt><dd id="wLocal">{{ "con respuesta" if snap.infra.web_local_up else "SIN respuesta" }}</dd>
+</dl>
+<h2 class="stitle" style="margin-top:14px">Auditoria QA</h2>
+<dl class="kv">
+<dt>Hallazgos abiertos</dt><dd id="qAbiertos">{{ snap.web.qa.abiertos }}</dd>
+<dt>Criticos</dt><dd id="qCrit">{{ snap.web.qa.criticos }}</dd>
+<dt>Altos</dt><dd id="qAltos">{{ snap.web.qa.altos }}</dd>
+<dt>Ultima auditoria</dt><dd id="qTs">{{ snap.web.qa.ultima_auditoria or "-" }}</dd>
+</dl>
+</div>
+
+<div class="st">
+<h2 class="stitle">Comunicaciones <span class="badge warn">outbox</span></h2>
+<dl class="kv">
+<dt>SMTP</dt><dd id="eSmtp">{{ snap.entregas.smtp.configured|default(false) }}</dd>
+<dt>WhatsApp</dt><dd id="eWa">{{ snap.entregas.whatsapp.configured|default(false) }}</dd>
+<dt>Email enviados / total</dt><dd id="eEm">{{ snap.entregas.email.enviados }} / {{ snap.entregas.email.total }}</dd>
+<dt>Email fallidos / pendientes</dt><dd id="eF">{{ snap.entregas.email.fallidos }} / {{ snap.entregas.email.pendientes }}</dd>
+<dt>Outbox total / stuck</dt><dd id="eOut">{{ snap.entregas.outbox.total }} / {{ snap.entregas.outbox.stuck|length }}</dd>
+</dl>
+</div>
+
+<div class="st">
+<h2 class="stitle">Radar DO <span class="badge ok">pipeline</span></h2>
+<dl class="kv">
+<dt>Publicaciones indexadas</dt><dd id="dTot">{{ snap.do.historico.total_publicaciones or snap.do.historico.total or 0 }}</dd>
+<dt>Fechas distintas</dt><dd id="dF">{{ snap.do.historico.fechas_distintas or 0 }}</dd>
+<dt>Edicion del dia</dt><dd id="dE">{{ snap.do.edicion_dia.edicion or "-" }} <span class="info">{{ snap.do.edicion_dia.fecha }}</span></dd>
+<dt>Clientes activos</dt><dd id="dP">{{ snap.do.clientes_activos }}</dd>
+<dt>Ultimo cron monitor</dt><dd id="dM">{{ snap.do.ultimo_cron_monitor }}</dd>
+<dt>Ultimo cron descarga</dt><dd id="dD">{{ snap.do.ultimo_cron_descarga }}</dd>
+</dl>
+</div>
+
+<div class="st">
+<h2 class="stitle">ERP <span class="badge warn">solo lectura</span></h2>
+{% if snap.erp.ok %}
+<dl class="kv">
+<dt>Sincronizados ahora</dt><dd id="erpN">{{ snap.erp.sincronizados }}</dd>
+<dt>Puente</dt><dd id="erpP">{{ snap.erp.origen }}</dd>
+</dl>
+{% else %}
+<p style="font-size:13px">No accesible desde esta maquina (requiere LXC/docker del servidor). El panel superadmin abrelo por deep-link abajo.</p>
+<p class="info">{{ snap.erp.error }}</p>
+{% endif %}
+</div>
+
+<div class="st" style="grid-column:1/-1">
+<h2 class="stitle">Acceso rapido</h2>
+{% for l in links %}<a class="link" href="{{ l.url }}" target="_blank">{{ l.label }}</a>{% endfor %}
+</div>
+
+<div class="st">
+<h2 class="stitle">Cron local <span class="badge ok">workers</span></h2>
+<dl class="kv">
+{% for fila in snap.infra.workers %}
+<dt>{{ fila.nombre }}</dt><dd>{{ fila.ultimo or "-" }} · {{ fila.linea[0] if fila.linea else "-" }}</dd>
+{% endfor %}
+</dl>
+</div>
+
+<div class="st">
+<h2 class="stitle">Ultimo briefing IA</h2>
+{% if brief %}<pre>{{ brief }}</pre>{% else %}<p class="info">Aun no hay briefing IA. Usa el boton "Enviar briefing diario" (devuelve texto IA si la quota del modelo lo permite, si no, plantilla).</p>{% endif %}
+</div>
+
+</div>
+
+<footer><span>QUANTUS NEXUS · panel unificado read-only</span><span>deep-links: web {{ "127.0.0.1:" ~ '8095' }} · ERP servidor</span></footer>
+
+<script>
+async function enviarBrief(){
+  const f=document.getElementById('flash');
+  f.style.display='block'; f.textContent='Generando y enviando...';
+  const r=await fetch('/briefing/enviar',{method:'POST'});
+  const j=await r.json();
+  f.textContent=j.ok?('Briefing enviado (IA: '+(j.ia?'si':'no, plantilla')+')'):'Error al enviar';
+  setTimeout(()=>{f.style.display='none';},5000);
+}
+</script>
+</body>
+</html>

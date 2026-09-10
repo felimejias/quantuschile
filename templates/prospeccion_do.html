@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prospeccion Diario Oficial | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-premium-copy">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+  <div class="app-container">
+
+    <section class="page-hero" style="min-height: auto;">
+      <div class="hero-copy" style="max-width: 980px;">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Demo interna de captacion responsable</div>
+        <h1 class="hero-title">Empresas detectadas en <span>publicaciones oficiales</span></h1>
+        <p class="hero-subtitle">
+          Esta vista muestra como se veria un pipeline comercial basado en menciones públicas del Diario Oficial. El enfoque recomendado es preventivo y verificable: informar la publicacion, no afirmar peligro sin una revisión humana.
+        </p>
+        <div class="hero-stats">
+          <div class="stat"><strong>{{ leads|length }}</strong><span>Empresas demo</span></div>
+          <div class="stat"><strong>0</strong><span>Correos inventados</span></div>
+          <div class="stat"><strong>Fuente</strong><span>Diario Oficial</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top: 10px;">
+      <div class="warning-box" style="margin-bottom: 20px;">
+        <div class="warning-title">Regla comercial</div>
+        <p class="muted">
+          No usar lenguaje alarmista. El mensaje correcto es: detectamos una publicacion oficial asociada a la empresa, puede requerir revisión, dejamos la fuente y ofrecemos monitoreo 24/7.
+        </p>
+      </div>
+
+      <div class="results-table-container">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Publicacion</th>
+              <th>Prioridad</th>
+              <th>Motivo comercial</th>
+              <th>Contacto</th>
+              <th>Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for lead in leads %}
+            <tr>
+              <td>
+                <strong style="color: #fff;">{{ lead.empresa }}</strong>
+                <div class="muted" style="font-size: 12px; margin-top: 5px;">{{ lead.id }}</div>
+              </td>
+              <td>
+                <span class="badge badge-info">{{ lead.tipo_publicacion }}</span>
+                <div class="muted" style="font-size: 12px; margin-top: 7px;">{{ lead.fecha_publicacion }}</div>
+                <a class="muted" href="{{ lead.fuente }}" target="_blank" rel="noopener" style="display: inline-block; font-size: 12px; margin-top: 5px;">Ver fuente</a>
+              </td>
+              <td>
+                {% if "Alta" in lead.prioridad %}
+                <span class="badge badge-warning">{{ lead.prioridad }}</span>
+                {% else %}
+                <span class="badge badge-success">{{ lead.prioridad }}</span>
+                {% endif %}
+              </td>
+              <td style="min-width: 260px;">
+                <div>{{ lead.motivo }}</div>
+                <div class="muted" style="font-size: 12px; margin-top: 8px;">{{ lead.categoria }}</div>
+              </td>
+              <td>
+                <span class="badge badge-info">{{ lead.contacto_estado }}</span>
+              </td>
+              <td style="min-width: 260px;">
+                <div>{{ lead.acción_sugerida }}</div>
+                <details style="margin-top: 10px;">
+                  <summary class="muted" style="cursor: pointer; font-weight: 800;">Mensaje sugerido</summary>
+                  <p class="muted" style="margin-top: 8px; font-size: 13px;">{{ lead.mensaje_sugerido }}</p>
+                </details>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {% include "partials/legal_footer.html" %}
+  </div>
+</body>
+</html>

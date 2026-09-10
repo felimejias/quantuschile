@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="200" height="80">
+  <rect width="200" height="80" rx="16" fill="#ffffff"/>
+  <rect x="20" y="22" width="5" height="36" fill="#0033a0"/>
+  <rect x="20" y="40" width="5" height="18" fill="#da291c"/>
+  <text x="32" y="32" font-family="sans-serif" font-weight="800" font-size="9" fill="#64748b">Gob.cl</text>
+  <text x="32" y="55" font-family="sans-serif" font-weight="900" font-size="22" fill="#0033a0" letter-spacing="1">INAPI</text>
+</svg>

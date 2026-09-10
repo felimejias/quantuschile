@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro Maestro Quantus | Acceso Privado</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-maestro">
+</head>
+<body>
+  <main class="master-login-shell">
+    <section class="master-login-card">
+      <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+      <div>
+        <span class="eyebrow"><span class="eyebrow-dot"></span> Acceso ejecutivo</span>
+        <h1>Centro Maestro Quantus</h1>
+        <p>Analítica privada de clientes, ingresos, agentes, módulos, riesgo y rendimiento comercial.</p>
+      </div>
+      {% if error %}
+      <div class="master-alert">{{ error }}</div>
+      {% endif %}
+      <a class="google-login-button {{ '' if google_ready else 'disabled' }}" href="/maestro/google">
+        <span class="google-mark">G</span>
+        <span>Continuar con Google</span>
+      </a>
+      <button class="google-login-button passkey-button" type="button" data-passkey-login>
+        <span class="google-mark passkey-mark">ID</span>
+        <span>Entrar con Touch ID</span>
+      </button>
+      {% if not google_ready %}
+      <p class="payment-note">Google Login queda visible, pero falta configurar las credenciales OAuth en el servidor.</p>
+      {% endif %}
+      <p class="payment-note" data-passkey-status>Para usar Touch ID primero registra una passkey desde el Centro Maestro.</p>
+      <div class="master-divider"><span>o entra con usuario maestro</span></div>
+      <form class="master-login-form" method="POST">
+        {{ csrf_input()|safe }}
+        <label>
+          <span>Usuario</span>
+          <input class="form-control" name="username" autocomplete="username" required>
+        </label>
+        <label>
+          <span>Contraseña</span>
+          <input class="form-control" name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn full" type="submit">Entrar al centro maestro</button>
+      </form>
+      <div class="master-login-actions">
+        <a class="cta-button btn-secondary" href="/maestro/olvide">Olvidé mi contraseña</a>
+        <a class="cta-button btn-secondary" href="https://www.quantuschile.cl/">Volver a Quantus</a>
+      </div>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='passkeys.js') }}?v=20260729-passkeys"></script>
+</body>
+</html>

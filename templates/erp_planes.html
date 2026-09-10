@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planes y Precios — Quantus ERP Chile</title>
+  <meta name="description" content="Conoce los planes y precios transparentes de Quantus ERP para pymes y empresas en Chile. Conexión SII, Inventario, Contabilidad y prueba gratis.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-light: #f8fafc;
+      --border-light: #e2e8f0;
+      --quantus-navy: #06101f;
+      --primary-cyan: #0284c7;
+      --primary-blue: #2563eb;
+      --cyan-bright: #38bdf8;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+    body { background: var(--bg-white); color: #334155; margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .top-ribbon-quantus { background: var(--quantus-navy); border-bottom: 1px solid rgba(56,189,248,0.2); color: #fff; padding: 9px 0; font-size: 12.5px; font-weight: 700; }
+    .ribbon-flex { width: min(calc(100% - 64px), 1280px); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .main-header { background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
+    .header-shell { width: min(calc(100% - 64px), 1280px); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .brand-quantus-official { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-symbol-img { width: 42px; height: 42px; object-fit: contain; border-radius: 10px; }
+    .brand-text-block { display: flex; flex-direction: column; }
+    .brand-name-quantus { font-size: 19px; font-weight: 900; color: var(--text-main); letter-spacing: -0.03em; line-height: 1.1; }
+    .brand-name-accent { color: var(--primary-cyan); }
+    .brand-tagline-quantus { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .nav-links-menu { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+    .nav-link-item { color: #0f172a; font-size: 14.5px; font-weight: 600; text-decoration: none; }
+    .nav-link-item.active { color: var(--primary-cyan); font-weight: 800; }
+    .btn-cyan-quantus-cta { padding: 11px 22px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--primary-blue) 100%); color: #fff; font-weight: 800; text-decoration: none; }
+    .section-padding { padding: 80px 0; }
+    .container { width: min(calc(100% - 64px), 1280px); margin: 0 auto; }
+    .title-box { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+    .title-box h1 { font-size: 42px; font-weight: 900; color: #0f172a; margin: 0 0 16px; }
+    .title-box p { font-size: 16px; color: #64748b; }
+    .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .plan-card { background: #fff; border: 2px solid #e2e8f0; border-radius: 24px; padding: 36px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+    .plan-card.featured { border-color: var(--primary-cyan); box-shadow: 0 20px 40px rgba(2, 132, 199, 0.15); transform: translateY(-6px); }
+    .plan-name { font-size: 22px; font-weight: 900; color: #0f172a; margin: 0 0 8px; }
+    .plan-price { font-size: 38px; font-weight: 900; color: var(--primary-cyan); margin: 16px 0; }
+    .plan-price span { font-size: 14px; font-weight: 600; color: #64748b; }
+    .plan-features { list-style: none; padding: 0; margin: 24px 0; }
+    .plan-features li { padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 10px; }
+    .btn-plan { display: block; text-align: center; padding: 14px; border-radius: 12px; background: var(--primary-cyan); color: #fff; font-weight: 800; text-decoration: none; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main class="section-padding">
+    <div class="container">
+      <div class="title-box">
+        <h1>Planes y precios transparentes para tu empresa</h1>
+        <p>Elige el plan ideal según el tamaño de tu empresa en Chile. Todos incluyen prueba gratuita de 10 días.</p>
+      </div>
+
+      <div class="plans-grid">
+        <div class="plan-card">
+          <div>
+            <div class="plan-name">Plan Pyme Inicial</div>
+            <p style="color: #64748b; font-size: 13.5px;">Ideal para microempresas y locales que inician su gestión.</p>
+            <div class="plan-price">1.5 UF <span>/mes</span></div>
+            <ul class="plan-features">
+              <li>✓ 1 Punto de Venta (POS)</li>
+              <li>✓ Control de Caja, Ventas e Inventario</li>
+              <li>✓ Inventario y Control de Stock</li>
+              <li>✓ Registro de Ventas Mostrador</li>
+              <li>✓ Soporte Técnico Asistido</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/56975480746?text=Hola%20Quantus,%20quiero%20solicitar%20prueba%20del%20Plan%20Pyme%20Inicial" target="_blank" class="btn-plan">Solicitar prueba 10 días →</a>
+        </div>
+
+        <div class="plan-card featured">
+          <div>
+            <div style="background: rgba(2,132,199,0.1); color: var(--primary-cyan); font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-bottom: 12px;">MÁS POPULAR</div>
+            <div class="plan-name">Plan Pro Crecimiento</div>
+            <p style="color: #64748b; font-size: 13.5px;">Para empresas con múltiples sucursales y bodegas.</p>
+            <div class="plan-price">2.8 UF <span>/mes</span></div>
+            <ul class="plan-features">
+              <li>✓ Multitienda & Multibodega</li>
+              <li>✓ Control de Caja y Ventas Mostrador</li>
+              <li>✓ Conciliación y Flujo de Caja</li>
+              <li>✓ Cuentas por Cobrar y Pagar</li>
+              <li>✓ Agente IA Diario Oficial Incluido</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/56975480746?text=Hola%20Quantus,%20quiero%20probar%20el%20Plan%20Pro%20Crecimiento" target="_blank" class="btn-plan" style="background: linear-gradient(135deg, var(--primary-cyan), #2563eb);">Probar Plan Pro →</a>
+        </div>
+
+        <div class="plan-card">
+          <div>
+            <div class="plan-name">Plan Enterprise Corporativo</div>
+            <p style="color: #64748b; font-size: 13.5px;">Para grandes empresas que requieren personalización e Inteligencia Operativa.</p>
+            <div class="plan-price">4.5 UF <span>/mes</span></div>
+            <ul class="plan-features">
+              <li>✓ Bodegas e Impresoras ilimitadas</li>
+              <li>✓ Agentes IA (Diario Oficial + Licitaciones)</li>
+              <li>✓ API Abierta e Integraciones</li>
+              <li>✓ Módulo de Adecuación Ley 21.719</li>
+              <li>✓ Ejecutivo de Cuenta Dedicado</li>
+            </ul>
+          </div>
+          <a href="https://wa.me/56975480746?text=Hola%20Quantus,%20quiero%20cotizar%20el%20Plan%20Enterprise" target="_blank" class="btn-plan">Hablar con Ventas →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+</body>
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cómo trabaja Quantus | Ecosistema Inteligente para Pymes</title>
+  <meta name="description" content="Descubre cómo trabaja Quantus: mientras tú diriges, nuestros módulos autorizados observan fuentes relevantes, analizan señales y te avisan con alertas simples.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-slate: #f8fafc;
+      --border-color: #e2e8f0;
+      --cyan-bright: #0284c7;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #0f172a;
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+    }
+
+    /* HERO BLANCO PREMIUM */
+    .page-hero {
+      position: relative;
+      padding: 90px 0 100px;
+      isolation: isolate;
+      overflow: hidden;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .page-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(2, 132, 199, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(2, 132, 199, 0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 85%);
+    }
+
+    .shell {
+      width: min(calc(100% - 48px), 1280px);
+      margin: 0 auto;
+    }
+
+    .hero-content {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .kicker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.25);
+      color: #0284c7;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .kicker-pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #0284c7;
+      box-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
+    }
+
+    .hero-h1 {
+      font-size: clamp(38px, 4.8vw, 64px);
+      line-height: 1.12;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      color: #0f172a;
+      margin: 0 0 24px;
+    }
+
+    .hero-lead-text {
+      font-size: 18px;
+      line-height: 1.65;
+      color: #475569;
+      margin: 0 auto 36px;
+      font-weight: 500;
+      max-width: 760px;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-cyan {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 32px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 12px 30px rgba(2, 132, 199, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-cyan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(2, 132, 199, 0.45);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 32px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #0f172a;
+      font-size: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: #0284c7;
+      color: #0284c7;
+      background: rgba(2, 132, 199, 0.04);
+    }
+
+    /* SECCIÓN DE 4 PASOS */
+    .steps-section {
+      padding: 90px 0;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section-header-center {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 60px;
+    }
+
+    .section-kicker-cyan {
+      font-size: 13px;
+      font-weight: 800;
+      color: #0284c7;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-h2-large {
+      font-size: clamp(32px, 3.8vw, 46px);
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+      line-height: 1.18;
+      margin: 0 0 16px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .step-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 36px 32px;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.04);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .step-card:hover {
+      border-color: #0284c7;
+      box-shadow: 0 16px 40px rgba(2, 132, 199, 0.12);
+      transform: translateY(-3px);
+    }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
+      border: 1.5px solid rgba(2, 132, 199, 0.25);
+      color: #0284c7;
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    .step-card h3 {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .step-card p {
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: #475569;
+      margin: 0 0 20px;
+      font-weight: 500;
+    }
+
+    .step-examples-box {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 16px 20px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .step-examples-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .step-examples-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .step-example-item {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0f172a;
+      background: #ffffff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .step-highlight-phrase {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(37, 99, 235, 0.08) 100%);
+      border: 1.5px solid rgba(2, 132, 199, 0.25);
+      border-radius: 14px;
+      padding: 16px 20px;
+      color: #0284c7;
+      font-size: 15px;
+      font-weight: 800;
+      margin-top: 10px;
+    }
+
+    /* SECCIÓN DE MÓDULOS */
+    .modules-section {
+      padding: 90px 0;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .mod-item-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 28px;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mod-item-card:hover {
+      border-color: #0284c7;
+      box-shadow: 0 12px 32px rgba(2, 132, 199, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .mod-card-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .mod-card-icon {
+      font-size: 24px;
+    }
+
+    .mod-item-card h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .mod-item-card p {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: #64748b;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    @media (max-width: 1024px) {
+      .steps-grid, .modules-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <!-- HERO DE LA PÁGINA -->
+    <section class="page-hero">
+      <div class="shell">
+        <div class="hero-content">
+          <div class="kicker-pill">
+            ECOSISTEMA INTELIGENTE PARA PYMES
+          </div>
+          <h1 class="hero-h1">
+            Mientras tú diriges, Quantus observa, analiza y trabaja.
+          </h1>
+          <p class="hero-lead-text">
+            Configuras tu empresa una sola vez. Desde ese momento, los módulos autorizados monitorean fuentes relevantes, detectan señales importantes y te entregan alertas claras para decidir mejor.
+          </p>
+          <div class="btn-row">
+            <a href="mailto:contacto@quantuschile.cl?subject=Solicitud%20Demostracion%20Quantus" class="btn-cyan">
+              Ver Quantus en acción
+            </a>
+            <a href="#modulos" class="btn-outline">
+              Explorar soluciones ↓
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOQUE DE 4 PASOS -->
+    <section class="steps-section">
+      <div class="shell">
+        <div class="section-header-center">
+          <div class="section-kicker-cyan">FLUJOS DE TRABAJO AUTOMATIZADOS</div>
+          <h2 class="section-h2-large">Cómo trabaja Quantus por tu empresa</h2>
+        </div>
+
+        <div class="steps-grid">
+          <!-- Paso 1 -->
+          <div class="step-card">
+            <div>
+              <div class="step-num">1</div>
+              <h3>1. Observa</h3>
+              <p>Quantus monitorea fuentes públicas, operación interna y eventos relevantes según los módulos que tengas activos.</p>
+            </div>
+            <div class="step-examples-box">
+              <div class="step-examples-title">Fuentes monitoreadas:</div>
+              <ul class="step-examples-list">
+                <li class="step-example-item">Diario Oficial</li>
+                <li class="step-example-item">Mercado Público</li>
+                <li class="step-example-item">Marcas</li>
+                <li class="step-example-item">Remates</li>
+                <li class="step-example-item">Inventario y ventas</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="step-card">
+            <div>
+              <div class="step-num">2</div>
+              <h3>2. Analiza</h3>
+              <p>Los agentes cruzan datos, contexto y prioridades para separar señales importantes del ruido diario.</p>
+            </div>
+            <div class="step-examples-box">
+              <div class="step-examples-title">Señales detectadas:</div>
+              <ul class="step-examples-list">
+                <li class="step-example-item">coincidencias comerciales</li>
+                <li class="step-example-item">publicaciones relevantes</li>
+                <li class="step-example-item">oportunidades compatibles</li>
+                <li class="step-example-item">alertas de stock</li>
+                <li class="step-example-item">eventos de cumplimiento</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Paso 3 -->
+          <div class="step-card">
+            <div>
+              <div class="step-num">3</div>
+              <h3>3. Te avisa</h3>
+              <p>Cuando aparece algo importante, Quantus lo resume en una alerta simple, con el dato clave y una acción sugerida.</p>
+            </div>
+            <div class="step-examples-box">
+              <div class="step-examples-title">Ejemplos de alerta:</div>
+              <ul class="step-examples-list">
+                <li class="step-example-item">"Publicación detectada en Diario Oficial."</li>
+                <li class="step-example-item">"Licitación compatible encontrada."</li>
+                <li class="step-example-item">"Stock crítico en producto de alta rotación."</li>
+                <li class="step-example-item">"Checklist Ley 21.719 pendiente."</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Paso 4 -->
+          <div class="step-card">
+            <div>
+              <div class="step-num">4</div>
+              <h3>4. Recomienda</h3>
+              <p>Quantus no reemplaza tu decisión. Ordena la información para que puedas actuar más rápido y con mejor contexto.</p>
+            </div>
+            <div class="step-highlight-phrase">
+              Tú decides. Quantus vigila, analiza y te ayuda a priorizar.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN DE MÓDULOS -->
+    <section id="modulos" class="modules-section">
+      <div class="shell">
+        <div class="section-header-center">
+          <div class="section-kicker-cyan">MODULARIDAD & INTEGRACIÓN</div>
+          <h2 class="section-h2-large">Radares y módulos que pueden trabajar juntos</h2>
+          <p style="color: #64748b; font-size: 16px;">Puedes comenzar con un módulo puntual y crecer hacia una plataforma integrada de gestión e inteligencia empresarial.</p>
+        </div>
+
+        <div class="modules-grid">
+          <!-- Diario Oficial -->
+          <div class="mod-item-card">
+            <div class="mod-card-top">
+              <span class="mod-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+              </span>
+              <h3>Diario Oficial</h3>
+            </div>
+            <p>Detecta publicaciones relevantes asociadas a empresas, RUT, juntas, citaciones y eventos societarios.</p>
+          </div>
+
+          <!-- Mercado Público -->
+          <div class="mod-item-card">
+            <div class="mod-card-top">
+              <span class="mod-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+              </span>
+              <h3>Mercado Público</h3>
+            </div>
+            <p>Encuentra licitaciones compatibles con tu rubro, ubicación y capacidad operativa.</p>
+          </div>
+
+          <!-- Marcas INAPI -->
+          <div class="mod-item-card">
+            <div class="mod-card-top">
+              <span class="mod-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="m12 15 2 5 2-3 3-2-5-2z"/><path d="M12 15V3"/><path d="m19 12-7-9-7 9"/></svg>
+              </span>
+              <h3>Marcas INAPI</h3>
+            </div>
+            <p>Vigila solicitudes similares para anticipar riesgos comerciales o proteger tu identidad de marca.</p>
+          </div>
+
+          <!-- Remates -->
+          <div class="mod-item-card">
+            <div class="mod-card-top">
+              <span class="mod-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </span>
+              <h3>Remates</h3>
+            </div>
+            <p>Monitorea oportunidades publicadas y señales de valor para evaluar antes que otros.</p>
+          </div>
+
+          <!-- ERP / POS -->
+          <div class="mod-item-card">
+            <div class="mod-card-top">
+              <span class="mod-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              </span>
+              <h3>ERP / POS</h3>
+            </div>
+            <p>Conecta ventas, caja, stock, inventario y alertas operativas en una sola plataforma.</p>
+          </div>
+
+          <!-- Ley 21.719 -->
+          <div class="mod-item-card">
+            <div class="mod-card-top">
+              <span class="mod-card-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              </span>
+              <h3>Ley 21.719</h3>
+            </div>
+            <p>Organiza tareas, checklist y señales de cumplimiento para preparar a tu empresa ante nuevas exigencias de protección de datos.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN GUÍAS RELACIONADAS -->
+    <div class="shell" style="margin-top: 40px; margin-bottom: 20px;">
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; padding:24px 28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 4px 16px rgba(15,23,42,0.03);">
+        <div>
+          <strong style="color:#0f172a; font-size:15px; display:block; margin-bottom:4px;">📖 Biblioteca de Guías y Recursos Técnicos</strong>
+          <span style="color:#64748b; font-size:13.5px;">Accede a análisis legales, casos prácticos y tutoriales elaborados por el equipo de Quantus.</span>
+        </div>
+        <div>
+          <a href="/blog" style="color:#0284c7; font-weight:700; font-size:13.5px; text-decoration:underline;">Explorar Blog & Guías →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

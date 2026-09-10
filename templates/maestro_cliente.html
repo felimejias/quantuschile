@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ client.name }} | Carpeta Maestro Quantus</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-maestro">
+</head>
+<body>
+  <div class="app-container master-shell">
+    <header class="app-header">
+      <a class="brand-link" href="/maestro">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Carpeta de cliente</div>
+        </div>
+      </a>
+      <nav class="header-actions">
+        <a class="cta-button btn-secondary" href="/maestro">Centro Maestro</a>
+        <a class="cta-button" href="/maestro/logout">Salir</a>
+      </nav>
+    </header>
+
+    <section class="master-client-hero proof-panel">
+      <div>
+        <span class="eyebrow"><span class="eyebrow-dot"></span> Carpeta ordenada por RUT</span>
+        <h1>{{ client.name }}</h1>
+        <p>{{ client.module }} · {{ client.rubro }} · {{ client.plan }}</p>
+      </div>
+      <div class="master-client-meta">
+        <span>RUT</span>
+        <strong>{{ client.rut or "Sin RUT" }}</strong>
+        <small>{{ client.folder_name }}</small>
+      </div>
+    </section>
+
+    <section class="dashboard-columns">
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Subir archivo</h2>
+            <p>PDFs, comprobantes, contratos, documentos de marca o respaldos comerciales.</p>
+          </div>
+        </div>
+        <form class="form-grid" action="/maestro/cliente/{{ client.key }}/upload" method="POST" enctype="multipart/form-data">
+          {{ csrf_input()|safe }}
+          <div class="form-group">
+            <label class="form-label" for="category">Categoría</label>
+            <select class="form-select" id="category" name="category">
+              {% for key, label in categories.items() %}
+              <option value="{{ key }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="file">Archivo</label>
+            <input class="form-control" id="file" name="file" type="file" required>
+          </div>
+          <div class="form-group full">
+            <button class="btn full" type="submit">Guardar en carpeta del cliente</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Resumen comercial</h2>
+            <p>Valor, estado y trazabilidad rápida.</p>
+          </div>
+        </div>
+        <div class="master-client-summary">
+          <div><span>Valor mensual</span><strong>{{ client.monthly_value|clp }}</strong></div>
+          <div><span>Estado</span><strong>{{ client.status }}</strong></div>
+          <div><span>Archivos</span><strong>{{ client.file_count }}</strong></div>
+          <div><span>WhatsApp Meta</span><strong>{{ "Activo" if client.meta_whatsapp.configured else "Pendiente" }}</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Meta WhatsApp Business</h2>
+          <p>Pide al cliente su token de Meta, Phone Number ID y plantilla aprobada. Quantus lo guarda en la carpeta privada del RUT.</p>
+        </div>
+        <span class="badge {{ 'badge-info' if client.meta_whatsapp.configured else 'badge-warning' }}">
+          {{ "Configurado" if client.meta_whatsapp.configured else "Pendiente" }}
+        </span>
+      </div>
+      <form class="form-grid" action="/maestro/cliente/{{ client.key }}/meta-whatsapp" method="POST" autocomplete="off">
+        {{ csrf_input()|safe }}
+        <div class="form-group">
+          <label class="form-label" for="owner_email">Correo administrador Meta</label>
+          <input class="form-control" id="owner_email" name="owner_email" type="email" value="{{ client.meta_whatsapp.owner_email }}" placeholder="correo@empresa.cl">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="phone_number_id">Phone Number ID *</label>
+          <input class="form-control" id="phone_number_id" name="phone_number_id" value="{{ client.meta_whatsapp.phone_number_id }}" placeholder="123456789012345" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="template">Plantilla aprobada</label>
+          <input class="form-control" id="template" name="template" value="{{ client.meta_whatsapp.template or 'quantus_alerta_general' }}" placeholder="quantus_alerta_general">
+          <div class="form-text">Debe existir y estar aprobada en Meta Business para enviar alertas automáticas.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="graph_version">Versión Graph API</label>
+          <input class="form-control" id="graph_version" name="graph_version" value="{{ client.meta_whatsapp.graph_version or 'v21.0' }}" placeholder="v21.0">
+        </div>
+        <div class="form-group full">
+          <label class="form-label" for="access_token">Token de acceso Meta {{ "(guardado: " ~ client.meta_whatsapp.token_mask ~ ")" if client.meta_whatsapp.token_mask else "*" }}</label>
+          <input class="form-control" id="access_token" name="access_token" type="password" placeholder="{{ 'Dejar en blanco para conservar el token actual' if client.meta_whatsapp.configured else 'Pegar token permanente o de sistema Meta' }}" {{ "" if client.meta_whatsapp.configured else "required" }}>
+          <div class="form-text">El token queda en archivo privado dentro de la carpeta del cliente. No se muestra completo en pantalla.</div>
+        </div>
+        <div class="form-group full">
+          <button class="btn full" type="submit">Guardar integración Meta del cliente</button>
+        </div>
+      </form>
+      <div class="form-group full" style="margin-top:12px;">
+        <button class="btn" type="button" id="btn_test_meta">Verificar credenciales y plantilla contra Meta</button>
+        <div id="meta_test_result" style="margin-top:10px; font-size:12px; white-space:pre-wrap;"></div>
+      </div>
+      <script>
+        document.getElementById('btn_test_meta').addEventListener('click', async function () {
+          var btn = this, out = document.getElementById('meta_test_result');
+          btn.disabled = true; out.textContent = 'Consultando Graph API de Meta...';
+          try {
+            var res = await fetch('/maestro/cliente/{{ client.key }}/meta-whatsapp/test', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': '{{ csrf_token() }}' },
+              body: JSON.stringify({})
+            });
+            var data = await res.json();
+            var lines = [];
+            if (data.ok) {
+              lines.push('✓ TODO OK: token válido, número conectado, plantilla APPROVED.');
+              lines.push('  Teléfono: ' + (data.telefono || '?'));
+              lines.push('  Calidad del número: ' + (data.calidad || '?'));
+              lines.push('  WABA: ' + (data.waba || '?'));
+              lines.push('  Plantilla: ' + data.plantilla.nombre + ' (' + data.plantilla.estado + ', ' + data.plantilla.idioma + ')');
+            } else {
+              lines.push('✗ ' + (data.error || 'Falló la verificación.'));
+              for (var k in data.chequeos || {}) lines.push('  ' + k + ': ' + data.chequeos[k]);
+            }
+            out.textContent = lines.join('\n');
+          } catch (e) {
+            out.textContent = 'Error de red local: ' + e;
+          } finally {
+            btn.disabled = false;
+          }
+        });
+      </script>
+    </section>
+
+    <section class="proof-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Archivos del cliente</h2>
+          <p>Documentos separados por carpeta operacional.</p>
+        </div>
+      </div>
+      <div class="client-folder-grid">
+        {% for group in client.files %}
+        <article class="client-folder-card">
+          <h3>{{ group.label }}</h3>
+          {% if group.files %}
+          <div class="report-list">
+            {% for file in group.files %}
+            <div class="report-item">
+              <div>
+                <strong>{{ file.name }}</strong>
+                <span>{{ file.updated_at }} · {{ file.size_kb }} KB</span>
+              </div>
+              <a class="cta-button btn-secondary compact-link" href="/maestro/cliente/{{ client.key }}/archivo/{{ file.category }}/{{ file.name }}">Descargar</a>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <p class="muted">Sin archivos aún.</p>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="proof-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Informes IA asociados</h2>
+          <p>PDFs generados por los agentes cuando el nombre coincide con el cliente.</p>
+        </div>
+      </div>
+      <div class="report-list">
+        {% for report in client.reports %}
+        <div class="report-item">
+          <div>
+            <strong>{{ report.publication_type or "Informe Quantus" }}</strong>
+            <span>{{ report.created_at }} · urgencia {{ report.urgency or "media" }}</span>
+          </div>
+          <a class="cta-button btn-secondary compact-link" href="/informes/{{ report.id }}.pdf">PDF</a>
+        </div>
+        {% else %}
+        <p class="muted">Aún no hay informes IA vinculados automáticamente.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% include "partials/law_21719.html" %}
+
+    {% include "partials/legal_footer.html" %}
+  </div>
+</body>
+</html>

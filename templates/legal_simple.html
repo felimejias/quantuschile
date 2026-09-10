@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | Quantus Chile SpA</title>
+  <link rel="icon" type="image/png" href="/static/quantus-logo-clean.png">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #64748b;
+      --line: #d8e1ec;
+      --soft: #f8fafc;
+      --navy: #07111f;
+      --cyan: #0ea5e9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--soft);
+      line-height: 1.65;
+    }
+    a:focus-visible {
+      outline: 3px solid #fbbf24;
+      outline-offset: 3px;
+    }
+    .legal-shell {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: clamp(24px, 6vw, 72px) 18px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 950;
+      margin-bottom: 34px;
+    }
+    .brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+    }
+    .legal-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: clamp(22px, 5vw, 44px);
+      box-shadow: 0 28px 72px rgba(15, 23, 42, 0.08);
+    }
+    .kicker {
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 8px 0 16px;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+    }
+    h2 {
+      margin: 28px 0 8px;
+      font-size: 20px;
+      line-height: 1.25;
+      color: #1e293b;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 6px;
+    }
+    p, li {
+      color: #334155;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .notice {
+      background: #eff8ff;
+      border: 1px solid #bae6fd;
+      border-radius: 14px;
+      padding: 14px 18px;
+      color: #0369a1;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .footer-links {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .footer-links a {
+      color: var(--cyan);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <main class="legal-shell">
+    <a class="brand" href="/">
+      <img src="/static/quantus-logo-clean.png" alt="Quantus Chile SpA">
+      <span>QUANTUS <span style="color:#0ea5e9;">CHILE SpA</span></span>
+    </a>
+    <article class="legal-card">
+      <div class="kicker">Marco Legal & Compliance Oficial</div>
+      <h1>{{ title }}</h1>
+      {% if notice %}
+      <p class="notice">{{ notice }}</p>
+      {% endif %}
+      {{ body|safe }}
+      <div class="footer-links">
+        <a href="/">← Inicio</a>
+        <a href="/terminos">Términos y Condiciones</a>
+        <a href="/privacidad">Privacidad</a>
+        <a href="/cookies">Cookies</a>
+        <a href="/privacidad/derechos-arcop">Derechos ARCOP</a>
+        <a href="/checklist-ley-21719">Ley N° 21.719</a>
+      </div>
+    </article>
+    {% include "partials/legal_footer.html" %}
+  </main>
+</body>
+</html>

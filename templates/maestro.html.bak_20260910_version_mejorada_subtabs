@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro Maestro Quantus | Analytics</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-maestro">
+  <style>
+    .registry-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(6, 16, 31, 0.82);
+      backdrop-filter: blur(6px);
+      z-index: 99990;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .registry-modal-overlay.open { display: flex; }
+    .registry-modal {
+      background: #0f172a;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 480px;
+      padding: 22px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+      position: relative;
+      color: #f8fafc;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .registry-modal h3 { margin: 0 0 4px; font-size: 18px; }
+    .registry-modal p { margin: 0 0 16px; color: #94a3b8; font-size: 13px; }
+    .registry-modal .form-group { margin-bottom: 12px; }
+    .registry-modal label { display: block; font-size: 12px; font-weight: 700; color: #cbd5e1; margin-bottom: 5px; }
+    .registry-modal .form-control { width: 100%; box-sizing: border-box; padding: 10px 12px; background: #1e293b; border: 1px solid rgba(148,163,184,0.3); border-radius: 10px; color: #fff; font-size: 14px; outline: none; }
+    .registry-modal .form-control:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.2); }
+    .registry-modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+    .registry-modal-actions .btn { flex: 1; }
+    .registry-close-btn {
+      position: absolute; top: 12px; right: 14px;
+      background: none; border: none; color: #94a3b8; font-size: 22px; cursor: pointer; line-height: 1;
+    }
+    .registry-close-btn:hover { color: #fff; }
+    .registry-float-alert {
+      position: fixed;
+      bottom: 20px; right: 20px;
+      z-index: 99980;
+      max-width: 360px;
+      background: rgba(30, 20, 4, 0.95);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+      color: #fde68a;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .registry-float-alert strong { color: #fbbf24; }
+    .registry-float-alert ul { margin: 8px 0 0; padding-left: 18px; max-height: 160px; overflow-y: auto; }
+    .registry-float-alert .dismiss {
+      position: absolute; top: 8px; right: 10px;
+      background: none; border: none; color: #fbbf24; font-size: 16px; cursor: pointer; line-height: 1;
+    }
+    .superadmin-control-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .superadmin-summary {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(90px, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .superadmin-summary div {
+      background: rgba(15, 23, 42, .78);
+      border: 1px solid rgba(148, 163, 184, .22);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .superadmin-summary span {
+      display: block;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .superadmin-summary strong { font-size: 22px; color: #f8fafc; }
+    .superadmin-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .superadmin-action-card {
+      display: block;
+      min-height: 88px;
+      padding: 12px;
+      border: 1px solid rgba(56, 189, 248, .28);
+      border-radius: 8px;
+      background: rgba(8, 16, 33, .8);
+      color: #e2e8f0;
+      text-decoration: none;
+    }
+    .superadmin-action-card strong { display: block; color: #fff; margin-bottom: 4px; }
+    .superadmin-action-card span { display: block; color: #94a3b8; font-size: 12px; line-height: 1.35; }
+    .module-admin-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .module-admin-form .wide { grid-column: 1 / -1; }
+    .module-admin-form label {
+      display: grid;
+      gap: 5px;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .module-admin-form input,
+    .module-admin-form select,
+    .module-admin-form textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid rgba(148, 163, 184, .28);
+      border-radius: 8px;
+      color: #f8fafc;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+    .module-row-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .module-edit-details {
+      margin-top: 8px;
+      border-top: 1px solid rgba(148, 163, 184, .18);
+      padding-top: 8px;
+    }
+    .module-edit-details summary {
+      cursor: pointer;
+      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .superadmin-add-panel {
+      background: rgba(8, 16, 33, .72);
+      border: 1px solid rgba(148, 163, 184, .2);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .superadmin-add-panel h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      color: #f8fafc;
+    }
+    .superadmin-add-panel p {
+      margin: 0 0 12px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+    .demo-access-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+    .demo-access-card {
+      background: rgba(8, 16, 33, .72);
+      border: 1px solid rgba(56, 189, 248, .24);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .demo-access-card h3 {
+      margin: 0 0 4px;
+      font-size: 17px;
+      color: #f8fafc;
+    }
+    .demo-access-card p,
+    .demo-protocol li {
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .demo-protocol {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+    .demo-access-result {
+      margin: 14px 0;
+      padding: 12px;
+      background: rgba(34, 197, 94, .12);
+      border: 1px solid rgba(34, 197, 94, .38);
+      border-radius: 8px;
+      color: #dcfce7;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .demo-access-result code {
+      display: inline-block;
+      margin: 2px 4px 2px 0;
+      padding: 3px 6px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, .85);
+      color: #f8fafc;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 900;
+      border: 1px solid rgba(148, 163, 184, .28);
+      color: #cbd5e1;
+      background: rgba(15, 23, 42, .7);
+    }
+    .status-pill.produccion { color:#86efac; border-color:rgba(34,197,94,.5); background:rgba(22,101,52,.2); }
+    .status-pill.piloto { color:#93c5fd; border-color:rgba(59,130,246,.5); background:rgba(30,64,175,.2); }
+    .status-pill.demo { color:#fde68a; border-color:rgba(245,158,11,.5); background:rgba(120,53,15,.2); }
+    .status-pill.block { color:#fca5a5; border-color:rgba(239,68,68,.55); background:rgba(127,29,29,.22); }
+    .status-pill.externo, .status-pill.mock { color:#d8b4fe; border-color:rgba(168,85,247,.5); background:rgba(88,28,135,.2); }
+    @media (max-width: 980px) {
+      .superadmin-control-grid,
+      .demo-access-grid,
+      .module-admin-form { grid-template-columns: 1fr; }
+      .superadmin-summary { grid-template-columns: repeat(2, minmax(110px, 1fr)); }
+    }
+  
+    .master-subtabs-nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 4px 14px;
+      margin: 12px 0 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+      scrollbar-width: thin;
+    }
+    .subtab-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 15px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 9px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .subtab-item:hover {
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-1px);
+    }
+    .subtab-item.active {
+      color: #f8fafc;
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.28), rgba(15, 23, 42, 0.9));
+      border-color: #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.3);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app-container master-shell">
+    <header class="app-header master-header">
+      <a class="brand-link" href="/maestro">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+        <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Centro Maestro SuperAdmin</div>
+        </div>
+      </a>
+      <nav class="header-actions">
+        <a class="cta-button btn-secondary" href="/maestro/servidores" style="border-color:#38bdf8; color:#38bdf8; display:inline-flex; align-items:center; gap:6px;">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#22c55e; box-shadow:0 0 8px #22c55e;"></span>
+          🖥️ Servidores Multi-Cloud
+        </a>
+        <a class="cta-button btn-secondary" href="#panel-superadmin">SuperAdmin</a>
+        <a class="cta-button btn-secondary" href="/clientes">Punto de Venta</a>
+        <a class="cta-button btn-secondary" href="/inapi">INAPI</a>
+        <a class="cta-button btn-secondary" href="/do">Diario Oficial</a>
+        <a class="cta-button btn-secondary" href="/licitaciones">Licitaciones</a>
+        <a class="cta-button btn-secondary" href="/maestro/tributario">Tributario Quantus</a>
+        <a class="cta-button btn-secondary" href="/maestro/geointel">GeoIntel</a>
+        <a class="cta-button" href="/maestro/logout">Salir</a>
+      </nav>
+    </header>
+
+    <!-- BARRA DE SUBPESTAÑAS MAESTRAS QUANTUS -->
+    <nav class="master-subtabs-nav" aria-label="Secciones del Centro Maestro">
+      <a href="/maestro" class="subtab-item active">📊 Resumen General</a>
+      <a href="/maestro/servidores" class="subtab-item">🖥️ Servidores Multi-Cloud</a>
+      <a href="#panel-do-historico" class="subtab-item">🏛️ Diario Oficial (25 Años)</a>
+      <a href="#panel-demos" class="subtab-item">🔑 Demos Temporales</a>
+      <a href="#panel-superadmin" class="subtab-item">⚙️ SuperAdmin Módulos</a>
+      <a href="#panel-clientes-cuentas" class="subtab-item">👥 Clientes & Cuentas</a>
+      <a href="/maestro/geointel" class="subtab-item">🗺️ GeoIntel</a>
+      <a href="/maestro/tributario" class="subtab-item">🧾 Tributario</a>
+    </nav>
+
+
+    <section class="proof-panel" style="margin: 16px 0;">
+      <div class="panel-title">
+        <div>
+          <h2>Crear usuarios gratis por radar</h2>
+          <p>Alta separada por servicio, con verificación de contacto y valor mensual cero.</p>
+        </div>
+        <span class="badge badge-info">{{ snapshot.totals.free_clients }} gratis activos</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px;">
+        {% set radar_cards = [
+          {"key":"diario_oficial","title":"Diario Oficial","accent":"#38bdf8","hint":"Alias, empresas o personas asociadas","button":"Crear gratis DO"},
+          {"key":"licitaciones","title":"Licitaciones","accent":"#22c55e","hint":"Rubros, regiones, montos u organismos","button":"Crear gratis Licitaciones"},
+          {"key":"remates","title":"Remates","accent":"#f97316","hint":"Region, comuna, banco o tipo de inmueble","button":"Crear gratis Remates"},
+          {"key":"inapi","title":"INAPI","accent":"#a855f7","hint":"Marca, clase, titular o rubro","button":"Crear gratis INAPI"}
+        ] %}
+        {% for radar in radar_cards %}
+        <article style="background:rgba(15,23,42,0.95); border:1px solid {{ radar.accent }}66; border-radius:8px; padding:14px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;">
+            <strong style="color:{{ radar.accent }};">{{ radar.title }}</strong>
+            <span class="badge badge-info">{{ snapshot.free_by_module.get(radar.key, 0) }} gratis</span>
+          </div>
+          <form action="/maestro/agregar-cliente-gratis" method="POST" style="display:grid; gap:8px;">
+            {{ csrf_input()|safe }}
+            <input type="hidden" name="modulo" value="{{ radar.key }}">
+            <input type="text" name="rut" class="form-control" placeholder="RUT a vigilar *" required data-rut style="padding:8px 10px; font-size:12px; border-color:{{ radar.accent }};">
+            <input type="text" name="nombre" class="form-control" placeholder="Nombre o razon social" style="padding:8px 10px; font-size:12px;">
+            <input type="email" name="email" class="form-control" placeholder="Correo verificado *" required style="padding:8px 10px; font-size:12px;">
+            <input type="tel" name="whatsapp" class="form-control" placeholder="WhatsApp +569..." required pattern="^(\+?569|9)[0-9]{8}$" title="Ingresa un numero celular chileno valido" style="padding:8px 10px; font-size:12px;">
+            <input type="text" name="rubros" class="form-control" placeholder="{{ radar.hint }}" style="padding:8px 10px; font-size:12px;">
+            <button type="submit" class="cta-button" style="padding:9px 12px; font-size:12px;">{{ radar.button }}</button>
+          </form>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+
+    <section class="master-hero">
+      <div>
+        <span class="eyebrow"><span class="eyebrow-dot"></span> Operación ejecutiva privada</span>
+        <h1 class="hero-title">Control maestro <span>Quantus Intelligence</span></h1>
+        <p class="hero-subtitle">
+          Vista unificada de Diario Oficial, INAPI, Licitaciones, ERP y agentes IA. Los ingresos se muestran como estimación operativa hasta conectar confirmación automática de Mercado Pago.
+        </p>
+      </div>
+      <div class="master-status-panel">
+        <span>Sesión</span>
+        <strong>{{ user }}</strong>
+        <small>Actualizado {{ snapshot.generated_at }}</small>
+        <small data-passkey-status>Touch ID disponible como passkey del navegador.</small>
+      </div>
+    </section>
+
+    <!-- MINI MONITOR COMPACTO DE INFRAESTRUCTURA MULTI-CLOUD -->
+    <section class="proof-panel" style="margin: 14px 0; padding: 14px 18px; border: 1px solid rgba(56, 189, 248, 0.35); background: linear-gradient(135deg, rgba(8, 16, 33, 0.95), rgba(15, 23, 42, 0.98)); border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.35);">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#22c55e; box-shadow:0 0 10px #22c55e;"></span>
+          <div>
+            <h3 style="margin:0; font-size:15px; color:#f8fafc; font-weight:800; letter-spacing:0.3px;">
+              Salud y Redundancia Multi-Cloud (ISO 22301)
+            </h3>
+            <p style="margin:2px 0 0; color:#94a3b8; font-size:12px;">
+              Monitoreo continuo de 3 nodos independientes: Servidor Físico + Oracle Cloud + Azure DR.
+            </p>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="badge" style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#4ade80; font-weight:700; font-size:11px;">
+            ● RTO &lt; 15m Sincronizado
+          </span>
+          <a href="/maestro/servidores" class="cta-button" style="background:#0284c7; color:#fff; border-color:#38bdf8; padding:6px 14px; font-size:12px; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:700;">
+            🖥️ Ver Monitor Completo en /maestro/servidores →
+          </a>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px;">
+        <!-- MINI NODO 1: FÍSICO -->
+        <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(56,189,248,0.25); border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:#38bdf8; font-size:13px; display:flex; align-items:center; gap:6px;">
+              🖥️ Físico On-Premise
+            </strong>
+            <small style="color:#94a3b8; font-size:10px; display:block; margin-top:2px;">
+              100.117.44.3 · Big Data & PG Master
+            </small>
+            <div style="font-size:11px; color:#cbd5e1; margin-top:4px;">
+              Disco: <b style="color:#4ade80;">{{ infra_snapshot.onprem.disk.used_pct if infra_snapshot else '34.8' }}%</b> · RAM: <b style="color:#38bdf8;">{{ infra_snapshot.onprem.ram.used_pct if infra_snapshot else '75' }}%</b>
+            </div>
+          </div>
+          <span class="badge" style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#4ade80; font-size:10px; font-weight:700;">ONLINE</span>
+        </div>
+
+        <!-- MINI NODO 2: ORACLE -->
+        <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(34,197,94,0.25); border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:#4ade80; font-size:13px; display:flex; align-items:center; gap:6px;">
+              ☁️ Oracle Cloud Santiago
+            </strong>
+            <small style="color:#94a3b8; font-size:10px; display:block; margin-top:2px;">
+              146.181.50.43 · Edge Web & ERP Nginx
+            </small>
+            <div style="font-size:11px; color:#cbd5e1; margin-top:4px;">
+              Disco: <b style="color:#4ade80;">{{ infra_snapshot.oracle.disk.used_pct if infra_snapshot else '8.4' }}%</b> (Huella &lt; 15%)
+            </div>
+          </div>
+          <span class="badge" style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#4ade80; font-size:10px; font-weight:700;">ONLINE</span>
+        </div>
+
+        <!-- MINI NODO 3: AZURE -->
+        <div style="background:rgba(15,23,42,0.85); border:1px solid rgba(168,85,247,0.25); border-radius:8px; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:#c084fc; font-size:13px; display:flex; align-items:center; gap:6px;">
+              🛡️ Azure Hot Standby
+            </strong>
+            <small style="color:#94a3b8; font-size:10px; display:block; margin-top:2px;">
+              158.23.185.184 · Réplica DR Failover
+            </small>
+            <div style="font-size:11px; color:#cbd5e1; margin-top:4px;">
+              Disco: <b style="color:#4ade80;">{{ infra_snapshot.azure.disk.used_pct if infra_snapshot else '4.4' }}%</b> · Túnel OK
+            </div>
+          </div>
+          <span class="badge" style="background:rgba(168,85,247,0.15); border:1px solid #a855f7; color:#c084fc; font-size:10px; font-weight:700;">STANDBY</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MONITOR DE INGESTA HISTÓRICA REGRESIVA (DIARIO OFICIAL 25 AÑOS) -->
+    <section class="proof-panel" id="panel-do-historico" style="margin: 18px 0; border: 1px solid rgba(56, 189, 248, 0.4); background: linear-gradient(135deg, rgba(8, 16, 33, 0.95), rgba(15, 23, 42, 0.98)); border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.35);">
+      <div class="panel-title" style="margin-bottom: 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:#38bdf8; box-shadow:0 0 10px #38bdf8;"></span>
+          <div>
+            <h2 style="margin:0; font-size:16px; color:#f8fafc; font-weight:800; letter-spacing:0.3px;">
+              Monitor de Ingesta Histórica Regresiva · Diario Oficial
+            </h2>
+            <p style="margin:3px 0 0; color:#94a3b8; font-size:12px;">
+              Digitalización regresiva desde la edición de hoy hacia la primera edición digital extraíble (año 2001 · 25 años).
+            </p>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span class="badge" style="background:rgba(34, 197, 94, 0.15); border:1px solid #22c55e; color:#4ade80; font-weight:700; font-size:11px;">
+            ● {{ snapshot.do_regressive_progress.estado }}
+          </span>
+          <span class="badge badge-info" style="font-size:11px;">
+            Meta Legal: 25 Años
+          </span>
+        </div>
+      </div>
+
+      <!-- Barra de Progreso Visual Regresiva -->
+      <div style="background:rgba(15, 23, 42, 0.9); border:1px solid rgba(148, 163, 184, 0.25); border-radius:10px; padding:16px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px; font-weight:700; flex-wrap:wrap; gap:6px;">
+          <span style="color:#94a3b8;">
+            🏁 Meta Histórica: <strong style="color:#e2e8f0;">Edición Nº {{ snapshot.do_regressive_progress.edicion_meta }} (Año 2001)</strong>
+          </span>
+          <span style="color:#38bdf8; font-size:14px;">
+            Avance Digitalizado: <strong>{{ snapshot.do_regressive_progress.progreso_pct }}%</strong>
+          </span>
+          <span style="color:#94a3b8;">
+            📍 Última Edición (Hoy): <strong style="color:#e2e8f0;">Edición Nº {{ snapshot.do_regressive_progress.edicion_hoy }} ({{ snapshot.do_regressive_progress.fecha_max }})</strong>
+          </span>
+        </div>
+
+        <div style="height:14px; background:rgba(30, 41, 59, 0.8); border-radius:8px; overflow:hidden; position:relative; border:1px solid rgba(56, 189, 248, 0.25);">
+          <div style="height:100%; width:{{ [snapshot.do_regressive_progress.progreso_pct, 1.2]|max }}%; background:linear-gradient(90deg, #0284c7, #38bdf8, #22c55e); border-radius:8px; box-shadow:0 0 12px rgba(56, 189, 248, 0.5);"></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:11px; color:#64748b;">
+          <span>← Marcha regresiva (hacia el pasado)</span>
+          <span style="color:#cbd5e1; font-weight:600;">
+            Frontera Actual en Base: <strong style="color:#38bdf8;">Edición Nº {{ snapshot.do_regressive_progress.edicion_frontera }}</strong> ({{ snapshot.do_regressive_progress.fecha_min }})
+          </span>
+          <span>Punto de partida (presente) →</span>
+        </div>
+      </div>
+
+      <!-- Cuadrícula de Métricas Clave -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+        <div style="background:rgba(15, 23, 42, 0.7); border:1px solid rgba(56, 189, 248, 0.2); border-radius:8px; padding:12px;">
+          <span style="display:block; color:#94a3b8; font-size:11px; font-weight:700; text-transform:uppercase;">Publicaciones en Base</span>
+          <strong style="font-size:22px; color:#38bdf8;">{{ snapshot.do_regressive_progress.total_publicaciones }}</strong>
+          <small style="display:block; color:#64748b; font-size:11px; margin-top:2px;">Texto íntegro en do_historico.db</small>
+        </div>
+
+        <div style="background:rgba(15, 23, 42, 0.7); border:1px solid rgba(56, 189, 248, 0.2); border-radius:8px; padding:12px;">
+          <span style="display:block; color:#94a3b8; font-size:11px; font-weight:700; text-transform:uppercase;">Ediciones Cubiertas</span>
+          <strong style="font-size:22px; color:#f8fafc;">{{ snapshot.do_regressive_progress.ediciones_procesadas }} <span style="font-size:13px; color:#64748b;">/ {{ snapshot.do_regressive_progress.ediciones_totales }}</span></strong>
+          <small style="display:block; color:#64748b; font-size:11px; margin-top:2px;">Ediciones completas extraídas</small>
+        </div>
+
+        <div style="background:rgba(15, 23, 42, 0.7); border:1px solid rgba(56, 189, 248, 0.2); border-radius:8px; padding:12px;">
+          <span style="display:block; color:#94a3b8; font-size:11px; font-weight:700; text-transform:uppercase;">Ediciones Restantes</span>
+          <strong style="font-size:22px; color:#f59e0b;">{{ snapshot.do_regressive_progress.ediciones_restantes }}</strong>
+          <small style="display:block; color:#64748b; font-size:11px; margin-top:2px;">Hacia edición Nº 37.000</small>
+        </div>
+
+        <div style="background:rgba(15, 23, 42, 0.7); border:1px solid rgba(56, 189, 248, 0.2); border-radius:8px; padding:12px;">
+          <span style="display:block; color:#94a3b8; font-size:11px; font-weight:700; text-transform:uppercase;">Rango Temporal Indexado</span>
+          <strong style="font-size:13px; color:#e2e8f0; line-height:1.7;">{{ snapshot.do_regressive_progress.fecha_min }} al {{ snapshot.do_regressive_progress.fecha_max }}</strong>
+          <small style="display:block; color:#22c55e; font-size:11px; margin-top:2px;">Diario Oficial 24/7 activo</small>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="proof-panel" id="panel-demos">
+      <div class="panel-title">
+        <div>
+          <h2>Protocolo demos temporales</h2>
+          <p>Solicitud publica, aprobación manual, acceso por rubro y vencimiento automático. El prospecto no ve el resto de demos.</p>
+        </div>
+        <span class="badge badge-info">{{ demo_access.accounts|selectattr("status", "equalto", "active")|list|length }} demos activas</span>
+      </div>
+
+      {% if request.args.get("demo_user") %}
+      <div class="demo-access-result">
+        <strong>Acceso creado para enviar al prospecto:</strong><br>
+        Usuario <code>{{ request.args.get("demo_user") }}</code>
+        Clave <code>{{ request.args.get("demo_pass") }}</code>
+        Vence <code>{{ request.args.get("demo_until") }}</code><br>
+        Link directo: <a class="compact-link" href="{{ request.args.get("demo_link") }}" target="_blank" rel="noopener">{{ request.args.get("demo_link") }}</a>
+      </div>
+      {% endif %}
+
+      <div class="demo-access-grid">
+        <article class="demo-access-card">
+          <h3>Crear acceso manual</h3>
+          <p>Usalo cuando la solicitud venga por WhatsApp, correo o llamada.</p>
+          <form class="module-admin-form" method="post" action="/maestro/demos/aprobar">
+            {{ csrf_input()|safe }}
+            <label>Contacto<input name="contact_name" placeholder="Nombre contacto" required></label>
+            <label>Empresa<input name="company" placeholder="Empresa prospecto" required></label>
+            <label class="wide">Correo<input type="email" name="email" placeholder="contacto@empresa.cl" required></label>
+            <label>Demo
+              <select name="vertical" required>
+                {% for key, vertical in demo_verticals.items() %}
+                <option value="{{ key }}">{{ vertical.label }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <label>Dias
+              <input type="number" name="days" value="7" min="1" max="14">
+            </label>
+            <button class="cta-button wide" type="submit">Generar acceso temporal</button>
+          </form>
+        </article>
+
+        <article class="demo-access-card">
+          <h3>Protocolo comercial</h3>
+          <ol class="demo-protocol">
+            <li>El prospecto pide demo desde el anuncio o portal de clientes.</li>
+            <li>Quantus valida rubro, empresa, correo y necesidad real.</li>
+            <li>Se habilita una sola vertical por 3 a 7 dias; máximo operativo 14.</li>
+            <li>Se envia usuario, clave y link directo de acceso temporal.</li>
+            <li>Se agenda seguimiento antes del vencimiento para convertir a cliente.</li>
+            <li>Si no avanza, se revoca o expira; no queda acceso abierto.</li>
+          </ol>
+        </article>
+      </div>
+
+      <div class="demo-access-grid" style="margin-top:14px;">
+        <article class="demo-access-card">
+          <h3>Solicitudes pendientes</h3>
+          <div class="table-wrap">
+            <table class="quantus-table">
+              <thead>
+                <tr><th>Prospecto</th><th>Demo</th><th>Estado</th><th>Acción</th></tr>
+              </thead>
+              <tbody>
+                {% for item in demo_access.requests %}
+                <tr>
+                  <td><strong>{{ item.empresa }}</strong><br><span class="muted">{{ item.nombre }} · {{ item.email }}</span></td>
+                  <td>{{ item.vertical_label }}</td>
+                  <td><span class="status-pill {{ 'demo' if item.status == 'pending' else 'produccion' }}">{{ item.status }}</span></td>
+                  <td>
+                    {% if item.status == "pending" %}
+                    <form method="post" action="/maestro/demos/aprobar" class="module-admin-form" style="grid-template-columns:1fr; min-width:180px;">
+                      {{ csrf_input()|safe }}
+                      <input type="hidden" name="request_id" value="{{ item.id }}">
+                      <input type="hidden" name="contact_name" value="{{ item.nombre }}">
+                      <input type="hidden" name="company" value="{{ item.empresa }}">
+                      <input type="hidden" name="email" value="{{ item.email }}">
+                      <input type="hidden" name="vertical" value="{{ item.vertical }}">
+                      <label>Dias<input type="number" name="days" value="7" min="1" max="14"></label>
+                      <button class="cta-button" type="submit" style="padding:7px 10px; font-size:12px;">Aprobar</button>
+                    </form>
+                    {% else %}
+                    <span class="muted">{{ item.account_id or "Sin cuenta" }}</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4"><span class="muted">Sin solicitudes pendientes.</span></td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="demo-access-card">
+          <h3>Accesos emitidos</h3>
+          <div class="table-wrap">
+            <table class="quantus-table">
+              <thead>
+                <tr><th>Cuenta</th><th>Demo</th><th>Vence</th><th>Control</th></tr>
+              </thead>
+              <tbody>
+                {% for account in demo_access.accounts %}
+                <tr>
+                  <td><strong>{{ account.company }}</strong><br><span class="muted">{{ account.username }} · {{ account.email }}</span></td>
+                  <td>{{ account.vertical_label }}</td>
+                  <td>{{ account.expires_at }}<br><span class="muted">{{ account.days_left }} dias</span></td>
+                  <td>
+                    <span class="status-pill {{ 'produccion' if account.status == 'active' else 'block' }}">{{ account.status }}</span><br>
+                    {% if account.status == "active" %}
+                    <a class="compact-link" href="/demo/acceso/{{ account.access_token }}" target="_blank" rel="noopener">Abrir demo</a>
+                    <form method="post" action="/maestro/demos/{{ account.id }}/revocar" style="margin-top:7px;">
+                      {{ csrf_input()|safe }}
+                      <button type="submit" class="btn btn-danger" style="min-height:28px; padding:4px 10px; font-size:12px; border-radius:8px;">Revocar</button>
+                    </form>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4"><span class="muted">Aun no hay accesos temporales emitidos.</span></td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="proof-panel" id="panel-superadmin">
+      <div class="panel-title">
+        <div>
+          <h2>Panel SuperAdmin</h2>
+          <p>Gobierno de funcionalidades, demos, rutas internas y complementos internos. Nexus queda separado como vista solo lectura.</p>
+        </div>
+        <span class="badge badge-info">{{ snapshot.superadmin_modules_summary.enabled }} habilitadas</span>
+      </div>
+
+      {% if request.args.get("funcionalidades_error") %}
+      <p class="payment-note">{{ request.args.get("funcionalidades_error") }}</p>
+      {% endif %}
+
+      <div class="superadmin-summary">
+        <div><span>Total</span><strong>{{ snapshot.superadmin_modules_summary.total }}</strong></div>
+        <div><span>Producción</span><strong>{{ snapshot.superadmin_modules_summary.production }}</strong></div>
+        <div><span>Demo</span><strong>{{ snapshot.superadmin_modules_summary.demo }}</strong></div>
+        <div><span>Bloqueadas</span><strong>{{ snapshot.superadmin_modules_summary.blocked }}</strong></div>
+        <div><span>Habilitadas</span><strong>{{ snapshot.superadmin_modules_summary.enabled }}</strong></div>
+      </div>
+
+      <div class="superadmin-actions-grid">
+        <a class="superadmin-action-card" href="/maestro/geointel"><strong>GeoIntel</strong><span>Prospección comercial B2B interna.</span></a>
+        <a class="superadmin-action-card" href="/maestro/tributario"><strong>Tributario Quantus</strong><span>RCV, F29, vigilancia SII y carpeta mensual propia.</span></a>
+        <a class="superadmin-action-card" href="/clientes"><strong>Punto de Venta</strong><span>Demos por rubro, usuarios y caja.</span></a>
+        <a class="superadmin-action-card" href="http://127.0.0.1:8096/" target="_blank" rel="noopener"><strong>Quantus Nexus</strong><span>Vista unificada solo lectura.</span></a>
+        <a class="superadmin-action-card" href="/maestro/salud-entregas"><strong>Entregas</strong><span>Correo, WhatsApp y reintentos.</span></a>
+        <a class="superadmin-action-card" href="/maestro/cambiar-clave"><strong>Seguridad</strong><span>Contraseña maestra y Touch ID.</span></a>
+        <button class="superadmin-action-card" type="button" data-passkey-register style="text-align:left; cursor:pointer;"><strong>Registrar Touch ID</strong><span>Habilita passkey del navegador.</span></button>
+      </div>
+
+      <div class="superadmin-control-grid" style="margin-top:16px;">
+        <div class="table-wrap">
+          <table class="quantus-table">
+            <thead>
+              <tr>
+                <th>Funcionalidad</th>
+                <th>Estado</th>
+                <th>Visibilidad</th>
+                <th>Rutas</th>
+                <th>Control</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for module in snapshot.superadmin_modules %}
+              <tr>
+                <td>
+                  <strong>{{ module.name }}</strong><br>
+                  <span class="muted">{{ module.category }} · {{ module.key }}</span>
+                </td>
+                <td><span class="status-pill {{ module.status }}">{{ snapshot.superadmin_module_statuses.get(module.status, module.status) }}</span></td>
+                <td>{{ snapshot.superadmin_module_visibility.get(module.visibility, module.visibility) }}<br><span class="muted">{{ "habilitada" if module.enabled else "deshabilitada" }}</span></td>
+                <td>
+                  {% if module.public_path %}<a class="compact-link" href="{{ module.public_path }}">Publica</a>{% endif %}
+                  {% if module.admin_path %}<a class="compact-link" href="{{ module.admin_path }}">Admin</a>{% endif %}
+                  {% if not module.public_path and not module.admin_path %}<span class="muted">Sin ruta</span>{% endif %}
+                </td>
+                <td>
+                  <div class="module-row-actions">
+                    <details class="module-edit-details">
+                      <summary>Modificar</summary>
+                      <form class="module-admin-form" method="post" action="/maestro/funcionalidades/guardar">
+                        {{ csrf_input()|safe }}
+                        <input type="hidden" name="original_key" value="{{ module.key }}">
+                        <label>Nombre<input name="name" value="{{ module.name }}" required></label>
+                        <label>Codigo<input name="key" value="{{ module.key }}" required></label>
+                        <label>Categoria<input name="category" value="{{ module.category }}"></label>
+                        <label>Owner<input name="owner" value="{{ module.owner }}"></label>
+                        <label>Estado
+                          <select name="status">
+                            {% for key, label in snapshot.superadmin_module_statuses.items() %}
+                            <option value="{{ key }}" {% if module.status == key %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                          </select>
+                        </label>
+                        <label>Visibilidad
+                          <select name="visibility">
+                            {% for key, label in snapshot.superadmin_module_visibility.items() %}
+                            <option value="{{ key }}" {% if module.visibility == key %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                          </select>
+                        </label>
+                        <label>Ruta publica<input name="public_path" value="{{ module.public_path }}"></label>
+                        <label>Ruta admin<input name="admin_path" value="{{ module.admin_path }}"></label>
+                        <label class="wide">Notas<textarea name="notes" rows="2">{{ module.notes }}</textarea></label>
+                        <label class="wide" style="display:flex; grid-template-columns:auto 1fr; align-items:center;">
+                          <input type="checkbox" name="enabled" value="1" {% if module.enabled %}checked{% endif %} style="width:auto;"> Habilitada
+                        </label>
+                        <button class="cta-button wide" type="submit">Guardar funcionalidad</button>
+                      </form>
+                    </details>
+                    <form method="post" action="/maestro/funcionalidades/{{ module.key }}/eliminar" class="module-delete-form" data-name="{{ module.name }}">
+                      {{ csrf_input()|safe }}
+                      <button type="submit" class="btn btn-danger" style="min-height:30px; padding:5px 12px; font-size:12px; border-radius:9px;">Eliminar</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="superadmin-add-panel">
+          <h3>Agregar funcionalidad</h3>
+          <p>Alta interna para demos, módulos privados o complementos.</p>
+          <form class="module-admin-form" method="post" action="/maestro/funcionalidades/guardar">
+            {{ csrf_input()|safe }}
+            <label>Nombre<input name="name" placeholder="Ej: Inventario avanzado" required></label>
+            <label>Codigo<input name="key" placeholder="inventario-avanzado"></label>
+            <label>Categoria<input name="category" placeholder="Punto de Venta"></label>
+            <label>Owner<input name="owner" value="Quantus"></label>
+            <label>Estado
+              <select name="status">
+                {% for key, label in snapshot.superadmin_module_statuses.items() %}
+                <option value="{{ key }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <label>Visibilidad
+              <select name="visibility">
+                {% for key, label in snapshot.superadmin_module_visibility.items() %}
+                <option value="{{ key }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <label>Ruta publica<input name="public_path" placeholder="/clientes"></label>
+            <label>Ruta admin<input name="admin_path" placeholder="/maestro/..."></label>
+            <label class="wide">Notas<textarea name="notes" rows="3" placeholder="Estado real, bloqueos y siguiente paso."></textarea></label>
+            <label class="wide" style="display:flex; grid-template-columns:auto 1fr; align-items:center;">
+              <input type="checkbox" name="enabled" value="1" style="width:auto;"> Habilitada
+            </label>
+            <button class="cta-button wide" type="submit">Agregar al panel</button>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <section class="master-kpi-grid">
+      <article class="metric-card">
+        <span>Clientes / perfiles</span>
+        <strong>{{ snapshot.totals.clients }}</strong>
+        <p>Perfiles activos entre vigilancia, marcas y módulos.</p>
+      </article>
+      <article class="metric-card">
+        <span>Informes IA</span>
+        <strong>{{ snapshot.totals.reports }}</strong>
+        <p>PDFs y análisis generados por los agentes.</p>
+      </article>
+      <article class="metric-card">
+        <span>Riesgo alto</span>
+        <strong>{{ snapshot.totals.high_risk }}</strong>
+        <p>Alertas que requieren acción comercial o legal.</p>
+      </article>
+      <article class="metric-card featured-kpi">
+        <span>MRR estimado</span>
+        <strong>{{ snapshot.totals.mrr|clp }}</strong>
+        <p>Recurrencia mensual modelada según planes activos.</p>
+      </article>
+      <article class="metric-card featured-kpi">
+        <span>Pipeline estimado</span>
+        <strong>{{ snapshot.totals.pipeline|clp }}</strong>
+        <p>Oportunidad comercial pendiente de confirmación.</p>
+      </article>
+      <article class="metric-card">
+        <span>Preparación comercial</span>
+        <strong>{{ snapshot.totals.conversion_readiness }}%</strong>
+        <p>Módulos listos para venta controlada.</p>
+      </article>
+      <article class="metric-card">
+        <span>WhatsApp pendiente</span>
+        <strong>{{ snapshot.totals.whatsapp_pending }}</strong>
+        <p>Alertas listas para enviar cuando Meta Business quede configurado.</p>
+      </article>
+      <article class="metric-card">
+        <span>RUT maestro</span>
+        <strong>{{ snapshot.totals.registry_ruts }}</strong>
+        <p>Identificadores cruzados entre ERP, INAPI y Diario Oficial.</p>
+      </article>
+    </section>
+
+    <section class="proof-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Pagos Diario Oficial pendientes</h2>
+          <p>Activa clientes solo después de confirmar el cobro real en Mercado Pago o Webpay.</p>
+        </div>
+        <span class="badge {{ 'badge-warning' if snapshot.pending_do_payments else 'badge-info' }}">{{ snapshot.pending_do_payments|length }} pendientes</span>
+      </div>
+      <div class="report-list">
+        {% for item in snapshot.pending_do_payments %}
+        <article class="report-item" style="align-items: stretch;">
+          <div>
+            <strong>{{ item.name }}</strong>
+            <span>{{ item.rut or "Sin RUT" }} · {{ item.email or "Sin correo" }} · {{ item.plan }}</span>
+            <p>Estado {{ item.state }} · registro {{ item.registered_at }} · vencimiento propuesto {{ item.proposed_expiration }}</p>
+            {% if item.checkout_url %}
+            <a class="compact-link" href="{{ item.checkout_url }}" target="_blank" rel="noopener">Abrir checkout</a>
+            {% endif %}
+          </div>
+          <form action="/maestro/do/confirmar-pago" method="POST" style="display:grid; grid-template-columns: minmax(120px, 1fr) 110px 130px minmax(120px, 1fr) auto; gap:8px; align-items:end; min-width:min(100%, 680px);">
+            {{ csrf_input()|safe }}
+            <input type="hidden" name="person_id" value="{{ item.id }}">
+            <label style="font-size:11px; color:#94a3b8;">Referencia
+              <input class="form-control" name="payment_reference" placeholder="MP-123 / comprobante" required style="padding:8px 10px; font-size:12px;">
+            </label>
+            <label style="font-size:11px; color:#94a3b8;">Monto CLP
+              <input class="form-control" name="amount_clp" inputmode="numeric" placeholder="10000" required style="padding:8px 10px; font-size:12px;">
+            </label>
+            <label style="font-size:11px; color:#94a3b8;">Fecha pago
+              <input class="form-control" name="paid_at" type="date" value="{{ snapshot.today }}" required style="padding:8px 10px; font-size:12px;">
+            </label>
+            <label style="font-size:11px; color:#94a3b8;">Nota
+              <input class="form-control" name="note" placeholder="Revisión manual" style="padding:8px 10px; font-size:12px;">
+            </label>
+            <button class="cta-button" type="submit" style="padding:9px 12px; font-size:12px; white-space:nowrap;">Confirmar pago</button>
+          </form>
+        </article>
+        {% else %}
+        <p class="muted">No hay solicitudes pendientes de pago para Diario Oficial.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="proof-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Bitácora de pagos confirmados</h2>
+          <p>Evidencia operacional: operador, referencia, monto, fecha de pago y vencimiento calculado.</p>
+        </div>
+        <span class="badge badge-info">{{ snapshot.payment_events|length }} recientes</span>
+      </div>
+      <div class="table-wrap">
+        <table class="quantus-table">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>RUT</th>
+              <th>Plan</th>
+              <th>Monto</th>
+              <th>Referencia</th>
+              <th>Vigencia</th>
+              <th>Operador</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for event in snapshot.payment_events %}
+            <tr>
+              <td>{{ event.client_name or "-" }}</td>
+              <td>{{ event.rut or "-" }}</td>
+              <td>{{ event.plan or "-" }}</td>
+              <td>{{ event.amount_clp|clp }}</td>
+              <td>{{ event.payment_reference or "-" }}</td>
+              <td>{{ event.paid_at or "-" }} → {{ event.expires_at or "-" }}</td>
+              <td>{{ event.operator or "-" }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7">Aún no hay pagos confirmados manualmente.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="master-grid">
+      <div class="proof-panel master-module-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Rendimiento por unidad</h2>
+            <p>Clientes, informes, riesgo e ingreso estimado por línea de negocio.</p>
+          </div>
+        </div>
+        <div class="master-module-list">
+          {% for module in snapshot.modules %}
+          <article class="master-module-card">
+            <div class="master-module-top">
+              <div>
+                <span class="badge badge-info">{{ module.status }}</span>
+                <h3>{{ module.name }}</h3>
+              </div>
+              <strong>{{ module.quality }}%</strong>
+            </div>
+            <p>{{ module.insight }}</p>
+            <div class="master-module-metrics">
+              <span>{{ module.clients }} clientes</span>
+              <span>{{ module.free_clients or 0 }} gratis</span>
+              <span>{{ module.reports }} informes</span>
+              <span>{{ module.high_risk }} riesgo alto</span>
+              <span>{{ module.mrr|clp }} MRR</span>
+            </div>
+            <div class="master-bar"><span style="width: {{ module.report_share }}%"></span></div>
+            <div class="master-money-bar"><span style="width: {{ module.money_share }}%"></span></div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+
+      <aside class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Rubros y segmentos</h2>
+            <p>Distribución comercial actual.</p>
+          </div>
+        </div>
+        <div class="segment-list">
+          {% for rubro in snapshot.rubros %}
+          <div class="segment-item">
+            <div>
+              <strong>{{ rubro.name }}</strong>
+              <span>{{ rubro.count }} perfiles</span>
+            </div>
+            <div class="segment-bar"><span style="width: {{ rubro.share }}%"></span></div>
+          </div>
+          {% else %}
+          <p class="muted">Aún no hay rubros persistidos.</p>
+          {% endfor %}
+        </div>
+      </aside>
+    </section>
+
+    <section class="proof-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Usuarios gratis por radar</h2>
+          <p>Altas creadas desde el Centro Maestro; sirven para operar pilotos, cortesias y cuentas internas.</p>
+        </div>
+        <span class="badge badge-info">{{ snapshot.free_clients|length }} registros</span>
+      </div>
+      <div class="table-wrap">
+        <table class="quantus-table">
+          <thead>
+            <tr>
+              <th>Radar</th>
+              <th>RUT</th>
+              <th>Usuario</th>
+              <th>Correo</th>
+              <th>WhatsApp</th>
+              <th>Filtro</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in snapshot.free_clients %}
+            <tr>
+              <td>{{ item.module_label }}</td>
+              <td>{{ item.rut or "Sin RUT" }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.email }}</td>
+              <td>{{ item.whatsapp or "-" }}</td>
+              <td>{{ item.scope or "-" }}</td>
+              <td>{{ item.status }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7">Aún no hay usuarios gratis creados desde el maestro.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="dashboard-columns">
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2 id="panel-clientes-cuentas">Clientes y cuentas</h2>
+            <p>Separado por módulo, rubro, plan y valor mensual estimado.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <input class="form-control master-search" id="clientSearch" placeholder="Buscar por RUT, cliente, rubro, plan o módulo">
+          <table class="quantus-table" id="clientsTable">
+            <thead>
+              <tr>
+                <th>RUT</th>
+                <th>Cliente</th>
+                <th>Módulo</th>
+                <th>Rubro</th>
+                <th>Plan</th>
+                <th>Valor</th>
+                <th>Carpeta</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for client in snapshot.clients %}
+              <tr>
+                <td>{{ client.rut or "Sin RUT" }}</td>
+                <td>{{ client.name }}</td>
+                <td>{{ client.module }}</td>
+                <td>{{ client.rubro }}</td>
+                <td>{{ client.plan }}</td>
+                <td>{{ client.monthly_value|clp }}</td>
+                <td><a class="cta-button btn-secondary compact-link" href="/maestro/cliente/{{ client.key }}">Abrir</a></td>
+              </tr>
+              {% else %}
+              <tr><td colspan="7">Aún no hay clientes registrados.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Decisiones inteligentes</h2>
+            <p>Acciones sugeridas para subir conversión y control.</p>
+          </div>
+        </div>
+        <div class="recommendation-list">
+          {% for item in snapshot.recommendations %}
+          <article class="recommendation-item">
+            <span class="badge {{ 'badge-danger' if item.priority == 'Alta' else 'badge-warning' }}">{{ item.priority }}</span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.impact }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-columns">
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Canal WhatsApp</h2>
+            <p>Consentimiento, cola de salida y trazabilidad de alertas críticas.</p>
+          </div>
+          <span class="badge badge-info">{{ snapshot.whatsapp.total }} registros</span>
+        </div>
+        <div class="master-module-metrics whatsapp-summary">
+          <span>{{ snapshot.whatsapp.sent }} enviadas</span>
+          <span>{{ snapshot.whatsapp.pending }} pendientes</span>
+          <span>{{ snapshot.whatsapp.error }} con error</span>
+          <span>Meta API {{ "activa" if snapshot.whatsapp.sent else "por validar" }}</span>
+        </div>
+        <div class="report-list">
+          {% for item in snapshot.whatsapp["items"] %}
+          <div class="report-item">
+            <div>
+              <strong>{{ snapshot.module_labels.get(item.module, item.module) }}</strong>
+              <span>{{ item.client_name or "Cliente" }} · {{ item.whatsapp }}</span>
+              <p>{{ item.created_at }} · estado {{ item.status }}</p>
+            </div>
+            {% if item.report_url %}
+            <a class="cta-button btn-secondary" href="{{ item.report_url }}">Informe</a>
+            {% endif %}
+          </div>
+          {% else %}
+          <p class="muted">Todavía no hay alertas WhatsApp en cola.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Operación biométrica</h2>
+            <p>Acceso maestro con passkey del navegador y verificación local del Mac.</p>
+          </div>
+        </div>
+        <div class="recommendation-list">
+          <article class="recommendation-item">
+            <span class="badge badge-info">Touch ID</span>
+            <h3>Registro por dispositivo</h3>
+            <p>Primero se entra con usuario maestro y luego se registra la huella desde este panel. La llave queda asociada al dominio seguro.</p>
+          </article>
+          <article class="recommendation-item">
+            <span class="badge badge-warning">Seguridad</span>
+            <h3>No guarda huellas</h3>
+            <p>Quantus solo almacena la clave pública de la passkey; la biometría permanece en el Secure Enclave del Mac.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-panel" id="registro-maestro-rut">
+      <div class="panel-title">
+        <div>
+          <h2>Registro Maestro RUT</h2>
+          <p>Base transversal para cruzar clientes ERP, marcas, vigilancia y apariciones en Diario Oficial.</p>
+        </div>
+        <span class="badge badge-info">{{ snapshot.registry.totals.total or 0 }} registros</span>
+      </div>
+      <div class="master-module-metrics">
+        <span>{{ snapshot.registry.totals.valid_ruts or 0 }} RUT válidos</span>
+        <span>{{ snapshot.registry.totals.erp or 0 }} ERP</span>
+        <span>{{ snapshot.registry.totals.inapi or 0 }} INAPI</span>
+        <span>{{ snapshot.registry.totals.diario_oficial or 0 }} Diario Oficial</span>
+      </div>
+      {% if snapshot.registry_sync.errors %}
+      <p class="payment-note">Sincronización parcial: {{ snapshot.registry_sync.errors[0] }}</p>
+      {% endif %}
+      <form method="post" action="/maestro/registro/eliminar-masivo" class="registry-bulk-form" style="margin:0 0 10px;">
+        {{ csrf_input()|safe }}
+        <input type="hidden" name="registry_keys" value="">
+        <button type="submit" class="btn btn-danger registry-bulk-btn" disabled style="min-height:34px; padding:6px 14px; font-size:12.5px; border-radius:10px;">Eliminar seleccionados (0)</button>
+        <span class="muted" style="font-size:12px; margin-left:10px;">Marca con la casilla los usuarios a eliminar.</span>
+      </form>
+      <div class="table-wrap">
+        <table class="quantus-table">
+          <thead>
+            <tr>
+              <th style="width:32px;"><input type="checkbox" id="registry-check-all" aria-label="Seleccionar todos"></th>
+              <th>RUT</th>
+              <th>Cliente</th>
+              <th>Origen</th>
+              <th>Correo</th>
+              <th>Alertas DO</th>
+              <th>Última alerta</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in snapshot.registry.rows %}
+            <tr>
+              <td><input type="checkbox" class="registry-check" value="{{ item.registry_key }}" aria-label="Seleccionar {{ item.display_name or item.rut or 'registro' }}"></td>
+              <td>{{ item.rut or item.clean_rut or "Sin RUT" }}</td>
+              <td>{{ item.display_name or "Cliente sin nombre" }}</td>
+              <td>{{ snapshot.module_labels.get(item.source_module, item.source_module) }}</td>
+              <td>{{ item.email or "-" }}</td>
+              <td>{{ item.alert_count }}</td>
+              <td>{{ item.last_alert_at or "-" }}</td>
+              <td>
+                <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                  <button type="button" class="btn registry-edit-btn" style="min-height:30px; padding:5px 12px; font-size:12px; border-radius:9px;"
+                    data-key="{{ item.registry_key }}"
+                    data-nombre="{{ item.display_name or '' }}"
+                    data-rut="{{ item.rut or item.clean_rut or '' }}"
+                    data-email="{{ item.email or '' }}"
+                    data-whatsapp="{{ item.phone or '' }}"
+                    data-estado="{{ item.status or 'activo' }}">Modificar</button>
+                  <form method="post" action="/maestro/registro/{{ item.registry_key|urlencode }}/eliminar" class="registry-delete-form" data-name="{{ item.display_name or item.rut or 'este registro' }}" style="margin:0;">
+                    {{ csrf_input()|safe }}
+                    <button type="submit" class="btn btn-danger registry-delete-btn" style="min-height:30px; padding:5px 12px; font-size:12px; border-radius:9px;">Eliminar</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="8">Aún no hay RUT consolidados.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="dashboard-columns">
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Últimos informes IA</h2>
+            <p>Resumen operativo de análisis recientes.</p>
+          </div>
+        </div>
+        <div class="report-list">
+          {% for report in snapshot.reports %}
+          <div class="report-item">
+            <div>
+              <strong>{{ snapshot.module_labels.get(report.module, report.module) }}</strong>
+              <span>{{ report.client_name or "Sin cliente" }} · {{ report.publication_type or "sin tipo" }}</span>
+              <p>{{ report.created_at }} · urgencia {{ report.urgency or "media" }}</p>
+            </div>
+            <a class="cta-button btn-secondary" href="/informes/{{ report.id }}.pdf">PDF</a>
+          </div>
+          {% else %}
+          <p class="muted">Aún no hay informes IA.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Memoria IA por cliente</h2>
+            <p>Historial consolidado de señales y riesgo acumulado.</p>
+          </div>
+        </div>
+        <div class="report-list">
+          {% for item in snapshot.memory %}
+          <div class="report-item">
+            <div>
+              <strong>{{ item.display_name or "Sin nombre" }}</strong>
+              <span>{{ item.rut or "Sin RUT" }} · {{ item.total_alerts }} alertas</span>
+              <p>{{ item.last_summary or "Sin resumen disponible." }}</p>
+            </div>
+            <span class="badge {{ 'badge-danger' if item.high_risk_alerts else 'badge-success' }}">{{ item.high_risk_alerts }} altas</span>
+          </div>
+          {% else %}
+          <p class="muted">Aún no hay memoria IA acumulada.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-panel master-actions">
+      <a class="cta-button" href="/admin/ia?token=">Dashboard IA por token</a>
+      <a class="cta-button btn-secondary" href="/do/admin?token=">Admin Diario Oficial por token</a>
+      <a class="cta-button btn-secondary" href="/do/prospeccion">Prospección Diario Oficial</a>
+      <a class="cta-button btn-secondary" href="/licitaciones#analizador-licitaciones">Analizador licitaciones</a>
+    </section>
+
+    {% include "partials/law_21719.html" %}
+
+    {% include "partials/legal_footer.html" %}
+  </div>
+
+  {% set registros_faltantes = [] %}
+  {% for item in snapshot.registry.rows %}
+    {% if not (item.rut or item.clean_rut) or not item.email or not item.phone or not item.display_name %}
+      {% set _ = registros_faltantes.append(item) %}
+    {% endif %}
+  {% endfor %}
+
+  {% if registros_faltantes %}
+  <div class="registry-float-alert" id="registry-float-alert" role="alert">
+    <button type="button" class="dismiss" aria-label="Cerrar aviso" onclick="document.getElementById('registry-float-alert').style.display='none';">✕</button>
+    <strong>⚠ {{ registros_faltantes|length }} usuario(s) con datos incompletos</strong>
+    <div>Falta RUT, correo o WhatsApp. Usa "Modificar" para completar los datos.</div>
+    <ul>
+      {% for item in registros_faltantes %}
+      <li>
+        {{ item.display_name or item.rut or item.clean_rut or "Sin nombre" }}
+        ({{ "RUT" if not (item.rut or item.clean_rut) }}{{ ", " if not (item.rut or item.clean_rut) and (not item.email or not item.phone) }}{{ "Correo" if not item.email }}{{ ", " if not item.email and not item.phone }}{{ "WhatsApp" if not item.phone }})
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="registry-modal-overlay" id="registry-modal-overlay">
+    <div class="registry-modal" role="dialog" aria-modal="true" aria-labelledby="registry-modal-title">
+      <button type="button" class="registry-close-btn" id="registry-modal-close" aria-label="Cerrar">✕</button>
+      <h3 id="registry-modal-title">Modificar usuario</h3>
+      <p>Actualiza los datos del Registro Maestro RUT y su origen de datos.</p>
+      <form method="post" id="registry-edit-form">
+        {{ csrf_input()|safe }}
+        <input type="hidden" name="registry_key" id="reg-edit-key" value="">
+        <div class="form-group">
+          <label for="reg-edit-nombre">Nombre o razón social</label>
+          <input type="text" name="nombre" id="reg-edit-nombre" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="reg-edit-rut">RUT</label>
+          <input type="text" name="rut" id="reg-edit-rut" class="form-control" data-rut>
+        </div>
+        <div class="form-group">
+          <label for="reg-edit-email">Correo</label>
+          <input type="email" name="email" id="reg-edit-email" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="reg-edit-whatsapp">WhatsApp</label>
+          <input type="tel" name="whatsapp" id="reg-edit-whatsapp" class="form-control" placeholder="+569...">
+        </div>
+        <div class="form-group">
+          <label for="reg-edit-estado">Estado</label>
+          <select name="estado" id="reg-edit-estado" class="form-control">
+            <option value="activo">activo</option>
+            <option value="activo_permanente">activo_permanente</option>
+            <option value="activo_sin_vencimiento">activo_sin_vencimiento</option>
+            <option value="activo_gratis">activo_gratis</option>
+            <option value="pendiente_pago">pendiente_pago</option>
+            <option value="baja">baja</option>
+          </select>
+        </div>
+        <div class="registry-modal-actions">
+          <button type="button" class="btn btn-secondary" id="registry-modal-cancel">Cancelar</button>
+          <button type="submit" class="btn">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    const clientSearch = document.getElementById("clientSearch");
+    const clientsTable = document.getElementById("clientsTable");
+    if (clientSearch && clientsTable) {
+      clientSearch.addEventListener("input", () => {
+        const query = clientSearch.value.trim().toLowerCase();
+        clientsTable.querySelectorAll("tbody tr").forEach((row) => {
+          row.style.display = row.textContent.toLowerCase().includes(query) ? "" : "none";
+        });
+      });
+    }
+    document.querySelectorAll(".registry-delete-form").forEach((form) => {
+      form.addEventListener("submit", (e) => {
+        const name = form.getAttribute("data-name") || "este registro";
+        if (!window.confirm("¿Eliminar del Registro Maestro RUT a \"" + name + "\"?\nSe borrará su registro transversal y el origen de datos correspondiente. Esta acción no se puede deshacer.")) {
+          e.preventDefault();
+        }
+      });
+    });
+    document.querySelectorAll(".module-delete-form").forEach((form) => {
+      form.addEventListener("submit", (e) => {
+        const name = form.getAttribute("data-name") || "esta funcionalidad";
+        if (!window.confirm("¿Eliminar \"" + name + "\" del Panel SuperAdmin?\nEsto borra el registro de control, no el código del sistema.")) {
+          e.preventDefault();
+        }
+      });
+    });
+    const checkAll = document.getElementById("registry-check-all");
+    const bulkForm = document.querySelector(".registry-bulk-form");
+    const bulkBtn = bulkForm ? bulkForm.querySelector(".registry-bulk-btn") : null;
+    function registrySelectedKeys() {
+      return Array.from(document.querySelectorAll(".registry-check:checked")).map((cb) => cb.value);
+    }
+    function updateRegistryBulkState() {
+      if (!bulkBtn) return;
+      const n = registrySelectedKeys().length;
+      bulkBtn.disabled = n === 0;
+      bulkBtn.textContent = "Eliminar seleccionados (" + n + ")";
+      if (checkAll) {
+        const checks = document.querySelectorAll(".registry-check");
+        checkAll.checked = checks.length > 0 && checks.length === document.querySelectorAll(".registry-check:checked").length;
+        checkAll.indeterminate = n > 0 && n < checks.length;
+      }
+    }
+    document.querySelectorAll(".registry-check").forEach((cb) => cb.addEventListener("change", updateRegistryBulkState));
+    if (checkAll) {
+      checkAll.addEventListener("change", () => {
+        document.querySelectorAll(".registry-check").forEach((cb) => { cb.checked = checkAll.checked; });
+        updateRegistryBulkState();
+      });
+    }
+    if (bulkForm) {
+      bulkForm.addEventListener("submit", (e) => {
+        const keys = registrySelectedKeys();
+        if (keys.length === 0) {
+          e.preventDefault();
+          return;
+        }
+        if (!window.confirm("¿Eliminar del Registro Maestro RUT a " + keys.length + " usuario(s)?\nSe borrará su registro transversal y su origen de datos correspondiente. Esta acción no se puede deshacer.")) {
+          e.preventDefault();
+          return;
+        }
+        bulkForm.querySelector("input[name='registry_keys']").value = JSON.stringify(keys);
+      });
+    }
+    const modalOverlay = document.getElementById("registry-modal-overlay");
+    const editForm = document.getElementById("registry-edit-form");
+    const modalClose = document.getElementById("registry-modal-close");
+    const modalCancel = document.getElementById("registry-modal-cancel");
+    function openRegistryModal() {
+      if (modalOverlay) modalOverlay.classList.add("open");
+    }
+    function closeRegistryModal() {
+      if (modalOverlay) modalOverlay.classList.remove("open");
+    }
+    document.querySelectorAll(".registry-edit-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.getElementById("reg-edit-key").value = btn.getAttribute("data-key") || "";
+        document.getElementById("reg-edit-nombre").value = btn.getAttribute("data-nombre") || "";
+        document.getElementById("reg-edit-rut").value = btn.getAttribute("data-rut") || "";
+        document.getElementById("reg-edit-email").value = btn.getAttribute("data-email") || "";
+        document.getElementById("reg-edit-whatsapp").value = btn.getAttribute("data-whatsapp") || "";
+        const estado = document.getElementById("reg-edit-estado");
+        const actual = btn.getAttribute("data-estado") || "activo";
+        let found = false;
+        Array.from(estado.options).forEach((opt) => { if (opt.value === actual) { opt.selected = true; found = true; } });
+        if (!found) {
+          const opt = document.createElement("option");
+          opt.value = actual; opt.textContent = actual; opt.selected = true;
+          estado.appendChild(opt);
+        }
+        editForm.action = "/maestro/registro/" + encodeURIComponent(btn.getAttribute("data-key")) + "/modificar";
+        openRegistryModal();
+      });
+    });
+    if (modalClose) modalClose.addEventListener("click", closeRegistryModal);
+    if (modalCancel) modalCancel.addEventListener("click", closeRegistryModal);
+    if (modalOverlay) {
+      modalOverlay.addEventListener("click", (e) => { if (e.target === modalOverlay) closeRegistryModal(); });
+    }
+  </script>
+  <script src="{{ url_for('static', filename='passkeys.js') }}?v=20260729-passkeys"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configura tu Vigilancia | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260731-onboarding">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <a class="brand-link" href="/do">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Configuración de Vigilancia</div>
+        </div>
+      </a>
+    </header>
+
+    <section class="page-hero" style="min-height: auto; padding: 40px 20px;">
+      <div style="max-width: 760px; margin: 0 auto;">
+        <form class="form-panel" action="/completar_onboarding_do" method="POST">
+          {{ csrf_input()|safe }}
+          <input type="hidden" name="plan" value="{{ plan }}">
+          
+          <div class="panel-title" style="text-align: center;">
+            <div style="width: 70px; height: 70px; display: grid; place-items: center; margin: 0 auto 16px; border-radius: 20px; color: #38bdf8; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.3); font-size: 36px;">🎉</div>
+            <h1 class="hero-title" style="font-size: 36px;">¡Pago recibido con <span>éxito</span>!</h1>
+            <p class="hero-subtitle" style="margin-top: 8px;">
+              Ingresa los datos y el RUT o nombre que Quantus vigilará 24/7 en el Diario Oficial.
+            </p>
+          </div>
+
+          <div class="form-grid" style="margin-top: 24px;">
+            <div class="form-group">
+              <label class="form-label" for="nombre">Nombre completo, empresa o grupo *</label>
+              <input id="nombre" type="text" class="form-control" name="nombre" required placeholder="Ej. Juan Pérez González o Empresa SpA" autoFocus>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rut">RUT a vigilar *</label>
+              <input id="rut" type="text" class="form-control" name="rut" required placeholder="Ej. 11.111.111-1" data-rut>
+              <div class="form-text rut-message" data-rut-message></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Correo para recibir alertas *</label>
+              <input id="email" type="email" class="form-control" name="email" required placeholder="tu@correo.com">
+              <div class="form-text">A este correo llegarán las alertas diarias y resúmenes con IA.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="whatsapp">WhatsApp para alertas directas</label>
+              <input id="whatsapp" type="tel" class="form-control" name="whatsapp" placeholder="+56912345678">
+              <div class="form-text">Opcional. Te notificaremos inmediatamente vía WhatsApp.</div>
+            </div>
+            <div class="form-group full">
+              <label class="consent-row">
+                <input type="checkbox" name="whatsapp_consent" value="1" checked>
+                <span>Acepto recibir alertas y resúmenes de Quantus por WhatsApp para este servicio.</span>
+              </label>
+            </div>
+          </div>
+
+          {% set service_label = "Vigilancia Diario Oficial 24/7" %}
+          {% include "partials/data_consent.html" %}
+
+          <button type="submit" class="cta-button full" style="margin-top: 24px; padding: 18px; font-size: 20px;">
+            🚀 Activar Monitoreo en el Diario Oficial
+          </button>
+        </form>
+      </div>
+    </section>
+
+    {% include "partials/law_21719.html" %}
+    {% include "partials/legal_footer.html" %}
+  </div>
+  <script src="{{ url_for('static', filename='rut-validator.js') }}"></script>
+</body>
+</html>

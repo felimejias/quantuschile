@@ -1,0 +1,17 @@
+ALERTA IMPORTANTE Quantus Diario Oficial
+
+Detectamos una coincidencia asociada a:
+{{ nombre }}{% if rut and rut != "No informado" %} / {{ rut }}{% endif %}
+
+Tipo: {{ tipo_publicacion }}
+Urgencia: {{ nivel_urgencia }}
+
+Resumen:
+{{ resumen or "Revisa el informe para ver el detalle en simple." }}
+
+Informe PDF: {{ report_url_abs }}
+
+Accion sugerida:
+Revisa el informe hoy y confirma si existe plazo aplicable en la fuente oficial o con abogado.
+{% if abogado %}Abogado recomendado: {{ abogado.get("url", "") }}
+{% endif %}Fuente oficial: {{ fuente_oficial }}

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantus Chile - Registro de Marca Comercial</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-premium-copy">
+  <style>
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .form-control {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      color: #ffffff;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    .form-control:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+    
+    /* Pestañas y selector de clases */
+    .tabs-nav {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .tab-content {
+      display: none;
+      margin-bottom: 1rem;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    
+    .classes-scrollbox {
+      max-height: 320px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .class-card {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: start;
+      gap: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    .class-card:hover {
+      border-color: rgba(139, 92, 246, 0.4);
+      background: rgba(139, 92, 246, 0.02);
+    }
+    .class-card.selected {
+      border-color: var(--accent);
+      background: rgba(139, 92, 246, 0.05);
+    }
+    .class-card.ai-recommended {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    
+    .ai-bubble {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+      font-size: 0.825rem;
+      color: var(--text-main);
+      margin-top: 0.5rem;
+      display: none;
+    }
+    
+    .payment-summary-box {
+      background: rgba(139, 92, 246, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s;
+    }
+    .mandate-box {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-size: 0.825rem;
+      color: var(--text-dim);
+      max-height: 120px;
+      overflow-y: scroll;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container" style="max-width: 950px;">
+    
+    <!-- HEADER -->
+    <header class="app-header">
+      <a class="brand-link" href="https://www.quantuschile.cl/inapi">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Propiedad Industrial</div>
+        </div>
+      </a>
+      <nav class="header-actions" aria-label="Navegación principal">
+        <button type="button" class="cta-button btn-secondary back-button" onclick="if (document.referrer && document.referrer.includes(window.location.host)) { history.back(); } else { window.location.href=/; }">Atrás</button>
+        <a href="https://www.quantuschile.cl" class="cta-button btn-secondary">Quantus System</a>
+        <a href="https://www.quantuschile.cl/inapi" class="cta-button btn-secondary">Registrar Marca</a>
+        <a href="https://www.quantuschile.cl/do" class="cta-button btn-secondary">Diario Oficial</a>
+        <a href="https://www.quantuschile.cl/licitaciones" class="cta-button btn-secondary">Licitaciones</a>
+      </nav>
+    </header>
+
+    <!-- FORM SECTION -->
+    <section>
+      <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Solicitud de Registro de Marca</h2>
+      <p style="color: var(--text-dim); margin-bottom: 2rem;">
+        Completa el formulario. El sistema recalculará las tasas estatales de forma dinámica según las clases elegidas.
+      </p>
+
+      <form action="/submit_registro" method="POST" enctype="multipart/form-data" id="form-registro">
+        {{ csrf_input()|safe }}
+        
+        <div class="grid-cards" style="grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem; align-items: start; margin-bottom: 2rem;">
+          
+          <!-- DATOS DEL CLIENTE Y SELECCIÓN DE CLASE -->
+          <div class="card" style="padding: 1.5rem;">
+            <h3 style="font-size: 1.15rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+              Datos del Titular de la Marca
+            </h3>
+            
+            <div class="form-group">
+              <label class="form-label" for="marca">Marca a Registrar</label>
+              <input type="text" id="marca" name="marca" class="form-control" value="{{ query }}" required>
+            </div>
+
+            <div class="grid-cards" style="grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0;">
+              <div class="form-group">
+                <label class="form-label" for="nombre">Nombre Completo / Razón Social</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej: Juan Pérez" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="rut">RUT del Titular</label>
+                <input type="text" id="rut" name="rut" class="form-control" placeholder="Ej: 12.345.678-9" required data-rut data-rut-required="true">
+                <div class="form-text rut-message" data-rut-message></div>
+              </div>
+            </div>
+
+            <div class="grid-cards" style="grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div class="form-group">
+                <label class="form-label" for="email">Correo Electrónico</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="juan@ejemplo.com" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="Ej: +56912345678" required>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="consent-row">
+                <input type="checkbox" name="whatsapp_consent" value="1">
+                <span>Acepto recibir avisos del proceso de marca por WhatsApp en este número.</span>
+              </label>
+              <div class="form-text">Si el cliente quiere alertas desde su propio WhatsApp Business, se solicitará token Meta y quedará en su carpeta privada.</div>
+            </div>
+
+            {% set service_label = "Registro y vigilancia de marca INAPI" %}
+            {% include "partials/data_consent.html" %}
+
+            <!-- SELECTOR DE CLASE NIZA INTERACTIVO -->
+            <h3 style="font-size: 1.15rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+              Clasificación Niza de la Marca
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 1rem;">
+              Debes registrar tu marca en las clases del mercado donde operas. Puedes seleccionar varias clases.
+            </p>
+            <p style="font-size: 0.82rem; color: var(--warning); font-weight: 700; margin: -0.35rem 0 1rem 0;">
+              Cada clase seleccionada suma 1 UTM estatal al pago inicial. Si marcas 2 clases, se cobran 2 UTM; si marcas 3, se cobran 3 UTM.
+            </p>
+
+            <div class="tabs-nav">
+              <button type="button" class="tab-btn active" onclick="switchTab('tab-buscar')">🔍 Buscador de Palabras</button>
+              <button type="button" class="tab-btn" onclick="switchTab('tab-ai')">✨ Recomendación IA (Gratis)</button>
+              <button type="button" class="tab-btn" onclick="switchTab('tab-todas')">🗂️ Todas las Clases (45)</button>
+            </div>
+
+            <!-- TAB 1: BUSCADOR POR PALABRA CLAVE -->
+            <div id="tab-buscar" class="tab-content active">
+              <div class="form-group" style="display: flex; gap: 0.5rem;">
+                <input type="text" id="niza-keyword" class="form-control" placeholder="Ej: ropa, cerveza, asesoría, software, pan..." onkeyup="searchNizaLocal()">
+              </div>
+              <div id="niza-search-results" class="classes-scrollbox" style="height: 180px;">
+                <p style="color: var(--text-dim); font-size: 0.875rem; text-align: center; margin-top: 3rem;">
+                  Escribe un producto o servicio arriba para buscar la categoría correspondiente.
+                </p>
+              </div>
+            </div>
+
+            <!-- TAB 2: CONSULTA CON INTELIGENCIA ARTIFICIAL (GEMINI) -->
+            <div id="tab-ai" class="tab-content">
+              <div class="form-group">
+                <label class="form-label">¿De qué se trata tu negocio? Explícalo en palabras simples:</label>
+                <textarea id="ai-description" class="form-control" rows="3" placeholder="Ej: Fabricamos helados artesanales para celíacos, los vendemos por internet y los despachamos a domicilio en Santiago..."></textarea>
+              </div>
+              <div style="text-align: right; margin-bottom: 1rem;">
+                <button type="button" class="cta-button" id="btn-consult-ai" onclick="runNizaAI()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                  ✨ Analizar con IA
+                </button>
+              </div>
+              <div id="ai-loader" style="display: none; text-align: center; margin: 1.5rem 0;">
+                <span class="spinner" style="border-top-color: var(--success); width: 30px; height: 30px;"></span>
+                <p style="color: var(--success); font-size: 0.875rem; margin-top: 0.5rem; font-weight: 600;">Gemini 1.5 analizando descripción de negocio...</p>
+              </div>
+              <div id="ai-response-box" class="ai-bubble">
+                <!-- Se inyectarán respuestas -->
+              </div>
+            </div>
+
+            <!-- TAB 3: LISTADO COMPLETO DE LAS 45 CLASES -->
+            <div id="tab-todas" class="tab-content">
+              <div class="classes-scrollbox">
+                {% for cl, desc in niza_classes.items() %}
+                <div class="class-card" id="card-{{ cl }}">
+                  <input type="checkbox" name="clases" value="{{ cl }}" id="chk-{{ cl }}" style="margin-top: 0.25rem;" onchange="updateSelectedClasses()">
+                  <div>
+                    <label for="chk-{{ cl }}" style="font-weight: 700; color: #ffffff; cursor: pointer;">Clase {{ cl }}</label>
+                    <p style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.3;">{{ desc }}</p>
+                    <p class="ai-justification" id="just-{{ cl }}" style="display: none; font-size: 0.75rem; color: var(--success); font-weight: 600; margin-top: 0.25rem;"></p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+          </div>
+
+          <!-- COLUMNA 2: DETALLE TRANSPARENTE DE PAGOS DINÁMICOS -->
+          <div class="card" style="padding: 1.5rem; border-color: var(--accent); position: sticky; top: 1.5rem;">
+            <h3 style="font-size: 1.15rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; color: var(--accent);">
+              Calendario y Desglose de Pagos
+            </h3>
+
+            <!-- FASE 1 -->
+            <div class="payment-summary-box" id="box-fase-1">
+              <div style="font-weight: 700; margin-bottom: 0.5rem; color: #ffffff; display: flex; justify-content: space-between;">
+                <span>1. Pago Inicial (Hoy)</span>
+                <span style="color: var(--accent);" id="fase1-count">1 Clase</span>
+              </div>
+              <div class="price-item" style="padding: 0.25rem 0; border-bottom: none; font-size: 0.875rem;">
+                <span class="price-label">Gestión Profesional Quantus</span>
+                <span class="price-value">$149.990 CLP</span>
+              </div>
+              <div class="price-item" style="padding: 0.25rem 0; border-bottom: none; font-size: 0.875rem;">
+                <span class="price-label">Tasa estatal INAPI: 1 UTM por cada clase seleccionada</span>
+                <span class="price-value" id="val-tasa-inicial">${{ '{:,}'.format(current_utm).replace(',', '.') }} CLP</span>
+              </div>
+              <div class="price-item" style="padding: 0.5rem 0 0 0; border-top: 1px dashed var(--border); font-size: 1rem; font-weight: 700; color: var(--text-main);">
+                <span>Total transferencia hoy:</span>
+                <span id="val-total-hoy">${{ '{:,}'.format(149990 + current_utm).replace(',', '.') }} CLP</span>
+              </div>
+              <p style="color: var(--text-dim); font-size: 0.75rem; line-height: 1.35; margin-top: 0.75rem;">
+                También podrás pagar con Mercado Pago. El link disponible cubre 1 clase; si seleccionas más clases, cada clase adicional suma 1 UTM y requiere link ajustado o transferencia exacta.
+              </p>
+            </div>
+
+            <!-- FASE 2 -->
+            <div class="payment-summary-box" style="background: transparent; border-color: var(--border);">
+              <div style="font-weight: 700; margin-bottom: 0.25rem; color: var(--warning);">2. Pago de Publicación (~Día 20)</div>
+              <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.5rem;">
+                Cobro directo del Diario Oficial por cantidad de texto.
+              </p>
+              <div class="price-item" style="padding: 0; border-bottom: none; font-size: 0.875rem;">
+                <span class="price-label">Publicación oficial estimada</span>
+                <span class="price-value" id="val-publicacion">~$32.000 CLP</span>
+              </div>
+            </div>
+
+            <!-- FASE 3 -->
+            <div class="payment-summary-box" style="background: transparent; border-color: var(--border);">
+              <div style="font-weight: 700; margin-bottom: 0.25rem; color: var(--success);">3. Pago Final de Concesión (~Mes 5)</div>
+              <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.5rem;">
+                Solo se paga si INAPI concede la marca tras examen.
+              </p>
+              <div class="price-item" style="padding: 0; border-bottom: none; font-size: 0.875rem;">
+                <span class="price-label">Tasas estatales de registro: 2 UTM por cada clase aprobada</span>
+                <span class="price-value" id="val-tasa-final">${{ '{:,}'.format(current_utm * 2).replace(',', '.') }} CLP</span>
+              </div>
+              <div class="price-item" style="padding: 0.5rem 0 0 0; border-bottom: none; font-size: 0.875rem;">
+                <span class="price-label">Gestión final Quantus</span>
+                <span class="price-value">$149.990 CLP</span>
+              </div>
+            </div>
+            
+            <div style="border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 1rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: var(--success);">
+                <span>Costo Total Estimado:</span>
+                <span id="val-gran-total">${{ '{:,}'.format(149990 + current_utm + 32000 + 149990 + current_utm * 2).replace(',', '.') }} CLP</span>
+              </div>
+            </div>
+            
+            <p style="color: var(--text-dim); font-size: 0.75rem; line-height: 1.3; margin-top: 1rem;">
+              * Valores calculados sobre UTM referencial de hoy (${{ '{:,}'.format(current_utm).replace(',', '.') }} CLP). El costo en pesos de las tasas estatales variará ligeramente dependiendo de la fecha exacta de pago.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- DOCUMENTOS REQUERIDOS -->
+        <div class="card card-accent-border" style="margin-bottom: 2rem;">
+          <h3 style="font-size: 1.15rem; margin-bottom: 1rem;">
+            Documentos requeridos para ingresar la solicitud
+          </h3>
+          <p style="color: var(--text-dim); font-size: 0.875rem; line-height: 1.45; margin-bottom: 1rem;">
+            Sube ambos documentos en PDF para que podamos preparar el ingreso ante INAPI sin pedirlos después por correo. El pago no reemplaza estos antecedentes.
+          </p>
+          <div class="grid-cards" style="grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0;">
+            <div class="form-group">
+              <label class="form-label" for="poder_simple">Poder simple firmado (PDF)</label>
+              <input type="file" id="poder_simple" name="poder_simple" accept="application/pdf,.pdf" required class="form-control">
+              <div class="form-text">Documento donde autorizas a Quantus a tramitar la marca ante INAPI.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="inicio_actividades">Inicio de actividades SII (PDF)</label>
+              <input type="file" id="inicio_actividades" name="inicio_actividades" accept="application/pdf,.pdf" required class="form-control">
+              <div class="form-text">Certificado o comprobante tributario del titular o empresa solicitante.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FIRMA DE MANDATO DIGITAL Y ADVERTENCIA -->
+        <div class="card card-accent-border" style="margin-bottom: 2rem;">
+          <h3 style="font-size: 1.15rem; margin-bottom: 1rem;">
+            Mandato de Representación Digital y Declaración de Plazos
+          </h3>
+          
+          <div class="mandate-box">
+            <strong>MANDATO DE REPRESENTACIÓN PARA TRAMITACIÓN DE MARCA COMERCIAL</strong><br><br>
+            Por el presente instrumento, el Titular individualizado en este formulario confiere poder y representación especial a <strong>Quantus Chile SpA</strong> (y sus abogados designados) para que, en su nombre y representación, ingresen, firmen y trámiten la solicitud de la marca comercial indicada ante el Instituto Nacional de Propiedad Industrial (INAPI) de Chile.<br><br>
+            El mandante declara conocer que el proceso ante INAPI tarda habitualmente entre 4 a 6 meses, pudiendo extenderse por sobre los 12 meses en caso de oposiciones. El servicio se cobra en dos etapas: pago inicial para ingresar la solicitud y pago final solo si INAPI concede la marca. Asímismo, se deja expresa constancia de que este servicio automatizado NO incluye patrocinio o defensa jurídica gratuita ante eventuales demandas de oposición o juicios arbitrales de terceros dentro del proceso de registro.
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 1rem;">
+            <input type="checkbox" id="accept-mandate" name="accept_mandate" style="margin-top: 0.25rem; cursor: pointer;" required>
+            <label for="accept-mandate" style="font-size: 0.875rem; color: var(--text-main); cursor: pointer; user-select: none;">
+              Acepto y firmo digitalmente este mandato de representación y entiendo que <strong>el proceso puede tomar más de 1 año</strong> y que <strong>no incluye asesoría legal ni defensa jurídica en litigios</strong> ante oposiciones de terceros.
+            </label>
+          </div>
+        </div>
+
+        <!-- SUBMIT BUTTON -->
+        <div style="text-align: right; margin-bottom: 4rem;">
+          <button type="submit" class="cta-button" id="btn-submit" style="padding: 1rem 2.5rem; font-size: 1.1rem; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);">
+            Firmar Mandato y Continuar al Pago
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- FOOTER -->
+    {% include "partials/law_21719.html" %}
+
+    <footer style="border-top: 1px solid var(--border); padding-top: 2rem; text-align: center; color: var(--text-dim); font-size: 0.875rem;">
+      <p>&copy; 2026 Quantus Chile — Soluciones de Propiedad Industrial Automáticas. Todos los derechos reservados.</p>
+    </footer>
+
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script src="{{ url_for('static', filename='rut-validator.js') }}?v=20260729-rut"></script>
+  <script>
+    // Diccionario de clases Niza precargado para el buscador rápido
+    const NIZA_DESCRIPTIONS = {
+      {% for cl, desc in niza_classes.items() %}
+        {{ cl }}: "{{ desc }}",
+      {% endfor %}
+    };
+
+    // Cambiar entre pestañas
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.innerText.includes(
+        tabId === 'tab-buscar' ? 'Buscador' : tabId === 'tab-ai' ? 'Recomendación' : 'Todas'
+      ));
+      if (activeBtn) activeBtn.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // Buscador rápido local
+    function searchNizaLocal() {
+      const q = document.getElementById('niza-keyword').value.trim().toLowerCase();
+      const resultsDiv = document.getElementById('niza-search-results');
+      
+      if (!q) {
+        resultsDiv.innerHTML = '<p style="color: var(--text-dim); font-size: 0.875rem; text-align: center; margin-top: 3rem;">Escribe un producto o servicio arriba para buscar la categoría correspondiente.</p>';
+        return;
+      }
+      
+      let html = '';
+      let count = 0;
+      
+      for (const [cl, desc] of Object.entries(NIZA_DESCRIPTIONS)) {
+        if (desc.toLowerCase().includes(q) || `clase ${cl}`.includes(q)) {
+          count++;
+          const isChecked = document.getElementById(`chk-${cl}`).checked ? 'checked' : '';
+          html += `
+            <div class="class-card ${isChecked ? 'selected' : ''}" id="search-card-${cl}" style="margin-bottom:0.5rem; display:flex; gap:0.5rem; align-items:start;">
+              <input type="checkbox" id="search-chk-${cl}" value="${cl}" ${isChecked} onchange="toggleMasterCheckbox(${cl}, this.checked)">
+              <div>
+                <label for="search-chk-${cl}" style="font-weight:700; color:#fff; cursor:pointer;">Clase ${cl}</label>
+                <p style="font-size:0.75rem; color:var(--text-dim); line-height:1.3;">${desc}</p>
+              </div>
+            </div>
+          `;
+        }
+      }
+      
+      if (count === 0) {
+        resultsDiv.innerHTML = '<p style="color: var(--text-dim); font-size: 0.875rem; text-align: center; margin-top: 3rem;">No se encontraron clases para ese término. Intenta con un sinónimo.</p>';
+      } else {
+        resultsDiv.innerHTML = html;
+      }
+    }
+
+    // Sincronizar checkboxes del buscador dinámico con la lista maestra (tab 3)
+    function toggleMasterCheckbox(cl, isChecked) {
+      const masterChk = document.getElementById(`chk-${cl}`);
+      masterChk.checked = isChecked;
+      
+      // Estilo de tarjeta master
+      const masterCard = document.getElementById(`card-${cl}`);
+      if (isChecked) {
+        masterCard.classList.add('selected');
+      } else {
+        masterCard.classList.remove('selected');
+      }
+      
+      updateSelectedClasses();
+    }
+
+    // Actualizar estados visuales de checkboxes y recalcular costos
+    function updateSelectedClasses() {
+      const checkboxes = document.querySelectorAll('input[name="clases"]');
+      let selectedCount = 0;
+      
+      checkboxes.forEach(chk => {
+        const cl = chk.value;
+        const card = document.getElementById(`card-${cl}`);
+        
+        if (chk.checked) {
+          selectedCount++;
+          card.classList.add('selected');
+        } else {
+          card.classList.remove('selected');
+        }
+        
+        // Sincronizar en buscador si está renderizado
+        const searchChk = document.getElementById(`search-chk-${cl}`);
+        if (searchChk) {
+          searchChk.checked = chk.checked;
+          const searchCard = document.getElementById(`search-card-${chk.value}`);
+          if (searchCard) {
+            if (chk.checked) searchCard.classList.add('selected');
+            else searchCard.classList.remove('selected');
+          }
+        }
+      });
+      
+      // Si no hay ninguna clase seleccionada, obligamos a marcar al menos una en el submit
+      const submitBtn = document.getElementById('btn-submit');
+      
+      if (selectedCount === 0) {
+        // Valores por defecto para 1 clase para no romper la visual
+        document.getElementById('fase1-count').innerText = '0 Clases';
+        document.getElementById('val-tasa-inicial').innerText = '$0 CLP';
+        document.getElementById('val-total-hoy').innerText = '$149.990 CLP';
+        document.getElementById('val-publicacion').innerText = '~$0 CLP';
+        document.getElementById('val-tasa-final').innerText = '$0 CLP';
+        document.getElementById('val-gran-total').innerText = '$299.980 CLP';
+        submitBtn.innerText = 'Selecciona al menos 1 Clase';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = 0.5;
+        return;
+      }
+      
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = 1;
+      
+      // Recálculo dinámico de costos
+      const UTM = {{ current_utm }};
+      const gestiónInicial = 149990;
+      const gestiónFinal = 149990;
+      const tasaIngreso = UTM * selectedCount;
+      const totalHoy = gestiónInicial + tasaIngreso;
+      const publicacionEst = 32000 * selectedCount;
+      const tasaFinal = (UTM * 2) * selectedCount;
+      const granTotal = totalHoy + publicacionEst + gestiónFinal + tasaFinal;
+      
+      // Formatear CLP
+      const fmt = (val) => '$' + val.toLocaleString('de-DE') + ' CLP';
+      
+      document.getElementById('fase1-count').innerText = `${selectedCount} Clase${selectedCount > 1 ? 's' : ''}`;
+      document.getElementById('val-tasa-inicial').innerText = fmt(tasaIngreso);
+      document.getElementById('val-total-hoy').innerText = fmt(totalHoy);
+      document.getElementById('val-publicacion').innerText = '~' + fmt(publicacionEst);
+      document.getElementById('val-tasa-final').innerText = fmt(tasaFinal);
+      document.getElementById('val-gran-total').innerText = fmt(granTotal);
+      
+      submitBtn.innerText = `Firmar Mandato y Continuar al Pago (${fmt(totalHoy)})`;
+    }
+
+    // Ejecutar recomendación por IA con Gemini
+    async function runNizaAI() {
+      const desc = document.getElementById('ai-description').value.trim();
+      const loader = document.getElementById('ai-loader');
+      const responseBox = document.getElementById('ai-response-box');
+      const btn = document.getElementById('btn-consult-ai');
+      
+      if (!desc) {
+        alert('Por favor describe tu negocio antes de consultar a la IA.');
+        return;
+      }
+      
+      loader.style.display = 'block';
+      responseBox.style.display = 'none';
+      btn.disabled = true;
+      btn.style.opacity = 0.5;
+      
+      // Limpiar justificaciones previas
+      document.querySelectorAll('.ai-justification').forEach(el => {
+        el.style.display = 'none';
+        el.innerText = '';
+      });
+      document.querySelectorAll('.class-card').forEach(el => el.classList.remove('ai-recommended'));
+      
+      try {
+        const response = await fetch('/api/niza_ai', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}'
+          },
+          body: JSON.stringify({ descripcion: desc })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          responseBox.innerHTML = `<span style="color: var(--danger); font-weight:700;">Error:</span> ${data.error}`;
+          responseBox.style.display = 'block';
+          responseBox.style.borderColor = 'var(--danger)';
+          responseBox.style.background = 'var(--danger-bg)';
+          return;
+        }
+        
+        const recs = data.recomendaciones || [];
+        if (recs.length === 0) {
+          responseBox.innerHTML = 'La IA no pudo determinar una clase clara. Intenta describiendo con otras palabras.';
+          responseBox.style.display = 'block';
+          return;
+        }
+        
+        let htmlResponse = '<h4 style="color: var(--success); margin-bottom: 0.5rem;">✨ Recomendación de Clases de la IA:</h4><ul style="padding-left:1.25rem; font-size:0.825rem; display:flex; flex-direction:column; gap:0.5rem;">';
+        
+        recs.forEach(rec => {
+          const cl = rec.clase;
+          const just = rec.justificacion;
+          
+          htmlResponse += `<li><strong>Clase ${cl}:</strong> ${just}</li>`;
+          
+          // Marcar el checkbox correspondiente en la lista
+          const chk = document.getElementById(`chk-${cl}`);
+          if (chk) {
+            chk.checked = true;
+            const card = document.getElementById(`card-${cl}`);
+            if (card) {
+              card.classList.add('ai-recommended');
+              card.classList.add('selected');
+            }
+            const justLabel = document.getElementById(`just-${cl}`);
+            if (justLabel) {
+              justLabel.innerText = `💡 Sugerencia IA: ${just}`;
+              justLabel.style.display = 'block';
+            }
+          }
+        });
+        
+        htmlResponse += '</ul><p style="font-size:0.75rem; color:var(--text-dim); margin-top:0.75rem;">* Hemos marcado automáticamente estas clases en la pestaña "Todas las clases" para ti. Revisa la lista y ajusta si lo deseas.</p>';
+        if (data.report_url) {
+          htmlResponse += `<a class="cta-button btn-secondary" href="${data.report_url}" style="margin-top:0.75rem;">Descargar informe PDF de marca</a>`;
+        }
+        
+        responseBox.innerHTML = htmlResponse;
+        responseBox.style.display = 'block';
+        responseBox.style.borderColor = 'rgba(16, 185, 129, 0.2)';
+        responseBox.style.background = 'rgba(16, 185, 129, 0.05)';
+        
+        // Mover a la pestaña "Todas" para que el usuario vea qué se seleccionó
+        switchTab('tab-todas');
+        updateSelectedClasses();
+        
+      } catch (err) {
+        responseBox.innerHTML = `<span style="color: var(--danger); font-weight:700;">Excepción de red:</span> ${err.message}`;
+        responseBox.style.display = 'block';
+      } finally {
+        loader.style.display = 'none';
+        btn.disabled = false;
+        btn.style.opacity = 1;
+      }
+    }
+
+    // Lógica para inicializar
+    document.addEventListener("DOMContentLoaded", () => {
+      // Marcar por defecto la primera clase (Clase 1) o la clase 9 si hay coincidencia
+      const defChk = document.getElementById('chk-9');
+      if (defChk) defChk.checked = true;
+      updateSelectedClasses();
+    });
+  </script>
+
+</body>
+</html>

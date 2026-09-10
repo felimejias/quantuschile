@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro Maestro Quantus | Acceso Privado</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-loginfix">
+</head>
+<body>
+  <main class="master-login-shell">
+    <section class="master-login-card">
+      <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+      <div>
+        <span class="eyebrow"><span class="eyebrow-dot"></span> Acceso ejecutivo</span>
+        <h1>Centro Maestro Quantus</h1>
+        <p>Analítica privada de clientes, ingresos, agentes, módulos, riesgo y rendimiento comercial.</p>
+      </div>
+      {% if error %}
+      <div class="master-alert">{{ error }}</div>
+      {% endif %}
+      <a class="brand-login-button google-login-button" href="/maestro/google" aria-label="Continuar con Google">
+        <span class="brand-mark google-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" focusable="false">
+            <path fill="#4285F4" d="M23.49 12.27c0-.82-.07-1.6-.21-2.36H12v4.46h6.44a5.51 5.51 0 0 1-2.39 3.62v2.95h3.87c2.26-2.08 3.57-5.15 3.57-8.67Z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.9l-3.87-2.95c-1.08.72-2.45 1.14-4.08 1.14-3.14 0-5.79-2.12-6.74-4.96H1.27v3.04A12 12 0 0 0 12 24Z"/>
+            <path fill="#FBBC05" d="M5.26 14.33A7.22 7.22 0 0 1 4.88 12c0-.81.14-1.6.38-2.33V6.63H1.27A12 12 0 0 0 0 12c0 1.93.46 3.76 1.27 5.37l3.99-3.04Z"/>
+            <path fill="#EA4335" d="M12 4.71c1.76 0 3.35.61 4.59 1.8l3.43-3.43A11.54 11.54 0 0 0 12 0 12 12 0 0 0 1.27 6.63l3.99 3.04C6.21 6.83 8.86 4.71 12 4.71Z"/>
+          </svg>
+        </span>
+        <span>Continuar con Google</span>
+      </a>
+      <button class="brand-login-button apple-login-button passkey-button" type="button" data-passkey-login aria-label="Entrar con Apple Touch ID">
+        <span class="brand-mark apple-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" focusable="false">
+            <path fill="currentColor" d="M16.37 1.51c0 1.15-.43 2.23-1.19 3.04-.82.88-2.15 1.55-3.23 1.46-.15-1.1.43-2.28 1.16-3.07.82-.89 2.24-1.53 3.26-1.43ZM20.75 17.55c-.56 1.27-.83 1.84-1.55 2.96-1.01 1.55-2.43 3.49-4.19 3.51-1.57.02-1.97-1.02-4.09-1.01-2.12.01-2.57 1.03-4.14 1.01-1.76-.02-3.1-1.76-4.11-3.31C-.12 16.43-.42 11.39 1.35 8.58c1.26-2 3.24-3.17 5.1-3.17 1.89 0 3.08 1.04 4.65 1.04 1.52 0 2.45-1.04 4.64-1.04 1.65 0 3.4.9 4.65 2.45-4.09 2.24-3.42 8.09.36 9.69Z"/>
+          </svg>
+        </span>
+        <span>Entrar con Apple / Touch ID</span>
+      </button>
+      {% if not google_ready %}
+      <p class="payment-note">Google requiere OAuth Client ID y Client Secret; las API keys de Google AI Studio no habilitan inicio de sesión.</p>
+      {% endif %}
+      <p class="payment-note" data-passkey-status>Para usar Touch ID primero registra una passkey desde el Centro Maestro.</p>
+      <div class="master-divider"><span>o entra con usuario maestro</span></div>
+      <form class="master-login-form" method="POST">
+        {{ csrf_input()|safe }}
+        <label>
+          <span>Usuario</span>
+          <input class="form-control" name="username" autocomplete="username" required>
+        </label>
+        <label>
+          <span>Contraseña</span>
+          <input class="form-control" name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn full" type="submit">Entrar al centro maestro</button>
+      </form>
+      <div class="master-login-actions">
+        <a class="cta-button btn-secondary" href="/maestro/olvide">Olvidé mi contraseña</a>
+        <a class="cta-button btn-secondary" href="https://www.quantuschile.cl/">Volver a Quantus</a>
+      </div>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='passkeys.js') }}?v=20260729-passkeys"></script>
+</body>
+</html>

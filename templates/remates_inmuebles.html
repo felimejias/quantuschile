@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radar de Remates de Inmuebles Chile | Quantus Legal Tech</title>
+  <link rel="icon" type="image/png" href="/static/quantus-logo-clean.png">
+  <link rel="stylesheet" href="/static/style.css?v=20260731-remates-v4">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+  <style>
+    .remate-hero {
+      background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.18), rgba(15, 23, 42, 0.98));
+      border-bottom: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 50px 20px 35px;
+      text-align: center;
+    }
+    .grid-remates {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+      margin: 30px 0;
+    }
+    .card-remate {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+    }
+    .badge-discount {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #10b981;
+      color: #0f172a;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+    .price-tag {
+      font-size: 26px;
+      font-weight: 900;
+      color: #38bdf8;
+      margin: 6px 0;
+    }
+    .btn-maps {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .btn-maps:hover {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    .meta-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+    }
+    .meta-label { color: #94a3b8; font-weight: 500; }
+    .meta-val { color: #f8fafc; font-weight: 700; text-align: right; }
+  </style>
+</head>
+<body class="dark-theme">
+  {% include "partials/nav_header.html" %}
+  <div class="app-container">
+
+    <main>
+      <section class="remate-hero">
+        <div class="container">
+          <span style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.4); padding:4px 14px; border-radius:999px; font-size:12px; font-weight:800; letter-spacing:0.04em;">RADAR JUDICIAL · DIARIO OFICIAL & TRIBUNALES</span>
+          <h1 style="font-size:32px; color:#fff; margin:16px 0 10px;">Radar de Remates de Inmuebles Chile</h1>
+          <p style="color:#94a3b8; max-width:720px; margin:0 auto; font-size:15px; line-height:1.6;">
+            Monitoreo en tiempo real de remates judiciales, ordenes de subasta pública de terrenos, parcelas e inmuebles publicados en el Diario Oficial y Boletines Judiciales de Chile.
+          </p>
+        </div>
+      </section>
+
+      <section class="container" style="padding: 40px 20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:24px;">
+          <div>
+            <h2 style="font-size:22px; color:#fff; margin:0;">Inmuebles en Proceso de Remate</h2>
+            <p style="color:#64748b; font-size:14px; margin:4px 0 0;">Ficha técnica, mínimo de subasta, avalúo comercial, tribunal y ubicación GPS.</p>
+          </div>
+        </div>
+
+        <div class="grid-remates">
+          {% for r in remates %}
+          <div class="card-remate">
+            {% if r.descuento_estimado_pct and r.descuento_estimado_pct > 0 %}
+            <span class="badge-discount">-{{ r.descuento_estimado_pct }}% DESC.</span>
+            {% endif %}
+
+            {% if r.fuente %}
+            <div style="position:absolute; top:-12px; left:16px; background:#1e293b; border:1px solid #334155; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:700; color:#cbd5e1; box-shadow:0 4px 6px -1px rgba(0,0,0,0.5);">
+              {% if 'PODER_JUDICIAL' in r.fuente %}Poder Judicial (PJUD)
+              {% elif 'MACAL' in r.fuente %}Macal Subastas
+              {% elif 'MADRID' in r.fuente %}Remates Madrid
+              {% elif 'TATTERSALL' in r.fuente %}Tattersall GDA
+              {% elif 'ADUANA' in r.fuente %}Aduanas de Chile
+              {% elif 'TGR' in r.fuente %}Tesorería (TGR)
+              {% elif 'CGR' in r.fuente %}Remates CGR
+              {% elif 'DICREP' in r.fuente %}DICREP (Tía Rica)
+              {% elif 'BIENES_NACIONALES' in r.fuente %}Bienes Nacionales
+              {% else %}Diario Oficial{% endif %}
+            </div>
+            {% endif %}
+
+            {% if r.imagen_url %}
+            <div style="margin: -24px -24px 16px -24px; border-radius: 16px 16px 0 0; overflow: hidden; height: 190px;">
+              <img src="{{ r.imagen_url }}" alt="{{ r.tipo_propiedad }}" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            {% else %}
+            <div style="margin-top: 12px;"></div>
+            {% endif %}
+            
+            <div style="font-size:12px; font-weight:800; color:#10b981; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">
+              {{ r.comuna }}, {{ r.region }}
+            </div>
+            
+            <h3 style="font-size:18px; color:#fff; margin:0 0 8px; line-height:1.4;">
+              {{ r.tipo_propiedad }}
+            </h3>
+
+            {% if loop.index <= 4 %}
+              {% if r.minimo_remate_clp %}
+              <div class="price-tag">
+                ${{ "{:,.0f}".format(r.minimo_remate_clp).replace(",", ".") }} <span style="font-size:14px; font-weight:600; color:#94a3b8;">CLP</span>
+                <span style="font-size:12px; font-weight:600; color:#10b981; display:block; margin-top:2px;">Postura Mínima de Subasta</span>
+              </div>
+              {% endif %}
+            {% else %}
+              <div class="price-tag" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(15, 23, 42, 0.9)); padding: 14px; border-radius: 10px; border: 1px dashed #f59e0b; text-align: center; margin-top: 10px;">
+                <span style="font-size: 17px; color:#fbbf24; font-weight:900;">Oportunidad Exclusiva (-55% DESC.)</span>
+                <span style="font-size:12px; font-weight:600; color:#e2e8f0; display:block; margin: 6px 0 10px;">Monto y expediente judicial reservados para suscriptores PRO</span>
+                <a href="#planes-suscripcion" style="display:inline-block; background:#f59e0b; color:#0f172a; font-weight:800; font-size:12px; padding:6px 14px; border-radius:6px; text-decoration:none;">Desbloquear Precio</a>
+              </div>
+            {% endif %}
+
+            <p style="color:#cbd5e1; font-size:13px; margin:12px 0 16px; line-height:1.5;">
+              <strong>Ubicación:</strong> {{ r.direccion }}
+            </p>
+
+            <div style="margin: 16px 0;">
+              {% if r.valor_comercial_estimado_clp %}
+              <div class="meta-item">
+                <span class="meta-label">Valor Comercial Estimado</span>
+                <span class="meta-val" style="color:#10b981;">${{ "{:,.0f}".format(r.valor_comercial_estimado_clp).replace(",", ".") }} CLP</span>
+              </div>
+              {% endif %}
+              {% if r.garantia_requerida_valevista_clp %}
+              <div class="meta-item">
+                <span class="meta-label">Garantía Vale Vista (10%)</span>
+                <span class="meta-val" style="color:#fbbf24;">${{ "{:,.0f}".format(r.garantia_requerida_valevista_clp).replace(",", ".") }} CLP</span>
+              </div>
+              {% endif %}
+              {% if r.fecha_remate %}
+              <div class="meta-item">
+                <span class="meta-label">Fecha y Hora de Subasta</span>
+                <span class="meta-val" style="color:#38bdf8;">{{ r.fecha_remate }}</span>
+              </div>
+              {% endif %}
+              {% if r.superficie %}
+              <div class="meta-item">
+                <span class="meta-label">Superficie / Detalle</span>
+                <span class="meta-val">{{ r.superficie }}</span>
+              </div>
+              {% endif %}
+              {% if r.tribunal %}
+              <div class="meta-item">
+                <span class="meta-label">Tribunal / Entidad</span>
+                <span class="meta-val">{{ r.tribunal }}</span>
+              </div>
+              {% endif %}
+              {% if r.rol_causa %}
+              <div class="meta-item">
+                <span class="meta-label">Rol Causa / Expediente</span>
+                <span class="meta-val" style="font-family:monospace; color:#38bdf8;">{{ r.rol_causa }}</span>
+              </div>
+              {% endif %}
+            </div>
+
+            {% if r.evaluacion_oportunidad %}
+            <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:10px; padding:12px; font-size:12px; color:#6ee7b7; margin-bottom:16px; line-height:1.4;">
+              {{ r.evaluacion_oportunidad }}
+            </div>
+            {% endif %}
+
+            <div style="margin-top:20px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+              {% if r.google_maps_url %}
+              <a href="{{ r.google_maps_url }}" target="_blank" rel="noopener noreferrer" class="btn-maps" style="padding: 8px 12px; font-size: 12px;">
+                📍 GPS Satelital
+              </a>
+              {% endif %}
+              
+              <div style="display:flex; gap:6px; align-items:center;">
+                <a href="https://wa.me/56975480746?text=Hola%20Quantus,%20me%20interesa%20postular%20al%20remate%20de%20{{ r.tipo_propiedad|urlencode }}%20(Rol:%20{{ r.rol_causa|urlencode }})%20y%20requiero%20estudio%20de%20t%C3%ADtulo%20o%20asesor%C3%ADa%20legal." target="_blank" rel="noopener noreferrer" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; color: #10b981; font-weight: 700; font-size: 12px; padding: 8px 12px; border-radius: 8px; text-decoration: none; display:inline-flex; align-items:center; gap:6px;">
+                  ⚖️ Asesoría Legal / Título
+                </a>
+                <button type="button" onclick="abrirQRWhatsApp('https://wa.me/56975480746?text=Hola%20Quantus,%20me%20interesa%20postular%20al%20remate%20de%20{{ r.tipo_propiedad|urlencode }}%20(Rol:%20{{ r.rol_causa|urlencode }})%20y%20requiero%20estudio%20de%20t%C3%ADtulo%20o%20asesor%C3%ADa%20legal.')" style="background: #1e293b; border: 1px solid #334155; color: #38bdf8; font-size: 12px; padding: 8px 10px; border-radius: 8px; cursor: pointer;" title="Escanear Código QR con tu celular">
+                  📱 QR
+                </button>
+              </div>
+
+              {% if r.fuente_url %}
+              <a href="{{ r.fuente_url }}" target="_blank" rel="noopener noreferrer" style="color:#38bdf8; font-size:12px; text-decoration:none; font-weight:600;">
+                Fuente Oficial ↗
+              </a>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- CONTENEDOR PUBLICITARIO / PATROCINADOR B2B / GOOGLE ADSENSE -->
+        <div style="margin: 40px 0; padding: 20px; background: linear-gradient(90deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1px dashed rgba(56, 189, 248, 0.4); border-radius: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="background: rgba(56, 189, 248, 0.15); padding: 12px; border-radius: 12px; font-size: 24px;">
+              📢
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span style="background: #38bdf8; color: #0f172a; font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">Espacio Patrocinado</span>
+                <span style="color: #94a3b8; font-size: 12px;">Estudios Jurídicos • Mutuarias • Corredoras</span>
+              </div>
+              <h4 style="margin: 0; color: #fff; font-size: 16px;">¿Ofreces servicios para inversionistas en remates?</h4>
+              <p style="margin: 2px 0 0; color: #94a3b8; font-size: 13px;">Posiciona tu marca frente a más de 5.000 inversionistas y compradores calificados al mes.</p>
+            </div>
+          </div>
+          <a href="https://wa.me/56975480746?text=Hola%20Quantus,%20me%20interesa%20publicitar%20mi%20empresa/estudio%20jur%C3%ADdico%20en%20el%20Radar%20de%20Remates." target="_blank" style="background: #38bdf8; color: #0f172a; font-weight: 800; font-size: 13px; padding: 10px 20px; border-radius: 8px; text-decoration: none; white-space: nowrap;">
+            Anúnciate Aquí ↗
+          </a>
+        </div>
+
+        <!-- SECCIÓN DE PLANES DE SUSCRIPCIÓN -->
+        <div id="planes-suscripcion" style="margin-top: 40px; padding: 40px 20px; background: rgba(15, 23, 42, 0.95); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; text-align: center;">
+          <span style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; padding: 4px 14px; border-radius: 999px; font-size: 12px; font-weight: 800; text-transform: uppercase;">Membresías de Inversión Quantus</span>
+          <h2 style="font-size: 30px; color: #fff; margin: 16px 0 10px;">Acceso Total al Radar de Remates de Chile</h2>
+          <p style="color: #94a3b8; max-width: 680px; margin: 0 auto 36px; font-size: 15px; line-height: 1.6;">
+            Monitorea más de 500 subastas mensuales consolidadas de Tribunales Civiles (PJUD), Tesorería (TGR), Aduanas, Diario Oficial y Casas de Remate Privadas (Remates Madrid, Macal, Tattersall, CGR, DICREP).
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 860px; margin: 0 auto; text-align: left;">
+            <!-- Plan Mensual -->
+            <div style="background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 30px; position: relative;">
+              <h3 style="color: #fff; font-size: 20px; margin: 0 0 8px;">Plan Inversionista Mensual</h3>
+              <p style="color: #94a3b8; font-size: 13px; margin: 0 0 20px;">Ideal para inversionistas activos que buscan oportunidades mes a mes.</p>
+              <div style="font-size: 34px; font-weight: 900; color: #38bdf8; margin-bottom: 20px;">
+                $29.900 <span style="font-size: 14px; font-weight: 600; color: #94a3b8;">CLP / mes</span>
+              </div>
+              <ul style="color: #cbd5e1; font-size: 13px; line-height: 1.8; padding-left: 20px; margin-bottom: 26px;">
+                <li>Radar completo de <strong>+500 remates actualizados 24/7</strong></li>
+                <li>Alertas diarias vía <strong>WhatsApp y Correo</strong> por región</li>
+                <li>Posturas mínimas, avalúo comercial y cálculo de garantía</li>
+                <li>Geolocalización satelital y enlace GPS directo</li>
+                <li>Sin permanencia mínima, cancela cuando quieras</li>
+              </ul>
+              <button type="button" onclick="abrirModalRemates('Plan Inversionista Mensual', '29900')" style="display: block; width: 100%; border: none; cursor: pointer; text-align: center; background: #38bdf8; color: #0f172a; font-weight: 800; padding: 12px; border-radius: 10px; font-size: 14px;">
+                Suscribirme Mensual ↗
+              </button>
+            </div>
+
+            <!-- Plan Anual PRO -->
+            <div style="background: linear-gradient(180deg, #1e293b 0%, rgba(16, 185, 129, 0.1) 100%); border: 2px solid #10b981; border-radius: 16px; padding: 30px; position: relative;">
+              <span style="position: absolute; top: -12px; right: 20px; background: #10b981; color: #0f172a; font-size: 11px; font-weight: 900; padding: 4px 10px; border-radius: 999px;">AHORRA 25%</span>
+              <h3 style="color: #fff; font-size: 20px; margin: 0 0 8px;">Plan Inversionista PRO (Anual)</h3>
+              <p style="color: #94a3b8; font-size: 13px; margin: 0 0 20px;">Para inmobiliarias, empresas y fondos que requieren máxima ventaja.</p>
+              <div style="font-size: 34px; font-weight: 900; color: #10b981; margin-bottom: 20px;">
+                $269.000 <span style="font-size: 14px; font-weight: 600; color: #94a3b8;">CLP / año</span>
+                <span style="display:block; font-size:12px; color:#94a3b8; font-weight:500;">(Equivalente a $22.417/mes)</span>
+              </div>
+              <ul style="color: #cbd5e1; font-size: 13px; line-height: 1.8; padding-left: 20px; margin-bottom: 26px;">
+                <li><strong>Todo lo incluido en el Plan Mensual</strong></li>
+                <li>Descarga de <strong>Expedientes Judiciales y Bases en PDF</strong></li>
+                <li>Detección temprana de <strong>Licitaciones y Adjudicaciones Directas</strong></li>
+                <li>Reporte personalizado de <strong>Tasación y Estudio de Títulos</strong></li>
+                <li>Atención y soporte preferente por WhatsApp 24/7</li>
+              </ul>
+              <button type="button" onclick="abrirModalRemates('Plan Inversionista PRO (Anual)', '269000')" style="display: block; width: 100%; border: none; cursor: pointer; text-align: center; background: #10b981; color: #0f172a; font-weight: 800; padding: 12px; border-radius: 10px; font-size: 14px;">
+                Activar Plan Anual PRO 🚀
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL SUSCRIPCIÓN RADAR DE REMATES -->
+        <div id="modal-suscripcion-remates" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(6,16,31,0.88); backdrop-filter:blur(8px); z-index:999999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+          <div style="background:#0f172a; border:1px solid #38bdf8; border-radius:20px; padding:28px; max-width:520px; width:100%; text-align:left; box-shadow:0 20px 50px rgba(0,0,0,0.8); position:relative; max-height:90vh; overflow-y:auto;">
+            <button type="button" onclick="cerrarModalRemates()" style="position:absolute; top:14px; right:18px; background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer;">&times;</button>
+            
+            <div style="color:#38bdf8; font-size:12px; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;">ACTIVAR MEMBRESÍA DE RADAR</div>
+            <h3 id="modal-remates-titulo" style="color:#ffffff; font-size:19px; font-weight:800; margin:0 0 16px;">Plan Inversionista</h3>
+
+            <form id="form-suscripcion-remates" onsubmit="enviarSuscripcionRemates(event)">
+              <input type="hidden" id="remates-plan-nombre" name="plan" value="Plan Inversionista Mensual">
+              <input type="hidden" id="remates-plan-monto" name="monto" value="29900">
+
+              <div style="margin-bottom:12px;">
+                <label style="display:block; color:#cbd5e1; font-size:12.5px; font-weight:600; margin-bottom:4px;">RUT del Titular / Empresa (Obligatorio)*</label>
+                <input type="text" id="remates-rut" name="rut" placeholder="Ej: 14.011.762-5 o 76.123.456-7" required style="width:100%; height:40px; background:#1e293b; border:1px solid #475569; border-radius:8px; color:#fff; padding:0 12px; box-sizing:border-box; font-size:13.5px;">
+              </div>
+
+              <div style="margin-bottom:12px;">
+                <label style="display:block; color:#cbd5e1; font-size:12.5px; font-weight:600; margin-bottom:4px;">Nombre Completo / Razón Social*</label>
+                <input type="text" id="remates-nombre" name="nombre" placeholder="Ej: Inversiones Los Andes SpA" required style="width:100%; height:40px; background:#1e293b; border:1px solid #475569; border-radius:8px; color:#fff; padding:0 12px; box-sizing:border-box; font-size:13.5px;">
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+                <div>
+                  <label style="display:block; color:#cbd5e1; font-size:12.5px; font-weight:600; margin-bottom:4px;">Correo Electrónico*</label>
+                  <input type="email" id="remates-email" name="email" placeholder="inversor@empresa.cl" required style="width:100%; height:40px; background:#1e293b; border:1px solid #475569; border-radius:8px; color:#fff; padding:0 12px; box-sizing:border-box; font-size:13.5px;">
+                </div>
+                <div>
+                  <label style="display:block; color:#cbd5e1; font-size:12.5px; font-weight:600; margin-bottom:4px;">WhatsApp Alertas*</label>
+                  <input type="tel" id="remates-telefono" name="telefono" placeholder="+56 9 7548 0746" required style="width:100%; height:40px; background:#1e293b; border:1px solid #475569; border-radius:8px; color:#fff; padding:0 12px; box-sizing:border-box; font-size:13.5px;">
+                </div>
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
+                <div>
+                  <label style="display:block; color:#cbd5e1; font-size:12.5px; font-weight:600; margin-bottom:4px;">Región Principal de Interés</label>
+                  <select id="remates-region" name="region_interes" style="width:100%; height:40px; background:#1e293b; border:1px solid #475569; border-radius:8px; color:#fff; padding:0 10px; box-sizing:border-box; font-size:13px;">
+                    <option value="Todo Chile">Todas las Regiones (Todo Chile)</option>
+                    <option value="Región Metropolitana de Santiago">Región Metropolitana</option>
+                    <option value="Región de Valparaíso">Región de Valparaíso</option>
+                    <option value="Región del Libertador General Bernardo O'Higgins">Región de O'Higgins</option>
+                    <option value="Región del Biobío">Región del Biobío</option>
+                    <option value="Región de Antofagasta">Región de Antofagasta</option>
+                    <option value="Región del Maule">Región del Maule</option>
+                    <option value="Región de Coquimbo">Región de Coquimbo</option>
+                    <option value="Región de Los Lagos">Región de Los Lagos</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; color:#cbd5e1; font-size:12.5px; font-weight:600; margin-bottom:4px;">Tipo de Bien de Interés</label>
+                  <select id="remates-tipo-bien" name="tipo_bien" style="width:100%; height:40px; background:#1e293b; border:1px solid #475569; border-radius:8px; color:#fff; padding:0 10px; box-sizing:border-box; font-size:13px;">
+                    <option value="Inmuebles (Casas, Deptos, Terrenos)">Inmuebles y Terrenos</option>
+                    <option value="Vehículos y Maquinaria Pesada">Vehículos y Maquinaria</option>
+                    <option value="Comercial e Industrial">Bodegas e Industria</option>
+                    <option value="Todos los Bienes">Todos los Bienes Subastados</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:10px 12px; margin-bottom:16px;">
+                <label style="display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#94a3b8; cursor:pointer;">
+                  <input type="checkbox" required checked style="margin-top:2px; accent-color:#38bdf8;">
+                  <span>Acepto los términos de servicio y autorizo el tratamiento de mis datos de contacto para la entrega exclusiva de alertas judiciales conforme a la Ley N° 21.719.</span>
+                </label>
+              </div>
+
+              <button type="submit" id="btn-submit-remates" style="width:100%; background:#38bdf8; color:#0f172a; font-weight:800; font-size:14px; padding:12px; border-radius:10px; border:none; cursor:pointer;">
+                Confirmar y Continuar a Activación &rarr;
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <script>
+          function abrirModalRemates(planNombre, monto) {
+            document.getElementById('remates-plan-nombre').value = planNombre;
+            document.getElementById('remates-plan-monto').value = monto;
+            document.getElementById('modal-remates-titulo').textContent = planNombre + ' ($' + Number(monto).toLocaleString('es-CL') + ' CLP)';
+            document.getElementById('modal-suscripcion-remates').style.display = 'flex';
+          }
+          function cerrarModalRemates() {
+            document.getElementById('modal-suscripcion-remates').style.display = 'none';
+          }
+          async function enviarSuscripcionRemates(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-remates');
+            btn.disabled = true;
+            btn.textContent = 'Registrando en servidor seguro...';
+            
+            const payload = {
+              rut: document.getElementById('remates-rut').value.trim(),
+              nombre: document.getElementById('remates-nombre').value.trim(),
+              email: document.getElementById('remates-email').value.trim(),
+              telefono: document.getElementById('remates-telefono').value.trim(),
+              region_interes: document.getElementById('remates-region').value,
+              tipo_bien: document.getElementById('remates-tipo-bien').value,
+              plan: document.getElementById('remates-plan-nombre').value,
+              monto: document.getElementById('remates-plan-monto').value
+            };
+
+            try {
+              const res = await fetch('/api/remates/suscripcion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+              const data = await res.json();
+              if (data.status === 'success') {
+                const msg = encodeURIComponent(`Hola Quantus, acabo de registrar mi suscripción a Remates con RUT ${payload.rut} (${payload.plan}). Solicito activación inmediata.`);
+                window.location.href = `https://wa.me/56975480746?text=${msg}`;
+              } else {
+                alert('Aviso: ' + (data.message || 'Datos registrados. Redirigiendo a activación...'));
+                window.location.href = 'https://wa.me/56975480746';
+              }
+            } catch (err) {
+              window.location.href = 'https://wa.me/56975480746';
+            }
+          }
+        </script>
+
+        <!-- MODAL CÓDIGO QR WHATSAPP -->
+        <div id="modal-qr-wsp" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(6,16,31,0.85); backdrop-filter:blur(8px); z-index:999999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+          <div style="background:#0f172a; border:1px solid #10b981; border-radius:20px; padding:28px; max-width:380px; width:100%; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.8); position:relative;">
+            <button type="button" onclick="cerrarQRWhatsApp()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer;">&times;</button>
+            <span style="background:rgba(16,185,129,0.2); color:#10b981; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:800;">WHATSAPP DIRECTO QUANTUS</span>
+            <h3 style="color:#fff; font-size:18px; margin:12px 0 6px;">Escanea con tu Celular</h3>
+            <p style="color:#94a3b8; font-size:12px; margin:0 0 16px;">Abre tu cámara o WhatsApp para iniciar el chat con el asesor legal (+56 9 7548 0746):</p>
+            <div style="background:#fff; padding:12px; border-radius:12px; display:inline-block; margin-bottom:16px;">
+              <img id="img-qr-wsp" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fwa.me%2F56975480746" alt="QR WhatsApp Quantus" style="width:180px; height:180px; display:block;">
+            </div>
+            <div>
+              <a id="link-directo-wsp" href="https://wa.me/56975480746" target="_blank" style="display:block; background:#10b981; color:#0f172a; font-weight:900; font-size:13px; padding:10px 16px; border-radius:10px; text-decoration:none;">💬 Abrir en WhatsApp Web</a>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          function abrirQRWhatsApp(url) {
+            const encodedUrl = encodeURIComponent(url);
+            document.getElementById('img-qr-wsp').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodedUrl}`;
+            document.getElementById('link-directo-wsp').href = url;
+            document.getElementById('modal-qr-wsp').style.display = 'flex';
+          }
+          function cerrarQRWhatsApp() {
+            document.getElementById('modal-qr-wsp').style.display = 'none';
+          }
+        </script>
+      <!-- SECCIÓN GUÍAS RELACIONADAS REMATES JUDICIALES -->
+      <div class="container" style="padding: 0 20px 30px;">
+        <div style="background:#1e293b; border:1px solid #334155; border-radius:18px; padding:24px 28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+          <div>
+            <strong style="color:#ffffff; font-size:15px; display:block; margin-bottom:4px;">📖 Guías Prácticas y Marco Legal de Remates</strong>
+            <span style="color:#94a3b8; font-size:13.5px;">Aprende cómo evaluar garantías, posturas mínimas y el procedimiento legal en tribunales.</span>
+          </div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <a href="/blog/guia-remates-propiedades-vehiculos-maquinaria" style="color:#38bdf8; font-weight:700; font-size:13.5px; text-decoration:underline;">Guía de Remates y Subastas →</a>
+            <a href="/blog/marco-legal-remates-judiciales-subastas-pjud" style="color:#38bdf8; font-weight:700; font-size:13.5px; text-decoration:underline;">Marco Legal y Procedimiento PJUD →</a>
+          </div>
+        </div>
+      </div>
+
+      {% include "law_21719.html" %}
+
+      {% include "partials/legal_footer.html" %}
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% if codigo == 404 %}Página no encontrada{% else %}Error interno del servidor{% endif %} | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-dark: #06101f;
+      --card-bg: #0b172b;
+      --card-border: rgba(56, 189, 248, 0.22);
+      --cyan-bright: #38bdf8;
+      --text-white: #ffffff;
+      --text-slate: #94a3b8;
+    }
+    body {
+      background: var(--bg-dark);
+      color: var(--text-white);
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 20px; }
+    .error-card {
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 48px 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+    .error-code {
+      font-size: 72px;
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--cyan-bright), #7dd3fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin: 0 0 12px;
+    }
+    .error-title { font-size: 22px; font-weight: 700; margin: 0 0 10px; }
+    .error-text { color: var(--text-slate); font-size: 15px; line-height: 1.6; margin: 0 0 28px; }
+    .error-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .btn-primary {
+      background: var(--cyan-bright);
+      color: #06101f;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(56, 189, 248, 0.35); }
+    .btn-ghost { border: 1px solid var(--card-border); color: var(--text-white); }
+    .btn-ghost:hover { border-color: var(--cyan-bright); color: var(--cyan-bright); }
+    @media (prefers-reduced-motion: reduce) {
+      .btn { transition: none; }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <section class="error-card" role="alert" aria-live="assertive">
+      <p class="error-code">{{ codigo }}</p>
+      <h1 class="error-title">
+        {% if codigo == 404 %}Esta página no existe o fue movida{% else %}Algo salió mal en nuestros sistemas{% endif %}
+      </h1>
+      <p class="error-text">
+        {% if codigo == 404 %}
+          La dirección que buscas no está disponible. Puede que el enlace esté desactualizado o haya sido reubicado.
+          Nuestro equipo ya está al tanto de tu visita: te invitamos a volver al inicio o explorar nuestras soluciones.
+        {% else %}
+          Ocurrió un error inesperado mientras preparábamos esta página. Ya lo registramos y lo estamos revisando.
+          Por favor, intenta nuevamente en unos minutos. Si el problema persiste, escríbenos y lo resolvemos a la brevedad.
+        {% endif %}
+      </p>
+      <div class="error-actions">
+        <a class="btn btn-primary" href="/">Volver al inicio</a>
+        <a class="btn btn-ghost" href="/do">Vigilancia Diario Oficial</a>
+        <a class="btn btn-ghost" href="/licitaciones">Licitaciones</a>
+      </div>
+    </section>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

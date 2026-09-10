@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantus Licitaciones 24/7 | Inteligencia Comercial Mercado Público</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-mp-logo-real">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <a class="brand-link" href="/licitaciones">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Licitaciones 24/7</div>
+        </div>
+      </a>
+      <nav class="header-actions" aria-label="Navegación principal">
+        <button type="button" class="cta-button btn-secondary back-button" onclick="history.back()">Atrás</button>
+        <a href="https://www.quantuschile.cl" class="cta-button btn-secondary">Quantus ERP</a>
+        <a href="https://www.quantuschile.cl/inapi" class="cta-button btn-secondary">Registrar Marca</a>
+        <a href="https://www.quantuschile.cl/do" class="cta-button btn-secondary">Diario Oficial</a>
+        <a href="https://www.quantuschile.cl/licitaciones" class="cta-button btn-secondary">Licitaciones</a>
+        <a href="#planes" class="cta-button">Activar monitoreo</a>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Inteligencia operacional conectada a Mercado Público</div>
+          <h1 class="hero-title">Que ninguna licitación rentable pase <span>invisible</span></h1>
+          <p class="hero-subtitle">
+            Quantus Licitaciones 24/7 transforma miles de oportunidades públicas en decisiones priorizadas: afinidad técnica, urgencia, monto, región, comprador, requisitos y acción recomendada para postular con velocidad ejecutiva.
+          </p>
+          <div class="hero-actions">
+            <a href="#dashboard" class="cta-button">Ver dashboard premium</a>
+            <a href="#planes" class="cta-button btn-secondary">Planes comerciales</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong>4.100</strong><span>Oportunidades activas analizadas en prueba real</span></div>
+            <div class="stat"><strong>Score IA</strong><span>Ranking de calce 0-100</span></div>
+            <div class="stat"><strong>24/7</strong><span>Worker Python con deduplicación</span></div>
+          </div>
+          <div class="proof-panel">
+          <h2>Por qué adquirir este servicio</h2>
+            <div class="proof-grid">
+              <div class="proof-item">
+                <strong>Convierte datos públicos en ventaja competitiva</strong>
+                <span>Mercado Público es abierto, pero no está curado para tu negocio. Quantus filtra ruido, detecta calce comercial y entrega oportunidades accionables antes de que tu equipo llegue tarde.</span>
+              </div>
+              <div class="proof-item">
+                <strong>Reduce fricción cognitiva y pérdida operacional</strong>
+                <span>El sistema cruza rubro, palabras clave, monto, región, organismo comprador, tipo de licitación y fecha de cierre para priorizar solo lo que merece revisión ejecutiva.</span>
+              </div>
+              <div class="proof-item">
+                <strong>Opera como radar comercial permanente</strong>
+                <span>Un worker autónomo consulta la API oficial, enriquece detalles, evita alertas duplicadas y conserva historial para aprender qué oportunidades generan valor real.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-panel premium-dashboard" id="dashboard">
+          <div class="panel-title">
+            <div>
+              <h2>Command Center</h2>
+              <p>Vista ejecutiva de oportunidades priorizadas.</p>
+            </div>
+            <span class="badge badge-success">Live-ready</span>
+          </div>
+
+          <div class="dashboard-metrics">
+            <div class="metric-card compact">
+              <span class="metric-value">92</span>
+              <span class="metric-label">Score máximo</span>
+            </div>
+            <div class="metric-card compact">
+              <span class="metric-value">3</span>
+              <span class="metric-label">Alertas premium</span>
+            </div>
+            <div class="metric-card compact">
+              <span class="metric-value">0</span>
+              <span class="metric-label">Duplicadas</span>
+            </div>
+          </div>
+
+          <div class="opportunity-stack">
+            {% for item in demo_opportunities %}
+            <article class="opportunity-card">
+              <div class="opportunity-score score-{{ 'success' if item.score >= 90 else 'info' }}">{{ item.score }}</div>
+              <div class="opportunity-body">
+                <div class="opportunity-topline">
+                  <span class="badge {{ 'badge-success' if item.score >= 90 else 'badge-info' }}">{{ item.nivel }}</span>
+                  <span class="muted">{{ item.region }}</span>
+                </div>
+                <h3>{{ item.titulo }}</h3>
+                <p>{{ item.organismo }} · {{ item.monto }} · cierre {{ item.cierre }}</p>
+                <div class="opportunity-action">{{ item.accion }}</div>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Arquitectura inteligente de captura</h2>
+      <p class="section-lead">No es un buscador manual. Es una capa de inteligencia comercial permanente sobre compras públicas.</p>
+      <div class="cards-grid">
+        <div class="card">
+          <h3 class="card-title">API oficial + enriquecimiento selectivo</h3>
+          <p class="muted">El worker consulta licitaciones activas, filtra candidatos y solo pide detalle profundo cuando existe probabilidad de calce. Así respeta límites y mejora calidad de datos.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Motor de scoring multidimensional</h3>
+          <p class="muted">El ranking pondera rubro, keywords positivas, exclusiones, región, monto, tipo de compra, comprador y urgencia. Una sola palabra genérica no basta para disparar una alerta.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Deduplicación y memoria comercial</h3>
+          <p class="muted">SQLite conserva oportunidades vistas y matches por cliente, evitando repetir avisos y dejando historial para aprender qué rubros, compradores y montos generan retorno.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Agente de decisión accionable</h3>
+          <p class="muted">Cada alerta explica por qué calza, qué riesgos revisar y cuál es la siguiente acción: solicitar bases, preparar oferta, descartar o revisar manualmente.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="planes">
+      <h2 class="section-title">Planes de inteligencia comercial</h2>
+      <p class="section-lead">Precios pensados para que una sola oportunidad ganada pague meses o años de monitoreo.</p>
+      <div class="plan-grid">
+        <div class="plan-card">
+          <div class="plan-body">
+          <h3>Oportunidades</h3>
+            <div class="price">$9.990<small>/mes</small></div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span><span>1 perfil de empresa</span></li>
+              <li><span class="check">✓</span><span>1 rubro principal</span></li>
+              <li><span class="check">✓</span><span>Alertas por email</span></li>
+            </ul>
+            <form action="/contratar_licitaciones" method="POST" style="margin-top: 18px;">
+              {{ csrf_input()|safe }}
+              <input type="hidden" name="plan" value="oportunidades">
+              <button class="btn full mp-pay-button" type="submit"><img class="mp-pay-logo" src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="">Pagar con Mercado Pago</button>
+            </form>
+          </div>
+        </div>
+        <div class="plan-card selected">
+          <div class="plan-ribbon">Recomendado</div>
+          <div class="plan-body">
+            <h3>Pyme Pro</h3>
+            <div class="price">$24.990<small>/mes</small></div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span><span>Hasta 3 rubros o líneas</span></li>
+              <li><span class="check">✓</span><span>Score de oportunidad</span></li>
+              <li><span class="check">✓</span><span>Alertas urgentes y resumen diario</span></li>
+            </ul>
+            <form action="/contratar_licitaciones" method="POST" style="margin-top: 18px;">
+              {{ csrf_input()|safe }}
+              <input type="hidden" name="plan" value="pyme_pro">
+              <button class="btn full mp-pay-button" type="submit"><img class="mp-pay-logo" src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="">Pagar con Mercado Pago</button>
+            </form>
+          </div>
+        </div>
+        <div class="plan-card">
+          <div class="plan-ribbon enterprise">Empresa</div>
+          <div class="plan-body">
+            <h3>Empresa</h3>
+            <div class="price">$49.990<small>/mes</small></div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span><span>Hasta 10 perfiles o sucursales</span></li>
+              <li><span class="check">✓</span><span>Compradores frecuentes</span></li>
+              <li><span class="check">✓</span><span>Reporte semanal ejecutivo</span></li>
+            </ul>
+            <form action="/contratar_licitaciones" method="POST" style="margin-top: 18px;">
+              {{ csrf_input()|safe }}
+              <input type="hidden" name="plan" value="empresa">
+              <button class="btn full mp-pay-button" type="submit"><img class="mp-pay-logo" src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="">Pagar con Mercado Pago</button>
+            </form>
+          </div>
+        </div>
+        <div class="plan-card">
+          <div class="plan-ribbon enterprise">Premium</div>
+          <div class="plan-body">
+            <h3>Gestión</h3>
+            <div class="price">$99.990<small>+</small></div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span><span>Checklist documental</span></li>
+              <li><span class="check">✓</span><span>Borrador de propuesta</span></li>
+              <li><span class="check">✓</span><span>Revisión humana inicial</span></li>
+            </ul>
+            <form action="/contratar_licitaciones" method="POST" style="margin-top: 18px;">
+              {{ csrf_input()|safe }}
+              <input type="hidden" name="plan" value="premium">
+              <button class="btn full mp-pay-button" type="submit"><img class="mp-pay-logo" src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="">Pagar con Mercado Pago</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="history-panel">
+        <div>
+          <span class="history-kicker">Oferta de lanzamiento</span>
+          <h2>Activación prioritaria para clientes Quantus</h2>
+          <p>El servicio se conecta naturalmente con Quantus ERP: ventas, inventario, sucursales y oportunidades públicas en una misma estrategia de crecimiento.</p>
+        </div>
+        <div class="history-price">
+          <span>Implementación</span>
+          <strong>$0 CLP</strong>
+          <small>para los primeros clientes piloto con perfil comercial bien definido.</small>
+        </div>
+        <div class="history-note">
+          La API de Mercado Público es gratuita con ticket oficial. El valor está en el monitoreo inteligente, la priorización y la ejecución comercial.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="analizador-licitaciones">
+      <div class="proof-panel">
+        <h2>Analizador IA de licitaciones</h2>
+        <p class="muted" style="margin-bottom: 18px;">
+          Pega una oportunidad, resumen de bases o ficha de Mercado Público. Quantus IA devuelve calce, urgencia, documentos a revisar y un PDF ejecutivo.
+        </p>
+        <form id="lic-ai-form" class="form-grid">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+          <div class="form-group">
+            <label class="form-label" for="licEmpresa">Empresa</label>
+            <input class="form-control" id="licEmpresa" name="empresa" placeholder="Ferretería Central SpA">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="licRubro">Rubro o perfil</label>
+            <input class="form-control" id="licRubro" name="rubro" placeholder="Ferretería, electricidad, construcción">
+          </div>
+          <div class="form-group full">
+            <label class="form-label" for="licTexto">Texto de la oportunidad</label>
+            <textarea class="form-control" id="licTexto" name="oportunidad" rows="6" placeholder="Pega aquí título, organismo, monto, fecha de cierre, requisitos o extracto de bases..."></textarea>
+          </div>
+          <div class="form-group full">
+            <button class="btn full" type="submit" id="licAiBtn">Analizar oportunidad con IA</button>
+          </div>
+        </form>
+        <div id="lic-ai-result" class="ai-result-panel" style="display:none;"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="form-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Activar piloto</h2>
+            <p>Deja los datos comerciales y configuramos el radar de oportunidades.</p>
+          </div>
+        </div>
+        <form class="form-grid" action="/contratar_licitaciones" method="POST">
+          {{ csrf_input()|safe }}
+          <input type="hidden" name="plan" value="pyme_pro">
+          <div class="form-group">
+            <label class="form-label" for="empresa">Empresa</label>
+            <input class="form-control" id="empresa" name="empresa" placeholder="Ej. Ferretería Central SpA">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rut">RUT empresa</label>
+            <input class="form-control" id="rut" name="rut" placeholder="Ej. 76.123.456-7" data-rut>
+            <div class="form-text rut-message" data-rut-message></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="correo">Correo</label>
+            <input class="form-control" id="correo" name="correo" type="email" placeholder="ventas@empresa.cl">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="whatsapp">WhatsApp comercial</label>
+            <input class="form-control" id="whatsapp" name="whatsapp" type="tel" placeholder="+56912345678">
+          </div>
+          <div class="form-group full">
+            <label class="form-label" for="rubros">Rubros, regiones y montos objetivo</label>
+            <textarea class="form-control" id="rubros" name="rubros" rows="4" placeholder="Ferretería, electricidad, gasfitería. Metropolitana y Valparaíso. Desde $500.000 hasta $80.000.000."></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="consent-row">
+              <input type="checkbox" name="whatsapp_consent" value="1">
+              <span>Acepto recibir oportunidades, resúmenes y avisos críticos por WhatsApp.</span>
+            </label>
+            <div class="form-text">Para operar desde el WhatsApp Business del cliente, pediremos token Meta y lo guardaremos en su carpeta privada por RUT.</div>
+          </div>
+          {% set service_label = "Radar de Licitaciones 24/7" %}
+          {% include "partials/data_consent.html" %}
+          <div class="form-group full">
+            <button class="btn full" type="submit">Solicitar activación del radar comercial</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    {% include "partials/law_21719.html" %}
+
+    <footer class="footer">
+      <p>&copy; 2026 Quantus Chile — Inteligencia comercial, automatización y oportunidades públicas.</p>
+    </footer>
+  </div>
+  <script src="{{ url_for('static', filename='rut-validator.js') }}?v=20260729-rut"></script>
+  <script>
+    const licAiForm = document.getElementById("lic-ai-form");
+    const licAiResult = document.getElementById("lic-ai-result");
+    const licAiBtn = document.getElementById("licAiBtn");
+
+    function renderLicList(items) {
+      if (!Array.isArray(items) || items.length === 0) return "<li>No informado.</li>";
+      return items.map((item) => `<li>${item}</li>`).join("");
+    }
+
+    if (licAiForm) {
+      licAiForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        licAiBtn.disabled = true;
+        licAiBtn.textContent = "Analizando...";
+        licAiResult.style.display = "block";
+        licAiResult.innerHTML = "<strong>Quantus IA está evaluando la oportunidad...</strong>";
+        try {
+          const response = await fetch("/api/licitacion_ai", {
+            method: "POST",
+            body: new FormData(licAiForm)
+          });
+          const data = await response.json();
+          if (!response.ok || data.error) {
+            licAiResult.innerHTML = `<strong class="danger-text">No se pudo analizar:</strong><p>${data.error || "Error inesperado."}</p>`;
+            return;
+          }
+          licAiResult.innerHTML = `
+            <div class="ai-result-header">
+              <span class="ai-badge ${data.nivel_urgencia || "medio"}">${data.nivel_urgencia || "medio"}</span>
+              <strong>${data.tipo_publicacion || "Oportunidad de licitación"}</strong>
+            </div>
+            <p>${data.resumen_ejecutivo || ""}</p>
+            <div class="ai-result-grid">
+              <div><h3>Por qué importa</h3><ul>${renderLicList(data.por_que_importa)}</ul></div>
+              <div><h3>Acciones recomendadas</h3><ul>${renderLicList(data.acciones_recomendadas)}</ul></div>
+              <div><h3>Datos a verificar</h3><ul>${renderLicList(data.datos_a_verificar)}</ul></div>
+            </div>
+            <p><strong>Plazos posibles:</strong> ${data.plazos_posibles || "No informado."}</p>
+            <p><strong>Mensaje sugerido:</strong> ${data.mensaje_cliente || "No informado."}</p>
+            <p class="payment-note">${data.advertencia || "Revisar siempre ficha oficial y bases antes de postular."}</p>
+            ${data.report_url ? `<a class="cta-button btn-secondary" href="${data.report_url}" style="margin-top:12px;">Descargar informe PDF</a>` : ""}
+          `;
+        } catch (error) {
+          licAiResult.innerHTML = `<strong class="danger-text">Error:</strong><p>${error.message}</p>`;
+        } finally {
+          licAiBtn.disabled = false;
+          licAiBtn.textContent = "Analizar oportunidad con IA";
+        }
+      });
+    }
+  </script>
+</body>
+</html>

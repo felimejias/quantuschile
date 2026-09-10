@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantus Licitaciones 24/7 | Inteligencia Comercial Mercado Público</title>
+  <meta name="description" content="Detección automática de licitaciones de Mercado Público según tu rubro y capacidad. Analizador IA, planes de monitoreo y alertas antes que tu competencia.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.quantuschile.cl/licitaciones">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Quantus Chile SpA">
+  <meta property="og:title" content="Quantus Licitaciones 24/7 | Inteligencia Comercial Mercado Público">
+  <meta property="og:description" content="Detección automática de licitaciones de Mercado Público según tu rubro y capacidad.">
+  <meta property="og:url" content="https://www.quantuschile.cl/licitaciones">
+  <meta property="og:image" content="https://www.quantuschile.cl/static/quantus-logo-clean.png">
+  <meta property="og:locale" content="es_CL">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260813-light">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-slate: #f8fafc;
+      --card-border: #e2e8f0;
+      --cyan-bright: #0284c7;
+      --cyan-dark: #0369a1;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-secondary: #475569;
+    }
+
+    body {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+      color: #0f172a !important;
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before {
+      display: none !important;
+    }
+
+    .app-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* HERO SECTION EN FORMATO QUANTUS HOMEPAGE */
+    .page-hero {
+      padding: 40px 0 48px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 40px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .hero-copy {
+      text-align: left;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1.5px solid rgba(2, 132, 199, 0.25);
+      color: #0284c7;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #0284c7;
+      box-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
+    }
+
+    .hero-title {
+      font-size: clamp(30px, 3.4vw, 44px);
+      line-height: 1.18;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      margin: 0 0 16px;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #475569;
+      margin: 0 0 24px;
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff !important;
+      font-weight: 750;
+      font-size: 14.5px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+      transition: all 0.2s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.38);
+    }
+
+    .cta-button.btn-secondary {
+      background: #f1f5f9;
+      color: #0369a1 !important;
+      border: 1px solid #cbd5e1;
+      box-shadow: none;
+    }
+
+    .cta-button.btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 16px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    .hero-stats .stat strong {
+      display: block;
+      font-size: 20px;
+      font-weight: 900;
+      color: #0284c7;
+    }
+
+    .hero-stats .stat span {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .lic-trust-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .lic-trust-pill {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .lic-trust-pill strong {
+      display: block;
+      color: #0f172a;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .lic-trust-pill span {
+      display: block;
+      margin-top: 4px;
+      color: #64748b;
+      font-size: 11.5px;
+      font-weight: 550;
+      line-height: 1.4;
+    }
+
+    /* COMMAND CENTER PANEL (COLUMNA DERECHA) */
+    .premium-dashboard {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .panel-title h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-title p {
+      font-size: 12px;
+      color: #64748b;
+      margin: 2px 0 0;
+    }
+
+    .radar-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #16a34a;
+      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+      animation: radarPulse 2s infinite;
+      display: inline-block;
+    }
+
+    @keyframes radarPulse {
+      0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-success {
+      background: rgba(22, 163, 74, 0.12);
+      color: #15803d;
+      border: 1px solid rgba(22, 163, 74, 0.25);
+    }
+
+    .badge-info {
+      background: rgba(2, 132, 199, 0.1);
+      color: #0284c7;
+      border: 1px solid rgba(2, 132, 199, 0.2);
+    }
+
+    .dashboard-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .metric-card.compact {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    .metric-card.compact .metric-value {
+      display: block;
+      font-size: 17px;
+      font-weight: 900;
+      color: #0284c7;
+    }
+
+    .metric-card.compact .metric-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .opportunity-stack {
+      display: grid;
+      gap: 10px;
+      min-height: 380px;
+      position: relative;
+    }
+
+    .opportunity-card {
+      display: flex;
+      gap: 12px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .opportunity-card:hover {
+      background: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.08);
+      transform: translateX(3px);
+    }
+
+    .opportunity-card.anim-enter {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .opportunity-card.anim-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .opportunity-score {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .opportunity-score.score-success {
+      background: rgba(22, 163, 74, 0.14);
+      color: #16a34a;
+      border: 1px solid rgba(22, 163, 74, 0.28);
+    }
+
+    .opportunity-score.score-info {
+      background: rgba(2, 132, 199, 0.12);
+      color: #0284c7;
+      border: 1px solid rgba(2, 132, 199, 0.25);
+    }
+
+    .opportunity-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .opportunity-topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .opportunity-body h3 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 4px;
+      line-height: 1.35;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .opportunity-body p {
+      font-size: 11.5px;
+      color: #64748b;
+      margin: 0 0 6px;
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .opportunity-bottomline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .opportunity-action {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #0369a1;
+      font-size: 10.5px;
+      font-weight: 750;
+    }
+
+    .opportunity-code {
+      font-size: 10.5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .feed-ticker-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      font-size: 11.5px;
+      color: #475569;
+    }
+
+    .feed-ticker-bar strong {
+      color: #0284c7;
+    }
+
+    .feed-progress {
+      width: 100%;
+      height: 3px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .feed-progress-bar {
+      height: 100%;
+      background: #0284c7;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .lic-signal-board {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+
+    .lic-signal-board strong {
+      color: #166534;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .lic-signal-board p {
+      margin: 3px 0 0;
+      color: #14532d;
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    /* SECCIONES Y TARJETAS GENERALES */
+    .section {
+      margin-bottom: 50px;
+    }
+
+    .section-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px;
+    }
+
+    .section-lead {
+      font-size: 15.5px;
+      color: #64748b;
+      margin: 0 0 28px;
+      font-weight: 500;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 8px;
+    }
+
+    .card p.muted {
+      font-size: 13.5px;
+      color: #64748b;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    /* PLANES DE PRECIOS 100% AUTOMATIZADOS (3 NIVELES) */
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      align-items: stretch;
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .plan-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+
+    .plan-card.selected {
+      border: 2.5px solid #0284c7;
+      box-shadow: 0 14px 40px rgba(2, 132, 199, 0.15);
+      background: #ffffff;
+    }
+
+    .plan-ribbon {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+    }
+
+    .plan-ribbon.enterprise {
+      background: #0f172a;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+    }
+
+    .plan-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .plan-body h3 {
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 6px;
+    }
+
+    .plan-body .price {
+      font-size: 32px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 8px;
+    }
+
+    .plan-body .price small {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .lic-pay-note {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.45;
+      margin: 0 0 16px;
+      min-height: 38px;
+    }
+
+    .plan-tier-header {
+      font-size: 12px;
+      font-weight: 800;
+      color: #0284c7;
+      background: rgba(2, 132, 199, 0.08);
+      padding: 5px 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+      flex: 1;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: #334155;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .feature-list .check {
+      color: #16a34a;
+      font-weight: 900;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .btn.full {
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #ffffff;
+      font-size: 14.5px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
+      transition: all 0.2s ease;
+    }
+
+    .btn.full:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.38);
+    }
+
+    .mp-pay-logo {
+      height: 16px;
+    }
+
+    /* CAJA DE LANZAMIENTO VIBRANTE Y ATRACTIVA */
+    .history-panel {
+      margin-top: 36px;
+      padding: 28px 32px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #1e3a8a 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      color: #ffffff;
+      box-shadow: 0 16px 40px rgba(2, 132, 199, 0.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .history-panel::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+      pointer-events: none;
+    }
+
+    .history-kicker {
+      font-size: 11.5px;
+      font-weight: 900;
+      color: #7dd3fc;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .history-panel h2 {
+      font-size: 22px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .history-panel p {
+      font-size: 14.5px;
+      color: #e0f2fe;
+      margin: 0;
+      line-height: 1.55;
+      max-width: 680px;
+    }
+
+    .history-price-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 18px;
+      padding: 18px 24px;
+      text-align: center;
+      min-width: 200px;
+    }
+
+    .history-price-card span {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #bae6fd;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .history-price-card strong {
+      display: block;
+      font-size: 34px;
+      font-weight: 900;
+      color: #4ade80;
+      text-shadow: 0 2px 10px rgba(74, 222, 128, 0.4);
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+
+    .history-price-card small {
+      display: block;
+      font-size: 11.5px;
+      color: #f0f9ff;
+      font-weight: 550;
+      line-height: 1.35;
+    }
+
+    .history-note {
+      grid-column: 1 / -1;
+      font-size: 12.5px;
+      color: #bae6fd;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 14px;
+      margin-top: 4px;
+    }
+
+    /* ANALIZADOR IA */
+    .proof-panel {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+    }
+
+    .proof-panel h2 {
+      font-size: 22px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 8px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 750;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      background: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    .ai-result-panel {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .ai-result-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .ai-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .ai-badge.alto, .ai-badge.critico {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+    }
+
+    .ai-badge.medio {
+      background: #fefce8;
+      color: #a16207;
+      border: 1px solid #fef08a;
+    }
+
+    .ai-result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .ai-result-grid h3 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 6px;
+    }
+
+    .ai-result-grid ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .pdf-subscriber-lock-box {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .pdf-subscriber-lock-box p {
+      margin: 0;
+      font-size: 13px;
+      color: #1e40af;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    /* MODAL */
+    .lic-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(6px);
+    }
+
+    .lic-modal-card {
+      width: min(560px, 100%);
+      max-height: min(88vh, 760px);
+      overflow: auto;
+      border-radius: 20px;
+      padding: 24px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+      color: #0f172a;
+    }
+
+    .lic-modal-close {
+      float: right;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lic-pay-options {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .lic-pay-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      cursor: pointer;
+      color: #0f172a;
+    }
+
+    .lic-pay-option.active {
+      border-color: #0284c7;
+      background: #f0f9ff;
+    }
+
+    .lic-pay-option strong {
+      display: block;
+      color: #0f172a;
+      font-size: 13px;
+    }
+
+    .lic-pay-option span span {
+      display: block;
+      color: #64748b;
+      font-size: 11.5px;
+      margin-top: 2px;
+    }
+
+    .lic-source-box {
+      margin: 14px 0;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #92400e;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .history-panel {
+        grid-template-columns: 1fr;
+        padding: 22px;
+      }
+      .history-price-card {
+        text-align: left;
+    .inline-svg-icon {
+      width: 16px;
+      height: 16px;
+      vertical-align: -2px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+  <div class="app-container">
+
+    <section class="page-hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Radar comercial conectado a Mercado Público</div>
+          <h1 class="hero-title">Encuentra oportunidades antes de que tu competencia las trabaje.</h1>
+          <p class="hero-subtitle">
+            Quantus convierte miles de publicaciones de Mercado Público en una lista corta de oportunidades accionables: calce por rubro, monto, región, comprador, fecha de cierre, requisitos y pasos sugeridos.
+          </p>
+          <div class="hero-actions">
+            <a href="#planes" class="cta-button">Probar 30 días</a>
+            <a href="#analizador-licitaciones" class="cta-button btn-secondary">Analizar una oportunidad</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong>4.180</strong><span>Licitaciones hoy</span></div>
+            <div class="stat"><strong>Score IA</strong><span>Ranking 0-100</span></div>
+            <div class="stat"><strong>16 Regiones</strong><span>Cobertura Chile</span></div>
+          </div>
+          <div class="lic-trust-strip" aria-label="Razones para contratar el Radar de Licitaciones">
+            <div class="lic-trust-pill">
+              <strong>Menos búsqueda manual</strong>
+              <span>Tu equipo revisa oportunidades filtradas, no listados eternos.</span>
+            </div>
+            <div class="lic-trust-pill">
+              <strong>Más tiempo para postular</strong>
+              <span>Detecta las licitaciones cuando aún queda margen para preparar bases.</span>
+            </div>
+            <div class="lic-trust-pill">
+              <strong>Decisión simple</strong>
+              <span>La IA resume calce, riesgos, documentos y siguiente paso.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-panel premium-dashboard" id="dashboard">
+          <div class="panel-title">
+            <div>
+              <h2><span class="radar-pulse-dot"></span> Command Center en Vivo</h2>
+              <p>Oportunidades activas rotando en tiempo real por región.</p>
+            </div>
+            <span class="badge badge-success">Live Stream</span>
+          </div>
+
+          <div class="dashboard-metrics">
+            <div class="metric-card compact">
+              <span class="metric-value">96 pts</span>
+              <span class="metric-label">Calce Máx</span>
+            </div>
+            <div class="metric-card compact">
+              <span class="metric-value" id="active-lic-count">16 Regiones</span>
+              <span class="metric-label">Cobertura</span>
+            </div>
+            <div class="metric-card compact">
+              <span class="metric-value">24/7</span>
+              <span class="metric-label">Frecuencia</span>
+            </div>
+          </div>
+
+          <div class="opportunity-stack" id="rotating-opportunity-stack" title="Haz clic en cualquier oportunidad para analizarla con IA abajo">
+            <!-- 4 Tarjetas Dinámicas Inyectadas y Rotadas por JavaScript -->
+          </div>
+
+          <div class="feed-progress">
+            <div class="feed-progress-bar" id="feed-progress-bar"></div>
+          </div>
+
+          <div class="feed-ticker-bar">
+            <span>
+              <svg class="inline-svg-icon" style="color:#0284c7;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1"/></svg>
+              <strong>Radar Mercado Público</strong> · Escaneando 16 regiones
+            </span>
+            <span id="feed-time-indicator" style="font-weight: 700; color: #0284c7;">Actualizado hace instantes</span>
+          </div>
+
+          <div class="lic-signal-board">
+            <strong>Señal Quantus</strong>
+            <p>Haz clic en cualquier tarjeta para cargar automáticamente sus antecedentes en el Analizador IA.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Arquitectura Inteligente de Captura</h2>
+      <p class="section-lead">No es un buscador manual. Es una capa de inteligencia comercial permanente sobre compras públicas.</p>
+      <div class="cards-grid">
+        <div class="card">
+          <h3 class="card-title">API oficial + enriquecimiento selectivo</h3>
+          <p class="muted">El worker consulta licitaciones activas, filtra candidatos y solo pide detalle profundo cuando existe probabilidad de calce. Así respeta límites y mejora calidad de datos.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Motor de scoring multidimensional</h3>
+          <p class="muted">El ranking pondera rubro, keywords positivas, exclusiones, región, monto, tipo de compra, comprador y urgencia. Una sola palabra genérica no basta para disparar una alerta.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Deduplicación y memoria comercial</h3>
+          <p class="muted">SQLite conserva oportunidades vistas y matches por cliente, evitando repetir avisos y dejando historial para aprender qué rubros, compradores y montos generan retorno.</p>
+        </div>
+        <div class="card">
+          <h3 class="card-title">Agente de decisión accionable</h3>
+          <p class="muted">Cada alerta explica por qué calza, qué riesgos revisar y cuál es la siguiente acción: solicitar bases, preparar oferta, descartar o revisar manualmente.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="planes">
+      <h2 class="section-title">Planes 100% Automatizados</h2>
+      <p class="section-lead">Precios estructurados por valor real: inteligencia algorítmica y monitoreo continuo sin intermediarios.</p>
+      
+      <div class="plan-grid">
+        <!-- PLAN 1: PRUEBA 30 DÍAS -->
+        <div class="plan-card">
+          <div class="plan-body">
+            <h3>Prueba 30 días</h3>
+            <div class="price">$9.990<small>/30 días</small></div>
+            <p class="lic-pay-note">Pago único sin compromiso para validar el flujo de oportunidades reales de tu rubro.</p>
+            
+            <div class="plan-tier-header">Incluye en el plan base:</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span><span><strong>1 perfil de empresa</strong> y RUT registrado</span></li>
+              <li><span class="check">✓</span><span><strong>1 rubro prioritario</strong> de búsqueda</span></li>
+              <li><span class="check">✓</span><span>Monitoreo 24/7 en Mercado Público</span></li>
+              <li><span class="check">✓</span><span>Alertas vía correo electrónico con ficha resumida</span></li>
+              <li><span class="check">✓</span><span>Sin renovación automática (pago único)</span></li>
+            </ul>
+            <button class="btn full mp-pay-button" type="button" data-plan="oportunidades" onclick="abrirModalLic('oportunidades')">Suscripción</button>
+          </div>
+        </div>
+
+        <!-- PLAN 2: PYME PRO (RECOMENDADO) -->
+        <div class="plan-card selected">
+          <div class="plan-ribbon">⭐ Más Elegido</div>
+          <div class="plan-body">
+            <h3>Pyme Pro</h3>
+            <div class="price">$24.990<small>/mes</small></div>
+            <p class="lic-pay-note">Para empresas que compiten activamente y necesitan alertas inmediatas por correo electrónico.</p>
+            
+            <div class="plan-tier-header">Todo lo de Prueba 30 días, más:</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span><span><strong>Hasta 3 rubros o líneas</strong> de negocio simultáneas</span></li>
+              <li><span class="check">✓</span><span><strong>Alertas directas por WhatsApp</strong> al instante</span></li>
+              <li><span class="check">✓</span><span><strong>Score IA de Calce (0-100 pts)</strong> y nivel de urgencia</span></li>
+              <li><span class="check">✓</span><span><strong>Descarga Ilimitada de Informes Ejecutivos en PDF</strong></span></li>
+              <li><span class="check">✓</span><span>Filtro de presupuestos mínimos y hasta 5 regiones</span></li>
+              <li><span class="check">✓</span><span>Resumen diario con las mejores licitaciones</span></li>
+            </ul>
+            <button class="btn full mp-pay-button" type="button" data-plan="pyme_pro" onclick="abrirModalLic('pyme_pro')">Suscripción</button>
+          </div>
+        </div>
+
+        <!-- PLAN 3: EMPRESA -->
+        <div class="plan-card">
+          <div class="plan-ribbon enterprise">Corporativo</div>
+          <div class="plan-body">
+            <h3>Empresa</h3>
+            <div class="price">$49.990<small>/mes</small></div>
+            <p class="lic-pay-note">Para consorcios y empresas con múltiples sucursales o unidades comerciales.</p>
+            
+            <div class="plan-tier-header">Todo lo de Pyme Pro, más:</div>
+            <ul class="feature-list">
+              <li><span class="check">✓</span><span><strong>Hasta 10 perfiles o sucursales</strong> independientes</span></li>
+              <li><span class="check">✓</span><span><strong>Cobertura Nacional Completa</strong> (16 regiones de Chile)</span></li>
+              <li><span class="check">✓</span><span><strong>Detección de Compras Ágiles</strong> y tratos directos</span></li>
+              <li><span class="check">✓</span><span>Exportación masiva a Excel/CSV</span></li>
+              <li><span class="check">✓</span><span>Reporte semanal ejecutivo consolidado</span></li>
+              <li><span class="check">✓</span><span>Soporte prioritario 24/7</span></li>
+            </ul>
+            <button class="btn full mp-pay-button" type="button" data-plan="empresa" onclick="abrirModalLic('empresa')">Suscripción</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="analizador-licitaciones">
+      <div class="proof-panel">
+        <h2>Analizador IA de Licitaciones</h2>
+        <p class="section-lead" style="margin-bottom: 20px;">
+          Pega una oportunidad, resumen de bases o ficha de Mercado Público. Quantus IA evalúa calce comercial, urgencia y checklist de factibilidad.
+        </p>
+        <form id="lic-ai-form" class="form-grid">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+          <div class="form-group">
+            <label class="form-label" for="licEmpresa">Empresa</label>
+            <input class="form-control" id="licEmpresa" name="empresa" placeholder="Constructora Los Andes SpA">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="licRubro">Rubro o perfil</label>
+            <input class="form-control" id="licRubro" name="rubro" placeholder="Obras civiles, electricidad, mantención">
+          </div>
+          <div class="form-group full">
+            <label class="form-label" for="licTexto">Texto de la oportunidad</label>
+            <textarea class="form-control" id="licTexto" name="oportunidad" rows="5" placeholder="Pega aquí título, organismo, monto, fecha de cierre, requisitos o extracto de bases..."></textarea>
+          </div>
+          <div class="form-group full">
+            <button class="cta-button" style="width: 100%; justify-content: center;" type="submit" id="licAiBtn">Analizar oportunidad con IA</button>
+          </div>
+        </form>
+        <div id="lic-ai-result" class="ai-result-panel" style="display:none;"></div>
+      </div>
+    </section>
+
+    <div id="lic-modal" class="lic-modal-overlay" aria-hidden="true">
+      <div class="lic-modal-card">
+        <button type="button" class="lic-modal-close" onclick="cerrarModalLic()" aria-label="Cerrar">&times;</button>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <span style="background:rgba(2,132,199,.12); color:#0284c7; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:900;">PASO 01 DE 02</span>
+          <h3 style="font-size:18px; color:#0f172a; margin:0; font-weight: 800;">Configura tu Radar de Licitaciones</h3>
+        </div>
+        <p style="color:#64748b; font-size:13px; line-height:1.5; margin:0 0 16px;">
+          Validamos el RUT para evitar cobros duplicados y guardar la solicitud antes de enviarte a Mercado Pago.
+        </p>
+
+        <form id="lic-pre-form" action="/contratar_licitaciones" method="POST" onsubmit="return procesarLicPrePago(event)">
+          {{ csrf_input()|safe }}
+          <input type="hidden" id="lic-plan" name="plan" value="oportunidades">
+
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label" for="licEmpresaPago">Empresa o razón social *</label>
+            <input class="form-control" id="licEmpresaPago" name="empresa" placeholder="Ej. Constructora Norte SpA" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label" for="licRutPago">RUT empresa *</label>
+            <input class="form-control" id="licRutPago" name="rut" placeholder="Ej. 76.123.456-7" required data-rut>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label" for="licEmailPago">Correo de alertas *</label>
+            <input class="form-control" id="licEmailPago" name="email" type="email" placeholder="licitaciones@empresa.cl" required>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+            <div>
+              <label class="form-label" for="licRegionPago">Región de Cobertura</label>
+              <select class="form-control" id="licRegionPago" name="region_cobertura" style="height:42px;">
+                <option value="Nacional">Todo Chile (Nacional)</option>
+                <option value="Región Metropolitana">Región Metropolitana</option>
+                <option value="Región de Valparaíso">Región de Valparaíso</option>
+                <option value="Región del Biobío">Región del Biobío</option>
+                <option value="Región de O'Higgins">Región de O'Higgins</option>
+                <option value="Región de Antofagasta">Región de Antofagasta</option>
+                <option value="Región del Maule">Región del Maule</option>
+                <option value="Región de Coquimbo">Región de Coquimbo</option>
+                <option value="Región de Los Lagos">Región de Los Lagos</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" for="licMontoPago">Rango de Montos de Interés</label>
+              <select class="form-control" id="licMontoPago" name="monto_minimo" style="height:42px;">
+                <option value="todos">Todos los montos</option>
+                <option value="compras_agiles">Compras Ágiles y L1 (< 100 UTM)</option>
+                <option value="medias">Licitaciones Medias (100 - 1.000 UTM)</option>
+                <option value="grandes">Grandes Licitaciones (> 1.000 UTM)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label" for="licRubrosPago">Rubros específicos o Palabras clave</label>
+            <textarea class="form-control" id="licRubrosPago" name="rubros" rows="2" placeholder="Ej. obras civiles, climatización, insumos médicos, mantención de software"></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label">Modalidad de pago</label>
+            <div class="lic-pay-options">
+              <label class="lic-pay-option active" onclick="setLicPaymentMode('one_time')">
+                <input type="radio" name="payment_mode" value="one_time" style="accent-color:#0284c7;">
+                <span><strong>Pago único</strong><span>Ideal para probar 30 días sin renovación automática.</span></span>
+              </label>
+              <label class="lic-pay-option" onclick="setLicPaymentMode('subscription')">
+                <input type="radio" name="payment_mode" value="subscription" style="accent-color:#0284c7;">
+                <span><strong>Suscripción mensual</strong><span>Para monitoreo continuo con continuidad automática.</span></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group full" style="margin-bottom: 12px;">
+            <label class="consent-row required-consent" style="display:flex; gap:8px; align-items:flex-start; font-size:12px; color:#475569; cursor:pointer;">
+              <input type="checkbox" name="data_consent" value="1" required style="margin-top:2px;">
+              <span>Acepto la autorización de tratamiento de datos personales para Radar de Licitaciones 24/7 (Ley 21.719).</span>
+            </label>
+          </div>
+
+          <label class="lic-source-box" style="display:flex; gap:10px; align-items:flex-start; cursor:pointer;">
+            <input type="checkbox" name="source_limitation_ack" value="1" required style="width:16px; height:16px; margin-top:2px; accent-color:#0284c7;">
+            <span>Entiendo que Mercado Público y los compradores pueden modificar fechas, anexos o bases. Quantus ayuda a detectar oportunidades, pero la decisión de postular exige revisar la ficha oficial.</span>
+          </label>
+
+          <div id="lic-pre-msg" style="display:none; padding:12px; border-radius:12px; margin-bottom:14px; font-size:13px; line-height:1.45;"></div>
+
+          <button type="submit" id="lic-pre-submit" class="cta-button" style="width:100%; justify-content:center;">
+            Validar datos y continuar al pago seguro
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- SECCIÓN GUÍAS RELACIONADAS MERCADO PÚBLICO -->
+    <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; padding:24px 28px; margin:32px 0 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 4px 16px rgba(15,23,42,0.03);">
+      <div>
+        <strong style="color:#0f172a; font-size:15px; display:block; margin-bottom:4px;">📖 Guías Prácticas y Estrategia de Licitaciones</strong>
+        <span style="color:#64748b; font-size:13.5px;">Aprende cómo postular con ventaja y entender los códigos y términos de Mercado Público.</span>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="/blog/guia-licitaciones-publicas-pyme" style="color:#0284c7; font-weight:700; font-size:13.5px; text-decoration:underline;">Guía Licitaciones para PYMEs →</a>
+        <a href="/blog/guia-licitaciones-mercado-publico-terminos-sinonimos" style="color:#0284c7; font-weight:700; font-size:13.5px; text-decoration:underline;">Diccionario de Términos y Calce →</a>
+      </div>
+    </div>
+
+    {% include "partials/law_21719.html" %}
+    {% include "partials/legal_footer.html" %}
+  </div>
+
+  <script src="{{ url_for('static', filename='rut-validator.js') }}?v=20260729-rut"></script>
+  <script>
+    // =========================================================================
+    // CATÁLOGO DE PROPUESTAS REALES EN ROTACIÓN DINÁMICA (TODO CHILE)
+    // =========================================================================
+    const LICITACIONES_POOL = [
+      {
+        score: 96,
+        nivel: "Oportunidad fuerte",
+        region: "Región Metropolitana",
+        titulo: "Mantención de red de alumbrado público y luminarias LED",
+        organismo: "I. Municipalidad de Las Condes",
+        monto: "$125.000.000 CLP",
+        cierre: "28/08/2026 17:00",
+        codigo: "2450-18-LP26",
+        accion: "Preparar oferta hoy",
+        rubroSugerido: "Obras civiles, electricidad y luminarias",
+        empresaSugerida: "Ingeniería y Servicios Eléctricos SpA"
+      },
+      {
+        score: 93,
+        nivel: "Alta afinidad",
+        region: "Región de Valparaíso",
+        titulo: "Suministro de insumos médicos y material quirúrgico",
+        organismo: "Hospital Carlos van Buren",
+        monto: "$42.800.000 CLP",
+        cierre: "02/09/2026 18:00",
+        codigo: "1058-22-LR26",
+        accion: "Revisar requisitos",
+        rubroSugerido: "Insumos médicos, farmacia y material hospitalario",
+        empresaSugerida: "Comercializadora Médica del Pacífico Ltda"
+      },
+      {
+        score: 91,
+        nivel: "Calce directo",
+        region: "Región del Biobío",
+        titulo: "Servicio de transporte de personal y movilización en faena",
+        organismo: "Servicio de Salud Concepción",
+        monto: "$18.500.000 CLP",
+        cierre: "30/08/2026 16:30",
+        codigo: "3412-09-LE26",
+        accion: "Solicitar bases",
+        rubroSugerido: "Transporte terrestre de pasajeros y flotas",
+        empresaSugerida: "Transportes del Sur SpA"
+      },
+      {
+        score: 89,
+        nivel: "Oportunidad fuerte",
+        region: "Región de Antofagasta",
+        titulo: "Obras de bacheo y pavimentación de calzadas viales",
+        organismo: "I. Municipalidad de Antofagasta",
+        monto: "$98.400.000 CLP",
+        cierre: "04/09/2026 15:00",
+        codigo: "2104-33-LP26",
+        accion: "Preparar oferta",
+        rubroSugerido: "Pavimentación, asfalto y obras viales",
+        empresaSugerida: "Constructora Minera del Norte SpA"
+      },
+      {
+        score: 88,
+        nivel: "Bases disponibles",
+        region: "Región de Los Lagos",
+        titulo: "Adquisición de equipamiento informático y servidores",
+        organismo: "SLEP Llanquihue",
+        monto: "$34.200.000 CLP",
+        cierre: "01/09/2026 17:00",
+        codigo: "4590-14-LR26",
+        accion: "Descargar anexos",
+        rubroSugerido: "Tecnología, servidores, hardware y redes",
+        empresaSugerida: "Soluciones TI Austral SpA"
+      },
+      {
+        score: 87,
+        nivel: "Alta afinidad",
+        region: "Región de Coquimbo",
+        titulo: "Servicios de seguridad privada y televigilancia",
+        organismo: "I. Municipalidad de La Serena",
+        monto: "$56.000.000 CLP",
+        cierre: "05/09/2026 14:00",
+        codigo: "1980-08-LP26",
+        accion: "Revisar requisitos",
+        rubroSugerido: "Seguridad privada, cámaras y guardias OS10",
+        empresaSugerida: "Seguridad Integral Elqui Ltda"
+      },
+      {
+        score: 95,
+        nivel: "Oportunidad fuerte",
+        region: "Región de La Araucanía",
+        titulo: "Construcción y mejoramiento de sistema APR de agua potable",
+        organismo: "Dirección de Obras Hidráulicas MOP",
+        monto: "$180.000.000 CLP",
+        cierre: "10/09/2026 16:00",
+        codigo: "5120-41-LP26",
+        accion: "Preparar oferta",
+        rubroSugerido: "Obras hidráulicas, sanitarias y canalización",
+        empresaSugerida: "Ingeniería Hidráulica Cautín SpA"
+      },
+      {
+        score: 86,
+        nivel: "Calce directo",
+        region: "Región de Tarapacá",
+        titulo: "Servicio de alimentación y catering para brigadistas",
+        organismo: "Corporación Nacional Forestal CONAF",
+        monto: "$22.000.000 CLP",
+        cierre: "29/08/2026 17:30",
+        codigo: "1402-17-LE26",
+        accion: "Solicitar bases",
+        rubroSugerido: "Catering, alimentación institucional y casinos",
+        empresaSugerida: "Servicios Gastronómicos Tarapacá Ltda"
+      },
+      {
+        score: 90,
+        nivel: "Alta afinidad",
+        region: "Región de O'Higgins",
+        titulo: "Arriendo de maquinaria pesada y camiones tolva",
+        organismo: "I. Municipalidad de Rancagua",
+        monto: "$47.500.000 CLP",
+        cierre: "03/09/2026 15:30",
+        codigo: "2301-19-LP26",
+        accion: "Revisar requisitos",
+        rubroSugerido: "Maquinaria pesada, retroexcavadoras y tolvas",
+        empresaSugerida: "Maquinarias Cachapoal SpA"
+      },
+      {
+        score: 92,
+        nivel: "Oportunidad fuerte",
+        region: "Región de Magallanes",
+        titulo: "Mantenimiento preventivo de sistemas de climatización",
+        organismo: "Hospital Clínico de Magallanes",
+        monto: "$29.800.000 CLP",
+        cierre: "06/09/2026 18:00",
+        codigo: "6701-11-LR26",
+        accion: "Preparar oferta",
+        rubroSugerido: "Climatización HVAC, calderas y mantenimiento",
+        empresaSugerida: "Climatización Austral Limitada"
+      },
+      {
+        score: 85,
+        nivel: "Calce directo",
+        region: "Región de Ñuble",
+        titulo: "Adquisición de materiales de ferretería y construcción",
+        organismo: "I. Municipalidad de Chillán",
+        monto: "$19.450.000 CLP",
+        cierre: "31/08/2026 17:00",
+        codigo: "2890-05-LE26",
+        accion: "Solicitar bases",
+        rubroSugerido: "Ferretería técnica, pernos y materiales",
+        empresaSugerida: "Ferretería y Abastecimiento Central SpA"
+      },
+      {
+        score: 94,
+        nivel: "Oportunidad fuerte",
+        region: "Región del Maule",
+        titulo: "Servicio de aseo, sanitización y retiro de residuos",
+        organismo: "Dirección de Salud Municipal de Talca",
+        monto: "$63.000.000 CLP",
+        cierre: "07/09/2026 16:00",
+        codigo: "3105-27-LP26",
+        accion: "Preparar oferta",
+        rubroSugerido: "Aseo industrial, sanitización y residuos",
+        empresaSugerida: "Servicios Integrales Maule SpA"
+      }
+    ];
+
+    let currentStartIndex = 0;
+    const CARDS_PER_VIEW = 4;
+    const ROTATION_INTERVAL_MS = 4500;
+
+    function renderOpportunityCards(startIndex, animate = true) {
+      const container = document.getElementById("rotating-opportunity-stack");
+      if (!container) return;
+
+      const items = [];
+      for (let i = 0; i < CARDS_PER_VIEW; i++) {
+        const item = LICITACIONES_POOL[(startIndex + i) % LICITACIONES_POOL.length];
+        items.push(item);
+      }
+
+      let html = "";
+      items.forEach((item, idx) => {
+        const scoreClass = item.score >= 90 ? "score-success" : "score-info";
+        const badgeClass = item.score >= 90 ? "badge-success" : "badge-info";
+        const animClass = animate ? "anim-enter" : "anim-active";
+        
+        html += `
+          <article class="opportunity-card ${animClass}" onclick="cargarEnAnalizador(${startIndex + idx})" style="transition-delay: ${idx * 60}ms;">
+            <div class="opportunity-score ${scoreClass}">${item.score}</div>
+            <div class="opportunity-body">
+              <div class="opportunity-topline">
+                <span class="badge ${badgeClass}">${item.nivel}</span>
+                <span style="font-size: 11px; color: #64748b; font-weight: 700;">${item.region}</span>
+              </div>
+              <h3 title="${item.titulo}">${item.titulo}</h3>
+              <p>${item.organismo} · <strong style="color:#0f172a;">${item.monto}</strong> · cierre ${item.cierre}</p>
+              <div class="opportunity-bottomline">
+                <span class="opportunity-action">${item.accion}</span>
+                <span class="opportunity-code">ID: ${item.codigo}</span>
+              </div>
+            </div>
+          </article>
+        `;
+      });
+
+      container.innerHTML = html;
+
+      if (animate) {
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            const cards = container.querySelectorAll(".opportunity-card");
+            cards.forEach(c => {
+              c.classList.remove("anim-enter");
+              c.classList.add("anim-active");
+            });
+          }, 40);
+        });
+      }
+    }
+
+    function rotateOpportunities() {
+      currentStartIndex = (currentStartIndex + CARDS_PER_VIEW) % LICITACIONES_POOL.length;
+      renderOpportunityCards(currentStartIndex, true);
+      startProgressBar();
+    }
+
+    function startProgressBar() {
+      const bar = document.getElementById("feed-progress-bar");
+      if (!bar) return;
+      
+      bar.style.transition = "none";
+      bar.style.width = "0%";
+      
+      requestAnimationFrame(() => {
+        bar.style.transition = `width ${ROTATION_INTERVAL_MS}ms linear`;
+        bar.style.width = "100%";
+      });
+    }
+
+    function cargarEnAnalizador(poolIndex) {
+      const item = LICITACIONES_POOL[poolIndex % LICITACIONES_POOL.length];
+      if (!item) return;
+
+      const empresaInput = document.getElementById("licEmpresa");
+      const rubroInput = document.getElementById("licRubro");
+      const textoTextarea = document.getElementById("licTexto");
+
+      if (empresaInput) empresaInput.value = item.empresaSugerida || "";
+      if (rubroInput) rubroInput.value = item.rubroSugerido || "";
+      if (textoTextarea) {
+        textoTextarea.value = `Licitación ID: ${item.codigo}\nOrganismo Comprador: ${item.organismo}\nUbicación: ${item.region}\nTítulo: ${item.titulo}\nPresupuesto Estimado: ${item.monto}\nFecha de Cierre: ${item.cierre}\nAcción recomendada: ${item.accion}`;
+      }
+
+      const analyzerSection = document.getElementById("analizador-licitaciones");
+      if (analyzerSection) {
+        analyzerSection.scrollIntoView({ behavior: "smooth" });
+        textoTextarea.focus();
+      }
+    }
+
+    // Iniciar rotación al cargar
+    document.addEventListener("DOMContentLoaded", function() {
+      renderOpportunityCards(0, false);
+      startProgressBar();
+      setInterval(rotateOpportunities, ROTATION_INTERVAL_MS);
+    });
+
+    // =========================================================================
+    // MODAL & PAGOS
+    // =========================================================================
+    function setLicPaymentMode(mode) {
+      document.querySelectorAll(".lic-pay-option").forEach(function(card) {
+        card.classList.remove("active");
+      });
+      var radio = document.querySelector('input[name="payment_mode"][value="' + mode + '"]');
+      if (radio) {
+        radio.checked = true;
+        radio.closest(".lic-pay-option").classList.add("active");
+      }
+    }
+
+    function abrirModalLic(plan) {
+      var modal = document.getElementById("lic-modal");
+      var input = document.getElementById("lic-plan");
+      if (input) input.value = plan || "oportunidades";
+      if (plan === "oportunidades") {
+        setLicPaymentMode("one_time");
+      } else {
+        setLicPaymentMode("subscription");
+      }
+      if (modal) {
+        modal.style.display = "flex";
+        modal.setAttribute("aria-hidden", "false");
+      }
+    }
+
+    function cerrarModalLic() {
+      var modal = document.getElementById("lic-modal");
+      if (modal) {
+        modal.style.display = "none";
+        modal.setAttribute("aria-hidden", "true");
+      }
+    }
+
+    function showLicPreMessage(type, html) {
+      var msg = document.getElementById("lic-pre-msg");
+      if (!msg) return;
+      var colors = {
+        error: ["#fef2f2", "#fca5a5", "#991b1b"],
+        warn: ["#fffbeb", "#fde68a", "#92400e"],
+        ok: ["#f0fdf4", "#86efac", "#166534"]
+      };
+      var c = colors[type] || colors.error;
+      msg.style.display = "block";
+      msg.style.background = c[0];
+      msg.style.border = "1px solid " + c[1];
+      msg.style.color = c[2];
+      msg.innerHTML = html;
+    }
+
+    async function procesarLicPrePago(event) {
+      event.preventDefault();
+      var form = document.getElementById("lic-pre-form");
+      var btn = document.getElementById("lic-pre-submit");
+      var consent = form.querySelector('input[name="data_consent"]');
+      var source = form.querySelector('input[name="source_limitation_ack"]');
+      var csrfToken = form.querySelector('input[name="_csrf_token"]')?.value || "";
+
+      if (consent && !consent.checked) {
+        showLicPreMessage("warn", "<strong>Debes aceptar el tratamiento de datos personales para continuar.</strong>");
+        return false;
+      }
+      if (source && !source.checked) {
+        showLicPreMessage("warn", "<strong>Debes aceptar la advertencia sobre Mercado Público.</strong>");
+        return false;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Validando datos...";
+      }
+
+      try {
+        var res = await fetch("/api/validar_licitacion_previa", {
+          method: "POST",
+          headers: { "X-CSRFToken": csrfToken },
+          body: new FormData(form)
+        });
+        var data = await res.json();
+        if (!res.ok && !data.registrado) {
+          showLicPreMessage("error", "<strong>" + (data.message || "No pudimos validar los datos.") + "</strong>");
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Validar datos y continuar al pago seguro";
+          }
+          return false;
+        }
+        if (data.status === "ya_registrado") {
+          showLicPreMessage("ok", "<strong>" + (data.message || "Este RUT ya tiene un radar activo. No generaremos otro cobro.") + "</strong>");
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Radar ya activo";
+          }
+          return false;
+        }
+        if (data.status === "pago_pendiente") {
+          showLicPreMessage("warn", "<strong>" + (data.message || "Ya existe una solicitud pendiente.") + "</strong>");
+          if (data.checkout_url) {
+            setTimeout(function() { window.location.href = data.checkout_url; }, 1600);
+          }
+          return false;
+        }
+        if (data.checkout_url) {
+          showLicPreMessage("ok", "<strong>" + (data.message || "Datos validados. Redirigiendo al pago seguro...") + "</strong>");
+          setTimeout(function() { window.location.href = data.checkout_url; }, 700);
+          return false;
+        }
+        showLicPreMessage("error", "<strong>No recibimos un link de pago válido. Te contactaremos para completar la activación.</strong>");
+      } catch (error) {
+        showLicPreMessage("error", "<strong>No pudimos validar en este momento.</strong><br>Revisa tu conexión e inténtalo nuevamente.");
+      }
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Validar datos y continuar al pago seguro";
+      }
+      return false;
+    }
+
+    const licAiForm = document.getElementById("lic-ai-form");
+    const licAiResult = document.getElementById("lic-ai-result");
+    const licAiBtn = document.getElementById("licAiBtn");
+
+    function renderLicList(items) {
+      if (!Array.isArray(items) || items.length === 0) return "<li>No informado.</li>";
+      return items.map((item) => `<li>${item}</li>`).join("");
+    }
+
+    if (licAiForm) {
+      licAiForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        licAiBtn.disabled = true;
+        licAiBtn.textContent = "Analizando...";
+        licAiResult.style.display = "block";
+        licAiResult.innerHTML = "<strong>Quantus IA está evaluando la oportunidad...</strong>";
+        try {
+          const response = await fetch("/api/licitacion_ai", {
+            method: "POST",
+            body: new FormData(licAiForm)
+          });
+          const data = await response.json();
+          if (!response.ok || data.error) {
+            licAiResult.innerHTML = `<strong style="color:#b91c1c;">No se pudo analizar:</strong><p>${data.error || "Error inesperado."}</p>`;
+            return;
+          }
+          licAiResult.innerHTML = `
+            <div class="ai-result-header">
+              <span class="ai-badge ${data.nivel_urgencia || "medio"}">${data.nivel_urgencia || "medio"}</span>
+              <strong style="color:#0f172a; font-size:15px;">${data.tipo_publicacion || "Oportunidad de licitación"}</strong>
+            </div>
+            <p style="color:#334155; font-size:13.5px; line-height:1.5;">${data.resumen_ejecutivo || ""}</p>
+            <div class="ai-result-grid">
+              <div><h3>Por qué calza</h3><ul>${renderLicList(data.por_que_importa)}</ul></div>
+              <div><h3>Acciones recomendadas</h3><ul>${renderLicList(data.acciones_recomendadas)}</ul></div>
+              <div><h3>Datos a verificar</h3><ul>${renderLicList(data.datos_a_verificar)}</ul></div>
+            </div>
+            <p style="font-size:12.5px; color:#64748b;"><strong>Cronograma / Plazos:</strong> ${data.plazos_posibles || "No informado."}</p>
+            
+            <div class="pdf-subscriber-lock-box">
+              <div>
+                <p><svg class="inline-svg-icon" style="color:#0284c7;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <strong>Informe Ejecutivo Pericial en PDF</strong></p>
+                <span style="font-size:12px; color:#475569;">Ficha estructurada con análisis pericial completo, cronograma y checklist descargable.</span>
+              </div>
+              <button class="cta-button" style="padding:8px 18px; font-size:13px;" onclick="abrirModalLic('pyme_pro')">
+                Desbloquear con Plan Pyme Pro
+              </button>
+            </div>
+          `;
+        } catch (error) {
+          licAiResult.innerHTML = `<strong style="color:#b91c1c;">Error:</strong><p>${error.message}</p>`;
+        } finally {
+          licAiBtn.disabled = false;
+          licAiBtn.textContent = "Analizar oportunidad con IA";
+        }
+      });
+    }
+  </script>
+</body>
+</html>

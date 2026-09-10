@@ -1,0 +1,11 @@
+Radar Diario Oficial activado
+
+Tu monitoreo preventivo del Diario Oficial quedo activo para:
+{{ nombre }}{% if rut and rut != "No informado" %} / {{ rut }}{% endif %}
+
+{% if plan %}Plan: {{ plan }}
+{% endif %}{% if vigencia %}Vigencia: {{ vigencia }}
+{% endif %}Seguimos monitoreando nuevas ediciones por RUT, nombre, razon social y alias registrados.
+
+Soporte: contacto@quantuschile.cl
+Privacidad (derechos ARCO): privacidad@quantuschile.cl

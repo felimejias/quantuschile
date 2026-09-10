@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pago de Registro de Marca | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-mp-logo-real">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <a class="brand-link" href="/">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Registro de marca</div>
+        </div>
+      </a>
+      <nav class="header-actions" aria-label="Navegación principal">
+        <button type="button" class="cta-button btn-secondary back-button" onclick="if (document.referrer && document.referrer.includes(window.location.host)) { history.back(); } else { window.location.href=/; }">Atrás</button>
+        <a href="https://www.quantuschile.cl" class="cta-button btn-secondary">Quantus System</a>
+        <a href="https://www.quantuschile.cl/inapi" class="cta-button btn-secondary">Registrar Marca</a>
+        <a href="https://www.quantuschile.cl/do" class="cta-button btn-secondary">Diario Oficial</a>
+        <a href="https://www.quantuschile.cl/licitaciones" class="cta-button btn-secondary">Licitaciones</a>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Solicitud lista para pago</div>
+          <h1 class="hero-title">Primer pago para <span>registrar tu marca</span></h1>
+          <p class="hero-subtitle">
+            Recibimos la solicitud para iniciar el registro de <strong>{{ marca }}</strong>. Este primer pago permite preparar el mandato, ingresar la solicitud en INAPI y cubrir la tasa estatal inicial.
+          </p>
+
+          <div class="proof-panel">
+            <h2>Proceso en dos etapas</h2>
+            <div class="proof-grid">
+              <div class="proof-item">
+                <strong>1. Ingreso de solicitud</strong>
+                <span>Se paga hoy: honorario de gestión Quantus más 1 UTM estatal por clase seleccionada.</span>
+              </div>
+              <div class="proof-item">
+                <strong>2. Concesion de marca</strong>
+                <span>Solo si INAPI aprueba, se cobra la segunda etapa: honorario final más 2 UTM estatales por clase.</span>
+              </div>
+              <div class="proof-item">
+                <strong>Transparencia</strong>
+                <span>La publicacion en Diario Oficial y las tasas estatales dependen de valores oficiales vigentes al momento del pago.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-panel">
+          <div class="panel-title">
+            <div>
+              <h2>Resumen de pago</h2>
+              <p>{{ num_clases }} clase{{ 's' if num_clases > 1 else '' }} seleccionada{{ 's' if num_clases > 1 else '' }} para {{ marca }}.</p>
+              <p class="muted" style="margin-top: 8px;">La tasa estatal inicial se calcula como 1 UTM por cada clase seleccionada.</p>
+            </div>
+          </div>
+
+          <div class="summary-box">
+            <div class="price-item"><span class="price-label">Cliente</span><span class="price-value">{{ nombre }}</span></div>
+            <div class="price-item"><span class="price-label">RUT</span><span class="price-value">{{ rut }}</span></div>
+            <div class="price-item"><span class="price-label">Clases</span><span class="price-value">{{ clase }}</span></div>
+          </div>
+
+          <div class="summary-box">
+            <h3 class="card-title">Pago inicial</h3>
+            <div class="price-item"><span class="price-label">Gestión profesional Quantus</span><span class="price-value">${{ '{:,}'.format(comisión).replace(',', '.') }} CLP</span></div>
+            <div class="price-item"><span class="price-label">Tasa INAPI ingreso: 1 UTM por cada clase seleccionada</span><span class="price-value">${{ '{:,}'.format(tasa_ingreso).replace(',', '.') }} CLP</span></div>
+            <div class="price-total"><span>Total transferencia</span><span>${{ '{:,}'.format(total_hoy).replace(',', '.') }} CLP</span></div>
+            <p class="muted" style="margin-top: 10px;">Este total multiplica la UTM por la cantidad de clases. Ej.: 2 clases = 2 UTM iniciales.</p>
+          </div>
+
+          <div class="summary-box">
+            <h3 class="card-title">Pago final estimado</h3>
+            <div class="price-item"><span class="price-label">Publicacion Diario Oficial estimada</span><span class="price-value">~${{ '{:,}'.format(publicacion_estimada).replace(',', '.') }} CLP</span></div>
+            <div class="price-item"><span class="price-label">Gestión final al aprobarse</span><span class="price-value">${{ '{:,}'.format(gestión_final).replace(',', '.') }} CLP</span></div>
+            <div class="price-item"><span class="price-label">Tasa INAPI concesion: 2 UTM por clase</span><span class="price-value">${{ '{:,}'.format(tasa_final).replace(',', '.') }} CLP</span></div>
+            <div class="price-total"><span>Total estimado completo</span><span>${{ '{:,}'.format(gran_total).replace(',', '.') }} CLP</span></div>
+          </div>
+
+          <div class="summary-box" style="border-color: rgba(16, 185, 129, 0.34);">
+            <h3 class="card-title">Documentos recibidos</h3>
+            <p class="muted" style="margin-bottom: 12px;">Guardamos estos PDF para preparar el ingreso de la solicitud ante INAPI.</p>
+            {% for doc in documentos %}
+            <div class="price-item">
+              <span class="price-label">{{ 'Poder simple firmado' if doc.tipo == 'poder_simple' else 'Inicio de actividades SII' }}</span>
+              <span class="price-value">PDF recibido</span>
+            </div>
+            {% endfor %}
+          </div>
+
+          {% if mp_link %}
+          <div class="summary-box" style="border-color: rgba(6, 182, 212, 0.42);">
+            <h3 class="card-title">Continuar con el Pago</h3>
+            <p class="muted" style="margin-bottom: 14px;">
+              Link para 1 clase calculado con UTM vigente y recargo de pasarela para no descontar la comisión del monto del trámite. Si necesitas más clases, se debe generar un link con 1 UTM adicional por cada clase.
+            </p>
+            <div class="price-total"><span>Total a Pagar</span><span>${{ '{:,}'.format(total_mp).replace(',', '.') }} CLP</span></div>
+            <a class="btn full mp-pay-button" href="{{ mp_link }}">Continuar con el Pago</a>
+            <div class="payment-methods" aria-label="Medios de pago" style="margin-top: 14px;">
+              <span>Credito</span>
+              <span>Debito</span>
+              <span>Apple Pay</span>
+              <span>Mercado Pago</span>
+            </div>
+          </div>
+          {% else %}
+          <div class="summary-box" style="border-color: rgba(245, 158, 11, 0.34);">
+            <h3 class="card-title">Pago para varias clases</h3>
+            <p class="muted">
+              Para {{ num_clases }} clases se cobran {{ num_clases }} UTM iniciales, además de la gestión Quantus y la comisión exacta de pasarela. Te enviaremos un link de pago ajustado o puedes pagar por transferencia exacta.
+            </p>
+          </div>
+          {% endif %}
+
+          <div class="summary-box">
+            <h3 class="card-title">Transferencia bancaria</h3>
+            <p class="muted" style="margin-bottom: 12px;">Si prefieres transferencia, paga el total exacto y sube el comprobante.</p>
+            <div class="bank-details">
+              <strong>Nombre:</strong> Felipe Mejias Gonzalez<br>
+              <strong>RUT:</strong> 14.011.762-5<br>
+              <strong>Banco:</strong> Banco Estado<br>
+              <strong>Tipo:</strong> Cuenta Corriente<br>
+              <strong>Numero:</strong> 38100413016<br>
+              <strong>Correo:</strong> Fmejias@quantuschile.cl
+            </div>
+            <form action="/confirm_payment" method="POST" enctype="multipart/form-data" class="file-upload">
+              {{ csrf_input()|safe }}
+              <input type="hidden" name="nombre" value="{{ nombre }}">
+              <input type="hidden" name="email" value="{{ email }}">
+              <input type="hidden" name="marca" value="{{ marca }}">
+              <label class="form-label" for="voucher">Comprobante de transferencia</label>
+              <input type="file" id="voucher" name="voucher" accept="image/*,.pdf" required class="form-control">
+              <button type="submit" class="btn full" style="margin-top: 14px;">Enviar comprobante</button>
+            </form>
+          </div>
+
+          <p class="payment-note">
+            UTM usada como referencia: ${{ '{:,}'.format(utm).replace(',', '.') }} CLP. Las tasas estatales pueden variar si INAPI o el SII actualizan valores antes del pago efectivo.
+          </p>
+        </div>
+      </div>
+    </section>
+    {% include "partials/law_21719.html" %}
+    {% include "partials/legal_footer.html" %}
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ subject }}</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f1f5f9; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-text-size-adjust:100%;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9; padding:16px 0;">
+<tr><td align="center" style="padding:16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; background:#ffffff; border-radius:14px; overflow:hidden; border:1px solid #e2e8f0;">
+  <tr>
+    <td style="background:#06101f; padding:18px 24px;">
+      <div style="font-size:11px; letter-spacing:2px; color:#38bdf8; font-weight:700;">QUANTUS CHILE</div>
+      <div style="font-size:12px; color:#94a3b8; margin-top:2px;">Radar Diario Oficial · Reporte preventivo</div>
+    </td>
+    <td align="right" style="background:#06101f; padding:18px 24px;">
+      <span style="display:inline-block; background:#059669; color:#ffffff; font-size:11px; font-weight:700; padding:6px 14px; border-radius:999px; letter-spacing:1px;">SIN INCIDENCIAS</span>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:24px 26px 8px 26px;">
+      <h1 style="margin:0 0 6px 0; font-size:20px; line-height:1.3; color:#06101f;">Radar Diario Oficial activo</h1>
+      <p style="margin:0; font-size:14px; line-height:1.5; color:#475569;">Hola {{ nombre }}, esta semana no detectamos publicaciones asociadas a los datos monitoreados:</p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:10px 26px;">
+      <ul style="margin:0; padding-left:20px; font-size:13px; line-height:1.8; color:#334155;">
+        {% for term in datos_monitoreados %}<li>{{ term }}</li>
+        {% endfor %}
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:6px 26px; font-size:14px; line-height:1.6; color:#334155;">
+      <p style="margin:0 0 8px 0;">Quantus continua monitoreando nuevas ediciones y coincidencias por RUT, nombre, razon social y alias registrados.</p>
+      <p style="margin:0;">Si aparece una coincidencia relevante, recibiras una alerta distinta y prioritaria con informe PDF, fuente oficial y pasos sugeridos.</p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:12px 26px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:10px;">
+        <tr><td style="padding:12px 16px; font-size:12px; line-height:1.5; color:#065f46;">{{ nota_semanal }}</td></tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" style="padding:18px 26px 22px 26px; background:#f8fafc; border-top:1px solid #e2e8f0; font-size:12px; line-height:1.7; color:#64748b;">
+      <strong style="color:#334155;">Importante:</strong> si no ves este correo en tu bandeja principal, revisa tu carpeta Spam o Correo no deseado y marcalo como "No es spam" para asegurar la llegada de tus alertas.<br>
+      <strong style="color:#334155;">Fuente oficial a revisar:</strong> <a href="{{ fuente_oficial }}" style="color:#0284c7;">Diario Oficial de Chile</a><br>
+      <strong style="color:#334155;">Informe:</strong> {{ informe_id or id_comunicacion or "-" }} · Generado: {{ fecha_generacion }}<br>
+      Proveedor: {{ corp.empresa }} · RUT {{ corp.rut_empresa }} · <a href="{{ corp.web }}" style="color:#0284c7;">{{ corp.web }}</a><br>
+      Soporte: <a href="mailto:{{ corp.email_contacto }}" style="color:#0284c7;">{{ corp.email_contacto }}</a> · Datos personales (ARCO): <a href="mailto:{{ corp.email_privacidad }}" style="color:#0284c7;">{{ corp.email_privacidad }}</a><br>
+      Quantus no reemplaza la revision de la fuente oficial ni la asesoria legal.
+    </td>
+  </tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

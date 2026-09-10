@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cómo trabaja Quantus | Ecosistema Inteligente para Empresas</title>
+  <meta name="description" content="Descubre cómo trabaja el ecosistema Quantus: agentes de inteligencia artificial especializados que observan, analizan y trabajan por tu empresa las 24 horas.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-dark: #06101f;
+      --bg-card: #0b172b;
+      --bg-card-alt: #0d1e38;
+      --border-cyan: rgba(56, 189, 248, 0.22);
+      --cyan-bright: #38bdf8;
+      --text-white: #ffffff;
+      --text-slate: #94a3b8;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #f8fafc;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+    }
+
+    .page-hero {
+      position: relative;
+      padding: 60px 0 80px;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 75% 25%, rgba(56, 189, 248, 0.14), transparent 45%),
+        linear-gradient(180deg, #06101f 0%, #081426 100%);
+    }
+
+    .page-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    .shell {
+      width: min(calc(100% - 48px), 1280px);
+      margin: 0 auto;
+    }
+
+    .hero-content {
+      max-width: 820px;
+    }
+
+    .kicker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-h1 {
+      font-size: clamp(38px, 4.5vw, 60px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      margin: 0 0 20px;
+    }
+
+    .hero-lead-text {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin: 0 0 32px;
+      font-weight: 450;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-cyan {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 26px;
+      border-radius: 12px;
+      background: #38bdf8;
+      color: #03172e;
+      font-size: 14px;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-cyan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(56, 189, 248, 0.5);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #f1f5f9;
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-outline:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    /* Method Section */
+    .section-block {
+      padding: 88px 0;
+      border-top: 1px solid rgba(56, 189, 248, 0.12);
+    }
+
+    .section-block.alt-bg {
+      background: #040a14;
+    }
+
+    .section-header-center {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 56px;
+    }
+
+    .section-tag {
+      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-h2 {
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc-text {
+      font-size: 16px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* 5 steps layout */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .step-card {
+      background: rgba(11, 23, 43, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      border-radius: 18px;
+      padding: 22px 18px;
+      position: relative;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-weight: 900;
+      font-size: 15px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+    }
+
+    .step-card h3 {
+      font-size: 16px;
+      color: #ffffff;
+      margin: 0 0 8px;
+      font-weight: 800;
+    }
+
+    .step-card p {
+      font-size: 13px;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Solutions 6 modules grid */
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+    }
+
+    .solution-card {
+      background: #091526;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .solution-card h3 {
+      font-size: 24px;
+      color: #ffffff;
+      margin: 0 0 6px;
+      font-weight: 900;
+    }
+
+    .solution-promise {
+      color: #38bdf8;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .solution-desc {
+      font-size: 14px;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+      line-height: 1.55;
+    }
+
+    .agents-list-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .agents-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+    }
+
+    .agents-bullets li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 13px;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      line-height: 1.45;
+    }
+
+    .agents-bullets li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #38bdf8;
+      font-weight: bold;
+    }
+
+    .solution-result {
+      background: rgba(14, 165, 233, 0.08);
+      border-left: 3px solid #38bdf8;
+      padding: 12px 16px;
+      border-radius: 0 10px 10px 0;
+      font-size: 13px;
+      color: #e2e8f0;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    /* Visual Agents Grid */
+    .agents-visual-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 40px;
+    }
+
+    .agent-box {
+      background: rgba(11, 23, 43, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .agent-box strong {
+      display: block;
+      color: #38bdf8;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .agent-box span {
+      color: #e2e8f0;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    .final-cta-box {
+      background: linear-gradient(135deg, #0b1d3a, #071326);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 28px;
+      padding: 48px 36px;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .final-cta-box h2 {
+      font-size: clamp(26px, 3.2vw, 38px);
+      color: #ffffff;
+      margin: 0 0 16px;
+      font-weight: 900;
+    }
+
+    @media (max-width: 1024px) {
+      .steps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .solutions-grid { grid-template-columns: 1fr; }
+      .agents-visual-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .agents-visual-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="page-hero">
+      <div class="shell">
+        <div class="hero-content">
+          <div class="kicker-pill">
+            ECOSISTEMA INTELIGENTE PARA PYMES
+          </div>
+          <h1 class="hero-h1">
+            Mientras tú diriges, Quantus observa, analiza y trabaja.
+          </h1>
+          <p class="hero-lead-text">
+            Configuras tu empresa una sola vez. Desde ese momento, los módulos y agentes autorizados monitorean tus operaciones, revisan fuentes relevantes, detectan oportunidades y te entregan alertas, explicaciones y acciones recomendadas.
+          </p>
+          <div class="btn-row">
+            <a href="mailto:contacto@quantuschile.cl?subject=Demostración%20Cómo%20Trabaja%20Quantus" class="btn-cyan">
+              Ver Quantus en acción
+            </a>
+            <a href="#soluciones" class="btn-outline">
+              Explorar soluciones
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EL MÉTODO QUANTUS -->
+    <section class="section-block alt-bg">
+      <div class="shell">
+        <div class="section-header-center">
+          <div class="section-tag">EL MÉTODO QUANTUS</div>
+          <h2 class="section-h2">Un ecosistema. Distintos agentes. Una empresa mejor informada.</h2>
+          <p class="section-desc-text">
+            Quantus conecta la gestión diaria de tu empresa con agentes de inteligencia artificial especializados. Cada agente observa un área diferente, analiza información, detecta eventos relevantes y te ayuda a actuar antes.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Conectamos tu empresa</h3>
+            <p>Registramos tu RUT, razón social, rubro, marcas, comunas de interés, criterios comerciales y módulos contratados.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Activamos agentes especializados</h3>
+            <p>Cada agente trabaja sobre una misión concreta: controlar inventario, encontrar licitaciones, vigilar publicaciones oficiales, monitorear marcas o detectar remates.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Analizamos y priorizamos</h3>
+            <p>Quantus no se limita a mostrar datos. Filtra coincidencia, resume documentos, clasifica urgencia y explica por qué un evento podría ser importante.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <h3>Te avisamos con contexto</h3>
+            <p>Recibes una alerta clara con su fuente, evidencia, nivel de prioridad y próximo paso sugerido.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number">5</div>
+            <h3>Todo queda conectado</h3>
+            <p>Alertas, documentos, decisiones, acciones y antecedentes permanecen organizados dentro de tu espacio empresarial.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ASÍ TRABAJA CADA SOLUCIÓN -->
+    <section id="soluciones" class="section-block">
+      <div class="shell">
+        <div class="section-header-center">
+          <div class="section-tag">CADA SOLUCIÓN EN ACCIÓN</div>
+          <h2 class="section-h2">Así trabaja cada solución de la red</h2>
+          <p class="section-desc-text">Cada módulo funciona como parte de un mismo ecosistema conectado, compartiendo datos e inteligencia.</p>
+        </div>
+
+        <div class="solutions-grid">
+          <!-- Módulo 1: Punto de Venta -->
+          <div class="solution-card">
+            <div>
+              <h3>🖥️ Punto de venta & Inventario inteligente con IA</h3>
+              <div class="solution-promise">Tu operación empresarial en un solo lugar</div>
+              <div class="solution-desc">
+                Gestiona ventas, caja, inventario, compras, proveedores, clientes y resultados desde una plataforma moderna diseñada para pymes chilenas.
+              </div>
+
+              <div class="agents-list-title">QUÉ HACEN SUS AGENTES:</div>
+              <ul class="agents-bullets">
+                <li>Detectan productos con riesgo de quiebre de stock.</li>
+                <li>Recomiendan compras según rotación y demanda.</li>
+                <li>Identifican productos inmovilizados.</li>
+                <li>Analizan márgenes y ventas.</li>
+                <li>Alertan diferencias de caja.</li>
+                <li>Resumen gerencial de tareas prioritarias.</li>
+              </ul>
+            </div>
+
+            <div>
+              <div class="solution-result">
+                <strong>Resultado:</strong> Menos tareas manuales, mayor control y decisiones basadas en información real.
+              </div>
+              <a href="/erp" class="btn-cyan" style="width:100%; box-sizing:border-box;">Conocer Punto de Venta</a>
+            </div>
+          </div>
+
+          <!-- Módulo 2: Radar Diario Oficial -->
+          <div class="solution-card">
+            <div>
+              <h3>📰 Radar Diario Oficial</h3>
+              <div class="solution-promise">Entérate antes de que una publicación se convierta en un problema</div>
+              <div class="solution-desc">
+                Quantus monitorea coincidencias asociadas a nombres, RUT, empresas y criterios configurados por el cliente.
+              </div>
+
+              <div class="agents-list-title">QUÉ HACE EL AGENTE:</div>
+              <ul class="agents-bullets">
+                <li>Detecta coincidencias en publicaciones oficiales.</li>
+                <li>Identifica la fuente oficial y descarga el archivo.</li>
+                <li>Resume la publicación en lenguaje simple.</li>
+                <li>Señala fechas o plazos críticos encontrados.</li>
+                <li>Clasifica la prioridad (Informativo, Revisar, Crítico).</li>
+                <li>Conserva evidencia y sugiere revisión humana cuando corresponde.</li>
+              </ul>
+            </div>
+
+            <div>
+              <div class="solution-result">
+                <strong>Resultado:</strong> Menos sorpresas y más tiempo para reaccionar.
+              </div>
+              <a href="/do" class="btn-cyan" style="width:100%; box-sizing:border-box;">Activar vigilancia del Diario Oficial</a>
+            </div>
+          </div>
+
+          <!-- Módulo 3: Radar de Licitaciones -->
+          <div class="solution-card">
+            <div>
+              <h3>🏛️ Radar de Licitaciones</h3>
+              <div class="solution-promise">Encuentra oportunidades compatibles sin revisar Mercado Público todo el día</div>
+              <div class="solution-desc">
+                El agente analiza licitaciones según rubro, comuna, montos, palabras clave, experiencia y criterios comerciales configurados.
+              </div>
+
+              <div class="agents-list-title">QUÉ HACE EL AGENTE:</div>
+              <ul class="agents-bullets">
+                <li>Descarta oportunidades irrelevantes o incompatibles.</li>
+                <li>Prioriza licitaciones con alta probabilidad de calzar.</li>
+                <li>Resume los requisitos clave de las bases.</li>
+                <li>Identifica fechas críticas de entrega y preguntas.</li>
+                <li>Señala documentos solicitados y garantías.</li>
+                <li>Ayuda a preparar una decisión rápida.</li>
+              </ul>
+            </div>
+
+            <div>
+              <div class="solution-result">
+                <strong>Resultado:</strong> Menos tiempo buscando y más tiempo preparando buenas propuestas.
+              </div>
+              <a href="/licitaciones" class="btn-cyan" style="width:100%; box-sizing:border-box;">Buscar oportunidades para mi empresa</a>
+            </div>
+          </div>
+
+          <!-- Módulo 4: Registro y Vigilancia de Marcas -->
+          <div class="solution-card">
+            <div>
+              <h3>🏷️ Registro y Vigilancia de Marcas</h3>
+              <div class="solution-promise">Protege la identidad que estás construyendo</div>
+              <div class="solution-desc">
+                Quantus te acompaña en el registro de tu marca y mantiene una vigilancia preventiva sobre solicitudes iguales o similares.
+              </div>
+
+              <div class="agents-list-title">QUÉ HACE EL AGENTE:</div>
+              <ul class="agents-bullets">
+                <li>Ayuda a revisar disponibilidad inicial de marca.</li>
+                <li>Ordena antecedentes del expediente de registro.</li>
+                <li>Orienta en la selección de clases comerciales.</li>
+                <li>Controla los hitos del proceso en INAPI.</li>
+                <li>Vigila nuevas solicitudes similares en el Diario Oficial.</li>
+                <li>Te avisa cuando una revisión u oposición puede ser necesaria.</li>
+              </ul>
+            </div>
+
+            <div>
+              <div class="solution-result">
+                <strong>Resultado:</strong> Mayor claridad durante el registro y vigilancia continua después de solicitar la marca.
+              </div>
+              <a href="/inapi" class="btn-cyan" style="width:100%; box-sizing:border-box;">Comenzar registro de marca</a>
+            </div>
+          </div>
+
+          <!-- Módulo 5: Radar de Remates -->
+          <div class="solution-card">
+            <div>
+              <h3>🏠 Radar de Remates</h3>
+              <div class="solution-promise">Detecta oportunidades inmobiliarias antes de perder horas buscando</div>
+              <div class="solution-desc">
+                Quantus centraliza y filtra información de remates según comunas, tribunales, bancos, valores y características de interés.
+              </div>
+
+              <div class="agents-list-title">QUÉ HACE EL AGENTE:</div>
+              <ul class="agents-bullets">
+                <li>Reúne oportunidades desde fuentes configuradas.</li>
+                <li>Elimina resultados duplicados o inconsistentes.</li>
+                <li>Ordena por comuna, valor mínimo y fecha de remate.</li>
+                <li>Destaca oportunidades compatibles con tu criterio.</li>
+                <li>Resume antecedentes disponibles de la propiedad.</li>
+                <li>Conserva la evidencia y el enlace de origen.</li>
+              </ul>
+            </div>
+
+            <div>
+              <div class="solution-result">
+                <strong>Resultado:</strong> Una búsqueda más rápida, ordenada y enfocada en oportunidades que realmente vale la pena revisar.
+              </div>
+              <a href="/remates" class="btn-cyan" style="width:100%; box-sizing:border-box;">Explorar remates</a>
+            </div>
+          </div>
+
+          <!-- Módulo 6: Preparación Ley 21.719 -->
+          <div class="solution-card">
+            <div>
+              <h3>⚖️ Preparación Ley 21.719</h3>
+              <div class="solution-promise">Convierte obligaciones de protección de datos en un plan comprensible</div>
+              <div class="solution-desc">
+                Quantus ayuda a revisar cómo tu empresa recopila, utiliza, almacena y protege datos personales.
+              </div>
+
+              <div class="agents-list-title">QUÉ ANALIZA:</div>
+              <ul class="agents-bullets">
+                <li>Inventario de datos personales y ubicación.</li>
+                <li>Consentimientos y finalidades informadas.</li>
+                <li>Proceso para atender derechos de los titulares.</li>
+                <li>Contratos de proveedores y encargados externos.</li>
+                <li>Medidas de seguridad y respaldos mínimos.</li>
+                <li>Plan de respuesta ante incidentes y brechas prioritarias.</li>
+              </ul>
+            </div>
+
+            <div>
+              <div class="solution-result">
+                <strong>Resultado:</strong> Saber qué falta, qué riesgo existe y qué conviene abordar primero.
+              </div>
+              <a href="/checklist-ley-21719" class="btn-cyan" style="width:100%; box-sizing:border-box;">Evaluar preparación</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UNA EMPRESA, MÚLTIPLES AGENTES -->
+    <section class="section-block alt-bg">
+      <div class="shell">
+        <div class="section-header-center">
+          <div class="section-tag">RED DE INTELIGENCIA</div>
+          <h2 class="section-h2">Una empresa, múltiples agentes</h2>
+          <p class="section-desc-text">
+            No necesitas revisar cinco plataformas todos los días. Quantus reúne las señales que importan y pone agentes especializados a trabajar por tu empresa.
+          </p>
+        </div>
+
+        <div class="agents-visual-grid">
+          <div class="agent-box">
+            <strong>AGENTE DE INVENTARIO</strong>
+            <span>Detecta quiebres y sobrestock en tiempo real.</span>
+          </div>
+          <div class="agent-box">
+            <strong>AGENTE DE COMPRAS</strong>
+            <span>Sugiere reposición y prioriza necesidades según rotación.</span>
+          </div>
+          <div class="agent-box">
+            <strong>AGENTE DE DIARIO OFICIAL</strong>
+            <span>Vigila coincidencias y publicaciones en fuentes oficiales.</span>
+          </div>
+          <div class="agent-box">
+            <strong>AGENTE DE LICITACIONES</strong>
+            <span>Encuentra oportunidades compatibles en Mercado Público.</span>
+          </div>
+          <div class="agent-box">
+            <strong>AGENTE DE MARCAS</strong>
+            <span>Monitorea solicitudes similares en INAPI y boletines.</span>
+          </div>
+          <div class="agent-box">
+            <strong>AGENTE DE REMATES</strong>
+            <span>Filtra oportunidades inmobiliarias por comuna y valor.</span>
+          </div>
+          <div class="agent-box" style="grid-column: span 3;">
+            <strong>AGENTE GERENCIAL</strong>
+            <span>Resume lo importante para decidir, consolida alertas y prioriza la agenda del directivo.</span>
+          </div>
+        </div>
+
+        <div class="final-cta-box">
+          <h2>No necesitas revisar cinco plataformas todos los días. Quantus reúne las señales que importan y pone agentes especializados a trabajar por tu empresa.</h2>
+          <div style="margin-top: 24px;">
+            <a href="mailto:contacto@quantuschile.cl?subject=Solicitud%20Demostración%20Ecosistema" class="btn-cyan">
+              Solicitar una demostración del ecosistema →
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

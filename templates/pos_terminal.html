@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantus System Chile — Punto de Venta</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='pos-original.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='pos-responsive-fix.css') }}">
+  <style>
+    .view { display: none; }
+    .view.active { display: block; }
+    .brand-mark-small { object-fit: contain; background: transparent; }
+    .bt-badge-icon.logo-img { width: 42px; height: 42px; border-radius: 14px; overflow: hidden; display: grid; place-items: center; background: #0a1220; border: 1px solid var(--border); }
+    .bt-badge-icon.logo-img img { width: 100%; height: 100%; object-fit: cover; }
+    .topbar-search { width: 260px; min-height: 38px; border-radius: 12px; padding: 0 12px; font-size: 13px; background: #07101fb3; }
+    .notification-dot { min-width: 22px; height: 22px; display: grid; place-items: center; border-radius: 999px; background: #315dff; color: #fff; font-size: 11px; font-weight: 800; }
+    .avatar-circle { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: #1f2a54; color: #fff; font-weight: 800; }
+    .ipv-section.final { background: linear-gradient(135deg, rgba(31,22,64,.94), rgba(13,24,43,.92)); border-color: rgba(139,92,246,.28); }
+    .ipv-field-check { color: #10b981; }
+    .ipv-preview-stack { display: grid; gap: 16px; }
+    .ipv-demo-evidence { margin-top: 16px; }
+    .ipv-demo-evidence p { margin: 6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .qu-operational { display: grid; gap: 18px; }
+    .qu-grid-2 { display: grid; grid-template-columns: 1.3fr .9fr; gap: 18px; align-items: start; }
+    .qu-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .qu-card { border-radius: 22px; padding: 18px; }
+    .qu-kicker { font-size: 11px; font-weight: 800; color: #8ea5ff; letter-spacing: .08em; text-transform: uppercase; }
+    .qu-card h2, .qu-card h3 { margin: 6px 0 12px; }
+    .qu-muted { color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .qu-table { width: 100%; border-collapse: collapse; }
+    .qu-table th, .qu-table td { padding: 11px 10px; font-size: 12px; }
+    .qu-product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+    .qu-product { min-height: 132px; border-radius: 18px; padding: 14px; text-align: left; color: var(--text); }
+    .qu-product strong, .qu-product span, .qu-product b { display: block; }
+    .qu-product span { color: var(--muted); font-size: 12px; margin-top: 5px; }
+    .qu-product b { color: var(--cyan); margin-top: 12px; font-size: 17px; }
+    .cart-row, .receipt-row, .user-row, .blocked-feature { display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid rgba(148,163,184,.12); padding: 11px 0; }
+    .cart-row small, .blocked-feature span { color: var(--muted); }
+    .checkout { width: 100%; margin-top: 14px; }
+    .printable-receipt { display: none; margin-top: 14px; background: #fff; color: #111827; border-radius: 14px; padding: 18px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .printable-receipt h3, .printable-receipt strong { color: #111827; }
+    .printable-receipt span { color: #374151; }
+    .print-action { width: 100%; display: block; text-align: center; border: none; text-decoration: none; border-radius: 12px; padding: 11px 12px; margin-top: 10px; background: #111827; color: #fff; font-weight: 800; }
+    .offline-sync-row { margin-top: 10px; padding: 10px; border-radius: 10px; background: #f8fafc; color: #111827; display: flex; justify-content: space-between; gap: 10px; align-items: center; font-size: 12px; font-weight: 700; }
+    .offline-sync-row button { border: none; border-radius: 9px; padding: 8px 10px; background: #2563eb; color: #fff; font-weight: 800; }
+    .stock-pill { padding: 7px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+    .stock-ok { background: #10b98124; color: #86efac; }
+    .stock-warn { background: #f59e0b24; color: #fde68a; }
+    .stock-danger { background: #ef444424; color: #fecaca; }
+    .admin-form { display: grid; gap: 12px; }
+    .admin-form label { display: grid; gap: 6px; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .small-action { min-height: 38px; border-radius: 10px; padding: 8px 11px; font-weight: 800; color: #fff; background: #2563eb; border: none; }
+    .danger-action { background: #ef4444; }
+    .omni-summary { display: grid; gap: 18px; }
+    .omni-hero { padding: 26px; border-radius: 22px; background: linear-gradient(135deg, rgba(13,24,43,.94), rgba(24,20,67,.82)); border: 1px solid rgba(148,163,184,.16); box-shadow: inset 0 1px rgba(255,255,255,.06), 0 22px 55px rgba(0,0,0,.22); }
+    .omni-kicker { margin: 0 0 10px; font-size: 12px; font-weight: 900; color: #94a3ff; letter-spacing: .08em; text-transform: uppercase; }
+    .omni-title { margin: 0; font-size: clamp(30px, 3vw, 46px); line-height: 1.03; font-weight: 900; letter-spacing: 0; color: #f8fafc; }
+    .omni-sub { margin: 12px 0 0; color: var(--muted); font-size: 16px; line-height: 1.45; }
+    .omni-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+    .omni-kpi { min-height: 128px; padding: 20px; border-radius: 18px; background: linear-gradient(135deg, rgba(15,23,42,.78), rgba(18,31,61,.64)); border: 1px solid rgba(148,163,184,.13); display: grid; align-content: center; position: relative; overflow: hidden; }
+    .omni-kpi:after { content: ""; position: absolute; inset: auto -25px -45px auto; width: 120px; height: 120px; border-radius: 36px; background: rgba(99,102,241,.24); filter: blur(6px); }
+    .omni-kpi:nth-child(2):after { background: rgba(16,185,129,.22); }
+    .omni-kpi:nth-child(3):after { background: rgba(245,158,11,.2); }
+    .omni-kpi:nth-child(4):after { background: rgba(139,92,246,.24); }
+    .omni-kpi-label { color: var(--muted); font-weight: 800; font-size: 14px; }
+    .omni-kpi-value { margin-top: 10px; color: #fff; font-size: clamp(27px, 3vw, 39px); font-weight: 900; line-height: 1; }
+    .omni-kpi-note { margin-top: 9px; color: #9ca8be; font-size: 13px; font-weight: 700; }
+    .omni-panel-grid { display: grid; grid-template-columns: 1fr 1.28fr .84fr .84fr; gap: 14px; }
+    .omni-panel { min-height: 220px; padding: 20px; border-radius: 20px; background: rgba(13,24,43,.78); border: 1px solid rgba(148,163,184,.14); box-shadow: inset 0 1px rgba(255,255,255,.05); }
+    .omni-panel h3 { margin: 0 0 16px; font-size: 20px; color: #f8fafc; }
+    .omni-bars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 9px; align-items: end; min-height: 122px; }
+    .omni-bar { display: grid; justify-items: center; align-items: end; gap: 6px; color: #94a3b8; font-size: 10px; font-weight: 800; }
+    .omni-bar span:first-child { width: 28px; min-height: 32px; border-radius: 6px 6px 3px 3px; background: linear-gradient(180deg, #6d5dfc, #293a83); }
+    .omni-bar b { color: #cbd5e1; font-size: 10px; }
+    .omni-chart-note { margin-top: 13px; color: var(--muted); font-weight: 800; font-size: 13px; }
+    .omni-payment { display: grid; grid-template-columns: 146px 1fr; gap: 18px; align-items: center; }
+    .omni-donut { width: 118px; aspect-ratio: 1; border-radius: 50%; background: conic-gradient(#10b981 0 48%, #f59e0b 48% 100%); display: grid; place-items: center; box-shadow: inset 0 0 0 28px #071020; }
+    .omni-donut span { color: #f8fafc; font-size: 13px; font-weight: 900; }
+    .omni-legend { display: grid; gap: 10px; color: var(--muted); font-weight: 750; }
+    .omni-legend-row { display: flex; align-items: center; gap: 9px; }
+    .omni-dot { width: 10px; height: 10px; border-radius: 999px; background: #10b981; }
+    .omni-dot.orange { background: #f59e0b; }
+    .omni-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .omni-tab { border: 1px solid rgba(148,163,184,.16); border-radius: 12px; padding: 10px 14px; background: #08111f; color: #f8fafc; font-weight: 900; }
+    .omni-tab.active { background: linear-gradient(135deg, #315dff, #7c3aed); border-color: rgba(129,140,248,.55); }
+    .omni-empty { color: var(--muted); font-size: 18px; line-height: 1.3; }
+    .omni-ranking { display: grid; gap: 14px; }
+    .omni-rank-item strong { display: block; color: #f8fafc; font-size: 15px; }
+    .omni-rank-item span { color: var(--muted); font-size: 12px; }
+    .omni-money-pill { display: inline-flex; margin-left: 8px; padding: 3px 9px; border-radius: 999px; background: #10b98124; color: #86efac; font-size: 12px; font-weight: 900; }
+    .omni-lower-grid { display: grid; grid-template-columns: 1.35fr .8fr; gap: 18px; }
+    .omni-table-wrap { overflow-x: auto; }
+    .omni-inventory { min-width: 720px; }
+    .omni-inventory th, .omni-inventory td { padding: 13px 12px; border-bottom: 1px solid rgba(148,163,184,.1); text-align: left; font-size: 13px; }
+    .omni-inventory th { color: var(--muted); font-weight: 900; }
+    .omni-inventory td { color: #e5e7eb; font-weight: 700; }
+    .omni-search { width: 100%; min-height: 48px; margin-bottom: 12px; border-radius: 16px; background: #050c17; border: 1px solid rgba(148,163,184,.12); color: var(--text); padding: 0 16px; }
+    .omni-reservations { display: grid; gap: 14px; }
+    .omni-reservation { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 18px; border-radius: 18px; background: #070d19; border: 1px solid rgba(148,163,184,.1); }
+    .omni-reservation strong { display: block; color: #f8fafc; font-size: 18px; }
+    .omni-reservation span { color: var(--muted); font-size: 13px; }
+    .omni-charge { border: 1px solid rgba(148,163,184,.2); border-radius: 12px; background: #0b1424; color: #f8fafc; padding: 10px 14px; font-weight: 900; white-space: nowrap; }
+    @media print {
+      body * { visibility: hidden; }
+      #receipt-print-area, #receipt-print-area * { visibility: visible; }
+      #receipt-print-area { display: block !important; position: absolute; inset: 0; margin: 0; border-radius: 0; }
+      .print-action, .offline-sync-row { display: none; }
+    }
+    /* TOOLTIP FLOTANTE ELEGANTE PARA BOTONES DEL ERP */
+    [data-tooltip] {
+      position: relative;
+    }
+    [data-tooltip]::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background: rgba(6, 16, 31, 0.96);
+      color: #f8fafc;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      z-index: 99999;
+      letter-spacing: 0.2px;
+    }
+    [data-tooltip]::after {
+      content: "";
+      position: absolute;
+      bottom: 112%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: rgba(6, 16, 31, 0.96) transparent transparent transparent;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease;
+      z-index: 99999;
+      pointer-events: none;
+    }
+    [data-tooltip]:hover::before,
+    [data-tooltip]:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-btn[data-tooltip]::before {
+      bottom: auto;
+      top: 50%;
+      left: calc(100% + 12px);
+      transform: translateY(-50%) translateX(-4px);
+    }
+    .nav-btn[data-tooltip]::after {
+      bottom: auto;
+      top: 50%;
+      left: calc(100% + 4px);
+      transform: translateY(-50%);
+      border-color: transparent rgba(6, 16, 31, 0.96) transparent transparent;
+    }
+    .nav-btn[data-tooltip]:hover::before {
+      transform: translateY(-50%) translateX(0);
+    }
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: relative; height: auto; }
+      .topbar, .topbar-left, .topbar-right { flex-wrap: wrap; }
+      .topbar-search { width: 100%; }
+      .qu-grid-2, .qu-grid-3 { grid-template-columns: 1fr; }
+      .omni-kpi-grid, .omni-panel-grid, .omni-lower-grid { grid-template-columns: 1fr; }
+      .omni-payment { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  {% set alert = stock_ai.main_alert %}
+  <div class="layout" data-contract="PUNTO DE VENTA pos_agents_ready catalogo productos ordenes compra saveReceiptPdf()">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img class="brand-mark-small" src="{{ url_for('static', filename='quantus-original-logo.png') }}" alt="Quantus System Chile">
+        <div>
+          <div class="sidebar-title">Quantus System Chile</div>
+        </div>
+        <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 14px #22c55e;margin-left:auto"></span>
+      </div>
+
+      <div class="bt-badge glass-soft">
+        <div class="bt-badge-icon logo-img">
+          {% if workspace.key == "don-manolo" %}
+          <img src="{{ url_for('static', filename='don-manolo-logo.png') }}" alt="{{ workspace.name }}">
+          {% elif workspace.logo_file %}
+          <img src="{{ url_for('static', filename=workspace.logo_file) }}" alt="{{ workspace.brand_label }}">
+          {% else %}
+          {{ workspace.brand_mark }}
+          {% endif %}
+        </div>
+        <div>
+          <div class="bt-badge-label">{{ workspace.name }}</div>
+          <div class="sidebar-sub">Administrador · {{ pos_user.display_name if pos_user else "Felipe Admin" }}</div>
+        </div>
+      </div>
+
+      <nav class="nav-stack">
+        <div class="nav-group">
+          <div class="nav-group-label">🏠 Inicio</div>
+          <button class="nav-btn active" data-view="resumen" onclick="switchView('resumen')" data-tooltip="📊 Resumen: Muestra ventas de hoy, dinero en caja y productos más vendidos"><span class="nav-active-indicator"></span><span class="nav-ico">📊</span>Resumen</button>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">📦 Compras y recepción</div>
+          <button class="nav-btn" data-view="ordenes" onclick="switchView('ordenes')" data-tooltip="🧾 Órdenes de compra: Crea y envía pedidos de reposición a tus proveedores"><span class="nav-ico">🧾</span>Órdenes de compra</button>
+          <button class="nav-btn" data-view="ingresos" onclick="switchView('ingresos')" data-tooltip="📥 Ingresos: Registra mercadería que llegó al local y suma unidades a tu stock"><span class="nav-ico">📥</span>Ingresos</button>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">🛒 Ventas y tienda</div>
+          <button class="nav-btn" data-view="ventas" onclick="switchView('ventas')" data-tooltip="🛒 Caja POS / Ventas: Pantalla rápida para registrar ventas de mostrador y dar vuelto"><span class="nav-ico">🧾</span>Caja POS / Ventas</button>
+          <button class="nav-btn" data-view="inventario" onclick="switchView('inventario')" data-tooltip="📦 Inventario: Consulta cuántas unidades te quedan de cada producto en tiempo real"><span class="nav-ico">📦</span>Inventario</button>
+          <button class="nav-btn" data-view="shopper" onclick="switchView('shopper')" data-tooltip="🛍️ App Shopper: Prepara, empaqueta y despacha pedidos listos para retiro"><span class="nav-ico">🛒</span>App Shopper</button>
+          <button class="nav-btn" data-view="cliente" onclick="switchView('cliente')" data-tooltip="📱 App Cliente: Catálogo digital interactivo para que tus clientes vean tus productos"><span class="nav-ico">📱</span>App Cliente</button>
+          <button class="nav-btn" data-view="usuarios" onclick="switchView('usuarios')" data-tooltip="👥 Clientes: Directorio de clientes con sus nombres, teléfonos y compras"><span class="nav-ico">👥</span>Clientes</button>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">📋 Reportes</div>
+          <button class="nav-btn" data-view="reportes" onclick="switchView('reportes')" data-tooltip="📄 Reportes: Descarga arqueos de caja, libros de ventas y balances del negocio"><span class="nav-ico">📄</span>Reportes</button>
+          <button class="nav-btn" data-view="analytics" onclick="switchView('analytics')" data-tooltip="📈 Analytics: Mira qué productos se venden rápido y cuáles están estancados en bodega"><span class="nav-ico">📈</span>Analytics</button>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-label">⚙️ Configuración</div>
+          <button class="nav-btn" data-view="configuracion" onclick="switchView('configuracion')" data-tooltip="⚙️ Configuración: Ajusta opciones de tus cajas, impresoras térmicas y cajeros"><span class="nav-ico">⚙️</span>Configuración</button>
+        </div>
+      </nav>
+
+      <div class="sidebar-user glass-soft">
+        <div class="sidebar-user-name">Centro de ayuda</div>
+        <div class="sidebar-sub">Protocolos de caja, inventario y respaldo</div>
+      </div>
+    </aside>
+
+    <div class="content-wrap">
+      <header class="topbar glass">
+        <div class="topbar-left">
+          <a href="/clientes" class="back-btn"><span class="back-btn-arrow">←</span><span class="back-btn-text">Volver</span></a>
+          <div>
+            <div class="topbar-breadcrumb">
+              <span class="breadcrumb-root">🛠️ {{ workspace.name }}</span>
+              <span class="breadcrumb-sep">›</span>
+              <span id="crumb-section">Inicio</span>
+              <span class="breadcrumb-sep">›</span>
+              <span class="breadcrumb-current" id="crumb-page">Resumen</span>
+            </div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <input class="topbar-search" placeholder="Buscar en Quantus..." aria-label="Buscar en Quantus">
+          <a class="btn btn-secondary btn-mini" href="/clientes">🌐 Ver tienda web</a>
+          <div class="topbar-chip">Rancagua Centro</div>
+          <div class="notification-dot">3</div>
+          <div class="avatar-circle">{{ (pos_user.display_name if pos_user else "FA")[:2].upper() }}</div>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="view" id="view-ingresos">
+          <div class="ipv-container">
+            <div class="ipv-header">
+              <div>
+                <h1 class="ipv-title">Nuevo producto <span class="ipv-badge-new">NUEVO</span></h1>
+                <p class="ipv-subtitle">Escanea el código de barras y deja que Quantus complete el resto automáticamente.</p>
+              </div>
+            </div>
+
+            <div class="ipv-body">
+              <div class="ipv-main">
+                <div class="ipv-section ipv-scan-section">
+                  <div class="ipv-scan-header">
+                    <div>
+                      <h2 class="ipv-step-title">1. Escanear código de barras</h2>
+                      <p class="ipv-step-desc">Usa tu lector o cámara. También puedes escribir el EAN/UPC.</p>
+                    </div>
+                    <div class="ipv-autocomplete-box">
+                      <div class="ipv-autocomplete-title">✨ Autocompletado inteligente</div>
+                      <p class="ipv-autocomplete-desc">Quantus consulta fuentes declaradas y completa solo campos compatibles con el catálogo.</p>
+                      <div class="ipv-source-badges">
+                        <span class="ipv-source-badge active">📗 Open Food Facts</span>
+                        <span class="ipv-source-badge active">📦 UPCItemDB</span>
+                        <span class="ipv-source-badge">🏪 Catálogo local</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ipv-scan-input-row">
+                    <div class="ipv-scan-icon">📱</div>
+                    <input class="ipv-scan-input" value="7791234567890" aria-label="Código EAN">
+                    <span class="ipv-detected-badge">Producto detectado ✅</span>
+                    <button class="btn btn-secondary ipv-scan-btn" data-tooltip="📷 Cámara: Escanear código de barras EAN usando la cámara del celular o tablet">📷 Cámara</button>
+                    <button class="btn btn-secondary ipv-scan-btn" data-tooltip="🔍 Buscar: Consultar si el código ya existe en el catálogo o bases internacionales">🔍 Buscar</button>
+                  </div>
+                  <button class="ipv-manual-link" type="button" data-tooltip="🔢 Generar: Asigna un código numérico interno correlativo automático">🔎 Buscar manualmente / Generar código interno</button>
+                </div>
+
+                <div class="ipv-section">
+                  <div class="ipv-step-header">
+                    <h2 class="ipv-step-title">2. Información autocompletada <span class="ipv-review-tag">(revisar y confirmar)</span></h2>
+                    <span class="ipv-auto-badge">Autocompletado</span>
+                  </div>
+                  <div class="ipv-form-grid">
+                    <div class="ipv-field">
+                      <label class="ipv-label">Nombre del producto</label>
+                      <input value="Penne Rigate Barilla 500 g" aria-label="Nombre del producto">
+                      <span class="ipv-field-check">✅</span>
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Marca</label>
+                      <input value="Barilla" aria-label="Marca">
+                      <span class="ipv-field-check">✅</span>
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Categoría</label>
+                      <select aria-label="Categoría"><option>Pastas</option><option>General</option></select>
+                      <span class="ipv-field-check">✅</span>
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Unidad de medida</label>
+                      <select aria-label="Unidad de medida"><option>Unidad</option><option>Caja</option></select>
+                      <span class="ipv-field-check">✅</span>
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Contenido neto</label>
+                      <input value="500 g" aria-label="Contenido neto">
+                      <span class="ipv-field-check">✅</span>
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Código de barras (EAN)</label>
+                      <input value="7791234567890" aria-label="Código de barras">
+                      <span class="ipv-field-check">✅</span>
+                    </div>
+                  </div>
+                  <div class="ipv-suggestions">
+                    <span class="ipv-suggestion-label">Sugerencias IA</span>
+                    <span class="ipv-suggestion-tag">Categoría sugerida: Pastas Secas</span>
+                    <span class="ipv-suggestion-tag">Unidad sugerida: Unidad</span>
+                    <span class="ipv-suggestion-tag">Popular en tu zona ↗</span>
+                  </div>
+                </div>
+
+                <div class="ipv-section final">
+                  <div class="ipv-step-header">
+                    <h2 class="ipv-step-title"><span class="ipv-step-star">⭐</span> Solo falta esto <span class="ipv-review-tag">(completa los datos finales)</span></h2>
+                  </div>
+                  <div class="ipv-final-grid">
+                    <div class="ipv-field">
+                      <label class="ipv-label">Costo neto de compra *</label>
+                      <div class="ipv-money-input"><span class="ipv-money-prefix">$</span><input id="ing-cost" value="8000" type="number"></div>
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Precio venta público *</label>
+                      <div class="ipv-money-input"><span class="ipv-money-prefix">$</span><input id="ing-price" value="12000" type="number"></div>
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Stock inicial *</label>
+                      <div class="ipv-stock-input"><input id="ing-cant" value="5" type="number"><span class="ipv-stock-unit">unidades</span></div>
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Ubicación en bodega *</label>
+                      <input id="ing-location" value="A-01">
+                    </div>
+                    <div class="ipv-field">
+                      <label class="ipv-label">Alerta mínima *</label>
+                      <div class="ipv-stock-input"><input id="ing-min" value="5" type="number"><span class="ipv-stock-unit">unidades</span></div>
+                    </div>
+                    <div class="ipv-tip-card">
+                      <span class="ipv-tip-icon">💡</span>
+                      <div><div class="ipv-tip-title">Tip Quantus</div><div class="ipv-tip-text">Estos datos impactan tu margen y disponibilidad de stock.</div></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pos-intel-bar glass-soft">
+                  <div class="pos-intel-head">
+                    <div class="pos-intel-icon">🚀</div>
+                    <div>
+                      <div class="pos-intel-kicker">Más velocidad, más ventas</div>
+                      <div class="pos-intel-title">Al guardar, el producto queda disponible en tienda online y caja POS.</div>
+                    </div>
+                  </div>
+                  <div class="pos-intel-items">
+                    <span class="pos-intel-pill info"><span class="pos-intel-dot"></span>Inventario en tiempo real</span>
+                    <span class="pos-intel-pill ok"><span class="pos-intel-dot"></span>Ventas online y POS</span>
+                    <span class="pos-intel-pill info"><span class="pos-intel-dot"></span>Reportes y ganancias</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ipv-sidebar">
+                <div class="ipv-preview-card">
+                  <div class="ipv-preview-title">Vista previa del producto</div>
+                  <div class="ipv-preview-content">
+                    <div class="ipv-preview-placeholder">📦</div>
+                    <div class="ipv-preview-info">
+                      <div class="ipv-preview-name">Penne Rigate Barilla 500 g</div>
+                      <div class="ipv-preview-meta">EAN: 7791234567890</div>
+                      <div class="ipv-preview-meta">Categoría: Pastas</div>
+                      <div class="ipv-preview-meta">Marca: Barilla</div>
+                    </div>
+                  </div>
+                  <div class="ipv-ready-badge ready">✅ Listo para guardar</div>
+                </div>
+
+                <div class="ipv-validations-card">
+                  <div class="ipv-validations-header">
+                    <span class="ipv-validations-title">Validaciones</span>
+                    <span class="ipv-validations-count">8/8</span>
+                  </div>
+                  <div class="ipv-validations-list">
+                    {% for label in ["Código de barras válido", "Nombre del producto", "Marca detectada", "Categoría asignada", "Unidad de medida", "Contenido neto", "Imagen del producto", "Fuente de datos"] %}
+                    <div class="ipv-validation-item ok">
+                      <span class="ipv-validation-icon">✅</span>
+                      <span class="ipv-validation-label">{{ label }}</span>
+                      <span class="ipv-validation-status">{% if loop.last %}Open Food Facts{% else %}OK{% endif %}</span>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+
+                <div class="ipv-margin-card">
+                  <div class="ipv-margin-title">Margen estimado</div>
+                  <div class="ipv-margin-content">
+                    <div class="ipv-margin-info">
+                      <div class="ipv-margin-percent" style="color:#10b981">50%</div>
+                      <div class="ipv-margin-label">Ganancia por unidad</div>
+                      <div class="ipv-margin-value">$4.000</div>
+                    </div>
+                    <svg class="ipv-donut" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"></circle>
+                      <circle cx="50" cy="50" r="40" fill="none" stroke="#10b981" stroke-width="10" stroke-dasharray="251.2" stroke-dashoffset="125.6" stroke-linecap="round" transform="rotate(-90 50 50)"></circle>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="ipv-preview-card ipv-demo-evidence" data-agent-demo-contract="pos_agents_ready">
+                  <div class="ipv-preview-title">Base demo IA cargada</div>
+                  <div class="ipv-preview-name">{{ workspace.brand_label }}</div>
+                  <p>{{ workspace.brand_note }}. Datos demo no personales para agentes de stock, compras, ventas, margen y reposición.</p>
+                  <div class="pos-intel-items" style="justify-content:flex-start;margin-top:12px">
+                    <span class="pos-intel-pill ok">Ordenes de compra demo</span>
+                    <span class="pos-intel-pill info">Ventas demo recientes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ipv-action-bar">
+              <button class="btn btn-secondary ipv-action-cancel" data-tooltip="❌ Cancelar: Descarta los cambios y cierra el formulario sin guardar">Cancelar</button>
+              <button class="btn btn-secondary ipv-action-save" onclick="registrarIngreso()" data-tooltip="💾 Guardar Ficha: Guarda los datos del producto en el catálogo sin sumar unidades aún">Guardar producto</button>
+              <button class="btn btn-secondary ipv-action-stock" onclick="registrarIngreso()" data-tooltip="📦 Ingresar Stock: Guarda el producto y suma la cantidad ingresada a tu bodega">Guardar e ingresar stock</button>
+              <button class="btn btn-primary ipv-action-publish" onclick="registrarIngreso()" data-tooltip="🚀 Listo para Vender: Deja el producto habilitado de inmediato para cobrar en caja POS">Guardar y publicar <span class="ipv-action-publish-sub">Visible en tienda online y POS</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view active" id="view-resumen">
+          <div class="omni-summary">
+            <section class="omni-hero">
+              <div class="omni-kicker">Resumen · {{ workspace.rubro }}</div>
+              <h1 class="omni-title">Resumen omnicanal</h1>
+              <p class="omni-sub">Vista ejecutiva de {{ workspace.rubro }} en tiempo real.</p>
+              <div class="omni-kpi-grid">
+                <div class="omni-kpi">
+                  <div class="omni-kpi-label">Productos</div>
+                  <div class="omni-kpi-value">{{ agent_context.products_count }}</div>
+                  <div class="omni-kpi-note">Catálogo del rubro</div>
+                </div>
+                <div class="omni-kpi">
+                  <div class="omni-kpi-label">Ventas POS hoy</div>
+                  <div class="omni-kpi-value">$228.750</div>
+                  <div class="omni-kpi-note">9 documentos</div>
+                </div>
+                <div class="omni-kpi">
+                  <div class="omni-kpi-label">Pendiente caja</div>
+                  <div class="omni-kpi-value">2</div>
+                  <div class="omni-kpi-note">Reservas por cobrar</div>
+                </div>
+                <div class="omni-kpi">
+                  <div class="omni-kpi-label">Stock crítico</div>
+                  <div class="omni-kpi-value">{{ agent_context.critical_count or 5 }}</div>
+                  <div class="omni-kpi-note">Productos por agotar</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="omni-panel-grid">
+              <div class="omni-panel">
+                <h3>Ventas últimos 7 días</h3>
+                <div class="omni-bars">
+                  <div class="omni-bar"><b>122k</b><span style="height:54px"></span><em>ma</em></div>
+                  <div class="omni-bar"><b>88k</b><span style="height:38px"></span><em>mi</em></div>
+                  <div class="omni-bar"><b>145k</b><span style="height:66px"></span><em>ju</em></div>
+                  <div class="omni-bar"><b>167k</b><span style="height:78px"></span><em>vi</em></div>
+                  <div class="omni-bar"><b>93k</b><span style="height:42px"></span><em>sa</em></div>
+                  <div class="omni-bar"><b>158k</b><span style="height:72px"></span><em>do</em></div>
+                  <div class="omni-bar"><b>229k</b><span style="height:104px"></span><em>lu</em></div>
+                </div>
+                <div class="omni-chart-note">Hoy: $228.750 · 9 documentos</div>
+              </div>
+
+              <div class="omni-panel">
+                <h3>Medios de pago (hoy)</h3>
+                <div class="omni-payment">
+                  <div class="omni-donut"><span>9 ventas</span></div>
+                  <div class="omni-legend">
+                    <div class="omni-legend-row"><span class="omni-dot"></span>Efectivo <strong>$107.860</strong></div>
+                    <div class="omni-legend-row"><span class="omni-dot orange"></span>Transferencia <strong>$120.890</strong></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="omni-panel">
+                <h3>Top productos</h3>
+                <div class="omni-tabs">
+                  <span class="omni-tab active">Hoy</span>
+                  <span class="omni-tab">Semanal</span>
+                  <span class="omni-tab">Mensual</span>
+                </div>
+                <p class="omni-empty">Sin ventas en este período.</p>
+              </div>
+
+              <div class="omni-panel">
+                <h3>Ranking Personal Shoppers</h3>
+                <div class="omni-ranking">
+                  <div class="omni-rank-item">
+                    <strong>#1 Lorena Cifuentes <span class="omni-money-pill">$165.840</span></strong>
+                    <span>4 pedidos pagados · Comisión: $16.584</span>
+                  </div>
+                  <div class="omni-rank-item">
+                    <strong>#2 Karen Shopper <span class="omni-money-pill">$41.930</span></strong>
+                    <span>3 pedidos pagados · Comisión: $4.193</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="omni-lower-grid">
+              <div class="omni-panel">
+                <h3>Inventario y ubicaciones</h3>
+                <input class="omni-search" placeholder="Buscar producto, SKU, ubicación" aria-label="Buscar inventario">
+                <div class="omni-table-wrap">
+                  <table class="omni-inventory">
+                    <thead><tr><th>Producto</th><th>SKU</th><th>Ubicación</th><th>Stock</th><th>Unidad</th><th>Disponible</th></tr></thead>
+                    <tbody>
+                      {% for product in products[:4] %}
+                      <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.sku }}</td>
+                        <td>A-0{{ loop.index }}-0{{ loop.index }}-{{ "ABCD"[loop.index0] }}</td>
+                        <td>{{ product.stock }}</td>
+                        <td>un</td>
+                        <td>{{ [product.stock - 4, 0]|max }}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="omni-panel">
+                <h3>Reservas pendientes de cobro</h3>
+                <div class="omni-reservations">
+                  <div class="omni-reservation">
+                    <div><strong>RS-103</strong><span>pedro</span></div>
+                    <div><strong>$109.870</strong><button class="omni-charge" type="button">Cobrar en caja</button></div>
+                  </div>
+                  <div class="omni-reservation">
+                    <div><strong>RS-104</strong><span>juana perez</span></div>
+                    <div><strong>$4.990</strong><button class="omni-charge" type="button">Cobrar en caja</button></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-ordenes">
+          <div class="qu-card glass">
+            <div class="qu-kicker">Ordenes de compra demo</div>
+            <h2>Recepción y proveedores</h2>
+            <div class="table-scroll">
+              <table class="qu-table">
+                <thead><tr><th>OC</th><th>Producto</th><th>Proveedor</th><th>Cant.</th><th>ETA</th><th>Estado</th></tr></thead>
+                <tbody>{% for order in agent_context.orders %}<tr><td>{{ order.id }}</td><td>{{ order.product }}</td><td>{{ order.supplier }}</td><td>{{ order.qty }}</td><td>{{ order.eta.strftime("%d/%m") }}</td><td>{{ order.status|replace("_"," ") }}</td></tr>{% endfor %}</tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-ventas">
+          <div class="qu-grid-2">
+            <div class="qu-card glass">
+              <div class="qu-kicker">PUNTO DE VENTA</div>
+              <h2>Caja POS / Ventas</h2>
+              <div class="qu-product-grid">
+                {% for product in products %}
+                <button class="qu-product glass-soft" onclick="addToCart('{{ product.name }}', {{ product.price }}, '{{ product.sku }}')">
+                  <strong>{{ product.name }}</strong><span>{{ product.sku }} · Stock {{ product.stock }} un.</span><b>${{ "{:,}".format(product.price).replace(",", ".") }}</b>
+                </button>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="qu-card glass">
+              <h3>Carrito de venta</h3>
+              <div id="cart-list"></div>
+              <div class="cart-row"><span>Neto</span><strong id="net-txt">$0</strong></div>
+              <div class="cart-row"><span>IVA referencia</span><strong id="iva-txt">$0</strong></div>
+              <div class="cart-row"><span>Total</span><strong id="total-txt">$0</strong></div>
+              <button class="btn btn-pay checkout" id="checkout-btn" onclick="processCheckout()" disabled data-tooltip="✅ Finalizar Venta: Registra el pago en caja, descuenta el stock de bodega y genera el comprobante">REGISTRAR VENTA Y COBRAR</button>
+              <div class="warn-note qu-card" id="sale-toast" style="display:none">VENTA #49102 REGISTRADA</div>
+              <div class="printable-receipt" id="receipt-print-area" data-receipt-status="pending">
+                <h3>COMPROBANTE PUNTO DE VENTA</h3>
+                <div class="receipt-row"><span>Empresa</span><strong>{{ workspace.name }}</strong></div>
+                <div class="receipt-row"><span>RUT</span><strong>{{ workspace.rut }}</strong></div>
+                <div class="receipt-row"><span>Documento</span><strong id="receipt-number">DEMO-49102</strong></div>
+                <div class="receipt-row"><span>Estado tributario</span><strong>Demo no tributario</strong></div>
+                <div id="receipt-lines"></div>
+                <div class="receipt-row"><span>Neto</span><strong id="receipt-net">$0</strong></div>
+                <div class="receipt-row"><span>IVA referencia</span><strong id="receipt-iva">$0</strong></div>
+                <div class="receipt-row"><span>Total</span><strong id="receipt-total">$0</strong></div>
+                <div class="receipt-row"><span>PDF auditoría</span><strong id="receipt-pdf-status">Pendiente</strong></div>
+                <div class="offline-sync-row" data-offline-contract="offline_queued"><span id="offline-sync-status">Modo local: 0 ventas pendientes</span><button onclick="syncOfflineSales()" data-tooltip="☁️ Sincronizar: Envía a la nube las ventas locales que hiciste sin conexión">Sincronizar</button></div>
+                <a class="print-action" id="receipt-pdf-link" href="#" target="_blank" rel="noopener" style="display:none">ABRIR PDF GUARDADO</a>
+                <button class="print-action" onclick="printReceipt()" data-tooltip="🖨️ Imprimir: Envía el ticket de venta o vale a tu impresora térmica">IMPRIMIR COMPROBANTE</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-inventario">
+          <div class="qu-card glass">
+            <div class="qu-kicker">Inventario predictivo</div>
+            <h2>Stock y quiebres proyectados</h2>
+            <div class="stack-list">
+              {% for item in stock_ai["items"] %}
+              <div class="list-card">
+                <div><div class="list-title">{{ item.name }}</div><div class="list-sub">{{ item.sku }} · Ritmo {{ "%.1f"|format(item.daily_sales) }} un/día · ETA {{ item.eta_date.strftime("%d/%m") }}</div></div>
+                {% if item.severity in ["critico","alerta"] %}<span class="stock-pill stock-danger">{{ item.stock }} un. ALERTA</span>{% elif item.severity == "preventivo" %}<span class="stock-pill stock-warn">{{ item.stock }} un. PREVENTIVO</span>{% else %}<span class="stock-pill stock-ok">{{ item.stock }} un. OK</span>{% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-reportes">
+          <div class="qu-card glass">
+            <div class="qu-kicker">Ventas demo recientes</div>
+            <h2>Reportes operacionales</h2>
+            <div class="stack-list">{% for sale in agent_context.sales %}<div class="list-card"><div><div class="list-title">{{ sale.id }} · ${{ "{:,}".format(sale.total).replace(",", ".") }}</div><div class="list-sub">{{ sale.sold_at.strftime("%d/%m") }} · {{ sale.channel }} · {{ sale.lines|length }} líneas</div></div><span class="stock-pill stock-ok">cerrada</span></div>{% endfor %}</div>
+          </div>
+        </section>
+
+        <section class="view" id="view-analytics">
+          <div class="qu-card glass">
+            <div class="qu-kicker">Analytics IA</div>
+            <h2>Margen, reposición y crecimiento</h2>
+            <p class="qu-muted">Quantus cruza catalogo productos, ventas históricas, ordenes compra, proveedores y lead time de entrega para anticipar quiebres y margen.</p>
+          </div>
+        </section>
+
+        <section class="view" id="view-usuarios">
+          <div class="qu-grid-2">
+            <div class="qu-card glass">
+              <div class="qu-kicker">Usuarios y perfiles</div>
+              <h2>Crear usuario</h2>
+              <form class="admin-form" action="/pos/usuarios/crear" method="POST">
+                {{ csrf_input()|safe }}
+                <label>Nombre<input name="display_name" required placeholder="Ej. Cajera turno mañana"></label>
+                <label>Correo<input name="email" type="email" required placeholder="usuario@empresa.cl"></label>
+                <label>Perfil<select name="role" required>{% for key, label in role_labels.items() %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</select></label>
+                <button class="btn btn-primary" type="submit">CREAR USUARIO</button>
+              </form>
+            </div>
+            <div class="qu-card glass">
+              <h2>Usuarios de esta empresa</h2>
+              {% for user in workspace_users %}
+              <div class="user-row">
+                <form action="/pos/usuarios/{{ user.id }}/actualizar" method="POST" style="display:contents">
+                  {{ csrf_input()|safe }}
+                  <input name="display_name" value="{{ user.display_name }}">
+                  <select name="role">{% for key, label in role_labels.items() %}<option value="{{ key }}" {% if user.role == key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+                  <button class="small-action" type="submit">Guardar</button>
+                </form>
+                <form action="/pos/usuarios/{{ user.id }}/eliminar" method="POST">{{ csrf_input()|safe }}<button class="small-action danger-action" type="submit">Eliminar</button></form>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-configuracion">
+          <div class="qu-card glass">
+            <div class="qu-kicker">Configuración</div>
+            <h2>Panel de administración</h2>
+            {% for key, label in quantus_only_features.items() %}
+            <div class="blocked-feature"><div><strong>{{ label }}</strong><span>Solo habilitable por SuperAdmin Quantus.</span></div><span class="stock-pill stock-danger">Bloqueado</span></div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="view" id="view-shopper"><div class="qu-card glass"><div class="qu-kicker">App Shopper</div><h2>Complemento disponible</h2><p class="qu-muted">Módulo visible como demo comercial, habilitación controlada por Quantus.</p></div></section>
+        <section class="view" id="view-cliente"><div class="qu-card glass"><div class="qu-kicker">App Cliente</div><h2>Catálogo cliente</h2><p class="qu-muted">Vista de cliente para demostrar tienda conectada al POS.</p></div></section>
+        <section class="view" id="view-ayuda"><div class="qu-card glass"><div class="qu-kicker">Ayuda</div><h2>Centro de ayuda</h2><p class="qu-muted">Protocolos de caja, inventario, respaldo de boletas y modo local.</p></div></section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const csrfToken = "{{ csrf_token() }}";
+    const offlineQueueKey = "quantus_pos_offline_sales_{{ workspace.key }}";
+    let cart = [];
+    function money(n) { return "$" + Math.round(n).toLocaleString("es-CL"); }
+    function switchView(view) {
+      document.querySelectorAll(".view").forEach((panel) => panel.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach((btn) => btn.classList.remove("active"));
+      const panel = document.getElementById("view-" + view);
+      if (panel) panel.classList.add("active");
+      const btn = document.querySelector('.nav-btn[data-view="' + view + '"]');
+      if (btn) btn.classList.add("active");
+      document.querySelectorAll(".nav-active-indicator").forEach((el) => el.remove());
+      if (btn) btn.insertAdjacentHTML("afterbegin", '<span class="nav-active-indicator"></span>');
+      const labels = {resumen:["Inicio","Resumen"],ordenes:["Compras","Órdenes de compra"],ingresos:["Ingresos","Nuevo producto"],ventas:["Ventas","Caja POS"],inventario:["Inventario","Stock"],usuarios:["Clientes","Usuarios y perfiles"],configuracion:["Configuración","Panel"],reportes:["Reportes","Ventas demo"],analytics:["Analytics","IA comercial"],shopper:["Ventas","App Shopper"],cliente:["Ventas","App Cliente"],ayuda:["Ayuda","Centro de ayuda"]};
+      const next = labels[view] || ["Punto de Venta","Panel"];
+      document.getElementById("crumb-section").textContent = next[0];
+      document.getElementById("crumb-page").textContent = next[1];
+    }
+    function registrarIngreso() {
+      const box = document.createElement("div");
+      box.className = "ok-note qu-card";
+      box.textContent = "OC-DEMO-0001 REGISTRADA: producto guardado e inventario actualizado.";
+      document.querySelector("#view-ingresos .ipv-main").prepend(box);
+      setTimeout(() => box.remove(), 3600);
+    }
+    function addToCart(name, price, sku) {
+      const existing = cart.find((item) => item.sku === sku);
+      if (existing) existing.qty += 1; else cart.push({ name, price, sku, qty: 1 });
+      renderCart();
+    }
+    function cartTotals() {
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const net = Math.round(total / 1.19);
+      return { total, net, iva: total - net };
+    }
+    function renderCart() {
+      const list = document.getElementById("cart-list");
+      const totals = cartTotals();
+      list.innerHTML = cart.length ? cart.map((item) => `<div class="cart-row"><div><strong>${item.name}</strong><br><small>${item.sku} x ${item.qty}</small></div><strong>${money(item.price * item.qty)}</strong></div>`).join("") : '<p class="qu-muted">Selecciona productos del catálogo.</p>';
+      document.getElementById("net-txt").textContent = money(totals.net);
+      document.getElementById("iva-txt").textContent = money(totals.iva);
+      document.getElementById("total-txt").textContent = money(totals.total);
+      document.getElementById("checkout-btn").disabled = cart.length === 0;
+    }
+    function processCheckout() {
+      if (!cart.length) return;
+      const receipt = generateReceipt();
+      document.getElementById("sale-toast").style.display = "block";
+      saveReceiptPdf(receipt);
+    }
+    function generateReceipt() {
+      const totals = cartTotals();
+      const receipt = document.getElementById("receipt-print-area");
+      receipt.style.display = "block";
+      receipt.dataset.receiptStatus = "ready_to_print";
+      document.getElementById("receipt-number").textContent = "VENTA #49102 REGISTRADA";
+      document.getElementById("receipt-lines").innerHTML = cart.map((item) => `<div class="receipt-row"><span>${item.name} x ${item.qty}</span><strong>${money(item.price * item.qty)}</strong></div>`).join("");
+      document.getElementById("receipt-net").textContent = money(totals.net);
+      document.getElementById("receipt-iva").textContent = money(totals.iva);
+      document.getElementById("receipt-total").textContent = money(totals.total);
+      return { items: cart.slice(), totals };
+    }
+    function printReceipt() { window.print(); }
+    async function saveReceiptPdf(receipt) {
+      try {
+        const response = await fetch("/pos/boletas/respaldo", { method: "POST", headers: {"Content-Type":"application/json","X-CSRFToken":csrfToken}, body: JSON.stringify(receipt) });
+        if (!response.ok) throw new Error("backup_failed");
+        const data = await response.json();
+        document.getElementById("receipt-pdf-status").textContent = "Guardado";
+        const link = document.getElementById("receipt-pdf-link");
+        link.href = data.url || "#";
+        link.style.display = "block";
+      } catch (error) { queueOfflineSale(receipt); }
+    }
+    function queueOfflineSale(receipt) {
+      const pending = JSON.parse(localStorage.getItem(offlineQueueKey) || "[]");
+      pending.push({ ...receipt, offline_id: "offline-" + Date.now(), status: "offline_queued" });
+      localStorage.setItem(offlineQueueKey, JSON.stringify(pending));
+      updateOfflineStatus();
+      document.getElementById("receipt-pdf-status").textContent = "Pendiente modo local";
+    }
+    async function syncOfflineSales() {
+      const pending = JSON.parse(localStorage.getItem(offlineQueueKey) || "[]");
+      if (!pending.length) return updateOfflineStatus();
+      try {
+        const response = await fetch("/pos/sync/offline-sales", { method: "POST", headers: {"Content-Type":"application/json","X-CSRFToken":csrfToken}, body: JSON.stringify({ sales: pending }) });
+        if (!response.ok) throw new Error("sync_failed");
+        localStorage.removeItem(offlineQueueKey);
+      } catch (error) {}
+      updateOfflineStatus();
+    }
+    function updateOfflineStatus() {
+      const pending = JSON.parse(localStorage.getItem(offlineQueueKey) || "[]");
+      const status = document.getElementById("offline-sync-status");
+      if (status) status.textContent = "Modo local: " + pending.length + " ventas pendientes";
+    }
+    renderCart();
+    updateOfflineStatus();
+  </script>
+</body>
+</html>

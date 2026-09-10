@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Farmacia San Juan">
+  <defs>
+    <linearGradient id="fsj-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#082f49"/>
+      <stop offset="100%" stop-color="#031525"/>
+    </linearGradient>
+    <linearGradient id="fsj-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="fsj-teal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4bf"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="36" fill="url(#fsj-bg)" stroke="#0369a1" stroke-width="2"/>
+  
+  <!-- Clinical Medical Shield Outline -->
+  <path d="M100,24 C132,24 154,34 154,66 C154,106 122,136 100,146 C78,136 46,106 46,66 C46,34 68,24 100,24 Z" fill="rgba(2, 132, 199, 0.12)" stroke="url(#fsj-cyan)" stroke-width="3.5" stroke-linejoin="round"/>
+  
+  <!-- Modern Medical Cross & DNA Nodes -->
+  <g transform="translate(100, 80)">
+    <!-- Cross -->
+    <path d="M-10,-32 L10,-32 L10,-10 L32,-10 L32,10 L10,10 L10,32 L-10,32 L-10,10 L-32,10 L-32,-10 L-10,-10 Z" fill="url(#fsj-cyan)"/>
+    
+    <!-- Heartbeat pulse line -->
+    <path d="M-26,0 L-14,0 L-6,-16 L4,18 L12,-8 L18,0 L26,0" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Health dots -->
+    <circle cx="0" cy="-38" r="4.5" fill="url(#fsj-teal)"/>
+    <circle cx="0" cy="38" r="4.5" fill="url(#fsj-teal)"/>
+  </g>
+  
+  <!-- Text Brand -->
+  <text x="100" y="168" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="14" font-weight="900" letter-spacing="1.2" fill="#f0f9ff">SAN JUAN</text>
+  <text x="100" y="184" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" letter-spacing="2.5" fill="#38bdf8">FARMACIA CLINICAL</text>
+</svg>

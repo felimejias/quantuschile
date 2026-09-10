@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador Semántico Histórico del Diario Oficial | Quantus Chile</title>
+  <meta name="description" content="Buscador semántico e interactivo sobre más de 77.000 publicaciones del Diario Oficial de Chile. Notificaciones judiciales, demandas por aviso, sociedades y minería.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #06101f;
+      --bg-card: #0b172b;
+      --bg-card-hover: #112240;
+      --border-color: rgba(56, 189, 248, 0.18);
+      --border-highlight: rgba(56, 189, 248, 0.45);
+      --cyan-bright: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.15);
+      --text-white: #f8fafc;
+      --text-muted: #94a3b8;
+      --gold-accent: #fbbf24;
+      --emerald-accent: #10b981;
+      --rose-accent: #f43f5e;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV HEADER */
+    .top-nav {
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(6, 16, 31, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 14px 24px;
+    }
+    .top-nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .nav-brand img { height: 32px; width: auto; }
+    .nav-brand-text { font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em; }
+    .nav-brand-badge {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan-bright);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-link { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.2s; }
+    .nav-link:hover, .nav-link.active { color: var(--cyan-bright); }
+    .btn-nav-action {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-nav-action:hover { opacity: 0.92; transform: translateY(-1px); }
+
+    /* HERO SECTION */
+    .hero-search-section {
+      padding: 48px 24px 32px;
+      max-width: 1180px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 30px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--cyan-bright);
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin: 0 0 12px;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan-bright) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin: 0 0 28px;
+      max-width: 820px;
+      line-height: 1.5;
+    }
+
+    /* SEARCH BAR */
+    .search-box-container {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: 16px;
+      padding: 10px 14px;
+      display: flex;
+      gap: 12px;
+      box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.5);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-box-container:focus-within {
+      border-color: var(--cyan-bright);
+      box-shadow: 0 12px 36px -8px rgba(56, 189, 248, 0.25);
+    }
+    .search-icon-wrap {
+      display: flex;
+      align-items: center;
+      color: var(--cyan-bright);
+      padding-left: 6px;
+    }
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+    }
+    .search-input::placeholder { color: #64748b; }
+    .btn-search {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-search:hover { opacity: 0.95; transform: translateY(-1px); }
+
+    /* QUICK CHIPS */
+    .quick-chips-wrap {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .chips-label { font-size: 12px; font-weight: 600; color: #64748b; margin-right: 4px; }
+    .quick-chip {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quick-chip:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: var(--cyan-bright);
+      color: #fff;
+    }
+
+    /* FILTERS BAR */
+    .filters-bar {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: rgba(11, 23, 43, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-group { display: flex; gap: 8px; align-items: center; }
+    .filter-label { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.03em; }
+    .filter-select {
+      background: #0f172a;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      cursor: pointer;
+    }
+    .filter-select:focus { border-color: var(--cyan-bright); }
+
+    /* RESULTS MAIN */
+    .results-main-section {
+      max-width: 1180px;
+      margin: 0 auto 60px;
+      width: 100%;
+      padding: 0 24px;
+      box-sizing: border-box;
+      flex: 1;
+    }
+    .results-stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .results-stats-count { font-weight: 700; color: var(--cyan-bright); }
+
+    /* FACET TABS */
+    .facet-tabs-wrap {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+      padding-bottom: 4px;
+    }
+    .facet-tab {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .facet-tab:hover, .facet-tab.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan-bright);
+      color: #fff;
+    }
+    .facet-tab-count {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+      margin-left: 6px;
+    }
+
+    /* RESULT CARD */
+    .pub-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 14px;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pub-card:hover {
+      border-color: var(--border-highlight);
+      background: var(--bg-card-hover);
+      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+    }
+    .pub-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .pub-badges { display: flex; gap: 8px; align-items: center; }
+    .badge-sec {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-sec.judicial { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .badge-sec.sociedad { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-sec.mineria { background: rgba(56, 189, 248, 0.15); color: var(--cyan-bright); border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-sec.marca { background: rgba(251, 191, 36, 0.15); color: #fcd34d; border: 1px solid rgba(251, 191, 36, 0.3); }
+    .badge-sec.general { background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.3); }
+
+    .pub-meta-top { font-size: 12px; color: var(--text-muted); display: flex; gap: 14px; font-family: 'JetBrains Mono', monospace; }
+
+    .pub-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0;
+      color: #fff;
+      line-height: 1.35;
+    }
+    .pub-snippet {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      background: rgba(15, 23, 42, 0.5);
+      border-left: 3px solid var(--cyan-bright);
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+    }
+    .pub-snippet mark.hl {
+      background: rgba(251, 191, 36, 0.35);
+      color: #fff;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .pub-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pub-links { display: flex; gap: 12px; }
+    .btn-card-action {
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-card-pdf {
+      background: rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #e2e8f0;
+    }
+    .btn-card-pdf:hover { background: rgba(148, 163, 184, 0.22); color: #fff; }
+    .btn-card-ai {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan-bright);
+      cursor: pointer;
+    }
+    .btn-card-ai:hover { background: rgba(56, 189, 248, 0.25); color: #fff; }
+
+    /* EMPTY & LOADING STATES */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--bg-card);
+      border: 1px dashed rgba(148, 163, 184, 0.25);
+      border-radius: 16px;
+    }
+    .empty-state-icon { font-size: 42px; margin-bottom: 12px; opacity: 0.8; }
+    .empty-state-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .empty-state-desc { font-size: 14px; color: var(--text-muted); max-width: 480px; margin: 0 auto 20px; }
+
+    /* PAGINATION */
+    .pagination-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 28px;
+    }
+    .btn-page {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-page:hover:not(:disabled), .btn-page.active {
+      background: var(--cyan-bright);
+      color: #06101f;
+      border-color: var(--cyan-bright);
+      font-weight: 700;
+    }
+    .btn-page:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* AI DIAGNOSTIC MODAL */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 16, 31, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #0b172b;
+      border: 1.5px solid var(--cyan-bright);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px; right: 18px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: 1.8rem; }
+      .search-box-container { flex-direction: column; }
+      .btn-search { width: 100%; justify-content: center; }
+      .filters-bar { flex-direction: column; align-items: flex-start; }
+      .pub-actions { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <header class="top-nav">
+    <div class="top-nav-inner">
+      <a href="/" class="nav-brand">
+        <img src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <span class="nav-brand-text">QUANTUS</span>
+        <span class="nav-brand-badge">Radar DO</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/vigilancia" class="nav-link">Vigilancia 24/7</a>
+        <a href="/do/buscador" class="nav-link active">Buscador Histórico</a>
+        <a href="/marcas" class="nav-link">Marcas INAPI</a>
+        <a href="/licitaciones" class="nav-link">Licitaciones</a>
+        <a href="/vigilancia#planes" class="btn-nav-action">Activar Membresía</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO & SEARCH SECTION -->
+  <section class="hero-search-section">
+    <div class="hero-pill">
+      <span>⚡ SQLite FTS5 Indexado en Vivo</span>
+      <span>•</span>
+      <span>🏛️ 77.000+ Publicaciones Históricas</span>
+    </div>
+    <h1 class="hero-title">Buscador Semántico del Diario Oficial</h1>
+    <p class="hero-desc">
+      Consulta publicaciones oficiales, edictos de notificación ficta (Art. 54 CPC), juicios de cobro bancario, constituciones de sociedades SpA y concesiones mineras con lenguaje natural y coincidencia conceptual.
+    </p>
+
+    <!-- SEARCH BAR -->
+    <div class="search-box-container">
+      <div class="search-icon-wrap">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <input type="text" id="searchInput" class="search-input" placeholder="Escribe un nombre, RUT, término jurídico o frase (ej. juicio cobro banco, concesion minera)..." value="{{ initial_query or '' }}">
+      <button id="btnSearch" class="btn-search">
+        <span>Buscar en Histórico</span>
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- QUICK CHIPS -->
+    <div class="quick-chips-wrap">
+      <span class="chips-label">Búsquedas Frecuentes:</span>
+      <button class="quick-chip" data-query="juicio de cobro banco">⚖️ Cobro Bancario y Embargos</button>
+      <button class="quick-chip" data-query="notificacion ficta articulo 54">📜 Notificación Ficta (Art. 54)</button>
+      <button class="quick-chip" data-query="concesion minera rancagua">⛏️ Concesiones Mineras</button>
+      <button class="quick-chip" data-query="constitucion spa capital">🏢 Sociedades SpA</button>
+      <button class="quick-chip" data-query="quiebra liquidacion voluntaria">🚨 Insolvencia y Quiebra</button>
+    </div>
+
+    <!-- FILTERS BAR -->
+    <div class="filters-bar">
+      <div class="filter-group">
+        <span class="filter-label">Sección:</span>
+        <select id="filterSeccion" class="filter-select">
+          <option value="todas">Todas las Secciones</option>
+          <option value="Judiciales">Publicaciones Judiciales</option>
+          <option value="Empresas">Empresas y Cooperativas</option>
+          <option value="Mineria">Boletín Oficial de Minería</option>
+          <option value="Marcas">Marcas y Propiedad Industrial</option>
+          <option value="Avisos">Avisos de Interés General</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Período:</span>
+        <select id="filterDias" class="filter-select">
+          <option value="0">Histórico Completo (2026 y anteriores)</option>
+          <option value="7">Últimos 7 días</option>
+          <option value="30">Últimos 30 días</option>
+          <option value="90">Últimos 90 días</option>
+          <option value="365">Último año</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Tecnología:</span>
+        <span style="font-size: 12px; color: var(--cyan-bright); font-weight: 700; font-family: 'JetBrains Mono', monospace;">BM25 Ranking</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS SECTION -->
+  <main class="results-main-section">
+    <!-- STATS -->
+    <div class="results-stats-header">
+      <div>
+        Resultados: <span id="statsCount" class="results-stats-count">0 publicaciones</span>
+      </div>
+      <div id="statsQueryDisplay" style="font-style: italic;"></div>
+    </div>
+
+    <!-- FACET TABS -->
+    <div id="facetTabsContainer" class="facet-tabs-wrap"></div>
+
+    <!-- RESULTS LIST -->
+    <div id="resultsList">
+      <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-title">Inicia una búsqueda en el Diario Oficial</div>
+        <div class="empty-state-desc">Ingresa términos como nombres de empresas, RUTs, juicios ejecutivos o concesiones mineras para explorar el histórico.</div>
+      </div>
+    </div>
+
+    <!-- PAGINATION -->
+    <div id="paginationBar" class="pagination-bar" style="display: none;"></div>
+  </main>
+
+  <!-- AI MODAL -->
+  <div id="aiModal" class="modal-backdrop">
+    <div class="modal-box">
+      <button id="modalClose" class="modal-close">&times;</button>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+        <span style="background: rgba(56, 189, 248, 0.15); color: var(--cyan-bright); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 11px;">QUANTUS INTELLIGENCE</span>
+        <span id="modalDocType" style="font-size: 12px; color: #94a3b8;">Diagnóstico Jurídico IA</span>
+      </div>
+      <h3 id="modalTitle" style="margin: 0 0 14px; font-size: 1.25rem; color: #fff; line-height: 1.3;"></h3>
+      <div id="modalSnippet" style="background: rgba(15, 23, 42, 0.7); padding: 12px; border-radius: 8px; font-size: 13px; color: #cbd5e1; margin-bottom: 20px; line-height: 1.5;"></div>
+      
+      <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+        <div style="font-size: 13px; font-weight: 700; color: var(--cyan-bright); margin-bottom: 6px;">💡 Explicación en Lenguaje Simple:</div>
+        <div id="modalExplanation" style="font-size: 13px; color: #e2e8f0; line-height: 1.5;">
+          Esta publicación ha sido indexada oficialmente en la base histórica del Diario Oficial. Si está relacionada con tu patrimonio, empresa o marcas, te recomendamos mantener un monitoreo activo para ejercer plazos legales de defensa oportuna.
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: flex-end;">
+        <a id="modalOfficialPdf" href="#" target="_blank" class="btn-card-action btn-card-pdf" style="padding: 10px 18px; font-size: 13px;">Ver PDF Oficial</a>
+        <a href="/vigilancia#planes" class="btn-search" style="padding: 10px 18px; font-size: 13px; text-decoration: none;">Monitorear 24/7 con Quantus</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentQuery = "{{ initial_query or '' }}";
+    let currentSeccion = "todas";
+    let currentDias = 0;
+    let currentOffset = 0;
+    const limit = 15;
+
+    const searchInput = document.getElementById("searchInput");
+    const btnSearch = document.getElementById("btnSearch");
+    const filterSeccion = document.getElementById("filterSeccion");
+    const filterDias = document.getElementById("filterDias");
+    const resultsList = document.getElementById("resultsList");
+    const statsCount = document.getElementById("statsCount");
+    const statsQueryDisplay = document.getElementById("statsQueryDisplay");
+    const facetTabsContainer = document.getElementById("facetTabsContainer");
+    const paginationBar = document.getElementById("paginationBar");
+
+    // Modal
+    const aiModal = document.getElementById("aiModal");
+    const modalClose = document.getElementById("modalClose");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalSnippet = document.getElementById("modalSnippet");
+    const modalOfficialPdf = document.getElementById("modalOfficialPdf");
+
+    modalClose.onclick = () => { aiModal.style.display = "none"; };
+    aiModal.onclick = (e) => { if (e.target === aiModal) aiModal.style.display = "none"; };
+
+    function executeSearch(resetPage = true) {
+      const q = searchInput.value.trim();
+      if (!q) return;
+
+      if (resetPage) currentOffset = 0;
+      currentQuery = q;
+      currentSeccion = filterSeccion.value;
+      currentDias = parseInt(filterDias.value) || 0;
+
+      btnSearch.disabled = true;
+      btnSearch.innerHTML = "Buscando...";
+      resultsList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">⚡</div>
+          <div class="empty-state-title">Consultando motor FTS5...</div>
+          <div class="empty-state-desc">Rastreando 77.000+ textos históricos del Diario Oficial.</div>
+        </div>
+      `;
+
+      fetch("/api/do/search_semantic", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          q: currentQuery,
+          seccion: currentSeccion,
+          dias: currentDias,
+          limit: limit,
+          offset: currentOffset
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        btnSearch.disabled = false;
+        btnSearch.innerHTML = `Buscar en Histórico <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>`;
+        renderResults(data);
+      })
+      .catch(err => {
+        btnSearch.disabled = false;
+        btnSearch.innerHTML = "Buscar en Histórico";
+        resultsList.innerHTML = `<div class="empty-state"><div class="empty-state-title" style="color: #f43f5e;">Error de conexión</div><div class="empty-state-desc">${err.message}</div></div>`;
+      });
+    }
+
+    function renderResults(data) {
+      const total = data.total || 0;
+      statsCount.textContent = `${total.toLocaleString()} publicaciones`;
+      statsQueryDisplay.textContent = `Consulta: "${data.query_original || currentQuery}"`;
+
+      // Render Facets
+      if (data.facetas_seccion && data.facetas_seccion.length > 0) {
+        let tabsHtml = `<button class="facet-tab ${currentSeccion === 'todas' ? 'active' : ''}" onclick="selectFacet('todas')">Todas <span class="facet-tab-count">${total}</span></button>`;
+        data.facetas_seccion.forEach(f => {
+          const isActive = currentSeccion.toLowerCase() === f.seccion.toLowerCase();
+          tabsHtml += `<button class="facet-tab ${isActive ? 'active' : ''}" onclick="selectFacet('${f.seccion}')">${f.seccion} <span class="facet-tab-count">${f.total}</span></button>`;
+        });
+        facetTabsContainer.innerHTML = tabsHtml;
+      } else {
+        facetTabsContainer.innerHTML = "";
+      }
+
+      // Render Cards
+      if (!data.resultados || data.resultados.length === 0) {
+        resultsList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <div class="empty-state-title">Sin publicaciones coincidentes</div>
+            <div class="empty-state-desc">No se encontraron menciones para "${currentQuery}" con los filtros actuales. Prueba ampliando el período de búsqueda o usando términos más generales.</div>
+          </div>
+        `;
+        paginationBar.style.display = "none";
+        return;
+      }
+
+      let html = "";
+      data.resultados.forEach(item => {
+        html += `
+          <article class="pub-card">
+            <div class="pub-card-top">
+              <div class="pub-badges">
+                <span class="badge-sec ${item.badge_type}">${item.seccion || 'Oficial'}</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--cyan-bright); background: rgba(56,189,248,0.1); padding: 2px 6px; border-radius: 4px;">Relevancia: ${item.relevancia_score}%</span>
+              </div>
+              <div class="pub-meta-top">
+                <span>📅 ${item.fecha}</span>
+                <span>Edición: ${item.edicion}</span>
+                <span>CVE: ${item.cve}</span>
+              </div>
+            </div>
+
+            <h2 class="pub-title">${item.titulo}</h2>
+            <div class="pub-snippet">${item.snippet || 'Sin extracto disponible'}</div>
+
+            <div class="pub-actions">
+              <div class="pub-links">
+                <a href="${item.url_oficial}" target="_blank" rel="noopener" class="btn-card-action btn-card-pdf">
+                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                  Ver Diario Oficial (PDF)
+                </a>
+                <button class="btn-card-action btn-card-ai" onclick='openAiModal(${JSON.stringify(item.titulo)}, ${JSON.stringify(item.snippet)}, "${item.url_oficial}")'>
+                  <span>✨ Diagnosticar con IA</span>
+                </button>
+              </div>
+              <span style="font-size: 11px; color: #64748b;">Diario Oficial de Chile</span>
+            </div>
+          </article>
+        `;
+      });
+      resultsList.innerHTML = html;
+
+      // Render Pagination
+      renderPagination(data);
+    }
+
+    function selectFacet(sec) {
+      currentSeccion = sec;
+      filterSeccion.value = sec;
+      executeSearch(true);
+    }
+
+    function renderPagination(data) {
+      const totalPages = data.total_paginas || 1;
+      const currentPage = data.pagina_actual || 1;
+
+      if (totalPages <= 1) {
+        paginationBar.style.display = "none";
+        return;
+      }
+      paginationBar.style.display = "flex";
+
+      let pagHtml = `
+        <button class="btn-page" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">← Anterior</button>
+      `;
+
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, currentPage + 2);
+
+      for (let p = startPage; p <= endPage; p++) {
+        pagHtml += `<button class="btn-page ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`;
+      }
+
+      pagHtml += `
+        <button class="btn-page" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">Siguiente →</button>
+      `;
+      paginationBar.innerHTML = pagHtml;
+    }
+
+    function goToPage(page) {
+      currentOffset = (page - 1) * limit;
+      executeSearch(false);
+      window.scrollTo({ top: 380, behavior: 'smooth' });
+    }
+
+    function openAiModal(titulo, snippet, url) {
+      modalTitle.textContent = titulo;
+      modalSnippet.innerHTML = snippet;
+      modalOfficialPdf.href = url;
+      aiModal.style.display = "flex";
+    }
+
+    // Event Listeners
+    btnSearch.addEventListener("click", () => executeSearch(true));
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") executeSearch(true);
+    });
+
+    filterSeccion.addEventListener("change", () => executeSearch(true));
+    filterDias.addEventListener("change", () => executeSearch(true));
+
+    document.querySelectorAll(".quick-chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        searchInput.value = chip.getAttribute("data-query");
+        executeSearch(true);
+      });
+    });
+
+    // Auto-search if initial query is provided
+    if (currentQuery) {
+      executeSearch(true);
+    }
+  </script>
+</body>
+</html>

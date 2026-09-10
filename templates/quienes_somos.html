@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiénes Somos | Quantus Chile SpA</title>
+  <meta name="description" content="Conoce la misión, estructura y valores de Quantus Chile SpA. Inteligencia y automatización de datos públicos para empresas chilenas.">
+  <link rel="canonical" href="https://www.quantuschile.cl/quienes-somos">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-slate: #f8fafc;
+      --border-color: #e2e8f0;
+      --cyan-bright: #0284c7;
+      --cyan-dark: #0369a1;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    html, body {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+      color: var(--text-main);
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.7;
+    }
+
+    body::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    .shell {
+      width: min(calc(100% - 48px), 920px);
+      margin: 0 auto;
+    }
+
+    .about-content {
+      padding: 28px 0 60px;
+    }
+
+    .about-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 36px 40px;
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .about-card h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 0;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .about-card h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+
+    .about-card p {
+      font-size: 16px;
+      color: #334155;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+
+    .module-list-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .module-mini-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .corporate-box {
+      background: #f8fafc;
+      border: 1.5px solid #0284c7;
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin: 32px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .corp-details strong {
+      display: block;
+      font-size: 16px;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .corp-details span {
+      font-size: 13.5px;
+      color: #64748b;
+    }
+
+    .btn-action-primary {
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-action-primary:hover {
+      background: #0369a1;
+    }
+
+    @media (max-width: 640px) {
+      .about-card {
+        padding: 24px 20px;
+      }
+      .about-content {
+        padding: 16px 0 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  {% set active_module = 'quienes_somos' %}
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <!-- CONTENT SECTION -->
+    <section class="about-content">
+      <div class="shell">
+        <article class="about-card">
+          <h2>Nuestra Razón de Ser</h2>
+          <p>
+            <strong>Quantus Chile SpA</strong> nace de una idea simple: las PYMEs chilenas pierden dinero, plazos y oportunidades no por falta de esfuerzo, sino porque el Estado y el mercado publican información crítica en decenas de fuentes distintas, con formatos densos y sin ningún filtro pensado para una empresa pequeña.
+          </p>
+          <p>
+            Un Diario Oficial que se lee en tribunales, un portal de Mercado Público con miles de licitaciones activas, remates judiciales que se publican con días de margen, un registro de marcas con ventanas de oposición que corren aunque nadie te avise — cada uno de estos sistemas fue diseñado para expertos, no para el dueño de una ferretería, una constructora o un estudio contable que no tiene tiempo de revisarlos a diario.
+          </p>
+
+          <h3>Qué hacemos</h3>
+          <p>
+            Construimos radares automatizados que vigilan estas fuentes oficiales las 24 horas, filtran lo irrelevante y traducen lo importante a lenguaje simple: <strong>qué pasó, por qué te afecta y qué plazo tienes para actuar</strong>.
+          </p>
+          
+          <div class="module-list-grid">
+            <div class="module-mini-item"><span>📰</span> Diario Oficial</div>
+            <div class="module-mini-item"><span>🏛️</span> Mercado Público</div>
+            <div class="module-mini-item"><span>🏠</span> Remates Judiciales</div>
+            <div class="module-mini-item"><span>🏷️</span> Marcas INAPI</div>
+            <div class="module-mini-item"><span>⚖️</span> Ley 21.719</div>
+            <div class="module-mini-item"><span>💼</span> Empleos Públicos</div>
+            <div class="module-mini-item"><span>🖥️</span> ERP / Punto de Venta</div>
+          </div>
+
+          <p>
+            Todos nuestros módulos operan bajo el mismo principio fundamental: <strong>menos tiempo buscando, más tiempo decidiendo.</strong>
+          </p>
+
+          <h3>Con qué operamos</h3>
+          <p>
+            Trabajamos exclusivamente sobre fuentes públicas y oficiales del Estado de Chile (Diario Oficial, Mercado Público, PJUD, TGR, Aduanas, INAPI) y cumplimos estrictamente con la <strong>Ley 19.628</strong> y la <strong>Ley 21.719</strong> de Protección de Datos Personales en todo el tratamiento de la información de nuestros clientes.
+          </p>
+
+          <h3>Dónde estamos</h3>
+          <p>
+            Quantus Chile SpA opera desde Rancagua, Región del Libertador General Bernardo O'Higgins, con infraestructura de monitoreo y cobertura a nivel nacional en las <strong>16 regiones de Chile</strong>.
+          </p>
+
+          <div class="corporate-box">
+            <div class="corp-details">
+              <strong>Quantus Chile SpA · RUT 78.478.612-9</strong>
+              <span>Rancagua, Región de O'Higgins · contacto@quantuschile.cl</span>
+            </div>
+            <div>
+              <a href="/seguridad-confianza" class="btn-action-primary">Seguridad y Confianza →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

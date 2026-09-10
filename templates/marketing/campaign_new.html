@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Campaña — Quantus Marketing Center</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .mkt-container { max-width: 700px; margin: 0 auto; padding: 2rem 1rem; }
+        .mkt-header h1 { font-size: 1.5rem; color: #f0f0f0; margin: 0.5rem 0 2rem; }
+        .back-link { color: #a5b4fc; text-decoration: none; font-size: 0.875rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.65rem 0.9rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 0.5rem; color: #e0e0e0; font-size: 0.9rem; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: rgba(99,102,241,0.5); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .form-group select option { background: #1a1a24; }
+        .form-group .help { font-size: 0.75rem; color: #666; margin-top: 0.3rem; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; border: none; padding: 0.65rem 2rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.9rem; width: 100%; }
+        .btn-primary:hover { opacity: 0.9; }
+        .info-box { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.15); border-radius: 0.5rem; padding: 1rem; margin-bottom: 2rem; font-size: 0.8rem; color: #93c5fd; }
+    </style>
+</head>
+<body style="background: #0f0f14; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif;">
+    <div class="mkt-container">
+        <a href="/marketing/campaigns/" class="back-link">← Campañas</a>
+        <h1>✨ Nueva Campaña</h1>
+
+        <div class="info-box">
+            ℹ️ Al crear una campaña, podrás generar contenido diferenciado para cada canal
+            (Instagram, Facebook, LinkedIn, WhatsApp). Todo pasa por revisión de cumplimiento
+            y aprobación humana antes de programarse.
+        </div>
+
+        <form method="POST" action="/marketing/campaigns/new">
+            <div class="form-group">
+                <label for="name">Nombre de la campaña</label>
+                <input type="text" id="name" name="name" required
+                       placeholder="Ej: Radar Diario Oficial — Agosto 2026">
+            </div>
+
+            <div class="form-group">
+                <label for="service_category">Servicio</label>
+                <select id="service_category" name="service_category" required>
+                    <option value="">Seleccionar servicio...</option>
+                    <option value="diario_oficial">Diario Oficial</option>
+                    <option value="licitaciones">Licitaciones</option>
+                    <option value="inapi">Marcas INAPI</option>
+                    <option value="remates">Remates</option>
+                    <option value="ley_21719">Ley 21.719</option>
+                    <option value="erp">Quantus ERP</option>
+                    <option value="agentes_ia">Agentes de IA</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="flow_type">Tipo de flujo</label>
+                <select id="flow_type" name="flow_type" required>
+                    <option value="ORGANIC">Orgánico (Instagram, Facebook, LinkedIn)</option>
+                    <option value="DIRECT">Directo (WhatsApp, Email)</option>
+                    <option value="BOTH">Ambos</option>
+                </select>
+                <div class="help">
+                    <strong>Orgánico</strong>: Publicaciones públicas. No requiere lista de destinatarios.<br>
+                    <strong>Directo</strong>: Mensajería a contactos con consentimiento. Requiere opt-in registrado.<br>
+                    <strong>Ambos</strong>: Genera contenido para los dos flujos.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="target_audience">Audiencia objetivo (opcional)</label>
+                <textarea id="target_audience" name="target_audience" rows="2"
+                          placeholder="Ej: Pymes con necesidad de monitoreo legal"></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">Crear Campaña</button>
+        </form>
+    </div>
+</body>
+</html>

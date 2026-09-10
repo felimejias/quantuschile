@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación de Contacto | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260731-verif">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <a class="brand-link" href="/">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Verificación de Contacto</div>
+        </div>
+      </a>
+    </header>
+
+    <section class="page-hero" style="min-height: auto; padding: 40px 20px;">
+      <div style="max-width: 580px; margin: 0 auto;">
+        <form class="form-panel" action="/confirmar_codigo_verificacion" method="POST">
+          {{ csrf_input()|safe }}
+          <input type="hidden" name="pending_id" value="{{ pending_id }}">
+          
+          <div class="panel-title" style="text-align: center;">
+            <div style="width: 64px; height: 64px; display: grid; place-items: center; margin: 0 auto 16px; border-radius: 18px; color: #38bdf8; background: rgba(56,189,248,0.12); border: 1px solid rgba(56,189,248,0.3); font-size: 32px;">🔐</div>
+            <h1 class="hero-title" style="font-size: 30px;">Confirmar <span>Verificación</span></h1>
+            <p class="hero-subtitle" style="margin-top: 8px; font-size: 15px;">
+              Enviamos un código de verificación de 6 dígitos a <strong>{{ email }}</strong> y <strong>{{ whatsapp }}</strong> para activar las alertas del RUT <strong>{{ rut }}</strong>.
+            </p>
+          </div>
+
+          {% if error %}
+          <div style="background: rgba(239,68,68,0.15); border: 1px solid #ef4444; color: #fca5a5; padding: 12px; border-radius: 8px; margin: 16px 0; font-size: 14px; text-align: center;">
+            ⚠️ {{ error }}
+          </div>
+          {% endif %}
+
+          <div class="form-group" style="margin-top: 20px; text-align: center;">
+            <label class="form-label" for="code" style="font-size: 16px;">Ingresa el código de 6 dígitos *</label>
+            <input id="code" type="text" class="form-control" name="code" required placeholder="Ej. 482910" maxlength="6" style="font-size: 28px; letter-spacing: 8px; text-align: center; font-weight: 900; height: 56px; border-color: #38bdf8;" autoFocus>
+          </div>
+
+          <button type="submit" class="cta-button full" style="margin-top: 20px; padding: 16px; font-size: 18px;">
+            ✓ Verificar y Activar Monitoreo 24/7
+          </button>
+        </form>
+      </div>
+    </section>
+
+    {% include "partials/law_21719.html" %}
+    {% include "partials/legal_footer.html" %}
+  </div>
+</body>
+</html>

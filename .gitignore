@@ -5,3 +5,12 @@ app.py.bak*
 *.pyc
 __pycache__/
 data/*.db
+.env
+.env.bak*
+data/master_auth.json
+data/master_passkeys.json
+._*
+*.log
+backups/
+app.py.tmp
+app.py.prev*

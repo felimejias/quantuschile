@@ -1,0 +1,399 @@
+{% set active_module = active_module|default('') %}
+<header class="public-header">
+  <div class="public-header__inner">
+    <a href="/" class="brand" aria-label="QUANTUS CHILE SpA — INTELLIGENCE BUSINESS">
+      <div class="brand__symbol">
+        <img src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile SpA">
+      </div>
+      <div>
+        <div class="brand__name">
+          QUANTUS <span class="brand__name-accent">CHILE SpA</span>
+        </div>
+        <div class="brand__tagline">
+          INTELLIGENCE BUSINESS
+        </div>
+      </div>
+    </a>
+
+    <nav class="main-navigation" aria-label="Navegación principal">
+      <div class="header-dropdown">
+        <span class="nav-item header-dropdown-btn">Soluciones <span class="caret">▾</span></span>
+        <div class="header-dropdown-menu">
+          <a href="/erp" class="dropdown-link {% if active_module == 'erp' %}active{% endif %}">
+            <span>🖥️ Punto de Venta</span>
+            <span class="badge-pronto">Pronto</span>
+          </a>
+          <a href="/do" class="dropdown-link {% if active_module == 'do' %}active{% endif %}">
+            <span>📰 Diario Oficial</span>
+          </a>
+          <a href="/licitaciones" class="dropdown-link {% if active_module == 'licitaciones' %}active{% endif %}">
+            <span>🏛️ Mercado Público</span>
+            <span class="badge-pronto">Pronto</span>
+          </a>
+          <a href="/inapi" class="dropdown-link {% if active_module == 'inapi' %}active{% endif %}">
+            <span>🏷️ Marcas INAPI</span>
+            <span class="badge-pronto">Pronto</span>
+          </a>
+          <a href="/remates" class="dropdown-link {% if active_module == 'remates' %}active{% endif %}">
+            <span>🏠 Remates</span>
+            <span class="badge-pronto">Pronto</span>
+          </a>
+          <a href="/checklist-ley-21719" class="dropdown-link {% if active_module == 'ley21719' %}active{% endif %}">
+            <span>⚖️ Ley 21.719</span>
+          </a>
+        </div>
+      </div>
+      <a href="/como-funciona" class="nav-item {% if active_module == 'como_funciona' %}active{% endif %}">Cómo trabaja Quantus</a>
+      <a href="/seguridad-confianza" class="nav-item {% if active_module == 'seguridad' %}active{% endif %}">Seguridad y confianza</a>
+      <a href="mailto:contacto@quantuschile.cl" class="nav-item">Contacto</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="/maestro" class="btn-login">Ingresar</a>
+      <a href="mailto:contacto@quantuschile.cl?subject=Solicitud%20Demostracion%20Quantus" class="btn-demo">Solicitar demostración</a>
+      <button type="button" class="burger-btn" aria-label="Abrir menú" aria-expanded="false" onclick="document.querySelector('.mobile-menu').classList.toggle('open'); this.setAttribute('aria-expanded', document.querySelector('.mobile-menu').classList.contains('open'));">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu">
+    <a href="/erp" class="dropdown-link {% if active_module == 'erp' %}active{% endif %}">
+      <span>🖥️ Punto de Venta</span>
+      <span class="badge-pronto">Pronto</span>
+    </a>
+    <a href="/do" class="dropdown-link {% if active_module == 'do' %}active{% endif %}">
+      <span>📰 Diario Oficial</span>
+    </a>
+    <a href="/licitaciones" class="dropdown-link {% if active_module == 'licitaciones' %}active{% endif %}">
+      <span>🏛️ Mercado Público</span>
+      <span class="badge-pronto">Pronto</span>
+    </a>
+    <a href="/inapi" class="dropdown-link {% if active_module == 'inapi' %}active{% endif %}">
+      <span>🏷️ Marcas INAPI</span>
+      <span class="badge-pronto">Pronto</span>
+    </a>
+    <a href="/remates" class="dropdown-link {% if active_module == 'remates' %}active{% endif %}">
+      <span>🏠 Remates</span>
+      <span class="badge-pronto">Pronto</span>
+    </a>
+    <a href="/checklist-ley-21719" class="dropdown-link {% if active_module == 'ley21719' %}active{% endif %}">
+      <span>⚖️ Ley 21.719</span>
+    </a>
+    <a href="/como-funciona" class="nav-item {% if active_module == 'como_funciona' %}active{% endif %}">Cómo trabaja Quantus</a>
+    <a href="/seguridad-confianza" class="nav-item {% if active_module == 'seguridad' %}active{% endif %}">Seguridad y confianza</a>
+    <a href="mailto:contacto@quantuschile.cl" class="nav-item">Contacto</a>
+    <div class="mobile-menu-actions">
+      <a href="/maestro" class="btn-login">Ingresar</a>
+      <a href="mailto:contacto@quantuschile.cl?subject=Solicitud%20Demostracion%20Quantus" class="btn-demo">Solicitar demostración</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .public-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #e2e8f0;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .public-header__inner {
+    width: min(calc(100% - 64px), 1320px);
+    min-height: 80px;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 38px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: max-content;
+    text-decoration: none;
+  }
+
+  .brand__symbol {
+    width: 46px;
+    height: 46px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #0b1728;
+    border: 1px solid rgba(2, 132, 199, 0.4);
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+    padding: 3px;
+  }
+
+  .brand__symbol img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+
+  .brand__name {
+    font-size: 20px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: 0.015em;
+    color: #0f172a;
+    white-space: nowrap;
+  }
+
+  .brand__name-accent {
+    color: #0284c7;
+  }
+
+  .brand__tagline {
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 750;
+    letter-spacing: 0.18em;
+    color: #64748b;
+    white-space: nowrap;
+  }
+
+  .main-navigation {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    justify-content: center;
+  }
+
+  .nav-item {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #0f172a;
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+
+  .nav-item:hover {
+    color: #0284c7;
+  }
+
+  .caret {
+    font-size: 10px;
+    margin-left: 3px;
+  }
+
+  .header-dropdown {
+    position: relative;
+  }
+
+  .header-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px;
+    min-width: 260px;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+    z-index: 10;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .header-dropdown:hover .header-dropdown-menu,
+  .header-dropdown:focus-within .header-dropdown-menu {
+    display: flex;
+  }
+
+  .dropdown-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0f172a;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .dropdown-link:hover {
+    background: rgba(2, 132, 199, 0.08);
+    color: #0284c7;
+  }
+
+  .dropdown-link.active {
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.12);
+  }
+
+  .badge-pronto {
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: rgba(245, 158, 11, 0.16);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #d97706;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-login {
+    padding: 9px 18px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #0f172a;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-login:hover {
+    background: rgba(2, 132, 199, 0.04);
+    color: #0284c7;
+    border-color: #0284c7;
+  }
+
+  .btn-demo {
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 900;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.3);
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-demo:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45);
+  }
+
+  .burger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid rgba(83, 195, 255, 0.3);
+    background: rgba(15, 23, 42, 0.7);
+    cursor: pointer;
+    align-items: center;
+    padding: 0;
+  }
+
+  .burger-btn span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: #55c8ff;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  @media (max-width: 1200px) {
+    .public-header__inner {
+      gap: 24px;
+    }
+    .main-navigation {
+      gap: 22px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .public-header__inner {
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+    }
+    .main-navigation {
+      display: none;
+    }
+    .burger-btn {
+      display: flex;
+    }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 20px 20px;
+      border-top: 1px solid rgba(83, 195, 255, 0.15);
+      background: rgba(8, 18, 39, 0.98);
+    }
+    .mobile-menu.open {
+      display: flex;
+    }
+    .mobile-menu .nav-item,
+    .mobile-menu .dropdown-link {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .mobile-menu-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(83, 195, 255, 0.15);
+    }
+    .mobile-menu-actions .btn-login,
+    .mobile-menu-actions .btn-demo {
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .public-header__inner {
+      width: min(calc(100% - 32px), 1320px);
+      min-height: 70px;
+    }
+    .brand__symbol {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+    }
+    .brand__symbol img {
+      width: 34px !important;
+      height: 34px !important;
+    }
+    .brand__name {
+      font-size: 17px;
+    }
+    .brand__tagline {
+      font-size: 9px;
+    }
+    .btn-login, .btn-demo {
+      display: none;
+    }
+  }
+</style>

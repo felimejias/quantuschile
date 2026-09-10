@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Editorial — Quantus Marketing Center</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .mkt-container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+        .mkt-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .mkt-header h1 { font-size: 1.5rem; color: #f0f0f0; margin: 0; }
+        .mkt-nav { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .mkt-nav a { padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; color: #c4c4c4; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); font-size: 0.875rem; }
+        .mkt-nav a:hover, .mkt-nav a.active { background: rgba(99,102,241,0.15); color: #a5b4fc; border-color: rgba(99,102,241,0.3); }
+        .mkt-table { width: 100%; border-collapse: collapse; }
+        .mkt-table th { text-align: left; padding: 0.75rem 1rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #888; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .mkt-table td { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: #d0d0d0; font-size: 0.875rem; }
+        .mkt-table tr:hover td { background: rgba(255,255,255,0.03); }
+        .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+        .status-SCHEDULED { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .status-PUBLISHED { background: rgba(52,211,153,0.2); color: #34d399; }
+        .status-FAILED { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .back-link { color: #a5b4fc; text-decoration: none; font-size: 0.875rem; }
+    </style>
+</head>
+<body style="background: #0f0f14; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif;">
+    <div class="mkt-container">
+        <div class="mkt-header">
+            <div>
+                <a href="/marketing/" class="back-link">← Dashboard</a>
+                <h1>📅 Calendario Editorial (Simulado MVP)</h1>
+            </div>
+        </div>
+
+        <nav class="mkt-nav">
+            <a href="/marketing/">Dashboard</a>
+            <a href="/marketing/campaigns/">Campañas</a>
+            <a href="/marketing/calendar" class="active">Calendario</a>
+            <a href="/marketing/leads">Prospectos</a>
+            <a href="/marketing/suppressions">Supresiones</a>
+        </nav>
+
+        {% if schedules %}
+        <div style="overflow-x: auto;">
+            <table class="mkt-table">
+                <thead>
+                    <tr>
+                        <th>Fecha / Hora Programada</th>
+                        <th>Campaña</th>
+                        <th>Servicio</th>
+                        <th>Canal</th>
+                        <th>Título / Contenido</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in schedules %}
+                    <tr>
+                        <td><strong>{{ s.scheduled_at }}</strong></td>
+                        <td>{{ s.campaign_name }}</td>
+                        <td>{{ s.service_category | replace('_', ' ') | title }}</td>
+                        <td>{{ s.channel }}</td>
+                        <td>{{ s.title or (s.body[:50] + '...') }}</td>
+                        <td><span class="status-badge status-{{ s.status }}">{{ s.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 4rem; color: #666;">
+            <p style="font-size: 2rem;">📅</p>
+            <p>No hay publicaciones programadas en el calendario.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

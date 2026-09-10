@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integraciones Bancarias & Hardware — Quantus ERP Chile</title>
+  <meta name="description" content="Conoce la red de integraciones bancarias, pasarelas de pago y hardware POS de Quantus ERP en Chile.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { background: #ffffff; color: #334155; margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .top-ribbon-quantus { background: #06101f; border-bottom: 1px solid rgba(56,189,248,0.2); color: #fff; padding: 9px 0; font-size: 12.5px; font-weight: 700; }
+    .ribbon-flex { width: min(calc(100% - 64px), 1280px); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .main-header { background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
+    .header-shell { width: min(calc(100% - 64px), 1280px); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .brand-quantus-official { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-symbol-img { width: 42px; height: 42px; object-fit: contain; border-radius: 10px; }
+    .brand-text-block { display: flex; flex-direction: column; }
+    .brand-name-quantus { font-size: 19px; font-weight: 900; color: #0f172a; letter-spacing: -0.03em; line-height: 1.1; }
+    .brand-name-accent { color: #0284c7; }
+    .brand-tagline-quantus { font-size: 10px; font-weight: 800; color: #64748b; letter-spacing: 0.1em; text-transform: uppercase; }
+    .nav-links-menu { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+    .nav-link-item { color: #0f172a; font-size: 14.5px; font-weight: 600; text-decoration: none; }
+    .nav-link-item.active { color: #0284c7; font-weight: 800; }
+    .btn-cyan-quantus-cta { padding: 11px 22px; border-radius: 10px; background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); color: #fff; font-weight: 800; text-decoration: none; }
+    .section-padding { padding: 80px 0; }
+    .container { width: min(calc(100% - 64px), 1280px); margin: 0 auto; }
+    .title-box { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+    .title-box h1 { font-size: 42px; font-weight: 900; color: #0f172a; margin: 0 0 16px; }
+    .title-box p { font-size: 16px; color: #64748b; }
+    .bank-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .bank-card { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 16px; padding: 24px; text-align: center; font-size: 18px; font-weight: 900; box-shadow: 0 4px 6px rgba(0,0,0,0.04); }
+    .hw-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px; }
+    .hw-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 28px; }
+    .hw-card h3 { font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 8px; }
+    .hw-card p { font-size: 14px; color: #64748b; margin: 0; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main class="section-padding">
+    <div class="container">
+      <div class="title-box">
+        <h1>Integraciones con la banca y tu hardware comercial</h1>
+        <p>Sincronización automatizada con las principales instituciones financieras del país y periféricos POS.</p>
+      </div>
+
+      <div class="bank-grid">
+        <div class="bank-card" style="color: #ec0000;">Scotiabank</div>
+        <div class="bank-card" style="color: #008853;">Bci</div>
+        <div class="bank-card" style="color: #ec0000;">Santander</div>
+        <div class="bank-card" style="color: #0f265c; font-family: serif;">Banco de Chile</div>
+        <div class="bank-card" style="color: #e65100;">BancoEstado</div>
+        <div class="bank-card" style="color: #002d62;">Banco Bice</div>
+        <div class="bank-card" style="color: #5a2a83;">Banco Security</div>
+        <div class="bank-card" style="color: #ec7000;">Banco Itaú</div>
+      </div>
+
+      <div class="hw-grid">
+        <div class="hw-card">
+          <h3>🖨️ Impresoras Térmicas ESC/POS (58mm / 80mm)</h3>
+          <p>Conexión directa vía USB, Red Ethernet o Bluetooth para la impresión instantánea de comprobantes de venta, comandas y vales de caja.</p>
+        </div>
+        <div class="hw-card">
+          <h3>💳 Pasarelas de Pago & Transbank / Redelcom</h3>
+          <p>Integración con terminales de pago con tarjeta de crédito/débito y pasarelas de pago electrónico como Mercado Pago y WebPay Plus.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+</body>
+</html>

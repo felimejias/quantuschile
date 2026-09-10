@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="description" content="Quantus Radar del Diario Oficial de Chile — Monitoreo automático diario y alertas preventivas sobre citaciones judiciales, demandas por aviso, quiebras, sociedades y marcas.">
+  <meta name="keywords" content="Diario Oficial Chile, Alertas RUT, Edictos Judiciales, Notificaciones Judiciales, Ley 21.719, Quantus Intelligence">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vigilancia del Diario Oficial | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-light: #f8fafc;
+      --border-light: #e2e8f0;
+      --text-main: #0f172a;
+      --text-dark: #0f172a;
+      --text-muted: #475569;
+      --text-sub: #64748b;
+      --primary-blue: #0284c7;
+      --primary-hover: #0369a1;
+      --navy-card: #0f172a;
+    }
+
+    body {
+      background: var(--bg-white);
+      color: var(--text-dark);
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    /* MODAL SYSTEM */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(6, 16, 31, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .modal-card {
+      background: #0f172a;
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      padding: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+      position: relative;
+      color: #f8fafc;
+      font-family: inherit;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: none; border: none;
+      color: #94a3b8; font-size: 26px;
+      cursor: pointer; line-height: 1;
+    }
+    .modal-close-btn:hover { color: #fff; }
+    .do-mobile-paybar { display: none; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
+    .form-control {
+      width: 100%; padding: 12px 14px;
+      background: #1e293b; border: 1px solid rgba(148,163,184,0.3);
+      border-radius: 10px; color: #fff; font-size: 14px;
+      box-sizing: border-box; outline: none; transition: border-color 0.2s;
+    }
+    .form-control:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.2); }
+    .btn-submit-pre {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #009ee3 0%, #007eb5 100%);
+      color: #fff; border: none; border-radius: 12px;
+      font-weight: 700; font-size: 15px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 20px; box-shadow: 0 4px 14px rgba(0,158,227,0.4);
+    }
+    .btn-submit-pre:hover { opacity: 0.95; transform: translateY(-1px); }
+    .pay-option-card {
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+      background: #1e293b;
+    }
+    .pay-option-card:hover, .pay-option-card.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    /* HERO SECTION */
+    .do-intel-hero {
+      position: relative;
+      padding: 48px 0 72px;
+      background: #ffffff;
+      color: var(--text-dark);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .do-intel-shell {
+      width: min(calc(100% - 48px), 1280px);
+      margin-inline: auto;
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 960px) {
+      .do-intel-shell { grid-template-columns: 1fr; gap: 36px; }
+    }
+    .do-intel-copy h1 {
+      font-size: clamp(32px, 3.8vw, 48px);
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin: 0 0 20px;
+      color: #0f172a !important;
+    }
+    .do-intel-copy h1 span {
+      color: #0284c7 !important;
+      font-weight: 900;
+    }
+    .do-intel-lead {
+      margin: 0 0 24px;
+      color: var(--text-muted);
+      font-size: clamp(15.5px, 1.5vw, 18px);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    .do-intel-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px;
+      display: grid;
+      gap: 12px;
+    }
+    .do-intel-bullets li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #334155;
+    }
+    .bullet-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--primary-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .do-primary-action {
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      padding: 0 28px;
+      font-size: 15.5px;
+      font-weight: 800;
+      text-decoration: none;
+      background: var(--primary-blue);
+      color: #ffffff;
+      box-shadow: 0 12px 28px rgba(2,132,199,0.3);
+      transition: all 0.2s ease;
+    }
+    .do-primary-action:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .hero-trust-badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+    .trust-badge-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 5px 12px;
+      border-radius: 999px;
+      transition: border-color 0.2s;
+    }
+    .trust-badge-item:hover {
+      border-color: #cbd5e1;
+      background: #f1f5f9;
+    }
+    .trust-badge-item svg {
+      color: #0284c7;
+      flex-shrink: 0;
+    }
+
+    /* RIGHT SIDE COMMAND CENTER MOCKUP */
+    .do-command {
+      display: grid;
+      gap: 14px;
+      align-self: center;
+      width: 100%;
+      max-width: 520px;
+      justify-self: end;
+    }
+    .do-signal-card {
+      border: 1.5px solid rgba(125, 211, 252, 0.24);
+      background: #0f172a;
+      box-shadow: 0 28px 70px rgba(2, 8, 23, 0.25);
+      border-radius: 22px;
+      padding: 20px;
+      color: #ffffff;
+    }
+    .do-signal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .do-signal-title {
+      color: #f8fafc;
+      font-size: 16px;
+      font-weight: 900;
+    }
+    .do-status-pill {
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.32);
+      color: #bbf7d0;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .do-signal-list {
+      display: grid;
+      gap: 12px;
+    }
+    .do-signal-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+    .do-signal-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(2, 132, 199, 0.2);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .do-signal-text strong {
+      display: block;
+      color: #f8fafc;
+      font-size: 13.5px;
+      margin-bottom: 2px;
+    }
+    .do-signal-text p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    /* GENERAL SECTION UTILITIES */
+    .section-padding {
+      padding: 72px 0;
+    }
+    .container-shell {
+      width: min(calc(100% - 64px), 1280px);
+      margin: 0 auto;
+    }
+    .section-head {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto 52px;
+    }
+    .section-head h2 {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 900;
+      color: var(--text-dark);
+      margin: 0 0 14px;
+      letter-spacing: -0.025em;
+    }
+    .section-head p {
+      font-size: 16.5px;
+      color: var(--text-sub);
+      margin: 0;
+      line-height: 1.55;
+    }
+
+    /* SECCIÓN 2: QUÉ DETECTAMOS (GRID 8 CATEGORÍAS) */
+    .detect-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .detect-card {
+      background: var(--bg-white);
+      border: 1.5px solid var(--border-light);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+      transition: all 0.2s ease;
+    }
+    .detect-card:hover {
+      border-color: var(--primary-blue);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(2, 132, 199, 0.12);
+    }
+    .detect-icon {
+      font-size: 24px;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .detect-card h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin: 0 0 8px;
+    }
+    .detect-card p {
+      font-size: 13.5px;
+      color: var(--text-sub);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* SECCIÓN 3: POR QUÉ NO BASTA CON REVISARLO TÚ MISMO */
+    .why-section {
+      background: var(--bg-light);
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .why-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.04);
+    }
+    .why-card h3 {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin: 0 0 12px;
+    }
+    .why-card p {
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* SECCIÓN 4: DEMO ANTES / DESPUÉS */
+    .demo-compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 36px;
+    }
+    .compare-box {
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 12px 32px rgba(15,23,42,0.06);
+    }
+    .compare-box.before {
+      background: #fff5f5;
+      border: 2px solid #fecaca;
+    }
+    .compare-box.after {
+      background: #f0f9ff;
+      border: 2.5px solid #0284c7;
+    }
+    .compare-tag {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .before .compare-tag { background: #fee2e2; color: #dc2626; }
+    .after .compare-tag { background: #0284c7; color: #ffffff; }
+
+    /* SECCIÓN 5: CÓMO FUNCIONA */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .step-card {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+    }
+    .step-num {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--primary-blue);
+      font-size: 18px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    /* SECCIÓN 6: PLANES DE PRECIO */
+    .pricing-grid-clean {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .plan-card-clean {
+      background: #ffffff;
+      border: 2px solid var(--border-light);
+      border-radius: 20px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 8px 24px rgba(15,23,42,0.05);
+    }
+    .plan-card-clean.featured {
+      border-color: var(--primary-blue);
+      box-shadow: 0 16px 40px rgba(2,132,199,0.15);
+      position: relative;
+    }
+
+    /* SECCIÓN 8: FAQ ACCORDION */
+    .faq-grid {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+    .faq-item {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .faq-item h3 {
+      font-size: 17.5px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin: 0 0 10px;
+    }
+    .faq-item p {
+      font-size: 14.5px;
+      color: var(--text-sub);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* SECCIÓN 9: CTA FINAL */
+    .final-cta-section {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: 28px;
+      padding: 64px 40px;
+      text-align: center;
+      margin: 60px auto 40px;
+      max-width: 1200px;
+      box-shadow: 0 25px 50px -12px rgba(15,23,42,0.25);
+    }
+
+    @media (max-width: 1024px) {
+      .do-intel-shell { grid-template-columns: 1fr; }
+      .why-grid, .steps-grid { grid-template-columns: 1fr; }
+      .demo-compare-grid { grid-template-columns: 1fr; }
+      .pricing-grid-clean { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .pricing-grid-clean { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <!-- SECCIÓN 1: HERO CON URGENCIA LEGAL -->
+    <section class="do-intel-hero" id="hero">
+      <div class="do-intel-shell">
+        <div class="do-intel-copy">
+          <h1>En Chile, una notificación judicial por aviso en el Diario Oficial se entiende legalmente practicada <span>a los 3 días de publicada.</span></h1>
+          <p class="do-intel-lead">
+            El reloj legal corre aunque nadie te haya llamado. Quantus monitorea la fuente oficial del Estado todos los días hábiles, cruza tu RUT o empresa y te explica en 2 minutos qué significa y cuánto tiempo tienes para actuar.
+          </p>
+          
+          <ul class="do-intel-bullets">
+            <li>
+              <span class="bullet-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+              Frecuencia de escaneo: Todos los días de publicación oficial (Lunes a Sábado).
+            </li>
+            <li>
+              <span class="bullet-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+              Fuente: 100% Datos Públicos del Estado (Cumplimiento Ley 19.628 / Ley 21.719).
+            </li>
+            <li>
+              <span class="bullet-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </span>
+              Tranquilidad garantizada desde $2.990 / mes (Sin contratos de permanencia).
+            </li>
+          </ul>
+
+          <div style="margin-top: 24px;">
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <a class="do-primary-action mp-pay-button" data-plan="mensual" href="#planes" style="margin:0;">Activar Monitoreo 24/7 →</a>
+              <a href="/do/buscador" class="btn-do-buscador" style="display:inline-flex; align-items:center; gap:8px; background:rgba(56,189,248,0.08); border:1.5px solid rgba(56,189,248,0.4); color:#0284c7; padding:14px 22px; border-radius:10px; font-weight:700; font-size:14px; text-decoration:none; transition:all 0.2s ease;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span>Buscar en el Diario Oficial (Gratis)</span>
+                <span style="background:#0284c7; color:#fff; font-size:10px; padding:2px 6px; border-radius:4px; text-transform:uppercase; font-weight:800; letter-spacing:0.5px;">Motor IA</span>
+              </a>
+            </div>
+            <div style="font-size: 12.5px; color: var(--text-sub); margin-top: 10px; font-weight: 600;">
+              Accede a nuestro buscador semántico de ediciones históricas o activa la vigilancia preventiva continua.
+            </div>
+
+            <!-- Fila de Badges de Confianza Corporativa -->
+            <div class="hero-trust-badges">
+              <div class="trust-badge-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                <span>Cumplimiento Ley 21.719</span>
+              </div>
+              <div class="trust-badge-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+                <span>Fuente Oficial del Estado</span>
+              </div>
+              <div class="trust-badge-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                <span>Cancelación en 1 Clic</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="do-command" aria-label="Centro de señales Quantus Diario Oficial">
+          <div class="do-signal-card">
+            <div class="do-signal-top">
+              <div class="do-signal-title">Centro de señales Quantus</div>
+              <div class="do-status-pill">Monitoreo 24/7</div>
+            </div>
+            <div class="do-signal-list">
+              <div class="do-signal-row">
+                <div class="do-signal-icon">DO</div>
+                <div class="do-signal-text">
+                  <strong>Publicación detectada</strong>
+                  <p>Coincidencia por RUT, razón social o representantes legales.</p>
+                </div>
+              </div>
+              <div class="do-signal-row">
+                <div class="do-signal-icon">IA</div>
+                <div class="do-signal-text">
+                  <strong>PDF explicado en simple</strong>
+                  <p>Resumen ejecutivo, plazos procesales y datos por verificar.</p>
+                </div>
+              </div>
+              <div class="do-signal-row">
+                <div class="do-signal-icon">AB</div>
+                <div class="do-signal-text">
+                  <strong>Acción sugerida & Derivación</strong>
+                  <p>Pasos sugeridos y abogado de referencia cuando hay riesgo.</p>
+                </div>
+              </div>
+              <div class="do-signal-row">
+                <div class="do-signal-icon">IN</div>
+                <div class="do-signal-text">
+                  <strong>Marcas INAPI · Coincidencia detectada</strong>
+                  <p>Alerta temprana de oposiciones dentro del plazo de 30 días.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <!-- SECCIÓN MOTOR DE BÚSQUEDA Y ARCHIVO HISTÓRICO -->
+    <section style="padding: 48px 0; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+      <div class="do-intel-shell">
+        <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 36px 40px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; gap: 32px; box-shadow: 0 10px 30px rgba(15,23,42,0.15); flex-wrap: wrap;">
+          <div style="max-width: 620px;">
+            <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(56,189,248,0.15); color:#38bdf8; font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">
+              <span>🔍 NUEVA HERRAMIENTA INTELIGENTE</span>
+            </div>
+            <h2 style="font-size: 26px; font-weight: 800; margin: 0 0 10px; color: #ffffff; line-height: 1.3;">
+              Buscador Semántico y Archivo Histórico del Diario Oficial
+            </h2>
+            <p style="color: #94a3b8; font-size: 15px; margin: 0; line-height: 1.6;">
+              ¿Buscas una publicación específica, decreto, constitución de sociedad o citación judicial? Explora nuestro motor de búsqueda de alta precisión FTS5 con filtros por fecha, materia y diagnóstico instantáneo con Inteligencia Artificial.
+            </p>
+          </div>
+          <div>
+            <a href="/do/buscador" style="display:inline-flex; align-items:center; gap:10px; background:#0284c7; color:#ffffff; font-weight:700; font-size:15px; padding:16px 28px; border-radius:12px; text-decoration:none; box-shadow: 0 4px 14px rgba(2,132,199,0.4); transition:all 0.2s ease;">
+              <span>Abrir Buscador Diario Oficial</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+            <div style="font-size: 12px; color: #64748b; text-align: center; margin-top: 8px;">
+              ⚡ Búsqueda rápida y gratuita
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: QUÉ DETECTAMOS EXACTAMENTE -->
+    <section class="section-padding" id="cobertura">
+      <div class="container-shell">
+        <div class="section-head">
+          <h2>No rastreamos datos privados. Auditamos las publicaciones oficiales del Estado que impactan a personas y empresas.</h2>
+          <p>Si tu RUT, Nombre, Razón Social o Representante aparece en alguna de estas 8 categorías oficiales, Quantus genera una alerta inmediata:</p>
+        </div>
+
+        <div class="detect-grid">
+          <div class="detect-card">
+            <span class="detect-icon">⚖️</span>
+            <h3>1. Notificaciones Judiciales por Aviso</h3>
+            <p>Edictos procesales (Art. 54 CPC y Art. 439 Código del Trabajo) dictados cuando el tribunal no logra ubicar tu domicilio.</p>
+          </div>
+
+          <div class="detect-card">
+            <span class="detect-icon">🏢</span>
+            <h3>2. Quiebras y Procedimientos Concursales</h3>
+            <p>Resoluciones bajo la Ley 20.720 con plazos acotados (ej: 15 días hábiles para verificación de créditos de acreedores).</p>
+          </div>
+
+          <div class="detect-card">
+            <span class="detect-icon">👥</span>
+            <h3>3. Citaciones a Juntas de Accionistas</h3>
+            <p>Convocatorias obligatorias para Sociedades Anónimas (Art. 58 Ley 18.046), legatarios y citaciones societarias.</p>
+          </div>
+
+          <div class="detect-card">
+            <span class="detect-icon">📜</span>
+            <h3>4. Modificación y Disolución de Sociedades</h3>
+            <p>Publicación de extractos de escrituras públicas de constitución, cambios de estatuto o cierre de empresas y cooperativas.</p>
+          </div>
+
+          <div class="detect-card">
+            <span class="detect-icon">🏷️</span>
+            <h3>5. Marcas y Propiedad Industrial (INAPI)</h3>
+            <p>Extractos de solicitudes de marcas, publicaciones preventivas de oposición y registro de patentes.</p>
+          </div>
+
+          <div class="detect-card">
+            <span class="detect-icon">💧</span>
+            <h3>6. Derechos de Aguas (DGA)</h3>
+            <p>Solicitudes y resoluciones sobre derechos de aprovechamiento de aguas según la normativa del Código de Aguas.</p>
+          </div>
+
+          <div class="detect-card">
+            <span class="detect-icon">⛏️</span>
+            <h3>7. Boletín Oficial de Minería</h3>
+            <p>Publicaciones de manifestaciones, mensuras y pedimentos de concesiones mineras en Chile.</p>
+          </div>
+
+          <div class="detect-card">
+            <span class="detect-icon">📋</span>
+            <h3>8. Edictos Administrativos y Actos Legales</h3>
+            <p>Cambios de nombre, declaraciones de muerte presunta y extravío de certificados o títulos profesionales.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 3: POR QUÉ NO BASTA CON REVISARLO TÚ MISMO -->
+    <section class="section-padding why-section" id="por-que-automatizar">
+      <div class="container-shell">
+        <div class="section-head">
+          <h2>El Diario Oficial se publica de Lunes a Sábado. Revisarlo manualmente todos los días es inviable.</h2>
+          <p>Cuando te enteras por un tercero, el plazo procesal ya está corriendo.</p>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-card">
+            <h3>📅 Ediciones los días 1 y 15 de cada mes</h3>
+            <p>Avisos de extravío y edictos judiciales suelen tramitarse con 5 días hábiles de anticipación. Para cuando salen publicados, tu margen de reacción ya se acortó.</p>
+          </div>
+
+          <div class="why-card">
+            <h3>📬 Sin aviso ni correo previo</h3>
+            <p>Los juzgados y organismos del Estado no envían notificaciones personales por correo antes de ordenar una publicación en el Diario Oficial.</p>
+          </div>
+
+          <div class="why-card">
+            <h3>🤖 La solución automatizada Quantus</h3>
+            <p>Procesamos la edición completa cada mañana, ejecutamos coincidencias exactas y aproximadas por RUT y te entregamos la explicación en tu bandeja antes de iniciar el día.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4: DEMO ANTES / DESPUÉS -->
+    <section class="section-padding" id="demo-ia">
+      <div class="container-shell">
+        <div class="section-head">
+          <h2>De lenguaje jurídico incomprensible a una explicación ejecutiva directa.</h2>
+          <p>Compara el texto técnico oficial frente al informe simplificado generado por la IA de Quantus:</p>
+        </div>
+
+        <div class="demo-compare-grid">
+          <div class="compare-box before">
+            <span class="compare-tag">❌ ANTES (Texto real del Diario Oficial)</span>
+            <div style="font-family: monospace; font-size: 13px; color: #7f1d1d; line-height: 1.6;">
+              "En autos rol C-4521-2025, 14º Juzgado Civil de Santiago, caratulados 'Banco X con Agrícola Y SpA', por resolución de fecha 12 de enero de 2026, se ordenó notificar por avisos a don [NOMBRE_CLIENTE], RUT [RUT_CLIENTE], la demanda ejecutiva y mandamiento de ejecución y embargo..."
+            </div>
+          </div>
+
+          <div class="compare-box after">
+            <span class="compare-tag">✅ DESPUÉS (Informe Inteligente Quantus)</span>
+            <div style="font-size: 14px; color: #0c4a6e; line-height: 1.6;">
+              <strong>⚠️ ALERTA JUDICIAL DETECTADA</strong><br>
+              • <strong>Tipo:</strong> Notificación por aviso (Demanda ejecutiva).<br>
+              • <strong>Juzgado:</strong> 14º Juzgado Civil de Santiago (Rol C-4521-2025).<br>
+              • <strong>Explicación simple:</strong> Se ha publicado una citación judicial en tu contra. Al publicarse hoy en el Diario Oficial, la ley entiende que estás notificado en 3 días hábiles.<br>
+              • <strong>Plazo crítico:</strong> Tienes 8 días hábiles a contar del tercer día para presentar oposición o defensa con un abogado.<br>
+              • <strong>Paso recomendado:</strong> Descargar el PDF oficial adjunto y consultar a tu abogado o revisar el convenio recomendado por Quantus.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 5: CÓMO FUNCIONA -->
+    <section class="section-padding why-section" id="como-funciona">
+      <div class="container-shell">
+        <div class="section-head">
+          <h2>Cómo funciona Quantus en 3 simples pasos</h2>
+          <p>Un flujo automatizado diseñado para darte aviso oportuno y margen de reacción.</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <h3 style="font-size: 19px; font-weight: 900; margin: 0 0 10px; color: var(--text-dark);">Monitoreo diario automático</h3>
+            <p style="font-size: 14px; color: var(--text-sub); line-height: 1.6; margin: 0;">Nuestros agentes analizan el Diario Oficial de Lunes a Sábado a primera hora, procesando miles de páginas mediante algoritmos de extracción.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <h3 style="font-size: 19px; font-weight: 900; margin: 0 0 10px; color: var(--text-dark);">Coincidencia Inteligente & Explicación IA</h3>
+            <p style="font-size: 14px; color: var(--text-sub); line-height: 1.6; margin: 0;">Comparamos tu RUT, Razón Social o Nombre. Si hay coincidencia, la inteligencia artificial analiza la publicación y redacta un resumen en lenguaje claro.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <h3 style="font-size: 19px; font-weight: 900; margin: 0 0 10px; color: var(--text-dark);">Alerta Instantánea con Hoja de Ruta</h3>
+            <p style="font-size: 14px; color: var(--text-sub); line-height: 1.6; margin: 0;">Recibes una notificación con el resumen del informe, el PDF original oficial adjunto como evidencia y los plazos procesales exactos.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 6: PLANES Y PRECIOS TRANSPARENTES -->
+    <section class="section-padding" id="planes">
+      <div class="container-shell">
+        <div class="section-head">
+          <h2>Planes y precios transparentes para tu empresa</h2>
+          <p>Sin contratos de permanencia ni cobros ocultos. Cancela cuando quieras en 1 clic.</p>
+        </div>
+
+        <div class="pricing-grid-clean">
+          <div class="plan-card-clean">
+            <div>
+              <div style="font-size:11px; font-weight:800; color:#0284c7; letter-spacing:0.05em;">SUSCRIPCIÓN MENSUAL</div>
+              <h3 style="font-size:22px; color:#0f172a; font-weight:900; margin:10px 0 6px;">Suscripción mensual</h3>
+              <div style="font-size:32px; font-weight:900; color:#0284c7;">$2.990 <span style="font-size:14px; font-weight:600; color:#64748b;">/mes</span></div>
+              <p style="font-size:13px; color:#64748b; margin-top:6px; line-height:1.45;">Monitoreo para 1 RUT o empresa personal.</p>
+              <ul style="list-style:none; padding:0; margin:20px 0; color:#334155; font-size:14px; line-height:2;">
+                <li>✓ Monitoreo activo de Lunes a Sábado</li>
+                <li>✓ Alerta con edición y coincidencia</li>
+                <li>✓ Explicación del PDF en lenguaje simple</li>
+              </ul>
+            </div>
+            <button type="button" data-plan="mensual" onclick="abrirModalPrePago('mensual')" class="mp-pay-button" style="width:100%; height:48px; padding:0 16px; background:#0284c7; box-shadow: 0 4px 14px rgba(2,132,199,0.35); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+              Suscripción
+            </button>
+          </div>
+
+          <div class="plan-card-clean featured">
+            <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); background:#0284c7; color:#ffffff; font-weight:900; font-size:11px; padding:5px 16px; border-radius:999px; letter-spacing:0.8px; box-shadow:0 4px 14px rgba(2,132,199,0.4); z-index:99; white-space:nowrap; text-transform:uppercase;">RECOMENDADO</div>
+            <div>
+              <div style="font-size:11px; font-weight:800; color:#0284c7; letter-spacing:0.05em;">AHORRA 66%</div>
+              <h3 style="font-size:22px; color:#0f172a; font-weight:900; margin:10px 0 6px;">Plan Anual</h3>
+              <div style="font-size:32px; font-weight:900; color:#0284c7;">$20.000 <span style="font-size:14px; font-weight:600; color:#64748b;">/año</span></div>
+              <p style="font-size:12.5px; color:#64748b; margin-top:2px;">(Precio normal: <s style="color:#ef4444;">$29.990</s>)</p>
+              <ul style="list-style:none; padding:0; margin:20px 0; color:#334155; font-size:14px; line-height:2;">
+                <li>✓ Protección preventiva 365 días</li>
+                <li>✓ PDF oficial + pasos sugeridos</li>
+                <li>✓ Enlace a abogado recomendado</li>
+              </ul>
+            </div>
+            <button type="button" data-plan="anual" onclick="abrirModalPrePago('anual')" class="mp-pay-button" style="width:100%; height:48px; padding:0 16px; background:#0284c7; box-shadow: 0 4px 14px rgba(2,132,199,0.35); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+              Suscripción
+            </button>
+          </div>
+
+          <div class="plan-card-clean">
+            <div>
+              <div style="font-size:11px; font-weight:800; color:#0284c7; letter-spacing:0.05em;">PYME / MULTI-RUT</div>
+              <h3 style="font-size:22px; color:#0f172a; font-weight:900; margin:10px 0 6px;">Empresa Inicial</h3>
+              <div style="font-size:32px; font-weight:900; color:#0284c7;">$19.990 <span style="font-size:14px; font-weight:600; color:#64748b;">/mes</span></div>
+              <p style="font-size:13px; color:#64748b; margin-top:6px; line-height:1.45;">Para empresas con hasta 3 RUTs.</p>
+              <ul style="list-style:none; padding:0; margin:20px 0; color:#334155; font-size:14px; line-height:2;">
+                <li>✓ Hasta 3 RUTs o sociedades</li>
+                <li>✓ Alertas con contexto ejecutivo</li>
+                <li>✓ Informes para revisar con abogado</li>
+              </ul>
+            </div>
+            <button type="button" data-plan="empresa_inicial" onclick="abrirModalPrePago('empresa_inicial')" class="mp-pay-button" style="width:100%; height:48px; padding:0 16px; background:#0284c7; box-shadow: 0 4px 14px rgba(2,132,199,0.35); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+              Suscripción
+            </button>
+          </div>
+
+          <div class="plan-card-clean">
+            <div>
+              <div style="font-size:11px; font-weight:800; color:#0284c7; letter-spacing:0.05em;">ESTUDIOS / CORPORATIVO</div>
+              <h3 style="font-size:22px; color:#0f172a; font-weight:900; margin:10px 0 6px;">Plan Empresa</h3>
+              <div style="font-size:32px; font-weight:900; color:#0284c7;">$49.990 <span style="font-size:14px; font-weight:600; color:#64748b;">/mes</span></div>
+              <p style="font-size:13px; color:#64748b; margin-top:6px; line-height:1.45;">Para grupos y estudios jurídicos.</p>
+              <ul style="list-style:none; padding:0; margin:20px 0; color:#334155; font-size:14px; line-height:2;">
+                <li>✓ Hasta 10 RUTs o clientes</li>
+                <li>✓ Alertas prioritarias y carpeta privada</li>
+                <li>✓ Derivación jurídica y ejecutivo dedicado</li>
+              </ul>
+            </div>
+            <button type="button" data-plan="empresa" onclick="abrirModalPrePago('empresa')" class="mp-pay-button" style="width:100%; height:48px; padding:0 16px; background:#0284c7; box-shadow: 0 4px 14px rgba(2,132,199,0.35); color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+              Suscripción
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 7: CONFIANZA Y FUENTE OFICIAL -->
+    <section class="section-padding why-section" id="confianza">
+      <div class="container-shell">
+        <div class="section-head">
+          <h2>Transparencia, Fuente Oficial y Privacidad de Datos</h2>
+          <p>Compromiso normativo y operación responsable sobre la fuente del Estado.</p>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-card">
+            <h3>🏛️ Fuente 100% Oficial del Estado</h3>
+            <p>Operamos directamente sobre las publicaciones emitidas por la Imprenta Nacional / Diario Oficial de la República de Chile. No compramos, vendemos ni alimentamos bases de datos privadas ni "rutificadores" informales.</p>
+          </div>
+
+          <div class="why-card">
+            <h3>🛡️ Cumplimiento Ley 19.628 y Ley 21.719</h3>
+            <p>Tus datos de registro se utilizan única y exclusivamente para ejecutar las búsquedas de tu propio plan. Respetamos de forma estricta los derechos ARCO+ de acceso y privacidad.</p>
+          </div>
+
+          <div class="why-card">
+            <h3>⚖️ Deslinde Profesional Legal</h3>
+            <p>Quantus es una plataforma de software e inteligencia operacional. La información entregada no constituye representación legal formal, por lo que siempre recomendamos validar los antecedentes con tu abogado o nuestro convenio de profesionales.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 8: PREGUNTAS FRECUENTES (FAQ) -->
+    <section class="section-padding" id="faq">
+      <div class="container-shell">
+        <div class="section-head">
+          <h2>Preguntas Frecuentes</h2>
+          <p>Resolvemos todas tus dudas operativas y de privacidad antes de contratar.</p>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-item">
+            <h3>1. ¿Este servicio reemplaza la asesoría de un abogado?</h3>
+            <p>No. Quantus es una herramienta de alerta temprana e inteligencia operacional. Te notificamos de forma inmediata y traducimos el documento para que no pierdas plazos procesales, pero cualquier acción judicial debe ser patrocinada por un abogado profesional.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>2. ¿Cómo manejan mis datos personales y el RUT ingresado?</h3>
+            <p>Cumplimos estrictamente con la Ley de Protección de Datos Personales de Chile (Ley 19.628 / Ley 21.719). El RUT y nombre ingresados se usan únicamente para el motor de búsqueda de tu cuenta. No vendemos ni compartimos tu información con terceros.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>3. ¿Con qué rapidez me llega la alerta si mi RUT aparece publicado?</h3>
+            <p>El Diario Oficial publica sus ediciones de Lunes a Sábado a primera hora. Nuestro sistema procesa la edición durante la mañana y te envía la alerta el mismo día de la publicación, otorgándote el máximo margen de reacción.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>4. ¿Puedo monitorear más de una empresa o RUT de clientes?</h3>
+            <p>Sí. El Plan Suscripción Mensual ($2.990/mes) está diseñado para 1 RUT principal. Si administras un grupo de empresas, una corredora o un estudio jurídico, nuestro Plan Empresa te permite ingresar múltiples RUTs bajo un mismo panel.</p>
+          </div>
+
+          <div class="faq-item">
+            <h3>5. ¿Puedo cancelar mi suscripción cuando quiera?</h3>
+            <p>Sí, en 1 solo clic desde tu panel de usuario o enviando un correo a contacto@quantuschile.cl. No exigimos cláusulas de permanencia ni cobros adicionales por cancelación.</p>
+          </div>
+
+          <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+            <span style="font-size: 14px; color: #94a3b8;">📖 Artículos y Guías Relacionadas:</span>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+              <a href="/blog/guia-monitoreo-diario-oficial-pyme" style="color: #38bdf8; font-weight: 700; font-size: 14px; text-decoration: underline;">
+                Guía Diario Oficial para PYMEs →
+              </a>
+              <a href="/blog/notificacion-ficta-art-54-cpc-diario-oficial" style="color: #38bdf8; font-weight: 700; font-size: 14px; text-decoration: underline;">
+                Notificación Ficta (Art. 54 CPC) →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 9: CTA FINAL DE CIERRE DE URGENCIA -->
+    <div class="container-shell">
+      <section class="final-cta-section">
+        <h2 style="font-size: clamp(30px, 3.5vw, 46px); font-weight: 900; margin: 0 0 18px; letter-spacing: -0.03em;">No dejes que una publicación en el Diario Oficial venza sin que te enteres.</h2>
+        <p style="font-size: 18px; color: #94a3b8; max-width: 720px; margin: 0 auto 32px; line-height: 1.55;">Protege tu empresa y tus bienes hoy mismo por solo $2.990/mes. El plazo legal de 3 días empieza a correr en el momento exacto en que se publica la edición.</p>
+        <button type="button" data-plan="mensual" onclick="abrirModalPrePago('mensual')" class="do-primary-action mp-pay-button" style="border: none; cursor: pointer;">
+          Iniciar vigilancia ahora por $2.990/mes →
+        </button>
+      </section>
+    </div>
+  </main>
+
+  <!-- MODAL DE PRE-PAGO DE MERCADO PAGO -->
+  <div id="modal-pre-pago" class="modal-overlay">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" onclick="cerrarModalPrePago()">&times;</button>
+
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+        <span style="background:rgba(56,189,248,0.2); color:#38bdf8; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:800;">PASO 1 DE 2</span>
+        <h3 style="font-size:18px; color:#f8fafc; margin:0;">Datos de Registro & Monitoreo</h3>
+      </div>
+
+      <p style="color:#94a3b8; font-size:13px; margin:0 0 16px; line-height:1.45;">
+        Ingresa el RUT y datos de contacto a monitorear antes de ser redirigido al portal seguro de pago.
+      </p>
+
+      <form id="form-pre-pago" onsubmit="return procesarPrePago(event)">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() if csrf_token is defined else '' }}">
+        <input type="hidden" id="pre-plan" name="plan" value="mensual">
+
+        <div class="form-group">
+          <label for="pre-rut">RUT de Empresa o Persona a Monitorear *</label>
+          <input type="text" id="pre-rut" name="rut" class="form-control" data-rut="true" placeholder="Ej: 14.011.762-5" required autocomplete="off">
+          <div id="rut-live-help" style="font-size:11.5px; color:#94a3b8; margin-top:3px;">Formato: 12.345.678-9 o 76.123.456-K</div>
+        </div>
+
+        <div class="form-group">
+          <label for="pre-nombre">Nombre Completo o Razón Social *</label>
+          <div style="background:rgba(56,189,248,0.12); border-left:3px solid #38bdf8; padding:9px 12px; margin-bottom:8px; border-radius:6px; font-size:12px; color:#e0f2fe; line-height:1.45;">
+            🔒 <strong>Instrucción Crítica:</strong> Escribe tu <strong>nombre y dos apellidos idéntico a tu Cédula de Identidad</strong> (o Razón Social completa). Esto garantiza el 100% de confiabilidad en las coincidencias del Diario Oficial y evita falsos positivos por alcances de nombre.
+          </div>
+          <input type="text" id="pre-nombre" name="nombre" class="form-control" placeholder="Ej: Juan Andrés Pérez Soto / Mi Empresa SpA" required>
+        </div>
+
+        <div class="form-group">
+          <label for="pre-email">Correo Electrónico (para Alertas) *</label>
+          <input type="email" id="pre-email" name="email" class="form-control" placeholder="cliente@mcrseguridad.cl" required>
+        </div>
+
+        <div class="form-group">
+          <label for="pre-telefono">Teléfono WhatsApp (Opcional)</label>
+          <input type="tel" id="pre-telefono" name="telefono" class="form-control" placeholder="+569 1234 5678">
+        </div>
+
+        <div class="form-group" id="group-ruts-adicionales">
+          <label for="pre-ruts-adicionales" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>RUTs Adicionales o Términos a Monitorear</span>
+            <span class="badge" style="background:rgba(56,189,248,0.15); color:#38bdf8; font-size:11px; padding:2px 8px; border-radius:4px; font-weight:600;">Plan Empresa / Multirut</span>
+          </label>
+          <input type="text" id="pre-ruts-adicionales" name="ruts_adicionales" class="form-control" placeholder="Ej: 76.543.210-K, 77.123.456-8, Holding SpA">
+          <div style="font-size:11.5px; color:#94a3b8; margin-top:4px; line-height:1.4;">
+            🏢 <strong>Monitoreo Multirut:</strong> Si contratas para un grupo de empresas o clientes, separa los RUTs con comas. Cada uno quedará bajo vigilancia activa continua en tu cuenta.
+          </div>
+        </div>
+
+
+        <div class="form-group" style="margin-top:12px;">
+          <label for="pre-codigo-convenio">Código de Estudio Jurídico o Convenio (Opcional)</label>
+          <input type="text" id="pre-codigo-convenio" name="codigo_convenio" class="form-control" placeholder="Ej: ESTUDIO-LEX" style="text-transform:uppercase;">
+          <div style="font-size:11.5px; color:#94a3b8; margin-top:3px;">
+            ⚖️ Si vienes referido por un abogado o estudio jurídico, ingresa su código para ampliar tu auditoría inicial de 9 a 30 o 60 días. Si no dispones de un código, recibirás igualmente tu auditoría legal estándar de 9 días.
+          </div>
+        </div>
+
+        <!-- Selección de Medio de Pago -->
+        <div class="form-group" style="margin-top:16px;">
+          <label style="color:#cbd5e1; font-weight:700; margin-bottom:8px; display:block;">Selecciona tu Medio de Pago Preferido:</label>
+          
+          <label class="pay-option-card" onclick="setPaymentMode('one_time')">
+            <input type="radio" name="payment_mode" value="one_time" style="accent-color:#38bdf8;">
+            <div>
+              <strong style="color:#fff; font-size:13px; display:block;">Débito / Webpay / Apple Pay / Todos los Bancos</strong>
+              <span style="color:#94a3b8; font-size:11px;">Pago directo sin renovación automática.</span>
+            </div>
+          </label>
+
+          <label class="pay-option-card" onclick="setPaymentMode('subscription')">
+            <input type="radio" name="payment_mode" value="subscription" style="accent-color:#38bdf8;">
+            <div>
+              <strong style="color:#fff; font-size:13px; display:block;">Suscripción recurrente automática</strong>
+              <span style="color:#94a3b8; font-size:11px;">Cobro mensual/anual automático con continuidad.</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Consentimiento Expreso Ley 21.719 -->
+        <div class="form-group" style="margin-top:16px; margin-bottom:16px; background:rgba(15,23,42,0.6); border:1px solid rgba(56,189,248,0.25); padding:12px; border-radius:12px;">
+          <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:12px; color:#cbd5e1; font-weight:normal; line-height:1.4; margin-bottom:0;">
+            <input type="checkbox" id="pre-consent" name="data_consent" value="1" required style="width:18px; height:18px; margin-top:2px; accent-color:#38bdf8; cursor:pointer;">
+            <span>
+              He leído y acepto expresamente la <a href="#" onclick="abrirModalLey21719(event)" style="color:#38bdf8; text-decoration:underline; font-weight:700;">Política de Tratamiento de Datos Personales (Ley 21.719)</a>. Autorizo a Quantus Chile a monitorear las publicaciones del Diario Oficial para el RUT ingresado. *
+            </span>
+          </label>
+        </div>
+
+        <div class="form-group" style="margin-top:16px; margin-bottom:16px; background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.45); padding:12px; border-radius:12px;">
+          <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:12px; color:#fde68a; font-weight:normal; line-height:1.45; margin-bottom:0;">
+            <input type="checkbox" id="pre-source-limits" name="source_limitation_ack" value="1" required style="width:18px; height:18px; margin-top:2px; accent-color:#f59e0b; cursor:pointer;">
+            <span>
+              Entiendo que el Diario Oficial u organismos publicadores pueden emitir datos con RUT errado, RUT omitido, nombres incompletos o tildes distintas. Quantus aplicará búsqueda multicriterio por RUT, nombre y razón social. *
+            </span>
+          </label>
+        </div>
+
+        <div id="pre-msg-error" style="display:none;"></div>
+
+        <button type="submit" id="btn-pre-submit" class="btn-submit-pre">
+          Continuar con la Suscripción →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Informativo Legal Ley 21.719 -->
+  <div id="modal-ley-21719" class="modal-overlay">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" onclick="cerrarModalLey21719()">&times;</button>
+      
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+        <span style="background:rgba(56,189,248,0.2); color:#38bdf8; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:800;">NORMATIVA OFICIAL CHILE</span>
+        <h3 style="font-size:18px; color:#f8fafc; margin:0;">Política de Datos Personales Ley 21.719</h3>
+      </div>
+
+      <div style="color:#cbd5e1; font-size:13px; line-height:1.6;">
+        <p><strong>1. Finalidad Exclusiva del Tratamiento:</strong><br>
+        Los datos personales recopilados (RUT, Nombre/Razón Social, Correo y WhatsApp) serán tratados por <strong>Quantus Chile SpA</strong> únicamente para ejecutar el servicio automatizado de escaneo en el Diario Oficial de Chile.</p>
+        
+        <p><strong>2. Legitimidad y Consentimiento Expreso:</strong><br>
+        De conformidad con la Ley N° 21.719 que modifica la Ley N° 19.628, el titular otorga su autorización previa, explícita e informada.</p>
+        
+        <p><strong>3. Derechos ARCO+:</strong><br>
+        El titular podrá ejercer en todo momento sus derechos legales escribiendo a <a href="mailto:privacidad@quantuschile.cl" style="color:#38bdf8; font-weight:700;">privacidad@quantuschile.cl</a>.</p>
+      </div>
+
+      <button type="button" onclick="cerrarModalLey21719()" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:10px; font-weight:800; font-size:14px; cursor:pointer; margin-top:20px;">
+        Entendido / Cerrar
+      </button>
+    </div>
+  </div>
+
+  {% include "partials/legal_footer.html" %}
+
+  <script src="{{ url_for('static', filename='rut-validator.js') }}?v=20260729-rut"></script>
+  <script>
+    function setPaymentMode(mode) {
+      var cards = document.querySelectorAll('.pay-option-card');
+      cards.forEach(function(c) { c.classList.remove('active'); });
+      var selectedRadio = document.querySelector('input[name="payment_mode"][value="' + mode + '"]');
+      if (selectedRadio) {
+        selectedRadio.checked = true;
+        selectedRadio.closest('.pay-option-card').classList.add('active');
+      }
+    }
+
+    function abrirModalPrePago(plan) {
+      console.log("Abriendo modal para plan:", plan);
+      var modal = document.getElementById("modal-pre-pago");
+      var planInput = document.getElementById("pre-plan");
+      if (planInput) planInput.value = plan;
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    }
+
+    function cerrarModalPrePago() {
+      var modal = document.getElementById("modal-pre-pago");
+      if (modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    function abrirModalLey21719(event) {
+      if (event) event.preventDefault();
+      var modal = document.getElementById("modal-ley-21719");
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    }
+
+    function cerrarModalLey21719() {
+      var modal = document.getElementById("modal-ley-21719");
+      if (modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    async function procesarPrePago(event) {
+      event.preventDefault();
+      var btn = document.getElementById("btn-pre-submit");
+      var errDiv = document.getElementById("pre-msg-error");
+      var form = document.getElementById("form-pre-pago");
+      var consentChk = document.getElementById("pre-consent");
+      var sourceLimitsChk = document.getElementById("pre-source-limits");
+
+      function showPreMessage(type, html) {
+        if (!errDiv) return;
+        var styles = {
+          error: ["rgba(239,68,68,0.22)", "#ef4444", "#ffffff"],
+          alert_red: ["rgba(239,68,68,0.25)", "#ef4444", "#ffffff"],
+          warn: ["rgba(245,158,11,0.20)", "#f59e0b", "#fde68a"],
+          ok: ["rgba(16,185,129,0.20)", "#10b981", "#bbf7d0"]
+        };
+        var selected = styles[type] || styles.error;
+        errDiv.style.display = "block";
+        errDiv.style.background = selected[0];
+        errDiv.style.borderColor = selected[1];
+        errDiv.style.color = selected[2];
+        errDiv.style.borderWidth = "1.5px";
+        errDiv.style.borderStyle = "solid";
+        errDiv.style.padding = "14px 18px";
+        errDiv.style.borderRadius = "14px";
+        errDiv.style.fontSize = "13.5px";
+        errDiv.style.lineHeight = "1.45";
+        errDiv.innerHTML = html;
+      }
+
+      if (consentChk && !consentChk.checked) {
+        showPreMessage("warn", "<strong>Debes aceptar expresamente la Política de Datos Personales (Ley 21.719) para continuar.</strong>");
+        return false;
+      }
+
+      if (sourceLimitsChk && !sourceLimitsChk.checked) {
+        showPreMessage("warn", "<strong>Debes aceptar la advertencia sobre posibles errores u omisiones del Diario Oficial para continuar.</strong>");
+        return false;
+      }
+
+      if (errDiv) errDiv.style.display = "none";
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Validando suscripción...";
+      }
+
+      var formData = new FormData(form);
+      var csrfToken = form.querySelector('input[name="_csrf_token"]')?.value || "";
+
+      try {
+        var res = await fetch("/api/validar_suscripcion_previa", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken
+          },
+          body: formData
+        });
+        var data = await res.json();
+
+        if (!res.ok && !data.registrado) {
+          showPreMessage("error", "<strong>" + (data.message || "No pudimos validar los datos. Revisa el formulario e inténtalo nuevamente.") + "</strong>");
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = 'Continuar con la Suscripción →';
+          }
+          return false;
+        }
+
+        if (data.registrado && data.status === "ya_registrado") {
+          showPreMessage("alert_red", "<strong>" + (data.message || "Este RUT o correo ya tiene una vigilancia activa. No realizaremos un nuevo cobro.") + "</strong>");
+          if (btn) {
+            btn.disabled = false;
+            btn.style.background = "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)";
+            btn.style.color = "#ffffff";
+            btn.style.borderColor = "#ef4444";
+            btn.style.boxShadow = "0 6px 20px rgba(239, 68, 68, 0.4)";
+            btn.innerHTML = "Vigilancia ya activa";
+          }
+          return false;
+        }
+
+        if (data.status === "pago_pendiente") {
+          showPreMessage("warn", "<strong>" + (data.message || "Ya existe una solicitud pendiente de pago.") + "</strong><br>Si ya pagaste, no vuelvas a pagar: espera la confirmación de activación.");
+          if (data.checkout_url) {
+            setTimeout(function() { window.location.href = data.checkout_url; }, 1800);
+          }
+          return false;
+        }
+
+        if (data.checkout_url) {
+          showPreMessage("ok", "<strong>" + (data.message || "Datos validados. Redirigiendo al pago seguro...") + "</strong>");
+          setTimeout(function() { window.location.href = data.checkout_url; }, 700);
+          return false;
+        }
+
+        showPreMessage("error", "<strong>No recibimos un enlace de pago válido. Te contactaremos para completar la activación.</strong>");
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = 'Continuar con la Suscripción →';
+        }
+        return false;
+      } catch (err) {
+        console.error("Error validando:", err);
+        showPreMessage("error", "<strong>No pudimos validar la suscripción en este momento.</strong><br>Revisa tu conexión e inténtalo nuevamente.");
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = 'Continuar con la Suscripción →';
+        }
+        return false;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      var btns = document.querySelectorAll(".mp-pay-button");
+      btns.forEach(function(b) {
+        b.addEventListener("click", function(e) {
+          e.preventDefault();
+          var p = b.getAttribute("data-plan") || "mensual";
+          abrirModalPrePago(p);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

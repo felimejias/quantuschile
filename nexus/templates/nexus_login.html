@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QUANTUS NEXUS · Acceso</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0b0e14;color:#e6e9f0;
+display:flex;min-height:100vh;align-items:center;justify-content:center}
+.card{background:#11151f;border:1px solid #232a3a;border-radius:14px;padding:34px;width:340px}
+h1{margin:0 0 4px;font-size:22px;letter-spacing:.5px}
+h1 b{color:#4dd2ff}
+p.sub{margin:0 0 22px;color:#7d8797;font-size:13px}
+input{width:100%;padding:11px 12px;background:#0b0e14;border:1px solid #2a3345;border-radius:8px;color:#e6e9f0;font-size:15px}
+input:focus{outline:none;border-color:#4dd2ff}
+button{margin-top:14px;width:100%;padding:12px;border:0;border-radius:8px;background:#4dd2ff;color:#081018;font-weight:700;font-size:15px;cursor:pointer}
+button:hover{background:#79dfff}
+a{display:block;text-align:center;margin-top:14px;color:#7fb3ff;text-decoration:none;font-size:13px}
+.err{color:#ff6b6b;font-size:13px;margin-top:12px;min-height:18px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>QUANTUS <b>NEXUS</b></h1>
+<p class="sub">Monitor unificado · acceso con tu contrasena de centro</p>
+<form method="post" action="/login">
+<input type="password" name="password" placeholder="Contrasena" autofocus>
+<button type="submit">Entrar</button>
+</form>
+<div class="err">{{ error }}</div>
+</div>
+</body>
+</html>

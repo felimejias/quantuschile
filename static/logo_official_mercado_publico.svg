@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" width="200" height="80">
+  <rect width="200" height="80" rx="16" fill="#ffffff"/>
+  <rect x="25" y="24" width="6" height="32" fill="#0033a0"/>
+  <rect x="25" y="40" width="6" height="16" fill="#da291c"/>
+  <text x="40" y="24" font-family="sans-serif" font-weight="600" font-size="8" fill="#64748b">GOBIERNO DE CHILE</text>
+  <text x="40" y="40" font-family="sans-serif" font-weight="900" font-size="15" fill="#0033a0">mercado</text>
+  <text x="40" y="56" font-family="sans-serif" font-weight="900" font-size="15" fill="#009ee3">público</text>
+</svg>

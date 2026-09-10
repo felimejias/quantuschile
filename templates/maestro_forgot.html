@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar contraseña | Centro Maestro Quantus</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-maestro-auth">
+</head>
+<body>
+  <main class="master-login-shell">
+    <section class="master-login-card">
+      <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+      <div>
+        <span class="eyebrow"><span class="eyebrow-dot"></span> Recuperación segura</span>
+        <h1>Olvidé mi contraseña</h1>
+        <p>Generaremos una contraseña temporal nueva y la enviaremos al correo maestro autorizado.</p>
+      </div>
+      {% if message %}<div class="master-success">{{ message }}</div>{% endif %}
+      {% if error %}<div class="master-alert">{{ error }}</div>{% endif %}
+      <form class="master-login-form" method="POST">
+        {{ csrf_input()|safe }}
+        <button class="btn full" type="submit">Enviar contraseña temporal</button>
+      </form>
+      <div class="master-login-actions">
+        <a class="cta-button btn-secondary" href="/maestro/login">Volver al login</a>
+      </div>
+    </section>
+  </main>
+  {% include "partials/legal_footer.html" %}
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ subject }}</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f1f5f9; font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-text-size-adjust:100%;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f1f5f9; padding:16px 0;">
+<tr><td align="center" style="padding:16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; background:#ffffff; border-radius:14px; overflow:hidden; border:1px solid #e2e8f0;">
+  <!-- HEADER -->
+  <tr>
+    <td style="background:#06101f; padding:20px 24px;">
+      <div style="font-size:12px; letter-spacing:2px; color:#38bdf8; font-weight:800;">QUANTUS CHILE</div>
+      <div style="font-size:13px; color:#94a3b8; margin-top:2px;">Radar Diario Oficial 24/7 · Membresía Activa</div>
+    </td>
+    <td align="right" style="background:#06101f; padding:20px 24px;">
+      <span style="display:inline-block; background:#0284c7; color:#ffffff; font-size:11px; font-weight:700; padding:6px 14px; border-radius:999px; letter-spacing:1px;">ACTIVO</span>
+    </td>
+  </tr>
+
+  <!-- HERO GREETING -->
+  <tr>
+    <td colspan="2" style="padding:26px 26px 8px 26px;">
+      <h1 style="margin:0 0 8px 0; font-size:22px; line-height:1.3; color:#06101f;">¡Bienvenido a Quantus, {{ nombre }}!</h1>
+      <p style="margin:0; font-size:14px; line-height:1.6; color:#475569;">Confirmamos la activación de tu <strong>Radar Preventivo del Diario Oficial</strong>. Nuestro motor de inteligencia jurídica revisa cada edición oficial a las 07:00 AM para protegerte de publicaciones judiciales, societarias o tributarias.</p>
+    </td>
+  </tr>
+
+{% if nombre_incompleto %}
+  <!-- NOTA DE PRECISION DE NOMBRE -->
+  <tr>
+    <td colspan="2" style="padding:6px 26px 14px 26px;">
+      <div style="background:#fffbeb; border:1px solid #fde68a; border-left:4px solid #f59e0b; padding:12px 14px; border-radius:8px; font-size:12.5px; line-height:1.5; color:#92400e;">
+        💡 <strong>Recomendación para Máxima Precisión:</strong> Registraste un solo nombre (<em>{{ nombre }}</em>). Para garantizar que ninguna notificación judicial o societaria se pase por alto debido a alcance de nombres, puedes responder directamente a este correo indicándonos tu <strong>nombre y dos apellidos tal como figuran en tu Cédula de Identidad</strong> para actualizar tu ficha sin costo.
+      </div>
+    </td>
+  </tr>
+{% endif %}
+
+  <!-- BLOQUE AUDITORIA RETROACTIVA (CANONICO) -->
+  <tr>
+    <td colspan="2" style="padding:10px 26px 4px 26px;">
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-left:4px solid #0284c7; padding:14px 16px; border-radius:8px;">
+        <div style="font-size:13px; font-weight:700; color:#0f172a; margin-bottom:4px;">
+          {% if estudio_convenio %}
+            🤝 Beneficio Especial de Convenio: Auditoría Retroactiva de {{ dias_auditoria }} Días
+          {% else %}
+            🎁 Beneficio de Bienvenida: Auditoría Retroactiva de {{ dias_auditoria }} Días (Plazo Legal Oportuno)
+          {% endif %}
+        </div>
+        <p style="margin:0 0 8px 0; font-size:12.5px; line-height:1.5; color:#475569;">
+          {% if estudio_convenio %}
+            Por convenio con <strong>{{ estudio_convenio }}</strong>, auditamos las publicaciones oficiales de los últimos <strong>{{ dias_auditoria }} días corridos</strong> anteriores a tu registro.
+          {% else %}
+            Hemos auditado las ediciones del Diario Oficial de los últimos <strong>9 días corridos</strong> (plazo procesal legal de 3 a 5 días hábiles para ejercer oportuna defensa) para certificar tu balance inicial.
+          {% endif %}
+        </p>
+        <div style="font-size:12px; color:#0369a1; background:#f0f9ff; border:1px solid #bae6fd; padding:8px 12px; border-radius:6px;">
+          <strong>Resultado de tu Auditoría:</strong> {{ auditoria_resultado or "Balance Limpio · Sin publicaciones judiciales ni societarias detectadas en el período auditado." }}
+        </div>
+      </div>
+    </td>
+  </tr>
+
+  <!-- SUBSCRIPTION DETAILS TABLE -->
+  <tr>
+    <td colspan="2" style="padding:14px 26px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e2e8f0; border-radius:10px; overflow:hidden;">
+        <tr>
+          <td style="padding:10px 14px; background:#f8fafc; border-bottom:1px solid #e2e8f0; font-size:11px; letter-spacing:1px; color:#64748b; font-weight:700; text-transform:uppercase; width:32%;">Plan</td>
+          <td style="padding:10px 14px; border-bottom:1px solid #e2e8f0; font-size:13px; color:#0f172a; font-weight:600;">{{ plan_label or plan or "Suscripción Mensual VIP" }}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 14px; background:#f8fafc; border-bottom:1px solid #e2e8f0; font-size:11px; letter-spacing:1px; color:#64748b; font-weight:700; text-transform:uppercase;">RUT Vigente</td>
+          <td style="padding:10px 14px; border-bottom:1px solid #e2e8f0; font-size:13px; color:#0f172a; font-weight:700;">{{ rut }}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 14px; background:#f8fafc; border-bottom:1px solid #e2e8f0; font-size:11px; letter-spacing:1px; color:#64748b; font-weight:700; text-transform:uppercase;">Vigencia</td>
+          <td style="padding:10px 14px; border-bottom:1px solid #e2e8f0; font-size:13px; color:#0f172a;">{{ vigencia or "Renovación Automática Activa" }}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 14px; background:#f8fafc; font-size:11px; letter-spacing:1px; color:#64748b; font-weight:700; text-transform:uppercase;">Canales de Alerta</td>
+          <td style="padding:10px 14px; font-size:13px; color:#0284c7; font-weight:600;">Correo Electrónico 24/7 (Entrega Inmediata)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+{% if datos_monitoreados %}
+  <!-- MONITORED TERMS -->
+  <tr>
+    <td colspan="2" style="padding:4px 26px;">
+      <h2 style="margin:12px 0 6px 0; font-size:14px; color:#0f172a; text-transform:uppercase; letter-spacing:0.5px;">Términos Monitoreados</h2>
+      <ul style="margin:0; padding-left:20px; font-size:13px; line-height:1.7; color:#334155;">
+        {% for term in datos_monitoreados %}
+          <li><strong>{{ term }}</strong></li>
+        {% endfor %}
+      </ul>
+    </td>
+  </tr>
+{% endif %}
+
+  <!-- CROSS-SELL / ECOSYSTEM ENGAGEMENT BANNER -->
+  <tr>
+    <td colspan="2" style="padding:18px 26px;">
+      <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius:12px; padding:20px; border:1px solid #334155; color:#ffffff;">
+        <h3 style="margin:0 0 6px 0; font-size:16px; color:#38bdf8;">⚡ Potencia tu Negocio con el Ecosistema Quantus</h3>
+        <p style="margin:0 0 14px 0; font-size:13px; line-height:1.5; color:#cbd5e1;">Como suscriptor de Quantus, tienes acceso prioritario a nuestros radares especializados de oportunidades y resguardo:</p>
+        
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+              <strong style="color:#ffffff; font-size:13px;">💼 Mercado Público & Licitaciones VIP</strong><br>
+              <span style="font-size:12px; color:#94a3b8;">Detecta convocatorias y licitaciones del Estado en tu rubro antes que la competencia.</span><br>
+              <a href="https://www.quantuschile.cl/licitaciones" style="font-size:12px; color:#38bdf8; text-decoration:none; font-weight:700;">Conocer Radar Licitaciones →</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+              <strong style="color:#ffffff; font-size:13px;">🛡️ Custodia de Marcas INAPI 24/7</strong><br>
+              <span style="font-size:12px; color:#94a3b8;">Vigilancia preventiva contra solicitudes de marcas similares que intenten copiar tu nombre o logo.</span><br>
+              <a href="https://www.quantuschile.cl/marcas" style="font-size:12px; color:#38bdf8; text-decoration:none; font-weight:700;">Ver Vigilancia INAPI →</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.1);">
+              <strong style="color:#ffffff; font-size:13px;">⚖️ Remates Judiciales & Quiebras</strong><br>
+              <span style="font-size:12px; color:#94a3b8;">Alertas diarias de inmuebles y vehículos en subasta judicial con posturas mínimas de oportunidad.</span><br>
+              <a href="https://www.quantuschile.cl/remates" style="font-size:12px; color:#38bdf8; text-decoration:none; font-weight:700;">Explorar Remates →</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0;">
+              <strong style="color:#ffffff; font-size:13px;">🎯 Empleos Públicos & Convocatorias Mineras</strong><br>
+              <span style="font-size:12px; color:#94a3b8;">Calce automático de admisibilidad curricular para cargos estatales, Codelco y empresas públicas.</span><br>
+              <a href="https://www.quantuschile.cl/empleos-publicos" style="font-size:12px; color:#38bdf8; text-decoration:none; font-weight:700;">Ver Empleos Públicos →</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+
+  <!-- LEGAL & RIGHTS NOTICE -->
+  <tr>
+    <td colspan="2" style="padding:10px 26px 16px 26px; font-size:12px; line-height:1.6; color:#64748b;">
+      <strong>Tus derechos (Ley 21.719):</strong> Puedes ejercer tus derechos de acceso, rectificación, supresión o bloqueo escribiendo a <a href="mailto:{{ corp.email_privacidad }}" style="color:#0284c7;">{{ corp.email_privacidad }}</a>.<br>
+      <strong>Soporte y Facturación:</strong> Para requerimientos tributarios o asistencia directa, contacta a <a href="mailto:{{ corp.email_contacto }}" style="color:#0284c7;">{{ corp.email_contacto }}</a>.
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td colspan="2" style="padding:16px 26px; background:#f8fafc; border-top:1px solid #e2e8f0; font-size:11px; line-height:1.6; color:#94a3b8; text-align:center;">
+      {{ corp.empresa }} · RUT {{ corp.rut_empresa }} · <a href="{{ corp.web }}" style="color:#0284c7; text-decoration:none;">www.quantuschile.cl</a><br>
+      Santiago, Chile · Inteligencia Preventiva de Datos Públicos
+    </td>
+  </tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

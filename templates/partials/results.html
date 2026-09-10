@@ -1,0 +1,99 @@
+{% if error %}
+<div class="card" style="border-color: var(--danger); padding: 1.5rem; background: var(--danger-bg);">
+  <h4 style="color: var(--danger); display: flex; align-items: center; gap: 0.5rem;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+    Error en la búsqueda
+  </h4>
+  <p style="margin-top: 0.5rem; color: var(--text-main);">{{ error }}</p>
+  <p style="font-size: 0.875rem; color: var(--text-dim); margin-top: 0.25rem;">Por favor, inténtalo de nuevo en unos momentos o simplifica los términos.</p>
+</div>
+{% else %}
+
+<!-- KPI VIABILIDAD -->
+<div class="viability-widget">
+  <div class="viability-score-box score-{{ viability_class }}">
+    {{ score }}%
+    <span class="viability-label">Score</span>
+  </div>
+  <div class="viability-details">
+    <h3 class="viability-title">Análisis de Viabilidad para "{{ query }}"</h3>
+    <p class="viability-desc" style="color: #ffffff; font-weight: 600; margin-bottom: 0.25rem;">
+      {{ viability_text }}
+    </p>
+    <p class="viability-desc">
+      Encontramos <strong>{{ total }}</strong> marcas similares en total. 
+      Coincidencias exactas: <strong>{{ exact_count }}</strong>. 
+      Marcas activas (en trámite/registradas): <strong>{{ vigentes_count }}</strong>.
+    </p>
+  </div>
+  
+  <div>
+    {% if score >= 50 %}
+      <a href="/registro?q={{ query }}" class="cta-button">Iniciar Registro</a>
+    {% else %}
+      <a href="/registro?q={{ query }}" class="cta-button btn-secondary" onclick="return confirm('Advertencia: El score de viabilidad es muy bajo debido a conflictos de marcas idénticas. ¿Desea continuar de todas formas?')">Iniciar de todas formas</a>
+    {% endif %}
+  </div>
+</div>
+
+<!-- TABLA DE RESULTADOS -->
+{% if total > 0 %}
+<div class="results-table-container">
+  <table class="results-table">
+    <thead>
+      <tr>
+        <th>Marca / Denominación</th>
+        <th>Solicitud</th>
+        <th>Registro</th>
+        <th>Clase</th>
+        <th>Estado</th>
+        <th>Titular</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in marcas %}
+      <tr>
+        <td style="font-weight: 700; color: #ffffff;">{{ m.denominacion }}</td>
+        <td>{{ m.solicitud }}</td>
+        <td>
+          {% if m.registro %}
+            <span style="color: var(--success); font-family: monospace;">{{ m.registro }}</span>
+          {% else %}
+            <span style="color: var(--text-dim); font-size: 0.875rem;">[En trámite]</span>
+          {% endif %}
+        </td>
+        <td>
+          <span class="badge badge-info" style="font-family: monospace;">Clase {{ m.clase }}</span>
+        </td>
+        <td>
+          {% set est = m.estado.lower() %}
+          {% if "registrada" in est or "concedida" in est %}
+            <span class="badge badge-success">Registrada</span>
+          {% elif "trámite" in est or "publicada" in est or "aceptada" in est %}
+            <span class="badge badge-warning">En Trámite</span>
+          {% else %}
+            <span class="badge badge-danger">{{ m.estado }}</span>
+          {% endif %}
+        </td>
+        <td style="font-size: 0.875rem; color: var(--text-dim);" title="{{ m.titular }}">{{ m.titular }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="card text-center" style="padding: 3rem; border-color: var(--success); background: rgba(16, 185, 129, 0.02);">
+  <svg style="width: 48px; height: 48px; color: var(--success); margin: 0 auto 1rem auto;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/>
+  </svg>
+  <h3 style="color: #ffffff; margin-bottom: 0.5rem;">¡Marca 100% disponible!</h3>
+  <p style="color: var(--text-dim); max-width: 500px; margin: 0 auto 1.5rem auto;">
+    No se encontraron registros de marcas idénticas ni similares en la base de datos de INAPI. Tienes la máxima probabilidad de aprobación.
+  </p>
+  <a href="/registro?q={{ query }}" class="cta-button" style="background: var(--success);">Registrar "{{ query }}" Ahora</a>
+</div>
+{% endif %}
+
+{% endif %}

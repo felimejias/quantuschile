@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Simulador de Multas & Diagnóstico Ley N° 21.719 | Quantus Privacy Engine</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: #1e293b;
+      --card-bg-glass: rgba(30, 41, 59, 0.7);
+      --accent-blue: #38bdf8;
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-orange: #f59e0b;
+      --border-color: rgba(56, 189, 248, 0.2);
+    }
+    body { background: var(--bg-dark); color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 0; margin: 0; }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+    
+    .hero-box {
+      text-align: center;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 70%);
+      border: 1px solid rgba(56,189,248,0.35);
+      border-radius: 20px;
+      padding: 36px 20px;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .hero-title { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 10px; line-height: 1.25; }
+    .hero-sub { font-size: 14px; color: #94a3b8; line-height: 1.6; max-width: 760px; margin: 0 auto; }
+
+    /* Configuración de Perfil de Empresa (Simulador) */
+    .profile-card {
+      background: var(--card-bg-glass);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .profile-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .profile-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .profile-select {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .profile-select:focus {
+      border-color: #38bdf8;
+    }
+
+    /* Tarjetas de Preguntas */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-counter {
+      font-size: 12px;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56,189,248,0.1);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(56,189,248,0.3);
+    }
+    .question-card {
+      background: var(--card-bg);
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+    }
+    .question-card.active { border-color: #38bdf8; }
+    .q-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .q-pillar {
+      font-size: 10px;
+      font-weight: 800;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .q-num { font-size: 11px; font-weight: 800; color: #64748b; }
+    .q-text { font-size: 14px; font-weight: 700; color: #f8fafc; margin-bottom: 14px; line-height: 1.45; }
+    
+    .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-opt {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .btn-opt:hover { background: #1e293b; border-color: #38bdf8; color: #fff; }
+    .btn-opt.selected-yes { background: rgba(16,185,129,0.2); border-color: #10b981; color: #6ee7b7; font-weight: 800; }
+    .btn-opt.selected-no { background: rgba(239,68,68,0.2); border-color: #ef4444; color: #fca5a5; font-weight: 800; }
+
+    /* Resultados & Simulador Financiero */
+    .result-box {
+      display: none;
+      background: #0f172a;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 20px;
+      padding: 32px 24px;
+      margin-top: 32px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .exposure-hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .stat-val {
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .stat-val.red { color: #ef4444; }
+    .stat-val.orange { color: #f59e0b; }
+    .stat-val.green { color: #10b981; }
+    .stat-sub { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+    /* Scorecard de Pilares */
+    .scorecard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .pillar-card {
+      background: #131d31;
+      border: 1px solid #233554;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: left;
+    }
+    .pillar-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #f1f5f9;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .pillar-status {
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .pillar-status.ok { color: #10b981; }
+    .pillar-status.fail { color: #ef4444; }
+
+    /* Hoja de Ruta */
+    .roadmap-box {
+      background: #131d31;
+      border: 1px dashed rgba(56,189,248,0.3);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+    .roadmap-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .roadmap-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-action-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(90deg, #10b981, #059669);
+      color: #0f172a;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 13px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(16,185,129,0.4);
+      transition: transform 0.2s;
+    }
+    .btn-action-wa:hover { transform: translateY(-2px); }
+
+    .btn-pdf-oficial {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(90deg, #ef4444, #dc2626);
+      color: #fff;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 4px 15px rgba(239,68,68,0.4);
+      transition: transform 0.2s;
+    }
+    .btn-pdf-oficial:hover { transform: translateY(-2px); }
+
+    /* Tooltips Glassmorphism */
+    .tooltip-term {
+      position: relative;
+      display: inline-block;
+      color: #38bdf8;
+      font-weight: 800;
+      border-bottom: 1.5px dashed #38bdf8;
+      cursor: help;
+    }
+    .tooltip-term .tooltip-text {
+      visibility: hidden;
+      width: 270px;
+      background: rgba(15, 23, 42, 0.96);
+      color: #f1f5f9;
+      text-align: left;
+      border-radius: 12px;
+      padding: 12px 14px;
+      position: absolute;
+      z-index: 9999;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 1.5;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.2);
+      backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+    .tooltip-term .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: #0f172a transparent transparent transparent;
+    }
+    .tooltip-term:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+    .tooltip-title {
+      font-weight: 800;
+      color: #38bdf8;
+      margin-bottom: 4px;
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  {% set active_module = 'ley21719' %}
+  {% include "partials/nav_header.html" %}
+
+  <main class="container">
+
+    <div class="hero-box">
+      <div class="badge-pill">⚖️ Ley N° 21.719 · Vigencia 1 Dic 2026</div>
+      <div class="hero-title">Simulador de Multas & Diagnóstico de Cumplimiento</div>
+      <div class="hero-sub">
+        Calcula la exposición financiera real de tu empresa ante la nueva <strong>Agencia de Protección de Datos Personales</strong> (multas de hasta <strong>20.000 UTM o 4% de ventas</strong>) y obtén tu hoja de ruta de remediación inmediata.
+      </div>
+    </div>
+
+    <!-- BLOQUE EDITORIAL ESTÁTICO DE ALTO VALOR E-E-A-T -->
+    <section class="profile-card" style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 18px; padding: 28px 32px; margin-bottom: 28px; line-height: 1.7; color: #cbd5e1;">
+      <h2 style="font-size: 22px; font-weight: 800; color: #ffffff; margin-top: 0; margin-bottom: 14px; letter-spacing: -0.01em;">
+        Ley N° 21.719: qué cambia para las empresas chilenas
+      </h2>
+      <p style="margin-bottom: 16px;">
+        La Ley N° 21.719 moderniza la protección de datos personales en Chile, reemplazando el marco vigente desde 1999 (Ley 19.628) y creando la <strong style="color: #38bdf8;">Agencia de Protección de Datos Personales</strong>, un organismo fiscalizador con potestad para investigar y sancionar. Entra en vigencia general el <strong>1 de diciembre de 2026</strong>.
+      </p>
+      <p style="margin-bottom: 16px;">
+        A diferencia de la normativa anterior, que rara vez se fiscalizaba en la práctica, esta ley introduce <strong style="color: #f59e0b;">multas de hasta 20.000 UTM o el 4% de las ventas anuales</strong> de la empresa infractora — cifras diseñadas explícitamente para que el cumplimiento deje de ser opcional.
+      </p>
+      <h3 style="font-size: 17px; font-weight: 700; color: #ffffff; margin-top: 22px; margin-bottom: 10px;">
+        ¿A qué empresas aplica?
+      </h3>
+      <p style="margin-bottom: 16px;">
+        Aplica a cualquier organización que trate datos personales de clientes, trabajadores o proveedores: desde una PYME con una base de clientes en Excel hasta un e-commerce, clínica o ERP. No hay una excepción general para empresas pequeñas, aunque el nivel de exigencia y las multas efectivas varían según el volumen de datos tratados y su sensibilidad.
+      </p>
+      <h3 style="font-size: 17px; font-weight: 700; color: #ffffff; margin-top: 22px; margin-bottom: 12px;">
+        Las cuatro obligaciones centrales
+      </h3>
+      <ol style="margin: 0 0 20px 20px; padding-left: 6px;">
+        <li style="margin-bottom: 8px;"><strong style="color: #ffffff;">Registro de Actividades de Tratamiento (RAT):</strong> un inventario formal de qué datos personales maneja la empresa, con qué finalidad y bajo qué base legal.</li>
+        <li style="margin-bottom: 8px;"><strong style="color: #ffffff;">Consentimiento y bases de legitimidad:</strong> cuando el tratamiento no se ampara en la ejecución de un contrato o una obligación legal, se requiere consentimiento expreso y trazable del titular.</li>
+        <li style="margin-bottom: 8px;"><strong style="color: #ffffff;">Derechos ARCOP:</strong> las empresas deben habilitar un canal para que las personas ejerzan sus derechos de Acceso, Rectificación, Cancelación, Oposición y Portabilidad, respondiendo dentro de plazos definidos.</li>
+        <li style="margin-bottom: 8px;"><strong style="color: #ffffff;">Protocolo ante brechas de seguridad:</strong> un procedimiento documentado para detectar, contener y reportar incidentes que comprometan datos personales.</li>
+      </ol>
+      <p style="margin: 0; font-size: 13.5px; color: #94a3b8; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px;">
+        Usa el simulador a continuación para estimar tu exposición financiera según el tamaño de tu empresa y el tipo de datos que tratas.
+      </p>
+    </section>
+
+    <!-- 1. Perfil de la Empresa (Simulador Financiero) -->
+    <div class="profile-card">
+      <div class="profile-title">
+        <span>1. Configura el Perfil de tu Empresa</span>
+      </div>
+      <div class="profile-grid">
+        <div class="profile-field">
+          <label for="company-size">Tamaño de Empresa / Facturación</label>
+          <select id="company-size" class="profile-select" onchange="actualizarCalculoSiCompleto()">
+            <option value="micro">Microempresa (&lt; 2.400 UF ventas · 1-9 personas)</option>
+            <option value="pequena" selected>Pequeña Empresa (2.400 - 25.000 UF · 10-49 personas)</option>
+            <option value="mediana">Mediana Empresa (25.000 - 100.000 UF · 50-199 personas)</option>
+            <option value="grande">Gran Empresa (&gt; 100.000 UF · 200+ personas)</option>
+          </select>
+        </div>
+        <div class="profile-field">
+          <label for="data-nature">Naturaleza de Datos Tratados</label>
+          <select id="data-nature" class="profile-select" onchange="actualizarCalculoSiCompleto()">
+            <option value="general" selected>Datos Generales (RUT, Teléfonos, Correos, Clientes)</option>
+            <option value="sensible">Datos Sensibles (Salud, Biometría, Menores de Edad, Financieros)</option>
+          </select>
+        </div>
+        <div class="profile-field">
+          <label for="records-volume">Volumen de Titulares / Contactos</label>
+          <select id="records-volume" class="profile-select" onchange="actualizarCalculoSiCompleto()">
+            <option value="bajo">&lt; 1.000 personas registradas</option>
+            <option value="medio" selected>1.000 a 10.000 personas</option>
+            <option value="alto">&gt; 10.000 personas registradas</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Test de 8 Controles Clave -->
+    <div class="section-header">
+      <div class="section-title">2. Test de Controles Obligatorios de la Ley</div>
+      <div id="progress-indicator" class="progress-counter">0 / 8 Respondidas</div>
+    </div>
+
+    <div id="quiz-questions-container"></div>
+
+    <!-- 3. Resultado & Scorecard Financiero -->
+    <div id="result-box" class="result-box">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <span class="badge-pill" id="score-level-badge">DIAGNÓSTICO FINALIZADO</span>
+        <h2 style="color:#fff; font-size:24px; margin: 8px 0 4px 0;" id="result-title">Exposición Financiera Estimada</h2>
+        <p style="color:#94a3b8; font-size:13px; margin:0;" id="result-subtitle">Cálculo basado en los topes legales del Art. 36° de la Ley N° 21.719</p>
+      </div>
+
+      <!-- Métricas Financieras -->
+      <div class="exposure-hero">
+        <div class="stat-card">
+          <div class="stat-label">Multa Máxima Estimada</div>
+          <div class="stat-val red" id="max-fine-clp">$0 CLP</div>
+          <div class="stat-sub" id="max-fine-utm">0 UTM</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Severidad Infraccional</div>
+          <div class="stat-val orange" id="severity-type">GRAVE</div>
+          <div class="stat-sub" id="severity-law-ref">Art. 34° y 36° Ley 21.719</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Nivel de Madurez Global</div>
+          <div class="stat-val" id="maturity-score">0%</div>
+          <div class="stat-sub" id="breaches-count">0 controles pendientes</div>
+        </div>
+      </div>
+
+      <!-- Scorecard por Pilares -->
+      <div style="text-align:left; margin-bottom: 12px;">
+        <span style="font-size:12px; font-weight:800; color:#38bdf8; text-transform:uppercase; letter-spacing:0.5px;">Scorecard por Pilares de Cumplimiento:</span>
+      </div>
+      <div class="scorecard-grid">
+        <div class="pillar-card">
+          <div class="pillar-title">
+            <span>1. Gobernanza & RAT</span>
+            <span class="pillar-status" id="pillar-1-status">Pendiente</span>
+          </div>
+          <div style="font-size:11px; color:#94a3b8;" id="pillar-1-desc">Inventario formal de datos</div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-title">
+            <span>2. Consentimientos</span>
+            <span class="pillar-status" id="pillar-2-status">Pendiente</span>
+          </div>
+          <div style="font-size:11px; color:#94a3b8;" id="pillar-2-desc">Aceptación expresa y Hash</div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-title">
+            <span>3. Seguridad & Brechas</span>
+            <span class="pillar-status" id="pillar-3-status">Pendiente</span>
+          </div>
+          <div style="font-size:11px; color:#94a3b8;" id="pillar-3-desc">Protocolo 3h y cámaras</div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-title">
+            <span>4. Derechos ARCOP</span>
+            <span class="pillar-status" id="pillar-4-status">Pendiente</span>
+          </div>
+          <div style="font-size:11px; color:#94a3b8;" id="pillar-4-desc">Portal borrado y sensibles</div>
+        </div>
+      </div>
+
+      <!-- Hoja de Ruta de Remediación -->
+      <div class="roadmap-box">
+        <div class="roadmap-title">Hoja de Ruta de Remediación Inmediata:</div>
+        <ol class="roadmap-list" id="roadmap-items">
+          <li><strong>Implementar Registro de Actividades de Tratamiento (RAT):</strong> Identificar bases de datos de clientes, proveedores y trabajadores.</li>
+          <li><strong>Habilitar Portal de Derechos ARCOP:</strong> Atender solicitudes de acceso y borrado en menos de 10 días hábiles.</li>
+          <li><strong>Auditar Políticas y Proveedores:</strong> Formalizar contratos de encargo de tratamiento con pasarelas, ERP y hosting.</li>
+        </ol>
+      </div>
+
+      <p id="result-desc" style="color:#cbd5e1; font-size:13px; max-width:700px; margin:0 auto 24px auto; line-height:1.6; text-align:center;"></p>
+      
+      <!-- Botones de Acción -->
+      <div class="cta-actions">
+        <a id="btn-wa-action" href="#" target="_blank" class="btn-action-wa">Solicitar Asesoría de Adecuación con Quantus →</a>
+        <button type="button" id="btn-wa-qr" class="btn-action-wa" style="background:#1e293b; border:1px solid #10b981; color:#10b981; cursor:pointer;">Ver Código QR</button>
+        <a href="/static/ley21719_oficial.pdf" download class="btn-pdf-oficial">Descargar Ley N° 21.719 en PDF</a>
+      </div>
+    </div>
+    </div>
+
+    <!-- SECCIÓN DE PREGUNTAS FRECUENTES LEY 21.719 -->
+    <section class="profile-card" style="background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 18px; padding: 28px 32px; margin-top: 32px; line-height: 1.7; color: #cbd5e1;">
+      <h2 style="font-size: 22px; font-weight: 800; color: #ffffff; margin-top: 0; margin-bottom: 20px; letter-spacing: -0.01em;">
+        Preguntas Frecuentes sobre la Ley 21.719
+      </h2>
+      
+      <div style="margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <h3 style="font-size: 16px; font-weight: 700; color: #38bdf8; margin: 0 0 6px;">
+          ¿Qué pasa si mi empresa no cumple antes del 1 de diciembre de 2026?
+        </h3>
+        <p style="margin: 0; font-size: 14px; color: #cbd5e1;">
+          La Agencia de Protección de Datos Personales queda habilitada para fiscalizar e iniciar procedimientos sancionatorios desde la entrada en vigencia. Las multas dependen de la gravedad de la infracción, pero pueden alcanzar hasta 20.000 UTM o el 4% de las ventas anuales de la empresa infractora.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <h3 style="font-size: 16px; font-weight: 700; color: #38bdf8; margin: 0 0 6px;">
+          ¿Una PYME pequeña también está obligada a tener un RAT?
+        </h3>
+        <p style="margin: 0; font-size: 14px; color: #cbd5e1;">
+          Sí. La ley no exime a las empresas pequeñas de las obligaciones centrales, aunque el nivel de complejidad del Registro de Actividades de Tratamiento puede ser proporcional al volumen y sensibilidad de los datos que maneja cada empresa.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <h3 style="font-size: 16px; font-weight: 700; color: #38bdf8; margin: 0 0 6px;">
+          ¿Qué se considera un dato sensible bajo esta ley?
+        </h3>
+        <p style="margin: 0; font-size: 14px; color: #cbd5e1;">
+          Datos de salud, biométricos, de menores de edad, información financiera detallada y datos que revelen origen étnico, opiniones políticas o afiliación sindical. Estos datos requieren medidas de resguardo más estrictas que los datos generales.
+        </p>
+      </div>
+
+      <div style="margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <h3 style="font-size: 16px; font-weight: 700; color: #38bdf8; margin: 0 0 6px;">
+          ¿En cuánto tiempo debo responder una solicitud de derechos ARCOP?
+        </h3>
+        <p style="margin: 0; font-size: 14px; color: #cbd5e1;">
+          La ley exige responder dentro de un plazo acotado en días hábiles desde que se recibe la solicitud del titular. No contar con un canal habilitado para recibir y tramitar estas solicitudes es en sí mismo un incumplimiento.
+        </p>
+      </div>
+
+      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <span style="font-size: 14px; color: #94a3b8;">¿Quieres profundizar en la normativa?</span>
+        <a href="/blog/guia-cumplimiento-ley-21719-pyme" style="color: #38bdf8; font-weight: 700; font-size: 14px; text-decoration: underline;">
+          Leer Guía Completa de Cumplimiento Ley 21.719 para PYMEs →
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const UTM_VALUE_CLP = 67500; // Valor de referencia oficial UTM
+
+    const questions = [
+      {
+        id: 1,
+        pillar: 1,
+        pillarName: "Gobernanza & RAT",
+        text: '1. ¿Cuentas con un <span class="tooltip-term">RAT (Registro de Actividades de Tratamiento)<span class="tooltip-text"><span class="tooltip-title">📜 ¿Qué es el RAT?</span>Es el inventario oficial exigido por ley donde registras todas las bases de datos, planillas Excel o sistemas con nombres, RUTs o teléfonos de clientes.</span></span> de tus clientes y empleados?',
+        yesText: "Sí, documentado",
+        noText: "No / No estoy seguro"
+      },
+      {
+        id: 2,
+        pillar: 4,
+        pillarName: "Derechos ARCOP",
+        text: '2. ¿Dispones de un portal o formulario web para responder solicitudes de borrado o acceso (<span class="tooltip-term">Derechos ARCOP<span class="tooltip-text"><span class="tooltip-title">🛡️ ¿Qué son los Derechos ARCOP?</span>Acceso, Rectificación, Cancelación/Supresión, Oposición y Portabilidad. Es el derecho legal del titular a exigir qué datos tienes o pedir su eliminación en máx 10 días.</span></span>)?',
+        yesText: "Sí, automatizado",
+        noText: "No / Solo correo general"
+      },
+      {
+        id: 3,
+        pillar: 2,
+        pillarName: "Consentimientos",
+        text: '3. ¿Tienes evidencia técnica y auditable (IP, fecha y <span class="tooltip-term">Hash SHA-256<span class="tooltip-text"><span class="tooltip-title">🔐 ¿Qué es el HASH SHA-256?</span>Huella digital matemática e inalterable que demuestra ante la Agencia o un juez la fecha y hora exacta en que el titular autorizó el tratamiento.</span></span>) de los consentimientos?',
+        yesText: "Sí, respaldado",
+        noText: "No, solo registros informales"
+      },
+      {
+        id: 4,
+        pillar: 2,
+        pillarName: "Consentimientos",
+        text: '4. ¿Los formularios de tu web tienen la casilla de <span class="tooltip-term">Aceptación Expresa<span class="tooltip-text"><span class="tooltip-title">☑️ Aceptación Expresa</span>Significa que el titular debe marcar la casilla voluntariamente. La ley prohíbe casillas pre-marcadas por defecto.</span></span> desmarcada por defecto?',
+        yesText: "Sí, desmarcada por defecto",
+        noText: "No, viene pre-marcada"
+      },
+      {
+        id: 5,
+        pillar: 1,
+        pillarName: "Gobernanza & RAT",
+        text: '5. En caso de archivadores en papel o facturas físicas, ¿tienes inventario etiquetado y protocolo de <span class="tooltip-term">Trituración y Custodia<span class="tooltip-text"><span class="tooltip-title">✂️ Custodia y Destrucción</span>Proceso formal de bloqueo y destrucción segura de documentos con datos personales al vencer los plazos tributarios (6 años).</span></span>?',
+        yesText: "Sí, protocolizado y bajo llave",
+        noText: "No, archivado sin control estricto"
+      },
+      {
+        id: 6,
+        pillar: 4,
+        pillarName: "Derechos ARCOP",
+        text: '6. Si tratas <span class="tooltip-term">Datos Sensibles o de Menores (Art. 14° y 32°)<span class="tooltip-text"><span class="tooltip-title">🏥 Datos Sensibles y Menores</span>Datos de salud, biometría, geolocalización o menores de 14 años. Exigen base legal reforzada y consentimiento escrito explícito.</span></span>, ¿tienes autorización firmada?',
+        yesText: "Sí, firmado y documentado",
+        noText: "No / No aplica estrictamente"
+      },
+      {
+        id: 7,
+        pillar: 3,
+        pillarName: "Seguridad & Brechas",
+        text: '7. ¿Cuentas con un <span class="tooltip-term">Protocolo de Notificación de Brechas<span class="tooltip-text"><span class="tooltip-title">🚨 Protocolo de Brechas</span>Plan de contingencia para avisar a la Agencia de Protección de Datos y afectados ante robos de claves, hackeos o filtraciones.</span></span> ante incidentes de seguridad?',
+        yesText: "Sí, protocolo activo",
+        noText: "No existe manual formal"
+      },
+      {
+        id: 8,
+        pillar: 3,
+        pillarName: "Seguridad & Brechas",
+        text: '8. Si cuentas con cámaras de seguridad, ¿están instalados los carteles informativos visibles de <span class="tooltip-term">Videovigilancia<span class="tooltip-text"><span class="tooltip-title">🎥 Cartel de Videovigilancia</span>Señalética obligatoria en los accesos informando el tratamiento de imágenes con fines de seguridad.</span></span> exigidos por ley?',
+        yesText: "Sí, carteles visibles",
+        noText: "No / Sin señalética"
+      }
+    ];
+
+    const answers = {};
+
+    function renderQuestions() {
+      const container = document.getElementById('quiz-questions-container');
+      container.innerHTML = '';
+
+      questions.forEach(q => {
+        const qDiv = document.createElement('div');
+        qDiv.className = 'question-card';
+        qDiv.id = `q-box-${q.id}`;
+        
+        qDiv.innerHTML = `
+          <div class="q-head">
+            <span class="q-pillar">${q.pillarName}</span>
+            <span class="q-num">PREGUNTA ${q.id} DE ${questions.length}</span>
+          </div>
+          <div class="q-text">${q.text}</div>
+          <div class="opt-grid">
+            <button type="button" class="btn-opt" id="btn-yes-${q.id}" onclick="selectAnswer(${q.id}, true)">${q.yesText}</button>
+            <button type="button" class="btn-opt" id="btn-no-${q.id}" onclick="selectAnswer(${q.id}, false)">${q.noText}</button>
+          </div>
+        `;
+        container.appendChild(qDiv);
+      });
+    }
+
+    function selectAnswer(qId, isYes) {
+      answers[qId] = isYes;
+      
+      const btnYes = document.getElementById(`btn-yes-${qId}`);
+      const btnNo = document.getElementById(`btn-no-${qId}`);
+      const box = document.getElementById(`q-box-${qId}`);
+
+      box.classList.add('active');
+
+      if (isYes) {
+        btnYes.className = 'btn-opt selected-yes';
+        btnNo.className = 'btn-opt';
+      } else {
+        btnNo.className = 'btn-opt selected-no';
+        btnYes.className = 'btn-opt';
+      }
+
+      const answeredCount = Object.keys(answers).length;
+      document.getElementById('progress-indicator').innerText = `${answeredCount} / ${questions.length} Respondidas`;
+
+      if (answeredCount === questions.length) {
+        calcularResultado();
+      }
+    }
+
+    function actualizarCalculoSiCompleto() {
+      if (Object.keys(answers).length === questions.length) {
+        calcularResultado();
+      }
+    }
+
+    function formatCLP(num) {
+      return '$' + Math.round(num).toLocaleString('es-CL') + ' CLP';
+    }
+
+    function calcularResultado() {
+      const companySize = document.getElementById('company-size').value;
+      const dataNature = document.getElementById('data-nature').value;
+      const recordsVolume = document.getElementById('records-volume').value;
+
+      let noCount = 0;
+      const pillarFails = { 1: 0, 2: 0, 3: 0, 4: 0 };
+
+      questions.forEach(q => {
+        if (!answers[q.id]) {
+          noCount++;
+          pillarFails[q.pillar]++;
+        }
+      });
+
+      const complianceScore = Math.round(((questions.length - noCount) / questions.length) * 100);
+      const riskScore = 100 - complianceScore;
+
+      // Cálculo de Severidad y Tope de Multa según Ley 21.719
+      let maxUtm = 5000;
+      let severity = "LEVE";
+      let severityRef = "Art. 36° N° 1 (Hasta 5.000 UTM)";
+
+      if (dataNature === 'sensible' || noCount >= 4) {
+        if (companySize === 'grande' || companySize === 'mediana') {
+          maxUtm = 20000;
+          severity = "GRAVÍSIMA";
+          severityRef = "Art. 36° N° 3 (Hasta 20.000 UTM o 4% ventas)";
+        } else if (companySize === 'pequena') {
+          maxUtm = 10000;
+          severity = "GRAVE";
+          severityRef = "Art. 36° N° 2 (Hasta 10.000 UTM o 2% ventas)";
+        } else {
+          maxUtm = 5000;
+          severity = "GRAVE";
+          severityRef = "Art. 36° N° 2 (Tope Microempresa)";
+        }
+      } else if (noCount >= 2) {
+        if (companySize === 'grande' || companySize === 'mediana') {
+          maxUtm = 10000;
+          severity = "GRAVE";
+          severityRef = "Art. 36° N° 2 (Hasta 10.000 UTM o 2% ventas)";
+        } else {
+          maxUtm = 5000;
+          severity = "LEVE A GRAVE";
+          severityRef = "Art. 36° N° 1 y 2";
+        }
+      } else {
+        maxUtm = 1000;
+        severity = "LEVE";
+        severityRef = "Art. 36° N° 1 (Hasta 5.000 UTM)";
+      }
+
+      // Factor de exposición por brechas
+      const exposureFactor = Math.max(0.2, noCount / questions.length);
+      const estimatedUtm = Math.round(maxUtm * exposureFactor);
+      const estimatedClp = estimatedUtm * UTM_VALUE_CLP;
+
+      // Elementos DOM
+      const resBox = document.getElementById('result-box');
+      const maxFineClpEl = document.getElementById('max-fine-clp');
+      const maxFineUtmEl = document.getElementById('max-fine-utm');
+      const severityTypeEl = document.getElementById('severity-type');
+      const severityLawRefEl = document.getElementById('severity-law-ref');
+      const maturityScoreEl = document.getElementById('maturity-score');
+      const breachesCountEl = document.getElementById('breaches-count');
+      const scoreLevelBadge = document.getElementById('score-level-badge');
+      const resDesc = document.getElementById('result-desc');
+
+      resBox.style.display = 'block';
+
+      maxFineClpEl.innerText = formatCLP(estimatedClp);
+      maxFineUtmEl.innerText = `Hasta ${estimatedUtm.toLocaleString('es-CL')} UTM aprox.`;
+      severityTypeEl.innerText = severity;
+      severityLawRefEl.innerText = severityRef;
+      maturityScoreEl.innerText = `${complianceScore}%`;
+      breachesCountEl.innerText = `${noCount} controles con brecha activa`;
+
+      // Color según riesgo
+      if (complianceScore < 50) {
+        maturityScoreEl.className = 'stat-val red';
+        scoreLevelBadge.style.background = 'rgba(239, 68, 68, 0.2)';
+        scoreLevelBadge.style.color = '#ef4444';
+        scoreLevelBadge.style.borderColor = '#ef4444';
+        scoreLevelBadge.innerText = 'RIESGO CRÍTICO DE SANCIÓN';
+        resDesc.innerText = `Tu empresa presenta un nivel de madurez bajo (${complianceScore}%) con ${noCount} brechas críticas. A partir del 1 de Diciembre de 2026, la Agencia de Protección de Datos podrá aplicar sanciones directas de hasta ${formatCLP(estimatedClp)} si no se subsanan los controles de RAT, Derechos ARCOP y Seguridad.`;
+      } else if (complianceScore < 85) {
+        maturityScoreEl.className = 'stat-val orange';
+        scoreLevelBadge.style.background = 'rgba(245, 158, 11, 0.2)';
+        scoreLevelBadge.style.color = '#f59e0b';
+        scoreLevelBadge.style.borderColor = '#f59e0b';
+        scoreLevelBadge.innerText = 'RIESGO MODERADO CON BRECHAS';
+        resDesc.innerText = `Cuentas con controles iniciales (${complianceScore}% de madurez), pero mantienes ${noCount} brechas obligatorias que deben ser subsanadas para evitar reclamos ante la Agencia y garantizar el principio de responsabilidad proactiva.`;
+      } else {
+        maturityScoreEl.className = 'stat-val green';
+        scoreLevelBadge.style.background = 'rgba(16, 185, 129, 0.2)';
+        scoreLevelBadge.style.color = '#10b981';
+        scoreLevelBadge.style.borderColor = '#10b981';
+        scoreLevelBadge.innerText = 'MADUREZ AVANZADA';
+        resDesc.innerText = `Excelente nivel de cumplimiento (${complianceScore}%). Te recomendamos mantener la gobernanza continua, actualizar el RAT periódicamente y capacitar a tu equipo para auditorías externas.`;
+      }
+
+      // Actualizar Pilares del Scorecard
+      for (let p = 1; p <= 4; p++) {
+        const pStatus = document.getElementById(`pillar-${p}-status`);
+        if (pillarFails[p] === 0) {
+          pStatus.innerText = 'Cumple';
+          pStatus.className = 'pillar-status ok';
+        } else {
+          pStatus.innerText = `${pillarFails[p]} Brecha(s)`;
+          pStatus.className = 'pillar-status fail';
+        }
+      }
+
+      // Generar enlace WhatsApp con resumen
+      const sizeNames = {
+        micro: "Microempresa",
+        pequena: "Pequeña Empresa",
+        mediana: "Mediana Empresa",
+        grande: "Gran Empresa"
+      };
+      const waMsg = encodeURIComponent(
+        `Hola Quantus, completé el Diagnóstico Ley 21.719:\n\n` +
+        `🏢 Tipo: ${sizeNames[companySize]}\n` +
+        `📊 Nivel Madurez: ${complianceScore}%\n` +
+        `⚠️ Brechas Detectadas: ${noCount}/8\n` +
+        `💰 Exposición Estimada: ${formatCLP(estimatedClp)} (${estimatedUtm} UTM)\n\n` +
+        `Me gustaría solicitar asesoría para la adecuación y conocer las herramientas de cumplimiento de Quantus.`
+      );
+      const waFullUrl = `https://wa.me/56975480746?text=${waMsg}`;
+      document.getElementById('btn-wa-action').href = waFullUrl;
+      document.getElementById('btn-wa-qr').setAttribute('onclick', `abrirQRDiagnostico('${waFullUrl}')`);
+
+      resBox.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function abrirQRDiagnostico(url) {
+      const encodedUrl = encodeURIComponent(url);
+      document.getElementById('img-qr-diag').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodedUrl}`;
+      document.getElementById('link-directo-diag').href = url;
+      document.getElementById('modal-qr-diag').style.display = 'flex';
+    }
+    function cerrarQRDiagnostico() {
+      document.getElementById('modal-qr-diag').style.display = 'none';
+    }
+
+    window.onload = renderQuestions;
+  </script>
+
+  <!-- MODAL CÓDIGO QR DIAGNÓSTICO -->
+  <div id="modal-qr-diag" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(6,16,31,0.85); backdrop-filter:blur(8px); z-index:999999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+    <div style="background:#0f172a; border:1px solid #10b981; border-radius:20px; padding:28px; max-width:380px; width:100%; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.8); position:relative;">
+      <button type="button" onclick="cerrarQRDiagnostico()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer;">&times;</button>
+      <span style="background:rgba(16,185,129,0.2); color:#10b981; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:800;">WHATSAPP DIRECTO QUANTUS</span>
+      <h3 style="color:#fff; font-size:18px; margin:12px 0 6px;">Escanea con tu Celular</h3>
+      <p style="color:#94a3b8; font-size:12px; margin:0 0 16px;">Inicia el chat directo con el equipo de cumplimiento (+56 9 7548 0746):</p>
+      <div style="background:#fff; padding:12px; border-radius:12px; display:inline-block; margin-bottom:16px;">
+        <img id="img-qr-diag" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fwa.me%2F56975480746" alt="QR WhatsApp Quantus" style="width:180px; height:180px; display:block;">
+      </div>
+      <div>
+        <a id="link-directo-diag" href="https://wa.me/56975480746" target="_blank" style="display:block; background:#10b981; color:#0f172a; font-weight:900; font-size:13px; padding:10px 16px; border-radius:10px; text-decoration:none;">💬 Abrir en WhatsApp Web</a>
+      </div>
+    </div>
+  </div>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

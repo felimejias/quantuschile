@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Radar Total | Quantus</title>
+  <link rel="icon" type="image/png" href="/static/quantus-logo-clean.png">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body { background: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; }
+    h1 { margin-top: 0; color: #10b981; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+    .tab-btn { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    .tab-btn.active { background: #10b981; color: #0f172a; border-color: #10b981; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #334155; }
+    th { background: #1e293b; color: #94a3b8; font-weight: 600; position: sticky; top: 0; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+    
+    .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+    .bg-bienes { background: #0ea5e9; color: #fff; }
+    .bg-aduana { background: #f59e0b; color: #fff; }
+    .bg-tgr { background: #ef4444; color: #fff; }
+    .bg-do { background: #8b5cf6; color: #fff; }
+    .bg-default { background: #64748b; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <h1>📡 Radar Total (Internal)</h1>
+  <p style="color: #94a3b8;">Base de datos maestra de remates recopilados por los workers.</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('inmuebles')">🏢 Inmuebles ({{ data.inmuebles|length }})</button>
+    <button class="tab-btn" onclick="showTab('terrenos')">🏞️ Terrenos ({{ data.terrenos|length }})</button>
+    <button class="tab-btn" onclick="showTab('vehiculos')">🚗 Vehículos ({{ data.vehiculos|length }})</button>
+    <button class="tab-btn" onclick="showTab('maquinaria')">🚜 Maquinaria ({{ data.maquinaria|length }})</button>
+    <button class="tab-btn" onclick="showTab('otros')">📦 Otros ({{ data.otros|length }})</button>
+  </div>
+
+  {% macro render_table(items) %}
+  <div style="overflow-x: auto; background: rgba(15,23,42,0.5); border: 1px solid #334155; border-radius: 8px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Fuente</th>
+          <th>Estado</th>
+          <th>Título</th>
+          <th>Región/Comuna</th>
+          <th>Superficie</th>
+          <th>Monto Min.</th>
+          <th>Fecha Remate</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in items %}
+        <tr>
+          <td>
+            {% if 'BIENES_NACIONALES' in r.fuente %}<span class="badge bg-bienes">BienesNac</span>
+            {% elif 'ADUANA' in r.fuente %}<span class="badge bg-aduana">Aduana</span>
+            {% elif 'TGR' in r.fuente %}<span class="badge bg-tgr">TGR</span>
+            {% elif 'DIARIO_OFICIAL' in r.fuente %}<span class="badge bg-do">D.Oficial</span>
+            {% else %}<span class="badge bg-default">{{ r.fuente }}</span>{% endif %}
+          </td>
+          <td>
+            {% if r.estado == 'proximo' %}🟢
+            {% elif r.estado == 'cerrado' %}🔴
+            {% else %}🟡{% endif %} {{ r.estado }}
+          </td>
+          <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ r.titulo }}">
+            {{ r.titulo }}
+          </td>
+          <td>{{ r.region }}<br><span style="color:#94a3b8;font-size:11px;">{{ r.comuna }}</span></td>
+          <td>{{ r.superficie }}</td>
+          <td>{% if r.monto_minimo and r.monto_minimo > 0 %}${{ "{:,.0f}".format(r.monto_minimo).replace(",", ".") }}{% else %}<span style="color: #64748b;">S/ Bases</span>{% endif %}</td>
+          <td>{{ r.fecha_remate or 'S/ Fecha' }}</td>
+          <td>
+            {% if r.fuente_url %}<a href="{{ r.fuente_url }}" target="_blank" style="color:#38bdf8;">🔗 Ver</a>{% endif %}
+            {% if r.google_maps_url %}<a href="{{ r.google_maps_url }}" target="_blank" style="color:#10b981; margin-left: 8px;">📍 GPS</a>{% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" style="text-align: center; color: #64748b; padding: 30px;">No hay datos en esta categoría.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endmacro %}
+
+  <div id="inmuebles" class="tab-content active">{{ render_table(data.inmuebles) }}</div>
+  <div id="terrenos" class="tab-content">{{ render_table(data.terrenos) }}</div>
+  <div id="vehiculos" class="tab-content">{{ render_table(data.vehiculos) }}</div>
+  <div id="maquinaria" class="tab-content">{{ render_table(data.maquinaria) }}</div>
+  <div id="otros" class="tab-content">{{ render_table(data.otros) }}</div>
+
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>

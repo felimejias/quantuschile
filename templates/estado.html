@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estado del servicio | Quantus Chile</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-dark: #06101f;
+      --card-bg: #0b172b;
+      --card-border: rgba(56, 189, 248, 0.22);
+      --cyan-bright: #38bdf8;
+      --green: #4ade80;
+      --red: #f87171;
+      --amber: #fbbf24;
+      --text-white: #ffffff;
+      --text-slate: #94a3b8;
+    }
+    body {
+      background: var(--bg-dark);
+      color: var(--text-white);
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    main { flex: 1; max-width: 860px; margin: 0 auto; width: 100%; padding: 32px 20px 64px; }
+    .matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin: 20px 0; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .card h2 { font-size: 15px; margin: 0 0 8px; color: var(--text-slate); font-weight: 600; }
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .ok { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+    .warn { background: rgba(251, 191, 36, 0.15); color: var(--amber); }
+    .error { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+    .legend { color: var(--text-slate); font-size: 13px; margin-top: 4px; }
+    .big { font-size: 30px; font-weight: 800; margin: 6px 0 2px; }
+    ul.bugs { margin: 8px 0 0; padding-left: 18px; color: var(--text-slate); font-size: 13px; }
+    .updated { text-align: center; color: var(--text-slate); font-size: 12px; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <h1 style="font-size:26px;margin:8px 0 0;">Estado del servicio</h1>
+    <p style="color:var(--text-slate);margin-top:6px;">Monitoreo automático de la plataforma Quantus: www.quantuschile.cl y los radares activos.</p>
+
+    <section class="matrix">
+
+      <div class="card">
+        <h2>Sitio de producción</h2>
+        {% if produccion %}
+          {% if produccion.status == 'ok' %}
+            <span class="badge ok">Operativo</span>
+          {% elif produccion.status == 'warn' %}
+            <span class="badge warn">Con advertencias</span>
+          {% else %}
+            <span class="badge error">Con problemas</span>
+          {% endif %}
+          <p class="big" style="color:var(--green);">{{ produccion.uptime }}%</p>
+          <p class="legend">Disponibilidad aproximada hoy · revisión cada minuto</p>
+          <p class="legend">Última verificación: {{ produccion.ultimo_check or '—' }}</p>
+        {% else %}
+          <span class="badge warn">Sin datos aún</span>
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <h2>Radares de vigilancia</h2>
+        {% if radares %}
+          <span class="badge ok">{{ radares.estado }}</span>
+        {% endif %}
+        <p class="big">{{ radares.ok if radares else '—' }}</p>
+        <p class="legend">{{ radares.resumen if radares else 'Revisando...' }}</p>
+      </div>
+
+      <div class="card">
+        <h2>Revisión QA automática</h2>
+        {% if qa %}
+          {% if qa.bugs > 0 %}
+            <span class="badge error">{{ qa.bugs }} hallazgo(s) abierto(s)</span>
+          {% else %}
+            <span class="badge ok">Sin hallazgos</span>
+          {% endif %}
+          <p class="big">{{ 'Sin errores' if qa.bugs == 0 else qa.bugs }}</p>
+          <p class="legend">Última auditoría: {{ qa.ultima_auditoria or '—' }}</p>
+          <p class="legend">Sitios revisados: {{ qa.sitios or '—' }}</p>
+        {% else %}
+          <span class="badge warn">Sin datos aún</span>
+        {% endif %}
+      </div>
+
+    </section>
+
+    <section class="card">
+      <h2 style="color:var(--text-white);">¿Qué revisamos?</h2>
+      <ul class="bugs">
+        <li>Disponibilidad de www.quantuschile.cl (cada 1 minuto).</li>
+        <li>Las rutas públicas principales: inicio, Diario Oficial, licitaciones, marcas y remates.</li>
+        <li>Errores de renderizado, HTTP o plantilla detectados por la auditoría automatizada.</li>
+        <li>El estado de los radares que vigilan publicaciones por ti.</li>
+      </ul>
+      <p class="legend" style="margin-top:12px;">Si detectamos un problema severo, nuestro equipo es notificado de inmediato para restablecer el servicio lo antes posible.</p>
+    </section>
+
+    <p class="updated">Actualizado por el sistema automático de salud de Quantus.</p>
+
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

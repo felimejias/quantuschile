@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>¡Demo Activada! | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <style>
+    body { margin:0; min-height:100vh; display:grid; place-items:center; background:#06101f; color:#f8fafc; font-family:Inter,system-ui,-apple-system,sans-serif; padding:20px 0; }
+    .card { width:min(580px, calc(100% - 32px)); background:#0f1c35; border:1px solid rgba(56,189,248,.35); border-radius:20px; padding:32px; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+    .brand-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    img { width:44px; height:44px; object-fit:contain; }
+    .brand-title { font-size:14px; font-weight:900; letter-spacing:1.5px; color:#38bdf8; }
+    h1 { margin:10px 0 6px; font-size:28px; line-height:1.15; color:#ffffff; }
+    p.lead { color:#cbd5e1; font-size:15px; line-height:1.6; margin-bottom:20px; }
+    
+    .creds-box { background:rgba(56,189,248,.08); border:1.5px solid rgba(56,189,248,.3); border-radius:14px; padding:20px; margin:20px 0; }
+    .creds-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px dashed rgba(255,255,255,0.1); }
+    .creds-row:last-child { border-bottom:none; }
+    .creds-label { color:#94a3b8; font-size:13px; font-weight:600; }
+    .creds-val { font-family:monospace; font-size:16px; font-weight:800; color:#38bdf8; letter-spacing:0.5px; }
+    
+    .btn-enter { display:block; width:100%; text-align:center; box-sizing:border-box; background:#38bdf8; color:#06101f; padding:15px 20px; border-radius:12px; text-decoration:none; font-weight:900; font-size:16px; box-shadow:0 8px 24px rgba(56,189,248,.35); transition:all 0.2s ease; margin-top:20px; }
+    .btn-enter:hover { background:#0284c7; color:#fff; transform:translateY(-1px); }
+    
+    .instruction-steps { margin-top:24px; background:rgba(15,23,42,0.6); border-radius:12px; padding:16px 20px; border:1px solid rgba(255,255,255,0.06); }
+    .instruction-steps h4 { margin:0 0 10px; font-size:13px; color:#e2e8f0; text-transform:uppercase; letter-spacing:1px; }
+    .instruction-steps ol { margin:0; padding-left:20px; color:#94a3b8; font-size:13px; line-height:1.7; }
+
+    .footer-note { text-align:center; font-size:12px; color:#64748b; margin-top:20px; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand-row">
+      <img src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus">
+      <div>
+        <div class="brand-title">QUANTUS CHILE SpA</div>
+        <div style="font-size:11px; color:#94a3b8;">DEMO AUTOMÁTICA ACTIVADA</div>
+      </div>
+    </div>
+
+    <h1>¡Tu acceso demo está listo!</h1>
+    <p class="lead">Hemos activado tu acceso temporal de <strong>10 días</strong> para la demo de <strong>{{ vertical.label }}</strong> de <strong>{{ empresa }}</strong>.</p>
+
+    <a href="{{ demo_access_link }}" class="btn-enter">🚀 Entrar directamente a la Demo de {{ vertical.label }} →</a>
+
+    <div class="creds-box">
+      <div class="creds-row">
+        <span class="creds-label">Usuario generado:</span>
+        <span class="creds-val">{{ username }}</span>
+      </div>
+      <div class="creds-row">
+        <span class="creds-label">Contraseña temporal:</span>
+        <span class="creds-val">{{ raw_password }}</span>
+      </div>
+      <div class="creds-row">
+        <span class="creds-label">Vigencia:</span>
+        <span class="creds-val" style="color:#10b981;">10 días (hasta {{ expires_at }})</span>
+      </div>
+      <div class="creds-row">
+        <span class="creds-label">Código de registro:</span>
+        <span class="creds-val" style="font-size:12px; color:#94a3b8;">{{ request_id }}</span>
+      </div>
+    </div>
+
+    <div class="instruction-steps">
+      <h4>¿Cómo ingresar en el futuro?</h4>
+      <ol>
+        <li>Puedes ingresar inmediatamente usando el botón azul superior.</li>
+        <li>Si sales, puedes volver a ingresar en <strong style="color:#fff;">quantuschile.cl/punto-de-venta/acceso</strong>.</li>
+        <li>Ingresa con tu usuario <code>{{ username }}</code> y tu contraseña <code>{{ raw_password }}</code>.</li>
+        <li>También enviamos una copia con estas credenciales y tu enlace de acceso a <strong>{{ email }}</strong>.</li>
+      </ol>
+    </div>
+
+    <div class="footer-note">
+      Soporte y contacto directo: contacto@quantuschile.cl
+    </div>
+  </main>
+</body>
+</html>

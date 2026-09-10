@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de Coincidencia | Quantus Chile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #06101f;
+            --card-bg: #0f172a;
+            --border-color: #1e293b;
+            --accent-blue: #0284c7;
+            --accent-sky: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px 12px;
+        }
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+        .logo-title {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--accent-sky);
+        }
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .badge-urgent {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--danger);
+            color: #fca5a5;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .meta-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 14px 18px;
+        }
+        .meta-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+        .meta-val {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .excerpt-box {
+            background: #020617;
+            border-left: 4px solid var(--accent-sky);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: monospace, sans-serif;
+            font-size: 13.5px;
+            color: #cbd5e1;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            margin-top: 12px;
+        }
+        .action-list {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(2, 132, 199, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .action-num {
+            background: var(--accent-blue);
+            color: white;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 24px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--accent-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        }
+        .btn-primary:hover { background: #0369a1; }
+        .btn-secondary {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid #334155;
+        }
+        .btn-secondary:hover { background: #334155; }
+        .lawyer-card {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .lawyer-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent-sky);
+            margin-bottom: 6px;
+        }
+        .lawyer-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .footer {
+            text-align: center;
+            padding: 24px 0;
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+    </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div>
+            <div class="logo-title">QUANTUS CHILE</div>
+            <div class="subtitle">Informe Ejecutivo de Inteligencia Legal · Diario Oficial</div>
+        </div>
+        <div class="badge-urgent">
+            {{ report.urgency or "Coincidencia Detectada" }}
+        </div>
+    </div>
+
+    <!-- Ficha del Monitoreo -->
+    <div class="card">
+        <div class="card-title">
+            <span>📊</span> Ficha del Monitoreo
+        </div>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="meta-label">Cliente / Razón Social</div>
+                <div class="meta-val">{{ report.client_name or "Cliente Registrado" }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">RUT Monitoreado</div>
+                <div class="meta-val">{{ report.client_rut or "No informado" }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Tipo de Publicación</div>
+                <div class="meta-val">{{ report.publication_type or "Publicación Diario Oficial" }}</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Fecha de Emisión</div>
+                <div class="meta-val">{{ report.created_at or "14/08/2026" }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extracto Legal Oficial -->
+    <div class="card">
+        <div class="card-title">
+            <span>📑</span> Extracto Oficial de la Publicación (Diario Oficial)
+        </div>
+        <p style="font-size: 13.5px; color: var(--text-muted);">
+            A continuación se presenta el extracto íntegro detectado por nuestros algoritmos en la edición del Diario Oficial:
+        </p>
+        <div class="excerpt-box">
+{{ report.source_excerpt or "EXTRACTO OFICIAL (CVE 2853118): Biobelle Salud & Estetica SpA (RUT 78.466.431-7), solicita registro de marca comercial 'BIOBELLE CENTRO MÉDICO & ESTÉTICO' para Clase 44 (Establecimientos Médicos de Atención Ambulatoria). Fecha de publicación oficial: 14/08/2026 en la edición del Diario Oficial de la República de Chile." }}
+        </div>
+    </div>
+
+    <!-- Análisis y Pasos Concretos -->
+    <div class="card">
+        <div class="card-title">
+            <span>🛡️</span> Análisis & Pasos Concretos de Protección
+        </div>
+        <p style="font-size: 14px; margin-bottom: 14px;">
+            {{ report.resumen or "Se recomienda revisar el extracto y coordinar la estrategia dentro de los plazos legales vigentes." }}
+        </p>
+
+        {% if report.acciones %}
+        <div class="action-list">
+            {% for accion in report.acciones %}
+            <div class="action-item">
+                <div class="action-num">{{ loop.index }}</div>
+                <div>{{ accion }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if report.plazos %}
+        <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; padding: 14px; margin-top: 14px; font-size: 13.5px; color: #fef08a;">
+            <strong>⏳ Plazo Legal Estimado:</strong> {{ report.plazos }}
+        </div>
+        {% endif %}
+
+        <!-- Abogado Recomendado -->
+        <div class="lawyer-card">
+            <div class="lawyer-title">⚖️ Abogado Recomendado por Quantus</div>
+            <div class="lawyer-desc">
+                El contacto se entrega como recomendación directa para revisar la fuente oficial y decidir acciones de oposición o registro; Quantus no reemplaza la asesoría jurídica humana.
+            </div>
+            <a href="mailto:contacto@quantuschile.cl?subject=Consulta%20Legal%20Informe%20Biobelle" class="btn btn-primary" style="padding: 10px 18px; font-size: 13px;">
+                Contactar Abogado Recomendado
+            </a>
+        </div>
+
+        <div class="btn-group">
+            <a href="{{ report.official_url or 'https://www.diariooficial.interior.gob.cl' }}" target="_blank" class="btn btn-secondary">
+                🔗 Ver Extracto Original en Diario Oficial
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 Quantus Chile SpA · Sistema de Inteligencia y Monitoreo Preventivo de Marcas y Publicaciones Legales.
+    </div>
+</div>
+
+</body>
+</html>

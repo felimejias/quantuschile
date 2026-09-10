@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ campaign.name }} — Quantus Marketing Center</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .mkt-container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+        .mkt-header h1 { font-size: 1.5rem; color: #f0f0f0; margin: 0.5rem 0 0.5rem; }
+        .back-link { color: #a5b4fc; text-decoration: none; font-size: 0.875rem; }
+        .meta-bar { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 2rem; }
+        .meta-bar .meta-item { font-size: 0.8rem; color: #888; }
+        .status-badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+        .status-DRAFT { background: rgba(156,163,175,0.2); color: #9ca3af; }
+        .status-ACTIVE { background: rgba(52,211,153,0.15); color: #34d399; }
+        .status-GENERATED { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .status-COMPLIANCE_REVIEW { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .status-COMPLIANCE_BLOCKED { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .status-HUMAN_REVIEW { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .status-CHANGES_REQUESTED { background: rgba(251,146,60,0.15); color: #fb923c; }
+        .status-APPROVED { background: rgba(52,211,153,0.15); color: #34d399; }
+        .status-SCHEDULED { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .status-PUBLISHED { background: rgba(52,211,153,0.2); color: #34d399; }
+        .status-FAILED { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .status-CANCELLED { background: rgba(156,163,175,0.15); color: #6b7280; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; border: none; padding: 0.5rem 1.25rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8rem; text-decoration: none; display: inline-block; }
+        .btn-warning { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); padding: 0.5rem 1.25rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8rem; }
+        .btn-danger { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); padding: 0.5rem 1.25rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8rem; }
+        .btn-success { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.2); padding: 0.5rem 1.25rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8rem; }
+        .content-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .content-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 0.75rem; padding: 1.25rem; }
+        .content-card .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+        .content-card .channel-name { font-weight: 600; font-size: 0.9rem; }
+        .channel-instagram { color: #e879f9; }
+        .channel-facebook { color: #60a5fa; }
+        .channel-linkedin { color: #38bdf8; }
+        .channel-whatsapp_template { color: #34d399; }
+        .content-card .body-preview { font-size: 0.8rem; color: #aaa; line-height: 1.5; max-height: 120px; overflow: hidden; margin-bottom: 0.75rem; white-space: pre-wrap; word-break: break-word; }
+        .content-card .card-meta { font-size: 0.7rem; color: #666; margin-bottom: 0.75rem; }
+        .content-card .card-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .content-card .card-actions button, .content-card .card-actions a { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
+        .compliance-result { margin-top: 0.75rem; padding: 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; }
+        .compliance-PASS { background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.15); color: #6ee7b7; }
+        .compliance-WARNING { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.15); color: #fcd34d; }
+        .compliance-BLOCKED { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.15); color: #fca5a5; }
+        .section-title { font-size: 1.1rem; color: #e0e0e0; margin: 2rem 0 0.5rem; }
+        .actions-bar { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        #toast { position: fixed; bottom: 2rem; right: 2rem; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-size: 0.85rem; display: none; z-index: 1000; }
+        .toast-success { background: rgba(52,211,153,0.9); color: #064e3b; }
+        .toast-error { background: rgba(239,68,68,0.9); color: #fff; }
+    </style>
+</head>
+<body style="background: #0f0f14; color: #e0e0e0; font-family: 'Inter', system-ui, sans-serif;">
+    <div class="mkt-container">
+        <a href="/marketing/campaigns/" class="back-link">← Campañas</a>
+        <h1>{{ campaign.name }}</h1>
+
+        <div class="meta-bar">
+            <span class="status-badge status-{{ campaign.status }}">{{ campaign.status }}</span>
+            <span class="meta-item">Servicio: {{ campaign.service_category | replace('_', ' ') | title }}</span>
+            <span class="meta-item">Flujo: {{ campaign.flow_type }}</span>
+            <span class="meta-item">Creada: {{ campaign.created_at[:10] }}</span>
+            <span class="meta-item">Por: {{ campaign.created_by }}</span>
+        </div>
+
+        <!-- Acciones de campaña -->
+        <div class="actions-bar">
+            {% if campaign.status == 'DRAFT' %}
+            <button class="btn-primary" onclick="generateContent()">🤖 Generar Contenido</button>
+            {% endif %}
+            {% if campaign.status not in ('CANCELLED', 'ARCHIVED') %}
+            <button class="btn-danger" onclick="cancelCampaign()">Cancelar Campaña</button>
+            {% endif %}
+        </div>
+
+        <!-- Contenidos multicanal -->
+        <h2 class="section-title">Contenidos por Canal</h2>
+        {% if contents %}
+        <div class="content-cards">
+            {% for c in contents %}
+            <div class="content-card" id="content-{{ c.id }}">
+                <div class="card-header">
+                    <span class="channel-name channel-{{ c.channel }}">
+                        {% if c.channel == 'instagram' %}📸 Instagram
+                        {% elif c.channel == 'facebook' %}📘 Facebook
+                        {% elif c.channel == 'linkedin' %}💼 LinkedIn
+                        {% elif c.channel == 'whatsapp_template' %}💬 WhatsApp
+                        {% else %}{{ c.channel }}{% endif %}
+                    </span>
+                    <span class="status-badge status-{{ c.status }}">{{ c.status }}</span>
+                </div>
+                <div class="body-preview">{{ c.body }}</div>
+                <div class="card-meta">
+                    {{ c.flow_type }} · {{ c.content_type }} · Hash: {{ c.content_hash[:12] }}…
+                    {% if c.destination_url %}<br>🔗 <a href="{{ c.destination_url }}" target="_blank" style="color: #a5b4fc; font-size: 0.7rem;">{{ c.destination_url[:60] }}…</a>{% endif %}
+                    {% if c.hashtags %}<br>{{ c.hashtags }}{% endif %}
+                </div>
+
+                <!-- Resultado de cumplimiento -->
+                {% if c.id in approvals %}
+                {% set appr = approvals[c.id] %}
+                <div class="compliance-result compliance-{{ appr.compliance_status }}">
+                    <strong>Cumplimiento: {{ appr.compliance_status }}</strong>
+                    {% if appr.approved_by %}<br>Aprobado por: {{ appr.approved_by }} ({{ appr.approved_at[:10] }}){% endif %}
+                    {% if appr.rejection_reason %}<br>Motivo: {{ appr.rejection_reason }}{% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Botones de acción por estado -->
+                <div class="card-actions">
+                    {% if c.status == 'GENERATED' %}
+                    <button class="btn-warning" onclick="complianceCheck('{{ c.id }}')">🔍 Verificar Cumplimiento</button>
+                    {% endif %}
+                    {% if c.status == 'HUMAN_REVIEW' %}
+                    <button class="btn-success" onclick="approveContent('{{ c.id }}')">✅ Aprobar</button>
+                    <button class="btn-warning" onclick="requestChanges('{{ c.id }}')">📝 Solicitar Cambios</button>
+                    {% endif %}
+                    {% if c.status == 'APPROVED' %}
+                    <button class="btn-primary" onclick="scheduleContent('{{ c.id }}')">📅 Programar</button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 3rem; color: #666;">
+            <p>No hay contenidos generados.</p>
+            {% if campaign.status == 'DRAFT' %}
+            <button class="btn-primary" onclick="generateContent()">🤖 Generar Contenido</button>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Programaciones -->
+        {% if schedules %}
+        <h2 class="section-title">Programaciones</h2>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left; padding: 0.5rem; font-size: 0.7rem; color: #888; border-bottom: 1px solid rgba(255,255,255,0.08);">Canal</th>
+                        <th style="text-align: left; padding: 0.5rem; font-size: 0.7rem; color: #888; border-bottom: 1px solid rgba(255,255,255,0.08);">Programado</th>
+                        <th style="text-align: left; padding: 0.5rem; font-size: 0.7rem; color: #888; border-bottom: 1px solid rgba(255,255,255,0.08);">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in schedules %}
+                    <tr>
+                        <td style="padding: 0.5rem; font-size: 0.8rem; color: #ccc;">{{ s.channel }}</td>
+                        <td style="padding: 0.5rem; font-size: 0.8rem; color: #ccc;">{{ s.scheduled_at }}</td>
+                        <td style="padding: 0.5rem;"><span class="status-badge status-{{ s.status }}">{{ s.status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+    function showToast(msg, type) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = type === 'error' ? 'toast-error' : 'toast-success';
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 4000);
+    }
+
+    async function apiCall(url, body) {
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-CSRF-Token': '{{ csrf_token() }}'},
+                body: JSON.stringify(body),
+            });
+            const data = await res.json();
+            if (!res.ok) { showToast(data.error || 'Error', 'error'); return null; }
+            return data;
+        } catch(e) { showToast('Error de conexión', 'error'); return null; }
+    }
+
+    async function generateContent() {
+        const data = await apiCall('/marketing/api/generate', {campaign_id: '{{ campaign.id }}'});
+        if (data) { showToast('Contenido generado', 'success'); setTimeout(() => location.reload(), 1000); }
+    }
+
+    async function complianceCheck(contentId) {
+        const data = await apiCall('/marketing/api/compliance-check', {content_id: contentId});
+        if (data) {
+            showToast('Cumplimiento: ' + data.compliance_result.overall_status, data.compliance_result.overall_status === 'BLOCKED' ? 'error' : 'success');
+            setTimeout(() => location.reload(), 1500);
+        }
+    }
+
+    async function approveContent(contentId) {
+        const data = await apiCall('/marketing/api/approve', {content_id: contentId, action: 'approve'});
+        if (data) { showToast('Contenido aprobado', 'success'); setTimeout(() => location.reload(), 1000); }
+    }
+
+    async function requestChanges(contentId) {
+        const reason = prompt('Motivo de los cambios solicitados:');
+        if (!reason) return;
+        const data = await apiCall('/marketing/api/approve', {content_id: contentId, action: 'request_changes', reason: reason});
+        if (data) { showToast('Cambios solicitados', 'success'); setTimeout(() => location.reload(), 1000); }
+    }
+
+    async function scheduleContent(contentId) {
+        const dt = prompt('Fecha y hora de programación (YYYY-MM-DD HH:MM):', new Date().toISOString().slice(0, 16).replace('T', ' '));
+        if (!dt) return;
+        const data = await apiCall('/marketing/api/schedule', {content_id: contentId, scheduled_at: dt});
+        if (data) { showToast('Programación simulada', 'success'); setTimeout(() => location.reload(), 1000); }
+    }
+
+    async function cancelCampaign() {
+        if (!confirm('¿Cancelar toda la campaña? Esta acción cancela todos los contenidos no publicados.')) return;
+        const data = await apiCall('/marketing/api/cancel', {campaign_id: '{{ campaign.id }}', reason: 'Cancelación manual'});
+        if (data) { showToast('Campaña cancelada', 'success'); setTimeout(() => location.reload(), 1000); }
+    }
+    </script>
+</body>
+</html>

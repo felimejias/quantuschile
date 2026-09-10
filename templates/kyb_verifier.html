@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantus Verified KYB | Verificador Oficial de Empresas y Proveedores en Chile</title>
+  <meta name="description" content="Consulta antecedentes comerciales, estatus regulatorio CMF, reclamos SERNAC y nivel de riesgo de cualquier empresa o RUT chileno en segundos.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #030712;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --border: rgba(56, 189, 248, 0.2);
+      --border-glow: rgba(56, 189, 248, 0.4);
+      --cyan: #38bdf8;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 60%); }
+    .container { max-width: 1080px; margin: 0 auto; padding: 24px 20px 80px; }
+    
+    /* Nav */
+    .top-nav { display: flex; justify-content: space-between; align-items: center; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px; }
+    .brand-group { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+    .brand-logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #10b981, #059669); display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 16px rgba(16,185,129,0.4); }
+    .brand-title { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+    .brand-sub { font-size: 11px; color: var(--emerald); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .nav-links { display: flex; gap: 16px; align-items: center; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600; }
+    .nav-link:hover { color: #fff; }
+    
+    /* Hero */
+    .hero-section { text-align: center; max-width: 780px; margin: 0 auto 36px; }
+    .hero-kicker { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; font-size: 12px; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; }
+    .hero-title { font-size: 40px; font-weight: 900; line-height: 1.15; letter-spacing: -1px; margin-bottom: 14px; }
+    .hero-title span { background: linear-gradient(135deg, #fff, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-desc { font-size: 16px; color: var(--muted); }
+
+    /* Search Box */
+    .search-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 24px; max-width: 680px; margin: 0 auto 40px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); backdrop-filter: blur(16px); }
+    .search-form { display: flex; gap: 12px; flex-wrap: wrap; }
+    .rut-input { flex: 1; min-width: 260px; height: 54px; background: rgba(3, 7, 18, 0.8); border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; color: #fff; padding: 0 20px; font-size: 18px; font-weight: 700; font-family: 'JetBrains Mono', monospace; outline: none; transition: border-color 0.2s; text-transform: uppercase; }
+    .rut-input:focus { border-color: var(--cyan); box-shadow: 0 0 14px rgba(56, 189, 248, 0.3); }
+    .btn-verify { height: 54px; padding: 0 28px; border-radius: 14px; border: none; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; font-size: 15px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 18px rgba(56, 189, 248, 0.35); transition: transform 0.2s; }
+    .btn-verify:hover { transform: translateY(-2px); }
+
+    /* Verification Result Card */
+    .result-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 32px; backdrop-filter: blur(16px); box-shadow: 0 16px 50px rgba(0,0,0,0.6); margin-bottom: 32px; }
+    .result-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 24px; margin-bottom: 24px; }
+    .company-name { font-size: 24px; font-weight: 900; color: #fff; }
+    .company-rut { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--cyan); font-weight: 700; margin-top: 4px; }
+    
+    .score-circle { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--emerald); background: rgba(16, 185, 129, 0.1); box-shadow: 0 0 24px rgba(16, 185, 129, 0.3); }
+    .score-num { font-size: 32px; font-weight: 900; color: #fff; font-family: 'JetBrains Mono', monospace; line-height: 1; }
+    .score-label { font-size: 10px; color: var(--emerald); font-weight: 800; text-transform: uppercase; margin-top: 4px; }
+
+    /* Checks Grid */
+    .checks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .check-item { background: rgba(3, 7, 18, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 18px; display: flex; align-items: flex-start; gap: 14px; }
+    .check-icon { font-size: 20px; line-height: 1; margin-top: 2px; }
+    .check-title { font-size: 13px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .check-desc { font-size: 15px; color: #fff; font-weight: 700; margin-top: 4px; }
+
+    /* CTA Box */
+    .report-cta { background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(16, 185, 129, 0.15)); border: 1px solid var(--border); border-radius: 18px; padding: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .cta-text h4 { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .cta-text p { font-size: 13px; color: var(--muted); }
+    .btn-pdf { padding: 12px 24px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); color: #fff; text-decoration: none; font-size: 14px; font-weight: 800; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); }
+
+    .error-box { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 16px; padding: 20px; color: #fca5a5; font-weight: 700; text-align: center; margin-bottom: 30px; }
+
+    @media (max-width: 680px) {
+      .hero-title { font-size: 28px; }
+      .search-form { flex-direction: column; }
+      .btn-verify { width: 100%; justify-content: center; }
+      .result-header { flex-direction: column; text-align: center; }
+      .report-cta { flex-direction: column; text-align: center; }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="top-nav">
+      <a href="/" class="brand-group">
+        <div class="brand-logo">🛡️</div>
+        <div>
+          <div class="brand-title">Quantus System Chile</div>
+          <div class="brand-sub">Verified KYB Due Diligence</div>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="/capital-radar" class="nav-link">Capital Radar</a>
+        <a href="/do" class="nav-link">Diario Oficial</a>
+        <a href="/licitaciones" class="nav-link">Licitaciones</a>
+        <a href="/marcas" class="nav-link">Marcas INAPI</a>
+      </div>
+    </header>
+
+    <div class="hero-section">
+      <div class="hero-kicker">🔍 Verificador de Empresas & Proveedores</div>
+      <h1 class="hero-title">Auditoría <span>KYB Instantánea</span> de Proveedores</h1>
+      <p class="hero-desc">Valida la legitimidad de cualquier RUT chileno. Consulta supervisión CMF, conducta SERNAC y riesgo comercial antes de pagar o firmar contratos.</p>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-card">
+      <form method="GET" action="/verificador-empresas" class="search-form">
+        <input type="text" name="rut" value="{{ current_rut }}" placeholder="Ingresa RUT empresa (ej. 76.123.456-7)" class="rut-input" required>
+        <button type="submit" class="btn-verify">Verificar RUT ⚡</button>
+      </form>
+    </div>
+
+    {% if error %}
+      <div class="error-box">
+        ⚠️ {{ error }}
+      </div>
+    {% endif %}
+
+    {% if result and result.success %}
+      <div class="result-card">
+        <div class="result-header">
+          <div>
+            <div class="company-name">{{ result.razon_social_estimada }}</div>
+            <div class="company-rut">RUT: {{ result.rut }} · {{ result.tipo_contribuyente }}</div>
+            <div style="font-size: 13px; color: var(--muted); margin-top: 6px;">📅 {{ result.antiguedad_estimada }}</div>
+          </div>
+          <div class="score-circle" style="border-color: {{ result.color_riesgo }};">
+            <div class="score-num">{{ result.score_kyb }}</div>
+            <div class="score-label" style="color: {{ result.color_riesgo }};">Score KYB</div>
+          </div>
+        </div>
+
+        <div class="checks-grid">
+          <div class="check-item">
+            <div class="check-icon">🏛️</div>
+            <div>
+              <div class="check-title">Comisión Mercado Financiero (CMF)</div>
+              <div class="check-desc">{{ result.cmf.badge }}</div>
+              <div style="font-size: 12px; color: var(--muted); margin-top: 3px;">{{ result.cmf.nivel_riesgo_cmf }}</div>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">⚖️</div>
+            <div>
+              <div class="check-title">SERNAC & Conducta Consumidor</div>
+              <div class="check-desc">{{ result.sernac.badge }}</div>
+              <div style="font-size: 12px; color: var(--muted); margin-top: 3px;">{{ result.sernac.tasa_respuesta }}</div>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">📑</div>
+            <div>
+              <div class="check-title">Dígito Verificador & SII</div>
+              <div class="check-desc">RUT Válido Oficial ✅</div>
+              <div style="font-size: 12px; color: var(--muted); margin-top: 3px;">Consistencia Módulo 11 superada</div>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">🛡️</div>
+            <div>
+              <div class="check-title">Dictamen de Riesgo</div>
+              <div class="check-desc" style="color: {{ result.color_riesgo }};">{{ result.nivel_riesgo }} RIESGO</div>
+              <div style="font-size: 12px; color: var(--muted); margin-top: 3px;">{{ result.dictamen_oficial }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-cta">
+          <div class="cta-text">
+            <h4>📄 Certificado Oficial de Due Diligence</h4>
+            <p>Descarga la ficha técnica auditada para adjuntar a tu carpeta de proveedores o compliance.</p>
+          </div>
+          <a href="https://wa.me/56975480746?text=Hola%20Quantus,%20solicito%20el%20Certificado%20Oficial%20KYB%20completo%20para%20el%20RUT%20{{ result.rut }}" target="_blank" class="btn-pdf">Solicitar Certificado PDF ($2.990)</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

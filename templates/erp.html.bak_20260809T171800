@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Punto de Venta & Inventario Inteligente con IA | Quantus Chile</title>
+  <meta name="description" content="Punto de venta & inventario inteligente con IA todo en uno para pymes chilenas: ventas, inventario, caja, compras y clientes, con agentes de IA integrados.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.quantuschile.cl/erp">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Quantus Chile SpA">
+  <meta property="og:title" content="Punto de Venta & Inventario Inteligente con IA | Quantus Chile">
+  <meta property="og:description" content="Punto de venta & inventario inteligente con IA todo en uno para pymes chilenas.">
+  <meta property="og:url" content="https://www.quantuschile.cl/erp">
+  <meta property="og:image" content="https://www.quantuschile.cl/static/quantus-logo-clean.png">
+  <meta property="og:locale" content="es_CL">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Punto de Venta & Inventario Inteligente con IA | Quantus Chile">
+  <meta name="twitter:description" content="Punto de venta & inventario inteligente con IA todo en uno para pymes chilenas.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --navy-bg: #06101f;
+      --card-bg: #0b172b;
+      --card-border: rgba(56, 189, 248, 0.22);
+      --cyan-bright: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    body {
+      background-color: var(--navy-bg);
+      color: var(--text-main);
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .dark-hero {
+      position: relative;
+      padding: 40px 0 80px;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.12), transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.08), transparent 45%),
+        linear-gradient(180deg, #06101f 0%, #081426 100%);
+    }
+
+    .dark-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 85%);
+    }
+
+    /* Haz de luz sutil tecnológico que recorre el fondo en ciclo continuo */
+    .dark-hero::after {
+      content: "";
+      position: absolute;
+      top: -30%;
+      left: -150%;
+      width: 65%;
+      height: 160%;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(56, 189, 248, 0.03) 20%,
+        rgba(56, 189, 248, 0.28) 50%,
+        rgba(56, 189, 248, 0.03) 80%,
+        transparent 100%
+      );
+      transform: rotate(20deg);
+      animation: techWaveLightSweep 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes techWaveLightSweep {
+      0% {
+        left: -150%;
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 1;
+      }
+      100% {
+        left: 170%;
+        opacity: 0;
+      }
+    }
+
+    /* Animación de luz para tarjetas */
+    .dark-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dark-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -40%;
+      width: 40%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #38bdf8, #0ea5e9, transparent);
+      box-shadow: 0 0 10px #38bdf8, 0 0 5px #0ea5e9;
+      animation: cardLightScan 6s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes cardLightScan {
+      0% { left: -40%; opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { left: 110%; opacity: 0; }
+    }
+
+    .dark-hero-shell {
+      width: min(calc(100% - 48px), 1320px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr);
+      gap: 48px;
+      align-items: center;
+    }
+
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow-pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #38bdf8;
+      box-shadow: 0 0 10px #38bdf8;
+    }
+
+    .hero-title {
+      font-size: clamp(38px, 4.2vw, 58px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      margin: 0 0 20px;
+    }
+
+    .hero-lead {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin: 0 0 28px;
+      max-width: 680px;
+      font-weight: 450;
+    }
+
+    .feature-pills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+      max-width: 680px;
+    }
+
+    .feature-pill-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.16);
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .feature-pill-item span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cyan-banner-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: #0ea5e9;
+      color: #03172e;
+      font-size: 13.5px;
+      font-weight: 800;
+      margin-bottom: 28px;
+      max-width: 680px;
+      box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3);
+    }
+
+    .hero-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary-cyan {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      background: #38bdf8;
+      color: #03172e;
+      font-size: 14px;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary-cyan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(56, 189, 248, 0.5);
+    }
+
+    .btn-secondary-dark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #f1f5f9;
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary-dark:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    /* Right column preview cards */
+    .hero-preview-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .ley-banner-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: rgba(11, 23, 43, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+    }
+
+    .ley-banner-card span {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ley-banner-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #38bdf8;
+      color: #03172e;
+      font-size: 12px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    .preview-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: #64748b;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .preview-card {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(11, 23, 43, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.2s;
+    }
+
+    .preview-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    .card-tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .tag-do { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .tag-mp { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .tag-inapi { background: rgba(245, 158, 11, 0.2); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag-erp { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 4px;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    /* Additional landing sections */
+    .ecosystem-section {
+      padding: 80px 0;
+      background: #040a14;
+      border-top: 1px solid rgba(56, 189, 248, 0.12);
+    }
+
+    .section-shell {
+      width: min(calc(100% - 48px), 1320px);
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 50px;
+    }
+
+    .section-kicker {
+      color: #38bdf8;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 14px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .mod-card {
+      background: #091526;
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+    }
+
+    .mod-card h3 {
+      font-size: 18px;
+      color: #ffffff;
+      margin: 12px 0 8px;
+    }
+
+    .mod-card p {
+      font-size: 13.5px;
+      color: #94a3b8;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .mod-link {
+      color: #38bdf8;
+      font-weight: 800;
+      font-size: 13px;
+      text-decoration: none;
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 1024px) {
+      .dark-hero-shell {
+        grid-template-columns: 1fr;
+      }
+      .grid-3col, .grid-2col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <section class="dark-hero">
+      <div class="dark-hero-shell">
+        <div>
+          <div class="eyebrow-pill">
+            Punto de venta & Inventario inteligente con IA
+          </div>
+          <h1 class="hero-title">
+            Administra tu negocio completo en un solo lugar.
+          </h1>
+          <p class="hero-lead">
+            Ventas, inventario, caja, compras y clientes en un Punto de Venta pensado para pymes chilenas.
+            Y a diferencia de un sistema tradicional, Quantus conecta tus datos con agentes de IA que
+            vigilan el Diario Oficial, las licitaciones, tus marcas y los remates mientras descansas.
+          </p>
+
+          <div class="feature-pills-grid">
+            <div class="feature-pill-item"><span>🛒 Ventas y comprobantes</span></div>
+            <div class="feature-pill-item"><span>📦 Inventario y stocks</span></div>
+            <div class="feature-pill-item"><span>💵 Caja y tesorería</span></div>
+            <div class="feature-pill-item"><span>📋 Órdenes de compra</span></div>
+            <div class="feature-pill-item"><span>👥 Clientes y proveedores</span></div>
+            <div class="feature-pill-item"><span>🤖 Agentes de IA integrados</span></div>
+          </div>
+
+          <div class="cyan-banner-pill">
+            <span>💡 Tú diriges el negocio. Quantus administra los datos y vigila por ti.</span>
+          </div>
+
+          <div class="hero-actions-row">
+            <a href="mailto:contacto@quantuschile.cl?subject=Solicitud%20Demostracion%20Punto%20de%20Venta" class="btn-primary-cyan">
+              Solicitar demostración del Punto de Venta →
+            </a>
+            <a href="/" class="btn-secondary-dark">
+              Conocer el ecosistema
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ecosystem-section" id="modulos">
+      <div class="ecosystem-shell">
+        <h2 class="section-title">Módulos que trabajan por ti</h2>
+        <p class="section-lead">Un solo sistema con todo lo que tu empresa necesita para operar ordenada y segura.</p>
+
+        <div class="grid-3col">
+          <div class="mod-card">
+            <div>
+              <h3>🛒 Ventas</h3>
+              <p>Registra ventas, emite comprobantes y sigue las cuentas por cobrar con claridad total.</p>
+            </div>
+            <a href="mailto:contacto@quantuschile.cl?subject=Quiero%20conocer%20Ventas" class="mod-link">Solicitar demo →</a>
+          </div>
+
+          <div class="mod-card">
+            <div>
+              <h3>📦 Inventario</h3>
+              <p>Stock en tiempo real, mermas y alertas de reposición para no quedarte sin producto.</p>
+            </div>
+            <a href="mailto:contacto@quantuschile.cl?subject=Quiero%20conocer%20Inventario" class="mod-link">Solicitar demo →</a>
+          </div>
+
+          <div class="mod-card">
+            <div>
+              <h3>💵 Caja</h3>
+              <p>Controla ingresos, egresos y arqueos de caja con trazabilidad total de cada movimiento.</p>
+            </div>
+            <a href="mailto:contacto@quantuschile.cl?subject=Quiero%20conocer%20Caja" class="mod-link">Solicitar demo →</a>
+          </div>
+
+          <div class="mod-card">
+            <div>
+              <h3>📋 Compras</h3>
+              <p>Órdenes de compra a proveedores y control de documentos, para comprar informado.</p>
+            </div>
+            <a href="mailto:contacto@quantuschile.cl?subject=Quiero%20conocer%20Compras" class="mod-link">Solicitar demo →</a>
+          </div>
+
+          <div class="mod-card">
+            <div>
+              <h3>🤖 Agentes IA</h3>
+              <p>El Punto de Venta se conecta con los radares: Diario Oficial, licitaciones, marcas y remates, todo en un panel.</p>
+            </div>
+            <a href="/" class="mod-link">Ver ecosistema →</a>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px; text-align: center;">
+          <a href="mailto:contacto@quantuschile.cl?subject=Solicitud%20Demostracion%20Punto%20de%20Venta" class="btn-primary-cyan">Agendar demostración del Punto de Venta →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

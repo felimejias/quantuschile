@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vigilancia del Diario Oficial | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-premium-copy">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <a class="brand-link" href="/">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Diario Oficial</div>
+        </div>
+      </a>
+      <nav class="header-actions" aria-label="Navegación principal">
+        <button type="button" class="cta-button btn-secondary back-button" onclick="if (document.referrer && document.referrer.includes(window.location.host)) { history.back(); } else { window.location.href=/; }">Atrás</button>
+        <a href="https://www.quantuschile.cl" class="cta-button btn-secondary">Quantus System</a>
+        <a href="https://www.quantuschile.cl/inapi" class="cta-button btn-secondary">Registrar Marca</a>
+        <a href="https://www.quantuschile.cl/do" class="cta-button btn-secondary">Diario Oficial</a>
+        <a href="https://www.quantuschile.cl/licitaciones" class="cta-button btn-secondary">Licitaciones</a>
+        <a href="/do/prospeccion" class="cta-button btn-secondary">Demo empresas</a>
+        <a href="#contratar" class="cta-button">Contratar vigilancia</a>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Alertas preventivas para personas y empresas</div>
+          <h1 class="hero-title">Vigilancia del <span>Diario Oficial</span></h1>
+          <p class="hero-subtitle">
+            El Diario Oficial es donde se publican actos que pueden afectarte legal, comercial o patrimonialmente. Si tu nombre, empresa o RUT aparece ahí, necesitas saberlo rápido, no semanas después.
+          </p>
+          <div class="hero-actions">
+            <a href="#planes" class="cta-button">Ver planes</a>
+            <a href="https://www.quantuschile.cl/inapi" class="cta-button btn-secondary">Buscar marca en INAPI</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat"><strong>Diario</strong><span>Revisión automatizada</span></div>
+            <div class="stat"><strong>Email</strong><span>Alertas inmediatas</span></div>
+            <div class="stat"><strong>RUT</strong><span>Nombre o empresa</span></div>
+          </div>
+          <div class="proof-panel">
+            <h2>¿Por qué es perfecto estar vigilado?</h2>
+            <div class="proof-grid">
+              <div class="proof-item">
+                <strong>Te enteras antes de que el problema escale</strong>
+                <span>Publicaciones de sociedades, juicios, remates, liquidaciones, marcas, avisos y actos administrativos pueden activar plazos cortos para responder.</span>
+              </div>
+              <div class="proof-item">
+                <strong>Proteges reputación y patrimonio</strong>
+                <span>Una alerta temprana permite revisar con contador, abogado o equipo comercial antes de que un tercero tome ventaja.</span>
+              </div>
+              <div class="proof-item">
+                <strong>Funciona como seguro preventivo</strong>
+                <span>Por un costo bajo, Quantus revisa todos los días una fuente que casi nadie mira manualmente, pero que sí produce efectos reales.</span>
+              </div>
+            </div>
+          </div>
+          <div class="history-panel">
+            <div>
+              <span class="history-kicker">Transparencia del servicio</span>
+              <h2>La vigilancia parte desde la contratación</h2>
+              <p>
+                El plan mensual o anual incluye revisión diaria hacia adelante. Si necesitas saber si apareciste antes de contratar, hacemos una búsqueda histórica dirigida por nombre, RUT y rango de fechas.
+              </p>
+            </div>
+            <div class="history-price">
+              <span>Adicional histórico</span>
+              <strong>$19.990 CLP</strong>
+              <small>por persona, hasta 12 meses de búsqueda. Rangos mayores se cotizan según fechas y cantidad de nombres.</small>
+            </div>
+            <div class="history-note">
+              El Diario Oficial se puede revisar gratis en su sitio oficial, pero buscar bien hacia atrás puede tomar tiempo porque hay que navegar ediciones, secciones, PDFs y variaciones del nombre.
+            </div>
+          </div>
+          <div class="proof-panel">
+            <h2>Captación para empresas</h2>
+            <div class="proof-grid">
+              <div class="proof-item">
+                <strong>Detectamos menciones públicas</strong>
+                <span>Quantus puede usar publicaciones oficiales como señal comercial para ofrecer revisión y vigilancia preventiva a empresas.</span>
+              </div>
+              <div class="proof-item">
+                <strong>Mensaje sobrio y verificable</strong>
+                <span>El contacto debe incluir fuente oficial y evitar frases alarmistas. La promesa es revisar, interpretar y monitorear.</span>
+              </div>
+              <div class="proof-item">
+                <strong>Pipeline revisable</strong>
+                <span>Antes de contactar, se valida si existe correo, teléfono o sitio corporativo publicado por la empresa.</span>
+              </div>
+            </div>
+            <div class="hero-actions" style="margin-top: 16px;">
+              <a href="https://www.quantuschile.cl/do/prospeccion" class="cta-button btn-secondary">Ver ejemplo con 10 empresas</a>
+            </div>
+          </div>
+          <div class="proof-panel" id="analizador-alertas">
+            <h2>Analizador IA de alertas</h2>
+            <p class="muted" style="margin-bottom: 18px;">
+              Pega el texto de una alerta o sube un PDF del Diario Oficial. El modo gratuito permite 1 análisis diario. En Premium, Quantus adjunta este resumen automáticamente a cada alerta relevante.
+            </p>
+            <form id="alert-ai-form" class="form-grid" enctype="multipart/form-data">
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+              <div class="form-group">
+                <label class="form-label" for="clientName">Cliente opcional</label>
+                <input class="form-control" id="clientName" name="client_name" type="text" placeholder="Nombre, empresa o grupo familiar">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="clientRut">RUT opcional</label>
+                <input class="form-control" id="clientRut" name="client_rut" type="text" placeholder="76.123.456-7" data-rut>
+                <div class="form-text rut-message" data-rut-message></div>
+              </div>
+              <div class="form-group full">
+                <label class="form-label" for="alertText">Texto de la alerta</label>
+                <textarea class="form-control" id="alertText" name="alert_text" rows="6" placeholder="Pega aquí el extracto, aviso o texto visible de la publicación..."></textarea>
+              </div>
+              <div class="form-group full">
+                <label class="form-label" for="alertPdf">PDF opcional</label>
+                <input class="form-control" id="alertPdf" name="alert_pdf" type="file" accept="application/pdf">
+                <div class="form-text">Si el PDF es escaneado como imagen, pega también el texto visible para obtener mejor resultado.</div>
+              </div>
+              <div class="form-group full">
+                <button class="btn full" type="submit" id="alertAiBtn">Analizar alerta con IA</button>
+              </div>
+            </form>
+            <div id="alert-ai-result" class="ai-result-panel" style="display:none;"></div>
+          </div>
+        </div>
+
+        <form class="form-panel" action="/contratar_vigilancia" method="POST" id="contratar">
+          {{ csrf_input()|safe }}
+          <div class="panel-title">
+            <div>
+              <h2>Activar vigilancia</h2>
+              <p>Elige un plan y registra los datos que quieres monitorear.</p>
+            </div>
+          </div>
+
+          <section id="planes" aria-label="Planes de vigilancia">
+            <div class="plan-grid">
+              <button type="button" class="plan-card" data-plan="mensual" onclick="selectPlan(event, 'mensual')">
+                <div class="plan-body">
+                  <div class="plan-title-row">
+                    <h3>Mensual</h3>
+                    <span class="radio-dot" aria-hidden="true"></span>
+                  </div>
+                  <div class="price">$2.990<small>/mes</small></div>
+                  <ul class="feature-list">
+                    <li><span class="check">✓</span><span>Monitoreo diario</span></li>
+                    <li><span class="check">✓</span><span>Alertas por email</span></li>
+                    <li><span class="check">✓</span><span>1 nombre, empresa o RUT</span></li>
+                  </ul>
+                </div>
+              </button>
+
+              <button type="button" class="plan-card selected" data-plan="anual" onclick="selectPlan(event, 'anual')">
+                <div class="plan-ribbon">Recomendado</div>
+                <div class="plan-body">
+                  <div class="plan-title-row">
+                    <h3>Anual oferta</h3>
+                    <span class="radio-dot" aria-hidden="true"></span>
+                  </div>
+                  <div class="price">$10.000<small>/año</small></div>
+                  <div class="price-note">Precio lanzamiento. Luego $29.990/año.</div>
+                  <ul class="feature-list">
+                    <li><span class="check">✓</span><span>Primer año con precio especial</span></li>
+                    <li><span class="check">✓</span><span>Monitoreo diario</span></li>
+                    <li><span class="check">✓</span><span>Alertas por email</span></li>
+                  </ul>
+                </div>
+              </button>
+
+              <button type="button" class="plan-card" data-plan="empresa_inicial" onclick="selectPlan(event, 'empresa_inicial')">
+                <div class="plan-ribbon enterprise">Empresas</div>
+                <div class="plan-body">
+                  <div class="plan-title-row">
+                    <h3>Empresa Inicial</h3>
+                    <span class="radio-dot" aria-hidden="true"></span>
+                  </div>
+                  <div class="price">$22.990<small>/mes</small></div>
+                  <div class="price-note">Para pymes que quieren partir con vigilancia seria.</div>
+                  <ul class="feature-list">
+                    <li><span class="check">✓</span><span>Hasta 3 nombres, empresas o RUT</span></li>
+                    <li><span class="check">✓</span><span>Alertas por email</span></li>
+                    <li><span class="check">✓</span><span>Ideal para sociedades chicas y negocios familiares</span></li>
+                  </ul>
+                </div>
+              </button>
+
+              <button type="button" class="plan-card" data-plan="empresa" onclick="selectPlan(event, 'empresa')">
+                <div class="plan-ribbon enterprise">Empresa Pro</div>
+                <div class="plan-body">
+                  <div class="plan-title-row">
+                    <h3>Empresa Pro</h3>
+                    <span class="radio-dot" aria-hidden="true"></span>
+                  </div>
+                  <div class="price">$49.990<small>/mes</small></div>
+                  <div class="price-note">Para equipos que necesitan más cobertura y prioridad.</div>
+                  <ul class="feature-list">
+                    <li><span class="check">✓</span><span>Hasta 10 nombres, empresas o RUT</span></li>
+                    <li><span class="check">✓</span><span>Alertas prioritarias por email</span></li>
+                    <li><span class="check">✓</span><span>Ideal para estudios, contadores, inmobiliarias y sociedades</span></li>
+                  </ul>
+                </div>
+              </button>
+            </div>
+          </section>
+
+          <input type="hidden" name="plan" id="selectedPlan" value="anual">
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="nombre">Nombre completo, empresa o grupo *</label>
+              <input id="nombre" type="text" class="form-control" name="nombre" required placeholder="Ej. Juan Pérez González o Empresa SpA">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rut">RUT opcional</label>
+              <input id="rut" type="text" class="form-control" name="rut" placeholder="Ej. 11.111.111-1" data-rut>
+              <div class="form-text rut-message" data-rut-message></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Correo para alertas *</label>
+              <input id="email" type="email" class="form-control" name="email" required placeholder="tu@correo.com">
+              <div class="form-text">A este correo llegarán las alertas si hay publicaciones relevantes.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="whatsapp">WhatsApp para alertas</label>
+              <input id="whatsapp" type="tel" class="form-control" name="whatsapp" placeholder="+56912345678">
+              <div class="form-text">Opcional. Se usará solo si autorizas alertas por WhatsApp.</div>
+            </div>
+            <div class="form-group full">
+              <label class="consent-row">
+                <input type="checkbox" name="whatsapp_consent" value="1">
+                <span>Acepto recibir alertas y resúmenes de Quantus por WhatsApp para este servicio.</span>
+              </label>
+              <div class="form-text">Para envíos desde el WhatsApp Business del cliente, Quantus solicitará el token Meta y lo guardará en la carpeta privada del RUT.</div>
+            </div>
+          </div>
+
+          {% set service_label = "Vigilancia Diario Oficial 24/7" %}
+          {% include "partials/data_consent.html" %}
+
+          <div class="card" style="margin: 18px 0; box-shadow: none;">
+            <h3 class="card-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18"></path>
+              </svg>
+              Pago seguro
+            </h3>
+            <p class="muted" style="margin-bottom: 16px;">
+              Serás redirigido al checkout seguro de Mercado Pago. Ahí podrás pagar con tarjeta de crédito, débito y Apple Pay cuando esté disponible en tu dispositivo.
+            </p>
+            <div class="payment-methods" aria-label="Medios de pago">
+              <span>Crédito</span>
+              <span>Débito</span>
+              <span>Apple Pay</span>
+              <span>Mercado Pago</span>
+            </div>
+            <p class="payment-note">El botón no cobra en esta página: abre una ventana segura de pago para completar la suscripción.</p>
+          </div>
+
+          <button type="submit" class="btn full">Proceder al pago seguro</button>
+        </form>
+      </div>
+    </section>
+
+    {% include "partials/law_21719.html" %}
+
+    <footer class="footer">
+      <p>&copy; 2026 Quantus Chile — Vigilancia automatizada del Diario Oficial.</p>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='rut-validator.js') }}?v=20260729-rut"></script>
+  <script>
+    function selectPlan(event, plan) {
+      document.querySelectorAll(".plan-card").forEach(function(card) {
+        card.classList.remove("selected");
+      });
+      document.getElementById("selectedPlan").value = plan;
+      event.currentTarget.classList.add("selected");
+    }
+
+    const alertAiForm = document.getElementById("alert-ai-form");
+    const alertAiResult = document.getElementById("alert-ai-result");
+    const alertAiBtn = document.getElementById("alertAiBtn");
+
+    function renderList(items) {
+      if (!Array.isArray(items) || items.length === 0) return "<li>No informado.</li>";
+      return items.map((item) => `<li>${item}</li>`).join("");
+    }
+
+    if (alertAiForm) {
+      alertAiForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        alertAiBtn.disabled = true;
+        alertAiBtn.textContent = "Analizando...";
+        alertAiResult.style.display = "block";
+        alertAiResult.innerHTML = "<strong>Quantus IA está leyendo la alerta...</strong>";
+
+        try {
+          const response = await fetch("/api/do_alert_ai", {
+            method: "POST",
+            body: new FormData(alertAiForm)
+          });
+          const data = await response.json();
+          if (!response.ok || data.error) {
+            alertAiResult.innerHTML = `<strong class="danger-text">No se pudo analizar:</strong><p>${data.error || "Error inesperado."}</p>`;
+            return;
+          }
+
+          alertAiResult.innerHTML = `
+            <div class="ai-result-header">
+              <span class="ai-badge ${data.nivel_urgencia || "medio"}">${data.nivel_urgencia || "medio"}</span>
+              <strong>${data.tipo_publicacion || "Publicación oficial"}</strong>
+            </div>
+            <p>${data.resumen_ejecutivo || ""}</p>
+            <div class="ai-result-grid">
+              <div><h3>Por qué importa</h3><ul>${renderList(data.por_que_importa)}</ul></div>
+              <div><h3>Acciones recomendadas</h3><ul>${renderList(data.acciones_recomendadas)}</ul></div>
+              <div><h3>Datos a verificar</h3><ul>${renderList(data.datos_a_verificar)}</ul></div>
+            </div>
+            <p><strong>Plazos posibles:</strong> ${data.plazos_posibles || "No informado."}</p>
+            <p><strong>Mensaje sugerido:</strong> ${data.mensaje_cliente || "No informado."}</p>
+            <p class="payment-note">${data.advertencia || "Este análisis no reemplaza revisión legal humana."}</p>
+            ${data.report_url ? `<a class="cta-button btn-secondary" href="${data.report_url}" style="margin-top:12px;">Descargar informe PDF</a>` : ""}
+          `;
+        } catch (error) {
+          alertAiResult.innerHTML = `<strong class="danger-text">Error:</strong><p>${error.message}</p>`;
+        } finally {
+          alertAiBtn.disabled = false;
+          alertAiBtn.textContent = "Analizar alerta con IA";
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantus ERP — Sistema de Gestión Empresarial & Punto de Venta | Chile</title>
+  <meta name="description" content="Quantus ERP: Sistema de Gestión Empresarial todo en uno para pymes chilenas. Ventas, Inventario, Contabilidad SII, Compras, Tesorería y Agentes de Inteligencia Artificial.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.quantuschile.cl/erp">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Quantus Chile SpA">
+  <meta property="og:title" content="Quantus ERP — Sistema de Gestión Empresarial">
+  <meta property="og:description" content="Ventas, inventario, caja, compras y contabilidad SII en una sola plataforma integrada con Inteligencia Artificial.">
+  <meta property="og:url" content="https://www.quantuschile.cl/erp">
+  <meta property="og:image" content="https://www.quantuschile.cl/static/quantus-logo-clean.png">
+  <meta property="og:locale" content="es_CL">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-light: #f8fafc;
+      --bg-subtle: #f1f5f9;
+      --card-white: #ffffff;
+      --border-light: #e2e8f0;
+      --border-accent: #cbd5e1;
+      --quantus-navy: #06101f;
+      --quantus-navy-mid: #0b172a;
+      --primary-cyan: #0284c7;
+      --primary-blue: #2563eb;
+      --cyan-bright: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --text-main: #0f172a;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      --shadow-xl: 0 20px 40px -15px rgba(15, 23, 42, 0.12);
+    }
+
+    body {
+      background-color: var(--bg-white);
+      color: var(--text-body);
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TOP ELEGANT QUANTUS NAVY RIBBON */
+    .top-ribbon-quantus {
+      background: var(--quantus-navy);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      color: #ffffff;
+      padding: 9px 0;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+
+    .ribbon-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ribbon-left-brand {
+      color: var(--cyan-bright);
+      font-size: 11.5px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ribbon-right-group {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .ribbon-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #e2e8f0;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .ribbon-item:hover {
+      color: var(--cyan-bright);
+    }
+
+    /* MAIN HEADER NAV WITH OFFICIAL QUANTUS CHILE SpA LOGO */
+    .main-header {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-shell {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+
+    /* Official Quantus Chile SpA Logo Branding */
+    .brand-quantus-official {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-symbol-img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .brand-text-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name-quantus {
+      font-size: 19px;
+      font-weight: 900;
+      color: var(--text-main);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .brand-name-accent {
+      color: var(--primary-cyan);
+    }
+
+    .brand-tagline-quantus {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .nav-links-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-link-item {
+      color: var(--text-main);
+      font-size: 14.5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link-item:hover, .nav-link-item.active {
+      color: var(--primary-cyan);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-outline-login {
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-accent);
+      background: transparent;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-outline-login:hover {
+      border-color: var(--primary-cyan);
+      color: var(--primary-cyan);
+      background: rgba(2, 132, 199, 0.04);
+    }
+
+    .btn-cyan-quantus-cta {
+      padding: 11px 22px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--primary-blue) 100%);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-cyan-quantus-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45);
+    }
+
+    /* CONTAINER SHELL */
+    .container {
+      width: min(calc(100% - 64px), 1280px);
+      margin: 0 auto;
+    }
+
+    .section-padding {
+      padding: 90px 0;
+    }
+
+    /* HERO SPLIT SECTION (White Premium) */
+    .hero-section-white {
+      padding: 70px 0 90px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .hero-split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .hero-kicker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      color: var(--primary-cyan);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-title-main {
+      font-size: clamp(38px, 4.5vw, 56px);
+      line-height: 1.1;
+      font-weight: 900;
+      color: var(--text-main);
+      letter-spacing: -0.03em;
+      margin: 0 0 20px;
+    }
+
+    .hero-title-main .accent {
+      color: var(--primary-cyan);
+    }
+
+    .hero-lead-paragraph {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-body);
+      margin: 0 0 28px;
+    }
+
+    /* Form Card White Premium */
+    .form-card-white {
+      background: var(--card-white);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .form-head-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 0 0 6px;
+    }
+
+    .form-head-sub {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin: 0 0 22px;
+    }
+
+    .form-grid-dual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .form-input-white {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      color: var(--text-main);
+      font-size: 14px;
+      font-family: inherit;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input-white:focus {
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.12);
+    }
+
+    .btn-submit-cyan {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--primary-blue) 100%);
+      border: none;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.3);
+      transition: all 0.2s;
+      margin-top: 6px;
+    }
+
+    .btn-submit-cyan:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(2, 132, 199, 0.45);
+    }
+
+    /* Laptop Screen Preview */
+    .laptop-frame-white {
+      background: #1e293b;
+      border-radius: 18px 18px 4px 4px;
+      padding: 10px 10px 0 10px;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+      border: 1px solid #cbd5e1;
+    }
+
+    .screen-header-dark {
+      background: #0f172a;
+      border-radius: 10px 10px 0 0;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .window-dots-flex {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot-item {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-r { background: #ef4444; }
+    .dot-y { background: #f59e0b; }
+    .dot-g { background: #10b981; }
+
+    .screen-url-box {
+      background: #1e293b;
+      color: #94a3b8;
+      border-radius: 6px;
+      padding: 4px 14px;
+      font-size: 11px;
+      font-family: monospace;
+    }
+
+    .screen-canvas-light {
+      background: #f8fafc;
+      border-radius: 0 0 10px 10px;
+      padding: 20px;
+    }
+
+    .laptop-preview-img {
+      width: 100%;
+      display: block;
+      height: auto;
+    }
+
+    .dash-kpis-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .dash-card-light {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dash-card-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .dash-card-val {
+      font-size: 19px;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+
+    .dash-card-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      margin-top: 3px;
+    }
+    .tag-green { color: #10b981; }
+    .tag-amber { color: #f59e0b; }
+
+    .dash-graph-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .graph-bars-flex {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 80px;
+      margin-top: 10px;
+    }
+
+    .graph-bar-item {
+      flex: 1;
+      background: linear-gradient(180deg, var(--primary-cyan) 0%, rgba(2, 132, 199, 0.2) 100%);
+      border-radius: 4px 4px 0 0;
+    }
+
+    .laptop-stand-base {
+      background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+      height: 12px;
+      border-radius: 0 0 14px 14px;
+      margin: 0 -18px;
+    }
+
+    /* SECTION TITLE BOX */
+    .section-title-center {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 56px;
+    }
+
+    .section-head-h2 {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--text-main);
+      margin: 0 0 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-head-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* 8 CORE MODULES GRID */
+    .modules-section-light {
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .modules-grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .module-card-white {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .module-card-white:hover {
+      border-color: var(--primary-cyan);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .module-icon-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-cyan);
+      margin-bottom: 18px;
+    }
+
+    .mod-card-h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 0 0 8px;
+    }
+
+    .mod-card-p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin: 0 0 18px;
+    }
+
+    .mod-card-link {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--primary-cyan);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* BANK LOGOS GRID */
+    .bank-logos-section {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    /* MOBILE APP & CLOUD BANNER SECTION */
+    .mobile-app-banner-section {
+      padding: 80px 0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-banner-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .app-banner-title {
+      font-size: 34px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 16px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .app-banner-sub {
+      font-size: 16px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .app-features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .app-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .app-feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(2, 132, 199, 0.2);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #38bdf8;
+      flex-shrink: 0;
+    }
+
+    .app-preview-visual {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 32px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .bank-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .bank-card-item {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 64px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s;
+    }
+
+    .bank-card-item:hover {
+      border-color: var(--primary-cyan);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.02);
+    }
+
+    .bank-text-brand {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .b-santander { color: #ec0000; }
+    .b-chile { color: #0f265c; font-family: serif; font-weight: 900; }
+    .b-estado { color: #e65100; }
+    .b-bci { color: #008853; }
+    .b-scotia { color: #ec111a; }
+    .b-bice { color: #002d62; }
+    .b-itau { color: #ec7000; }
+    .b-security { color: #5a2a83; }
+
+    /* FEATURE MATRIX */
+    .matrix-section-light {
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .matrix-box-white {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .matrix-row-grid {
+      display: grid;
+      grid-template-columns: 2.2fr 1fr 1fr;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--border-light);
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .matrix-row-grid:last-child {
+      border-bottom: none;
+    }
+
+    .matrix-head-row {
+      background: #f1f5f9;
+      font-weight: 800;
+      color: var(--primary-cyan);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tooltip-dot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary-cyan);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 900;
+      margin-left: 6px;
+      cursor: help;
+    }
+
+    .icon-check-green {
+      color: var(--accent-emerald);
+      width: 22px;
+      height: 22px;
+    }
+
+    .icon-cross-gray {
+      color: #94a3b8;
+      width: 18px;
+      height: 18px;
+    }
+
+    /* TESTIMONIALS SECTION */
+    .testimonials-section {
+      background: var(--bg-white);
+    }
+
+    .testimonials-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .testimonial-card-white {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .testi-user-flex {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .user-avatar-img {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-cyan), var(--primary-blue));
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 19px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-meta h4 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin: 0 0 2px;
+    }
+
+    .user-meta p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .quote-paragraph {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text-body);
+      font-style: italic;
+      margin: 0;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .hero-split-grid { grid-template-columns: 1fr; }
+      .modules-grid-4col { grid-template-columns: repeat(2, 1fr); }
+      .bank-cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid-2col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .modules-grid-4col { grid-template-columns: 1fr; }
+      .bank-cards-grid { grid-template-columns: 1fr; }
+      .form-grid-dual { grid-template-columns: 1fr; }
+      .nav-links-menu { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <!-- HERO SECTION (White Premium) -->
+    <section class="hero-section-white">
+      <div class="container">
+        <div class="hero-split-grid">
+          <!-- LEFT COLUMN: Value Proposition & Onboarding Form -->
+          <div>
+            <div class="hero-kicker-pill">
+              Sistema ERP Institucional con Inteligencia Artificial
+            </div>
+            <h1 class="hero-title-main">
+              El ERP de clase mundial que <span class="accent">hace crecer tu empresa</span> en Chile.
+            </h1>
+            <p class="hero-lead-paragraph">
+              Integración total de Ventas, Inventario Multibodega, Facturación Electrónica SII, Compras y Tesorería en una plataforma amigable y de rápida implementación.
+            </p>
+
+            <!-- Registration Form Card -->
+            <div class="form-card-white">
+              <h3 class="form-head-title">Regístrate gratis en Quantus ERP</h3>
+              <p class="form-head-sub">Gestiona tu negocio fácil y rápido. ¡Pruébalo gratis por 10 días! (No hace falta tarjeta de crédito)</p>
+              <form action="mailto:contacto@quantuschile.cl" method="GET">
+                <input type="hidden" name="subject" value="Registro Prueba Gratuita Quantus ERP">
+                <div class="form-grid-dual">
+                  <div>
+                    <input type="text" name="nombre" class="form-input-white" placeholder="Nombre o Razón Social *" required>
+                  </div>
+                  <div>
+                    <input type="text" name="rut" class="form-input-white" placeholder="RUT Empresa *" required>
+                  </div>
+                </div>
+                <div class="form-grid-dual">
+                  <div>
+                    <input type="email" name="email" class="form-input-white" placeholder="Correo electrónico usuario *" required>
+                  </div>
+                  <div>
+                    <input type="tel" name="telefono" class="form-input-white" placeholder="Teléfono de contacto *" required>
+                  </div>
+                </div>
+	                <button type="submit" class="btn-submit-cyan">
+	                  Crear mi cuenta gratis →
+	                </button>
+	              </form>
+	            </div>
+	          </div>
+
+          <!-- RIGHT COLUMN: Mac Mockup con Fondo Azul Oficial Quantus (Imagen 2) -->
+          <div>
+            <div class="laptop-frame-white">
+              <div class="screen-header-dark">
+                <div class="window-dots-flex">
+                  <div class="dot-item dot-r"></div>
+                  <div class="dot-item dot-y"></div>
+                  <div class="dot-item dot-g"></div>
+                </div>
+                <div class="screen-url-box">https://www.quantuschile.cl/app/dashboard</div>
+                <div style="font-size: 11px; font-weight: 700; color: #10b981;">● ERP CONECTADO</div>
+              </div>
+	            <div style="background: #0b1728; overflow: hidden; border-radius: 0 0 10px 10px;">
+	                <img class="laptop-preview-img" src="{{ url_for('static', filename='quantus-pos-new-product-preview.png') }}" alt="Vista del Punto de Venta Quantus creando un nuevo producto">
+	              </div>
+            </div>
+            <div class="laptop-stand-base"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8 CORE MODULES GRID -->
+    <section class="section-padding modules-section-light" id="modulos">
+      <div class="container">
+        <div class="section-title-center">
+          <div class="hero-kicker-pill">Módulos Corporativos</div>
+          <h2 class="section-head-h2">Soluciones empresariales integradas de software</h2>
+          <p class="section-head-sub">
+            Conoce los módulos que transforman la forma de hacer negocios en Chile con respaldo contable y tributario.
+          </p>
+        </div>
+
+        <div class="modules-grid-4col">
+          <!-- 1. Ventas & POS -->
+          <div class="module-card-white">
+            <div>
+              <div class="module-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              </div>
+              <h3 class="mod-card-h3">Ventas</h3>
+              <p class="mod-card-p">Administra ventas, crea cotizaciones, emite boletas/facturas electrónicas y registra ingresos en tiempo real.</p>
+            </div>
+            <a href="/punto-de-venta/acceso" class="mod-card-link">Acceder al módulo →</a>
+          </div>
+
+          <!-- 2. Contabilidad SII -->
+          <div class="module-card-white">
+            <div>
+              <div class="module-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+              <h3 class="mod-card-h3">Contabilidad</h3>
+              <p class="mod-card-p">Gestiona cuentas, realiza conciliaciones bancarias y genera informes financieros precisos y listos para el SII.</p>
+            </div>
+            <a href="/punto-de-venta/funcionalidades" class="mod-card-link">Ver detalles →</a>
+          </div>
+
+          <!-- 3. Inventario Multibodega -->
+          <div class="module-card-white">
+            <div>
+              <div class="module-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <h3 class="mod-card-h3">Inventario</h3>
+              <p class="mod-card-p">Controla el stock, ajusta cantidades, gestiona productos multibodega y alerta reposiciones automáticas.</p>
+            </div>
+            <a href="/punto-de-venta/funcionalidades" class="mod-card-link">Ver detalles →</a>
+          </div>
+
+          <!-- 4. Compras -->
+          <div class="module-card-white">
+            <div>
+              <div class="module-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <h3 class="mod-card-h3">Compras</h3>
+              <p class="mod-card-p">Gestiona órdenes de compra, controla proveedores, recibe DTEs y optimiza gastos de inventario.</p>
+            </div>
+            <a href="/punto-de-venta/funcionalidades" class="mod-card-link">Ver detalles →</a>
+          </div>
+
+          <!-- 5. Facturación Electrónica -->
+          <div class="module-card-white">
+            <div>
+              <div class="module-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <h3 class="mod-card-h3">Facturación Electrónica</h3>
+              <p class="mod-card-p">Emite facturas conectadas con el SII y envíalas a tus clientes automáticamente sin errores.</p>
+            </div>
+            <a href="/punto-de-venta/funcionalidades" class="mod-card-link">Ver detalles →</a>
+          </div>
+
+          <!-- 6. Cuentas por Cobrar y Pagar -->
+          <div class="module-card-white">
+            <div>
+              <div class="module-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <h3 class="mod-card-h3">Cuentas por Cobrar y Pagar</h3>
+              <p class="mod-card-p">Asegura el flujo de caja y controla tus obligaciones financieras con alertas de vencimiento.</p>
+            </div>
+            <a href="/punto-de-venta/funcionalidades" class="mod-card-link">Ver detalles →</a>
+          </div>
+
+          <!-- 7. Informes Financieros -->
+          <div class="module-card-white">
+            <div>
+              <div class="module-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <h3 class="mod-card-h3">Informes Financieros</h3>
+              <p class="mod-card-p">Genera reportes detallados de ingresos, egresos y balances financieros instantáneos.</p>
+            </div>
+            <a href="/punto-de-venta/funcionalidades" class="mod-card-link">Ver detalles →</a>
+          </div>
+
+          <!-- 8. Gestión de Clientes y Proveedores -->
+          <div class="module-card-white">
+            <div>
+              <div class="module-icon-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+              <h3 class="mod-card-h3">Gestión de Clientes y Proveedores</h3>
+              <p class="mod-card-p">Centraliza la información de tus clientes y proveedores en una misma plataforma bajo Ley 21.719.</p>
+            </div>
+            <a href="/punto-de-venta/clientes" class="mod-card-link">Centro de Clientes →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BANK LOGOS INTEGRATION -->
+    <section class="section-padding bank-logos-section" id="integraciones">
+      <div class="container">
+        <div class="section-title-center">
+          <div class="hero-kicker-pill">Integración Bancaria Automatizada</div>
+          <h2 class="section-head-h2">Conciliación bancaria automática: precisión y eficiencia</h2>
+          <p class="section-head-sub">
+            Nuestra plataforma 100% online centraliza y automatiza las funciones críticas del negocio con la banca chilena.
+          </p>
+        </div>
+
+        <div class="bank-cards-grid">
+          <div class="bank-card-item">
+            <span class="bank-text-brand b-scotia">Scotiabank</span>
+          </div>
+          <div class="bank-card-item">
+            <span class="bank-text-brand b-bci">Bci</span>
+          </div>
+          <div class="bank-card-item">
+            <span class="bank-text-brand b-santander">Santander</span>
+          </div>
+          <div class="bank-card-item">
+            <span class="bank-text-brand b-chile">Banco de Chile</span>
+          </div>
+          <div class="bank-card-item">
+            <span class="bank-text-brand b-estado">BancoEstado</span>
+          </div>
+          <div class="bank-card-item">
+            <span class="bank-text-brand b-bice">Banco Bice</span>
+          </div>
+          <div class="bank-card-item">
+            <span class="bank-text-brand b-security">Banco Security</span>
+          </div>
+          <div class="bank-card-item">
+            <span class="bank-text-brand b-itau">Banco Itaú</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOBILE & CLOUD ACCESS BANNER -->
+    <section class="mobile-app-banner-section">
+      <div class="container">
+        <div class="app-banner-card">
+          <div>
+            <div class="hero-kicker-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">Flexibilidad 100% Web &amp; Móvil</div>
+            <h2 class="app-banner-title">Gestiona tu negocio desde cualquier lugar con la App de Quantus ERP</h2>
+            <p class="app-banner-sub">
+              Optimiza y simplifica la gestión diaria de tu pyme accediendo a diversas funciones de tu ERP directamente desde tu celular, tablet o laptop. Controla ventas, facturación e inventario en la palma de tu mano.
+            </p>
+            <div class="app-features-list">
+              <div class="app-feature-item">
+                <div class="app-feature-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <span>Acceso 24/7 sin instalación de software local</span>
+              </div>
+              <div class="app-feature-item">
+                <div class="app-feature-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <span>Notificaciones automáticas de stock crítico y cobranzas</span>
+              </div>
+              <div class="app-feature-item">
+                <div class="app-feature-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <span>Conexión directa con SII y emisión de boletas en ruta</span>
+              </div>
+            </div>
+            <a href="mailto:contacto@quantuschile.cl?subject=Solicitud%20Demo%20ERP%20Movil" class="btn-submit-cyan" style="display: inline-flex; text-decoration: none;">
+              Solicitar demostración móvil →
+            </a>
+          </div>
+
+          <div class="app-preview-visual">
+            <div style="font-size: 13px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Vista Móvil Inteligente</div>
+            <div style="background: #0f172a; border-radius: 16px; padding: 20px; text-align: left; border: 1px solid #334155;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
+                <span style="font-weight: 800; font-size: 14px; color: #f8fafc;">📊 Resumen del Día</span>
+                <span style="font-size: 11px; font-weight: 700; color: #10b981; background: rgba(16, 185, 129, 0.15); padding: 4px 8px; border-radius: 6px;">EN VIVO</span>
+              </div>
+              <div style="margin-bottom: 12px;">
+                <div style="font-size: 12px; color: #94a3b8;">Ventas Hoy</div>
+                <div style="font-size: 22px; font-weight: 900; color: #ffffff;">$485.900</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="background: #1e293b; padding: 10px; border-radius: 8px; border: 1px solid #334155;">
+                  <div style="font-size: 11px; color: #94a3b8;">Boletas Emitidas</div>
+                  <div style="font-size: 15px; font-weight: 800; color: #38bdf8;">34</div>
+                </div>
+                <div style="background: #1e293b; padding: 10px; border-radius: 8px; border: 1px solid #334155;">
+                  <div style="font-size: 11px; color: #94a3b8;">Facturas Al Día</div>
+                  <div style="font-size: 15px; font-weight: 800; color: #10b981;">100%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES CHECKLIST MATRIX -->
+    <section class="section-padding matrix-section-light" id="funcionalidades">
+      <div class="container">
+        <div class="section-title-center">
+          <div class="hero-kicker-pill">Matriz de Funcionalidades</div>
+          <h2 class="section-head-h2">Comparativa técnica de módulos e Inteligencia Artificial</h2>
+        </div>
+
+        <div class="matrix-box-white">
+          <div class="matrix-row-grid matrix-head-row">
+            <div>Funcionalidad / Módulo</div>
+            <div style="text-align: center;">Quantus ERP</div>
+            <div style="text-align: center;">ERP Tradicional</div>
+          </div>
+          <div class="matrix-row-grid">
+            <div>Inteligencia Artificial Operativa <span class="tooltip-dot" title="Vigilancia del Diario Oficial e IA de Stock">?</span></div>
+            <div style="text-align: center;">
+              <svg class="icon-check-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div style="text-align: center;">
+              <svg class="icon-cross-gray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </div>
+          </div>
+          <div class="matrix-row-grid">
+            <div>Ventas y Boleta/Factura SII <span class="tooltip-dot" title="Conexión automática RCV">?</span></div>
+            <div style="text-align: center;">
+              <svg class="icon-check-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div style="text-align: center;">
+              <svg class="icon-check-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="matrix-row-grid">
+            <div>Inventario Multibodega <span class="tooltip-dot" title="Trazabilidad por lote y mermas">?</span></div>
+            <div style="text-align: center;">
+              <svg class="icon-check-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div style="text-align: center;">
+              <svg class="icon-check-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+          <div class="matrix-row-grid">
+            <div>Conciliación Bancaria Automática <span class="tooltip-dot" title="Integración con la banca chilena">?</span></div>
+            <div style="text-align: center;">
+              <svg class="icon-check-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div style="text-align: center;">
+              <svg class="icon-cross-gray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </div>
+          </div>
+          <div class="matrix-row-grid">
+            <div>Vigilancia de Licitaciones Mercado Público <span class="tooltip-dot" title="Agente de alertas de licitación">?</span></div>
+            <div style="text-align: center;">
+              <svg class="icon-check-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div style="text-align: center;">
+              <svg class="icon-cross-gray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="section-padding testimonials-section">
+      <div class="container">
+        <div class="section-title-center">
+          <div class="hero-kicker-pill">Empresarias y Empresarios</div>
+          <h2 class="section-head-h2">Empresas que crecen con Quantus ERP: soluciones de software</h2>
+          <p class="section-head-sub">
+            Nuestra misión es entregar un sistema ERP de clase mundial a las empresas chilenas, aportando valor mediante un sistema amigable y de rápida implementación.
+          </p>
+        </div>
+
+        <div class="testimonials-grid-2col">
+          <div class="testimonial-card-white">
+            <div class="testi-user-flex">
+              <div class="user-avatar-img">RP</div>
+              <div class="user-meta">
+                <h4>Ricardo Páez</h4>
+                <p>CEO Rally Karting</p>
+              </div>
+            </div>
+            <p class="quote-paragraph">
+              "Quantus ERP nos cambió la vida, ahora podemos conocer la rentabilidad real de la empresa desde cualquier parte y con el celular. Es más fácil tomar decisiones y tener el negocio al día."
+            </p>
+          </div>
+
+          <div class="testimonial-card-white">
+            <div class="testi-user-flex">
+              <div class="user-avatar-img">NL</div>
+              <div class="user-meta">
+                <h4>Nicolás Lavandero</h4>
+                <p>CEO La Península SpA</p>
+              </div>
+            </div>
+            <p class="quote-paragraph">
+              "Quantus ERP es muy simple de usar y entrega la información precisa de la forma más fácil, en los tiempos reales y es muy intuitivo."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

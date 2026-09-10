@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Ferretería Don Manolo">
+  <defs>
+    <linearGradient id="dm-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="dm-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="dm-silver" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="36" fill="url(#dm-bg)" stroke="#334155" stroke-width="2"/>
+  
+  <!-- Outer industrial hex ring -->
+  <polygon points="100,28 152,58 152,118 100,148 48,118 48,58" fill="none" stroke="url(#dm-gold)" stroke-width="4" stroke-linejoin="round"/>
+  
+  <!-- Crossed Tools Emblem: Hammer and Wrench -->
+  <g transform="translate(100, 88)">
+    <!-- Wrench (diagonal left to right) -->
+    <path d="M-38,-38 L32,32 M-38,-38 L-46,-30 L-34,-18 L-26,-26 L-30,-34 Z" fill="none" stroke="url(#dm-silver)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="28" cy="28" r="8" fill="none" stroke="url(#dm-silver)" stroke-width="5"/>
+    
+    <!-- Hammer (diagonal right to left) -->
+    <path d="M38,-38 L-32,32" stroke="url(#dm-gold)" stroke-width="6" stroke-linecap="round"/>
+    <rect x="24" y="-48" width="22" height="14" rx="3" transform="rotate(45, 35, -41)" fill="url(#dm-gold)"/>
+    
+    <!-- Center gear hub -->
+    <circle cx="0" cy="0" r="14" fill="#0f172a" stroke="url(#dm-gold)" stroke-width="3.5"/>
+    <circle cx="0" cy="0" r="6" fill="url(#dm-gold)"/>
+  </g>
+  
+  <!-- Text Brand -->
+  <text x="100" y="172" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="14" font-weight="900" letter-spacing="1.5" fill="#f8fafc">DON MANOLO</text>
+  <text x="100" y="187" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="9" font-weight="800" letter-spacing="3" fill="#fbbf24">FERRETERÍA</text>
+</svg>

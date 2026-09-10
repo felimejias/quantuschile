@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% set mod = modulo|default('diario_oficial')|lower %}
+  <title>
+    {% if titulo %}
+      {{ titulo }} | Quantus Chile
+    {% elif mod in ['inapi', 'marcas'] %}
+      Solicitud de Marca Recibida | Quantus Chile
+    {% elif mod in ['licitaciones', 'mercado_publico'] %}
+      Radar de Licitaciones Activado | Quantus Chile
+    {% elif mod in ['erp', 'pos', 'punto_de_venta'] %}
+      Suscripción ERP Activada | Quantus Chile
+    {% else %}
+      Vigilancia Activada con Éxito | Quantus Chile
+    {% endif %}
+  </title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260816-success-redesign">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #070e17;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --border: rgba(148, 163, 184, 0.16);
+      --accent: #38bdf8;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --text: #f8fafc;
+      --text-dim: #94a3b8;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    .app-container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 24px 16px 64px;
+    }
+    .success-hero {
+      text-align: center;
+      margin-top: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .success-icon-wrap {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: var(--success-bg);
+      border: 2px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 0 32px rgba(16, 185, 129, 0.25);
+    }
+    .success-title {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 800;
+      margin: 0 0 0.75rem;
+      background: linear-gradient(135deg, #ffffff 40%, var(--success) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+    .success-subtitle {
+      color: var(--text-dim);
+      font-size: 1.1rem;
+      max-width: 640px;
+      margin: 0 auto;
+      font-weight: 400;
+    }
+    .card-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px 28px;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    .panel-header {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1.2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .data-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .data-label {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    .data-value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .timeline-container {
+      margin: 2.5rem 0;
+      text-align: left;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+      border-left: 2px solid rgba(56, 189, 248, 0.25);
+      margin-top: 1.5rem;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-badge {
+      position: absolute;
+      left: -2.75rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #0f172a;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text-dim);
+    }
+    .timeline-badge.done {
+      border-color: var(--success);
+      background: var(--success);
+      color: #064e3b;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+    .timeline-badge.active {
+      border-color: var(--accent);
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+    }
+    .timeline-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.35rem;
+    }
+    .timeline-desc {
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      line-height: 1.55;
+    }
+    .notice-card {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 16px;
+      padding: 18px 24px;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin: 2.5rem 0 3.5rem;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: #ffffff;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 10px 24px rgba(14, 165, 233, 0.3);
+      transition: transform 0.15s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: rgba(30, 41, 59, 0.8);
+      color: #cbd5e1;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      color: #ffffff;
+      border-color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- CABECERA INSTITUCIONAL -->
+    <header class="app-header" style="text-align: left; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+      <a class="brand-link" href="/" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile SpA" style="width: 42px; height: 42px; border-radius: 10px;">
+        <div>
+          <div style="font-weight: 800; font-size: 1.15rem; color: #ffffff; letter-spacing: 0.5px;">QUANTUS <span style="color: var(--accent);">CHILE SpA</span></div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">Confirmación Operacional</div>
+        </div>
+      </a>
+      <nav class="header-actions" aria-label="Navegación rápida">
+        <a href="/" class="btn-secondary" style="font-size: 0.85rem; padding: 8px 16px;">Inicio</a>
+        <a href="/punto-de-venta" class="btn-secondary" style="font-size: 0.85rem; padding: 8px 16px;">Punto de Venta</a>
+        <a href="/do" class="btn-secondary" style="font-size: 0.85rem; padding: 8px 16px;">Diario Oficial</a>
+        <a href="/licitaciones" class="btn-secondary" style="font-size: 0.85rem; padding: 8px 16px;">Licitaciones</a>
+      </nav>
+    </header>
+
+    <!-- HERO DE ÉXITO -->
+    <section class="success-hero">
+      <div class="success-icon-wrap">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+
+      <h1 class="success-title">
+        {% if titulo %}
+          {{ titulo }}
+        {% elif mod in ['inapi', 'marcas'] %}
+          ¡Solicitud de Registro de Marca Recibida!
+        {% elif mod in ['licitaciones', 'mercado_publico'] %}
+          ¡Radar de Licitaciones 24/7 Activado!
+        {% elif mod in ['erp', 'pos', 'punto_de_venta'] %}
+          ¡Suscripción ERP / Punto de Venta Confirmada!
+        {% else %}
+          ¡Vigilancia Diario Oficial Activada con Éxito!
+        {% endif %}
+      </h1>
+
+      <p class="success-subtitle">
+        {% if mensaje %}
+          {{ mensaje }}
+        {% elif mod in ['inapi', 'marcas'] %}
+          Hemos procesado tu solicitud y guardado tu mandato de forma segura. El equipo de Quantus iniciará la tramitación legal ante INAPI.
+        {% elif mod in ['licitaciones', 'mercado_publico'] %}
+          Tu suscripción ha sido confirmada. El motor de búsqueda inteligente de Quantus ya está monitoreando en tiempo real las compras públicas de ChileCompra en tus rubros.
+        {% elif mod in ['erp', 'pos', 'punto_de_venta'] %}
+          Tu cuenta ha sido activada en el sistema central de Quantus ERP. Ya puedes configurar tu catálogo y comenzar a operar el punto de venta.
+        {% else %}
+          Tu suscripción ha quedado registrada en nuestros servidores. Comenzaremos a escanear diariamente el Diario Oficial de Chile para alertarte ante cualquier coincidencia legal o societaria.
+        {% endif %}
+      </p>
+    </section>
+
+    <!-- RESUMEN DE LA CONTRATACIÓN -->
+    <div class="card-panel">
+      <div class="panel-header">
+        <span>📋</span> Resumen de la Suscripción / Trámite
+      </div>
+      <div class="data-grid">
+        {% if mod in ['inapi', 'marcas'] and marca %}
+        <div class="data-item">
+          <span class="data-label">Marca a tramitar</span>
+          <span class="data-value" style="color: var(--accent);">"{{ marca }}"</span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Clase Niza</span>
+          <span class="data-value">Clase {{ clase|default('1') }}</span>
+        </div>
+        {% else %}
+        <div class="data-item">
+          <span class="data-label">Servicio Activo</span>
+          <span class="data-value" style="color: var(--accent);">
+            {% if mod in ['licitaciones', 'mercado_publico'] %}
+              Radar Licitaciones Mercado Público 24/7
+            {% elif mod in ['erp', 'pos', 'punto_de_venta'] %}
+              Quantus ERP & Punto de Venta
+            {% elif mod in ['inapi', 'marcas'] %}
+              Registro y Vigilancia de Marca INAPI
+            {% else %}
+              Vigilancia Diario Oficial 24/7
+            {% endif %}
+          </span>
+        </div>
+        <div class="data-item">
+          <span class="data-label">Plan Contratado</span>
+          <span class="data-value">{{ plan|default('Plan Estándar')|capitalize }}</span>
+        </div>
+        {% endif %}
+
+        {% if nombre %}
+        <div class="data-item">
+          <span class="data-label">Titular / Empresa</span>
+          <span class="data-value">{{ nombre }}</span>
+        </div>
+        {% endif %}
+
+        {% if rut %}
+        <div class="data-item">
+          <span class="data-label">RUT Registrado</span>
+          <span class="data-value">{{ rut }}</span>
+        </div>
+        {% endif %}
+
+        <div class="data-item">
+          <span class="data-label">Estado Operacional</span>
+          <span class="data-value" style="color: var(--success);">● Activo y Monitoreando</span>
+        </div>
+
+        <div class="data-item">
+          <span class="data-label">Canales de Alerta</span>
+          <span class="data-value">Email institucional + WhatsApp</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AVISO DE CORREO / SPAM -->
+    <div class="notice-card">
+      <div style="font-weight: 700; color: var(--accent); margin-bottom: 4px; font-size: 1.05rem;">
+        📬 Revisa tu Bandeja de Entrada o Carpeta de Spam
+      </div>
+      <p style="margin: 0; color: var(--text-dim); font-size: 0.92rem;">
+        Hemos despachado la confirmación escrita desde <strong>contacto@quantuschile.cl</strong>. Si no lo encuentras en tu bandeja principal, búscalo en "Correo no deseado" / Spam y márcalo como <strong>"No es spam"</strong> para asegurar la recepción puntual de tus alertas críticas.
+      </p>
+    </div>
+
+    <!-- PASOS A SEGUIR (TIMELINE DINÁMICO POR SERVICIO) -->
+    <div class="timeline-container">
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin: 0 0 0.5rem; color: #ffffff;">
+        🚀 Próximos Pasos Operacionales
+      </h2>
+      <p style="color: var(--text-dim); font-size: 0.95rem; margin: 0 0 1.5rem;">
+        Así opera la plataforma tecnológica de Quantus a partir de este momento:
+      </p>
+
+      {% if mod in ['licitaciones', 'mercado_publico'] %}
+      <!-- TIMELINE LICITACIONES -->
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-badge done">✓</div>
+          <div class="timeline-title">1. Configuración de Filtros y Rubros (Completado)</div>
+          <div class="timeline-desc">Tu perfil empresarial, rubros estratégicos y regiones han quedado registrados en el motor inteligente de compras públicas.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge active">2</div>
+          <div class="timeline-title">2. Escaneo Continuo en Vivo (Cada 45 minutos)</div>
+          <div class="timeline-desc">El algoritmo rastrea en tiempo real nuevas licitaciones, compras ágiles y cotizaciones publicadas en Mercado Público a lo largo de Chile.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge">3</div>
+          <div class="timeline-title">3. Alertas con Score de Factibilidad IA (WhatsApp / Email)</div>
+          <div class="timeline-desc">Cada vez que surja una oportunidad coincidente, te notificaremos inmediatamente con el análisis de factibilidad, monto estimado y fecha de cierre.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge">4</div>
+          <div class="timeline-title">4. Resumen Ejecutivo y Factura</div>
+          <div class="timeline-desc">Recibirás semanalmente un informe consolidado y tu factura electrónica oficial emitida conforme a los datos tributarios informados.</div>
+        </div>
+      </div>
+
+      {% elif mod in ['erp', 'pos', 'punto_de_venta'] %}
+      <!-- TIMELINE ERP -->
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-badge done">✓</div>
+          <div class="timeline-title">1. Creación de Espacio de Trabajo (Completado)</div>
+          <div class="timeline-desc">Tu entorno seguro e independiente de punto de venta e inventario ha sido provisionado en los servidores de Quantus.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge active">2</div>
+          <div class="timeline-title">2. Acceso al Sistema</div>
+          <div class="timeline-desc">Ingresa a <a href="/punto-de-venta/acceso" style="color: var(--accent); text-decoration: underline;">Acceso Punto de Venta</a> para iniciar sesión con tus credenciales y abrir tu primera caja.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge">3</div>
+          <div class="timeline-title">3. Carga de Catálogo y Productos</div>
+          <div class="timeline-desc">Configura rápidamente tus productos, precios, códigos de barra y stock inicial para operar con total agilidad.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge">4</div>
+          <div class="timeline-title">4. Acompañamiento y Soporte Continuo</div>
+          <div class="timeline-desc">Tienes asistencia directa por WhatsApp ante cualquier duda en la configuración de impresoras térmicas, lectores o usuarios.</div>
+        </div>
+      </div>
+
+      {% elif mod in ['inapi', 'marcas'] %}
+      <!-- TIMELINE INAPI -->
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-badge done">✓</div>
+          <div class="timeline-title">1. Firma del Mandato Digital (Completado)</div>
+          <div class="timeline-desc">Mandato y antecedentes legales archivados de manera inmutable bajo cumplimiento de la Ley N° 21.719.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge active">2</div>
+          <div class="timeline-title">2. Ingreso Oficial ante INAPI (Próximas 24 a 48 hrs)</div>
+          <div class="timeline-desc">El equipo de Quantus ingresará la solicitud formal en el portal del Instituto Nacional de Propiedad Industrial y pagará la 1ª tasa UTM estatal.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge">3</div>
+          <div class="timeline-title">3. Examen de Forma y Publicación en Diario Oficial (15 a 30 días)</div>
+          <div class="timeline-desc">Tras la aprobación del examinador, se publicará el extracto de la marca en el Diario Oficial para el periodo de oposiciones.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge">4</div>
+          <div class="timeline-title">4. Examen de Fondo y Concesión por 10 Años</div>
+          <div class="timeline-desc">INAPI evaluará la registrabilidad final y emitirá la resolución definitiva que otorga la propiedad legal exclusiva de tu marca.</div>
+        </div>
+      </div>
+
+      {% else %}
+      <!-- TIMELINE DIARIO OFICIAL / GENERAL -->
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-badge done">✓</div>
+          <div class="timeline-title">1. Activación de Vigilancia en el Servidor (Completado)</div>
+          <div class="timeline-desc">Tus datos, RUT y criterios de búsqueda quedaron indexados en el motor de monitoreo continuo de Quantus.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge active">2</div>
+          <div class="timeline-title">2. Escaneo Diario Oficial de Chile (08:00 AM)</div>
+          <div class="timeline-desc">Cada mañana a primera hora, el sistema descarga y procesa íntegramente la edición oficial del día (sociedades, citaciones, balances y avisos).</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge">3</div>
+          <div class="timeline-title">3. Despacho Instantáneo de Alertas (WhatsApp / Email)</div>
+          <div class="timeline-desc">Si detectamos cualquier mención de tu RUT o nombre comercial, recibirás de inmediato el extracto oficial y el enlace a la publicación legal.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-badge">4</div>
+          <div class="timeline-title">4. Emisión de Factura Tributaria</div>
+          <div class="timeline-desc">Tu factura electrónica se emitirá por el canal oficial con los datos tributarios informados por tu empresa.</div>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- ECOSISTEMA DE SERVICIOS -->
+    {% include "partials/ecosistema_servicios.html" %}
+
+    <!-- BOTONES DE ACCIÓN -->
+    <div class="action-buttons">
+      {% if mod in ['erp', 'pos', 'punto_de_venta'] %}
+      <a href="/punto-de-venta/acceso" class="btn-primary">🖥️ Entrar a mi Punto de Venta</a>
+      {% elif mod in ['licitaciones', 'mercado_publico'] %}
+      <a href="/licitaciones" class="btn-primary">🏛️ Ver Radar de Licitaciones</a>
+      {% elif mod in ['inapi', 'marcas'] %}
+      <a href="/inapi" class="btn-primary">🏷️ Portal de Marcas INAPI</a>
+      {% else %}
+      <a href="/do" class="btn-primary">📰 Ir al Radar Diario Oficial</a>
+      {% endif %}
+      <a href="/" class="btn-secondary">Volver a Quantus Chile</a>
+    </div>
+
+    <!-- FOOTER LEGAL Y PROTECCIÓN DE DATOS -->
+    {% include "partials/legal_footer.html" %}
+  </div>
+
+</body>
+</html>

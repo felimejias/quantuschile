@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Portal de Clientes | Quantus Chile SpA</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #ffffff;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --blue-accent: #2563eb;
+      --blue-hover: #1d4ed8;
+      --cyan-bright: #0284c7;
+      --text-white: #0f172a;
+      --text-gray: #475569;
+      --text-muted: #64748b;
+      --green-badge: #10b981;
+      --red-badge: #ef4444;
+      --amber-badge: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-white);
+      min-height: 100vh;
+    }
+
+    /* SCREEN 1: LOGIN STYLES */
+    #screen-login {
+      width: 100%;
+      min-height: 100vh;
+      padding: 40px 60px;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .top-brand-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo-text {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo-text img { width: 36px; height: 36px; }
+    .brand-title { font-size: 18px; font-weight: 900; color: #0f172a; letter-spacing: -0.01em; }
+    .brand-sub { font-size: 11px; font-weight: 800; color: var(--cyan-bright); letter-spacing: 0.05em; }
+
+    .demo-link { color: var(--cyan-bright); text-decoration: none; font-size: 14px; font-weight: 700; }
+
+    .login-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 60px;
+      align-items: center;
+      margin: 40px 0;
+    }
+
+    .left-hero-tag {
+      display: inline-block;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.25);
+      color: var(--cyan-bright);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .left-hero-title {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1.15;
+      color: #0f172a;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .left-hero-desc {
+      font-size: 18px;
+      color: var(--text-gray);
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+
+    .checklist-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .check-item span { color: var(--cyan-bright); font-weight: 900; }
+
+    .cloud-card {
+      background: #f8fafc;
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cloud-card p { font-size: 14px; color: var(--text-gray); }
+    .cloud-card strong { display: block; color: #0f172a; font-size: 15px; }
+
+    /* Right Form Card */
+    .login-card-panel {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.1);
+    }
+
+    .login-card-title { font-size: 26px; font-weight: 900; color: #0f172a; margin-bottom: 6px; }
+    .login-card-sub { font-size: 14px; color: var(--text-gray); margin-bottom: 28px; }
+
+    .form-group-item { margin-bottom: 20px; }
+    .form-group-item label { display: block; font-size: 13px; font-weight: 800; color: #334155; margin-bottom: 8px; }
+    .form-control-item {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #0f172a;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .form-control-item:focus { border-color: var(--blue-accent); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); }
+
+    .btn-blue-primary {
+      width: 100%;
+      background: linear-gradient(90deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .error-alert-box {
+      display: none;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid #ef4444;
+      color: #b91c1c;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    /* SCREEN 2: SELECCIÓN DE EMPRESA STYLES */
+    #screen-companies {
+      min-height: 100vh;
+      width: 100%;
+      background: #f8fafc;
+    }
+
+    .sidebar-left {
+      width: 250px;
+      background: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar-menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: var(--text-gray);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .sidebar-item.active {
+      background: rgba(2, 132, 199, 0.08);
+      color: #0f172a;
+      border-left: 3px solid var(--blue-accent);
+    }
+
+    .sidebar-help-widget {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+
+    .help-title {
+      font-size: 13px;
+      font-weight: 900;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .help-phone-link {
+      display: block;
+      color: var(--cyan-bright);
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .help-phone-link:hover { color: #0f172a; }
+
+    .main-body-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-nav-dash {
+      height: 70px;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+
+    .user-profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      padding: 6px 16px;
+      border-radius: 999px;
+      color: #0f172a;
+    }
+
+    .avatar-circle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--blue-accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 0 10px rgba(37, 99, 235, 0.3);
+    }
+
+    .dash-workspace {
+      padding: 40px;
+      flex: 1;
+    }
+
+    .workspace-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+
+    .workspace-title { font-size: 32px; font-weight: 900; color: #0f172a; }
+    .workspace-sub { font-size: 15px; color: var(--text-gray); margin-top: 4px; }
+
+    .btn-new-company {
+      background: var(--blue-accent);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .company-grid-6 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .company-card-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 250px;
+    }
+
+    .card-top-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .company-logo-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+
+    .logo-don-manolo {
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+      border: 1.5px solid #64748b;
+    }
+
+    .logo-ohiggins {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      border: 1.5px solid #38bdf8;
+    }
+
+    .logo-minimarket {
+      background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+      border: 1.5px solid #34d399;
+    }
+
+    .logo-san-juan {
+      background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+      border: 1.5px solid #c084fc;
+    }
+
+    .logo-boutique {
+      background: linear-gradient(135deg, #312e81 0%, #111827 100%);
+      border: 1.5px solid #a5b4fc;
+    }
+
+    .logo-glamour {
+      background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+      border: 1.5px solid #f472b6;
+    }
+
+    .logo-imperial {
+      background: linear-gradient(135deg, #475569 0%, #334155 100%);
+      border: 1.5px solid #94a3b8;
+    }
+
+    .logo-demo {
+      background: linear-gradient(135deg, #0d9488 0%, #115e59 100%);
+      border: 1.5px solid #2dd4bf;
+    }
+
+    .company-logo-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .real-client-mark {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
+      color: #f8fafc;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .brand-note-line {
+      margin-top: 8px;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .badge-status {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .badge-active { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .badge-inactive { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .badge-suspended { background: rgba(245, 158, 11, 0.2); color: #fde047; }
+    .badge-demo { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; }
+
+    .company-title-text { font-size: 20px; font-weight: 900; color: #0f172a; }
+    .company-rubro-text { font-size: 14px; font-weight: 700; color: var(--cyan-bright); margin-top: 2px; }
+
+    .company-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin: 16px 0;
+      font-size: 12px;
+    }
+
+    .meta-col span { display: block; color: var(--text-muted); font-weight: 700; }
+    .meta-col strong { color: var(--text-gray); font-weight: 800; margin-top: 2px; display: block; }
+
+    .btn-enter-company {
+      width: 100%;
+      background: var(--blue-accent);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+
+    .btn-disabled-co {
+      background: #1e293b;
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+    .demo-request-panel {
+      grid-column: 1 / -1;
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+      margin-top: 10px;
+    }
+    .demo-request-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .demo-request-head h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .demo-request-head p {
+      margin: 2px 0 0;
+      color: #64748b;
+      font-size: 12px;
+    }
+    .demo-request-form {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      align-items: end;
+    }
+    .demo-request-form label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      color: #334155;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .demo-request-form label:nth-child(1),
+    .demo-request-form label:nth-child(2),
+    .demo-request-form label:nth-child(3),
+    .demo-request-form label:nth-child(4),
+    .demo-request-form label:nth-child(5) { grid-column: span 1; }
+    .demo-request-form .form-control-item {
+      padding: 9px 12px;
+      font-size: 13px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+    }
+    .demo-request-form button {
+      grid-column: span 1;
+      padding: 10px;
+      font-size: 13px;
+      border-radius: 8px;
+      height: 38px;
+    }
+    @media (max-width: 980px) {
+      #screen-login { padding: 24px; }
+      .login-grid { grid-template-columns: 1fr; gap: 28px; }
+      .demo-request-form { grid-template-columns: 1fr; }
+      .demo-request-form label,
+      .demo-request-form label:nth-child(1),
+      .demo-request-form label:nth-child(2),
+      .demo-request-form label:nth-child(3),
+      .demo-request-form label:nth-child(4),
+      .demo-request-form label:nth-child(5),
+      .demo-request-form button { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCREEN 1: LOGIN CARD (IMAGEN 1) -->
+  <div id="screen-login" style="display: {{ 'none' if show_companies else 'flex' }};">
+    <header class="top-brand-bar">
+      <div class="brand-logo-text">
+        <img src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus">
+        <div>
+          <div class="brand-title">QUANTUS CHILE SpA</div>
+          <div class="brand-sub">INTELLIGENCE BUSINESS</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:16px;">
+        <a href="/punto-de-venta" class="client-login-btn" style="background:#0284c7; color:#fff; padding:9px 18px; border-radius:999px; font-weight:800; font-size:13px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; box-shadow:0 4px 12px rgba(2,132,199,0.25);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Acceso Clientes POS
+        </a>
+        <div>
+          <span style="color:var(--text-gray); font-size:14px;">¿No tienes cuenta? </span>
+          <a href="#solicitar-demo" class="demo-link">Solicita una demo</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="login-grid">
+      <div>
+        <span class="left-hero-tag">PUNTO DE VENTA PARA PYMES CHILENAS</span>
+        <h1 class="left-hero-title">Gestiona tu punto de venta con inteligencia</h1>
+        <p class="left-hero-desc">Cada usuario accede solo a la empresa y rubro contratado. Si una cuenta tiene más de una empresa autorizada, se muestra únicamente esa lista.</p>
+
+        <div class="checklist-2col">
+          <div class="check-item"><span>✓</span> Ventas, inventario y compras</div>
+          <div class="check-item"><span>✓</span> Caja y punto de venta</div>
+          <div class="check-item"><span>✓</span> Agentes de IA especializados</div>
+          <div class="check-item"><span>✓</span> Reportes y análisis en tiempo real</div>
+          <div class="check-item"><span>✓</span> Automatización de procesos</div>
+          <div class="check-item"><span>✓</span> Seguridad y respaldo 100% cloud</div>
+        </div>
+
+        <div class="cloud-card">
+          <span style="font-size: 28px;">☁️</span>
+          <div>
+            <strong>Plataforma 100% cloud</strong>
+            <p>Segura, escalable y siempre disponible</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-card-panel">
+        <h2 class="login-card-title">Iniciar sesión</h2>
+        <p class="login-card-sub">Accede a tu cuenta de administrador</p>
+
+        <div class="error-alert-box" id="login-error">
+          {{ error or "Usuario o contraseña incorrectos." }}
+        </div>
+
+        {% if error %}
+        <script>document.addEventListener('DOMContentLoaded', () => { document.getElementById('login-error').style.display = 'block'; });</script>
+        {% endif %}
+
+        {% if allow_force_login %}
+        <form action="/punto-de-venta/acceso" method="POST" style="margin-bottom: 20px;">
+          {{ csrf_input()|safe }}
+          <input type="hidden" name="username" value="{{ force_username }}">
+          <input type="hidden" name="password" value="{{ force_password }}">
+          <input type="hidden" name="force_login" value="1">
+          <button type="submit" class="btn-blue-primary" style="background:#f59e0b; color:#0f172a; font-weight:800; border:none; padding:12px; border-radius:10px; cursor:pointer;" title="Cierra la sesión abierta en el otro navegador e inicia aquí">
+            🔓 Cerrar sesión anterior e ingresar en este navegador
+          </button>
+        </form>
+        {% endif %}
+
+        <form id="login-form" action="/punto-de-venta/acceso" method="POST">
+          {{ csrf_input()|safe }}
+          <div class="form-group-item">
+            <label>Usuario o email</label>
+            <input type="text" class="form-control-item" id="input-username" name="username" placeholder="usuario@empresa.cl" required>
+          </div>
+
+          <div class="form-group-item">
+            <label>Contraseña</label>
+            <input type="password" class="form-control-item" id="input-password" name="password" placeholder="••••••••" required>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-gray); margin-bottom:24px;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" checked> Recordar sesión
+            </label>
+            <a href="#" style="color:var(--cyan-bright); text-decoration:none;">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button type="submit" class="btn-blue-primary" id="btn-login-submit">
+            Ingresar al ERP del servidor →
+          </button>
+        </form>
+
+        <div style="text-align:center; color:var(--text-muted); font-size:12px; margin:24px 0 16px;">
+          o continuar con
+        </div>
+
+        <button class="btn-blue-primary" style="background:#f8fafc; color:#0f172a; border:1.5px solid #cbd5e1; margin-bottom:20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          👤 SSO Empresarial
+        </button>
+
+        <div style="text-align:center;">
+          <a href="/" style="color:var(--text-gray); font-size:13px; text-decoration:none;">← Volver al sitio web</a>
+        </div>
+      </div>
+
+      <section class="demo-request-panel" id="solicitar-demo">
+        <div class="demo-request-head">
+          <div>
+            <h2>Solicita tu demo temporal</h2>
+            <p>Indica el rubro que quieres probar. Quantus revisa la solicitud y habilita acceso controlado por algunos días, sin mostrar el resto de demos.</p>
+          </div>
+          <span class="left-hero-tag" style="margin:0;">3 a 7 dias sugeridos</span>
+        </div>
+        <form class="demo-request-form" action="/demo/solicitar" method="POST">
+          {{ csrf_input()|safe }}
+          <label>Nombre
+            <input class="form-control-item" name="nombre" placeholder="Nombre contacto" required>
+          </label>
+          <label>Empresa
+            <input class="form-control-item" name="empresa" placeholder="Nombre empresa" required>
+          </label>
+          <label>Correo
+            <input class="form-control-item" type="email" name="email" placeholder="contacto@empresa.cl" required>
+          </label>
+          <label>Telefono
+            <input class="form-control-item" name="telefono" placeholder="+56 9 ...">
+          </label>
+          <label>Demo
+            <select class="form-control-item" name="vertical" required>
+              <option value="minimarket">Punto de Venta Minimarket</option>
+              <option value="ferreteria">Punto de Venta Ferreteria</option>
+              <option value="boutique">Punto de Venta Boutique</option>
+              <option value="distribucion">Punto de Venta Distribucion</option>
+              <option value="farmacia">Farmacia POS demo</option>
+              <option value="estetica">Agenda Estetica</option>
+            </select>
+          </label>
+          <button class="btn-blue-primary" type="submit">Enviar solicitud</button>
+        </form>
+      </section>
+    </main>
+
+    <footer style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:12px;">
+      <div>© 2026 Quantus Chile SpA. Todos los derechos reservados.</div>
+      <div>Términos y condiciones · Política de privacidad</div>
+    </footer>
+  </div>
+
+
+  <!-- SCREEN 2: SELECCIÓN DE EMPRESA (IMAGEN 2) -->
+  <div id="screen-companies" style="display: {{ 'block' if show_companies else 'none' }};">
+    <div style="display:flex; min-height:100vh; width:100%;">
+      <aside class="sidebar-left">
+        <div class="sidebar-menu-list">
+          <div class="brand-logo-text" style="margin-bottom: 24px;">
+            <img src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus">
+            <div>
+              <div class="brand-title">QUANTUS</div>
+              <div class="brand-sub">CHILE SpA</div>
+            </div>
+          </div>
+
+          <a href="/punto-de-venta/clientes" class="sidebar-item active" title="Catálogo de empresas y rubros autorizados para operar">🏢 Empresas autorizadas</a>
+          <a href="#" class="sidebar-item" title="Gestión de roles y cuentas de usuarios cajeros y administradores">👥 Usuarios</a>
+          <a href="/punto-de-venta/clientes-erp" class="sidebar-item" title="Enrutador de acceso directo y SSO a instancias dedicadas de clientes">🔗 Clientes ERP servidor</a>
+          <a href="#" class="sidebar-item" title="Estado de los 7 agentes de IA que analizan stock, precios y compras 24/7">🤖 Agentes de IA</a>
+          <a href="#" class="sidebar-item" title="Métricas consolidadas de ventas, inventario y cierres de caja">📊 Reportes</a>
+          <a href="#" class="sidebar-item" title="Parámetros de licencias, sucursales, impresoras térmicas y cajas">⚙️ Configuración</a>
+          <a href="#" class="sidebar-item" title="Control de accesos JWT, permisos por módulo y sesiones activas">🛡️ Seguridad</a>
+          <a href="/maestro/ley-21719" class="sidebar-item" title="Bitácora de auditoría, trazabilidad y cumplimiento Ley N° 21.719">📋 Auditoría</a>
+        </div>
+
+        <!-- Widget ¿Necesitas ayuda? con el teléfono +56975480746 -->
+        <div class="sidebar-help-widget">
+          <div class="help-title">🎧 ¿Necesitas ayuda?</div>
+          <a href="tel:+56975480746" class="help-phone-link" title="Llamar directamente a soporte Quantus (+56 9 7548 0746)">Contáctanos: +56 9 7548 0746</a>
+        </div>
+      </aside>
+
+      <main class="main-body-content">
+        <header class="top-nav-dash">
+          <div class="brand-title" style="font-size: 16px;">Centro de Control Multiempresa</div>
+          <div style="display:flex; align-items:center; gap:20px;">
+            <a href="/punto-de-venta/acceso?logout=1" title="Cerrar la sesión actual de forma segura" style="background:transparent; border:1px solid #334155; color:#cbd5e1; padding:6px 14px; border-radius:8px; font-weight:700; text-decoration:none;">🔒 Cerrar Sesión</a>
+            
+            <!-- Perfil del usuario con correo fmejias@quantuschile.cl -->
+            <div class="user-profile-pill" title="Sesión activa del operador SuperAdmin">
+              <div class="avatar-circle">FM</div>
+              <div>
+                <div style="font-size: 13px; font-weight: 800; color: #fff;">{{ pos_user.display_name if pos_user else "Usuario Punto de Venta" }}</div>
+                <div style="font-size: 11px; color: var(--cyan-bright); font-weight: 700;">{{ pos_user.email if pos_user else "" }}</div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="dash-workspace">
+          <div class="workspace-head">
+            <div>
+              <h1 class="workspace-title">Selección de empresa autorizada</h1>
+              {% if pos_user and pos_user.role in ["superadmin", "owner_demo"] %}
+              <p class="workspace-sub">Vista interna de demos comerciales. Puedes abrir todas para vender y mostrar rubros distintos sin exponerlas a clientes.</p>
+              {% else %}
+              <p class="workspace-sub">Estas son las empresas y rubros contratados para tus credenciales.</p>
+              {% endif %}
+            </div>
+            <button class="btn-new-company" disabled title="Crear una nueva empresa con base de datos PostgreSQL aislada (gestionado por contrato)">+ Nueva empresa</button>
+          </div>
+
+          <div class="company-grid-6">
+            {% for company in companies %}
+            <div class="company-card-item" style="border-color: rgba(56, 189, 248, 0.5);">
+              <div>
+                <div class="card-top-head">
+                  <div class="company-logo-badge {{ company.logo_class }}">
+                    {% if company.logo_file %}
+                    <img src="{{ url_for('static', filename=company.logo_file) }}" alt="{{ company.brand_label }}">
+                    {% else %}
+                    <div class="real-client-mark">{{ company.brand_mark }}</div>
+                    {% endif %}
+                  </div>
+                  <span class="badge-status {{ company.badge_class }}" title="Estado operacional en el servidor">{{ company.status }}</span>
+                </div>
+                <div class="company-title-text">{{ company.name }}</div>
+                <div class="company-rubro-text">{{ company.rubro }}</div>
+                <div class="brand-note-line">{{ company.brand_label }} · {{ company.brand_note }}</div>
+
+                <div class="company-meta-grid">
+                  <div class="meta-col"><span>RUT:</span><strong>{{ company.rut }}</strong></div>
+                  <div class="meta-col"><span>Plan:</span><strong>{{ company.plan }}</strong></div>
+                  <div class="meta-col"><span>Vence:</span><strong>{{ company.expires }}</strong></div>
+                </div>
+              </div>
+              <form action="/pos/seleccionar/{{ company.key }}" method="POST">
+                {{ csrf_input()|safe }}
+                <button type="submit" class="btn-enter-company" title="Abrir Punto de Venta (POS) y panel de {{ company.name }}">Ingresar al ERP</button>
+              </form>
+            </div>
+            {% else %}
+            <div class="company-card-item">
+              <div>
+                <div class="company-title-text">Sin empresas autorizadas</div>
+                <div class="company-rubro-text">Contacta a Quantus para activar el Punto de Venta contratado.</div>
+              </div>
+              <button class="btn-enter-company btn-disabled-co" disabled>No disponible</button>
+            </div>
+            {% endfor %}
+            {% if false %}
+            <!-- 1. Ferretería Don Manolo -->
+            <div class="company-card-item" style="border-color: rgba(245, 158, 11, 0.5);">
+              <div>
+                <div class="card-top-head">
+                  <div class="company-logo-badge logo-don-manolo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                  </div>
+                  <span class="badge-status badge-active">ACTIVA</span>
+                </div>
+                <div class="company-title-text">Ferretería Don Manolo</div>
+                <div class="company-rubro-text">Ferretería</div>
+
+                <div class="company-meta-grid">
+                  <div class="meta-col"><span>RUT:</span><strong>76.543.210-9</strong></div>
+                  <div class="meta-col"><span>Plan:</span><strong>Profesional</strong></div>
+                  <div class="meta-col"><span>Vence:</span><strong>31/12/2025</strong></div>
+                </div>
+              </div>
+              <a href="/pos?company=don-manolo&name=Ferreter%C3%ADa%20Don%20Manolo" class="btn-enter-company">Ingresar</a>
+            </div>
+
+            <!-- 2. Distribuidora O'Higgins -->
+            <div class="company-card-item">
+              <div>
+                <div class="card-top-head">
+                  <div class="company-logo-badge logo-ohiggins">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                      <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                  </div>
+                  <span class="badge-status badge-active">ACTIVA</span>
+                </div>
+                <div class="company-title-text">Distribuidora O'Higgins</div>
+                <div class="company-rubro-text">Distribución</div>
+
+                <div class="company-meta-grid">
+                  <div class="meta-col"><span>RUT:</span><strong>76.987.654-3</strong></div>
+                  <div class="meta-col"><span>Plan:</span><strong>Empresarial</strong></div>
+                  <div class="meta-col"><span>Vence:</span><strong>15/01/2026</strong></div>
+                </div>
+              </div>
+              <a href="/pos?company=ohiggins&name=Distribuidora%20O%27Higgins" class="btn-enter-company">Ingresar</a>
+            </div>
+
+            <!-- 3. Farmacia San Juan -->
+            <div class="company-card-item">
+              <div>
+                <div class="card-top-head">
+                  <div class="company-logo-badge logo-san-juan">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2v20M2 12h20"></path>
+                      <circle cx="12" cy="12" r="9"></circle>
+                    </svg>
+                  </div>
+                  <span class="badge-status badge-active">ACTIVA</span>
+                </div>
+                <div class="company-title-text">Farmacia San Juan</div>
+                <div class="company-rubro-text">Farmacia</div>
+
+                <div class="company-meta-grid">
+                  <div class="meta-col"><span>RUT:</span><strong>77.111.222-0</strong></div>
+                  <div class="meta-col"><span>Plan:</span><strong>Profesional</strong></div>
+                  <div class="meta-col"><span>Vence:</span><strong>28/02/2026</strong></div>
+                </div>
+              </div>
+              <a href="/pos?company=san-juan&name=Farmacia%20San%20Juan" class="btn-enter-company">Ingresar</a>
+            </div>
+
+            <!-- 4. Boutique Glamour -->
+            <div class="company-card-item">
+              <div>
+                <div class="card-top-head">
+                  <div class="company-logo-badge logo-glamour">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                  </div>
+                  <span class="badge-status badge-inactive">INACTIVA</span>
+                </div>
+                <div class="company-title-text">Boutique Glamour</div>
+                <div class="company-rubro-text">Retail</div>
+
+                <div class="company-meta-grid">
+                  <div class="meta-col"><span>RUT:</span><strong>77.333.444-6</strong></div>
+                  <div class="meta-col"><span>Plan:</span><strong>Básico</strong></div>
+                  <div class="meta-col"><span>Vence:</span><strong>10/02/2024</strong></div>
+                </div>
+              </div>
+              <button class="btn-enter-company btn-disabled-co" disabled>Reactivar</button>
+            </div>
+
+            <!-- 5. Ferretería Imperial -->
+            <div class="company-card-item">
+              <div>
+                <div class="card-top-head">
+                  <div class="company-logo-badge logo-imperial">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                    </svg>
+                  </div>
+                  <span class="badge-status badge-suspended">SUSPENDIDA</span>
+                </div>
+                <div class="company-title-text">Ferretería Imperial</div>
+                <div class="company-rubro-text">Ferretería</div>
+
+                <div class="company-meta-grid">
+                  <div class="meta-col"><span>RUT:</span><strong>77.555.666-7</strong></div>
+                  <div class="meta-col"><span>Plan:</span><strong>Suspendida</strong></div>
+                  <div class="meta-col"><span>Vence:</span><strong>05/11/2024</strong></div>
+                </div>
+              </div>
+              <button class="btn-enter-company btn-disabled-co" disabled>Contactar soporte</button>
+            </div>
+
+            <!-- 6. Demo Sistema -->
+            <div class="company-card-item">
+              <div>
+                <div class="card-top-head">
+                  <div class="company-logo-badge logo-demo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                      <line x1="8" y1="21" x2="16" y2="21"></line>
+                      <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                  </div>
+                  <span class="badge-status badge-demo">DEMO</span>
+                </div>
+                <div class="company-title-text">Demo Sistema</div>
+                <div class="company-rubro-text">Demostración</div>
+
+                <div class="company-meta-grid">
+                  <div class="meta-col"><span>RUT:</span><strong>77.777.888-K</strong></div>
+                  <div class="meta-col"><span>Plan:</span><strong>Demo</strong></div>
+                  <div class="meta-col"><span>Vence:</span><strong>No aplica</strong></div>
+                </div>
+              </div>
+              <a href="/pos?company=demo&name=Demo%20Sistema" class="btn-enter-company">Ingresar</a>
+            </div>
+            {% endif %}
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function handleLoginSubmit(event) {
+      // El formulario se envía directamente a Flask vía POST
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantus Empleos Públicos | Radar Inteligente de Convocatorias del Estado</title>
+  <meta name="description" content="Monitoreo 24/7 de empleos públicos en Chile. Sueldos transparentes, cálculo de renta líquida real, fechas de cierre y alertas tempranas a WhatsApp.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.quantuschile.cl/empleos-publicos">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Quantus Chile SpA">
+  <meta property="og:title" content="Quantus Empleos Públicos | Radar Inteligente de Convocatorias del Estado">
+  <meta property="og:description" content="Encuentra tu próximo cargo en el Estado con Inteligencia Quantus. Convocatorias en vivo y alertas tempranas.">
+  <meta property="og:url" content="https://www.quantuschile.cl/empleos-publicos">
+  <meta property="og:image" content="https://www.quantuschile.cl/static/quantus-logo-clean.png">
+  <meta property="og:locale" content="es_CL">
+  
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260820-empleos-v5">
+
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-slate: #f8fafc;
+      --bg-slate-soft: #f1f5f9;
+      --card-border: #e2e8f0;
+      --cyan-bright: #0284c7;
+      --cyan-dark: #0369a1;
+      --purple-primary: #7c3aed;
+      --purple-soft: #a855f7;
+      --emerald-accent: #059669;
+      --amber-accent: #d97706;
+      --red-accent: #dc2626;
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+      color: #0f172a !important;
+      margin: 0;
+      font-family: var(--font-family);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before {
+      display: none !important;
+    }
+
+    .app-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    /* ── Typography & Gradients ─────────────────────────────────────────────── */
+    .gradient-text {
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 45%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      display: inline-block;
+      font-weight: 900;
+      filter: drop-shadow(0 2px 10px rgba(37, 99, 235, 0.12));
+    }
+
+    .cyan-text {
+      color: #0284c7;
+    }
+
+    /* ── Hero Section (Centered & Polished) ─────────────────────────────────── */
+    .hero-section-clean {
+      padding: 44px 0 28px;
+      background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 60%, #ffffff 100%);
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 18px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1.5px solid rgba(2, 132, 199, 0.25);
+      color: #0369a1;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08);
+    }
+
+    .hero-pill-badge span.dot-separator {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .hero-main-title {
+      font-size: clamp(30px, 3.8vw, 46px);
+      line-height: 1.18;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+      margin: 0 auto 16px;
+      max-width: 960px;
+    }
+
+    .hero-main-subtitle {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #475569;
+      margin: 0 auto 32px;
+      max-width: 780px;
+    }
+
+    /* ── Live KPI Stats Strip ────────────────────────────────────────────────── */
+    .stats-strip-clean {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 1100px;
+      margin: 0 auto 36px;
+      text-align: left;
+    }
+
+    .stat-card-clean {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    }
+
+    .stat-card-clean:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      border-color: #cbd5e1;
+    }
+
+    .stat-card-label {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .stat-card-value {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .stat-card-sub {
+      font-size: 11.5px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* ── Main Search & Filter Console (The Big Polished Card) ────────────────── */
+    .search-console-wrapper {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 22px;
+      padding: 26px 28px;
+      box-shadow: 0 12px 36px rgba(15, 23, 42, 0.06), 0 0 1px rgba(15, 23, 42, 0.08);
+      margin-bottom: 36px;
+      position: relative;
+    }
+
+    .search-primary-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon-left {
+      position: absolute;
+      left: 18px;
+      font-size: 18px;
+      color: #64748b;
+      pointer-events: none;
+    }
+
+    .main-search-input {
+      width: 100%;
+      padding: 15px 18px 15px 50px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 15px;
+      font-family: inherit;
+      color: #0f172a;
+      background: #f8fafc;
+      outline: none;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .main-search-input:focus {
+      background: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3.5px rgba(2, 132, 199, 0.15);
+    }
+
+    .main-search-input::placeholder {
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    .btn-search-submit {
+      padding: 15px 32px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #7c3aed 100%);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 15px;
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-search-submit:hover {
+      transform: translateY(-1.5px);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45);
+      filter: brightness(1.05);
+    }
+
+    /* Filters Grid (4 Columns) */
+    .filters-row-clean {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .filter-group-clean {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+
+    .filter-group-clean label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .filter-select-clean {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 13.5px;
+      font-family: inherit;
+      font-weight: 600;
+      color: #0f172a;
+      background: #f8fafc;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-select-clean:focus {
+      background: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    /* Quick Tag Toggles */
+    .quick-tags-row-clean {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .quick-label-text {
+      font-size: 12px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .tag-btn-clean {
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag-btn-clean:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    .tag-btn-clean.active {
+      background: rgba(2, 132, 199, 0.12) !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+      box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
+    }
+
+
+
+    .tag-btn-reset {
+      margin-left: auto;
+      color: #dc2626;
+      border-color: rgba(220, 38, 38, 0.25);
+      background: rgba(220, 38, 38, 0.05);
+    }
+
+    .tag-btn-reset:hover {
+      background: rgba(220, 38, 38, 0.12);
+      border-color: #dc2626;
+      color: #b91c1c;
+    }
+
+    /* ── Results Header & Jobs Cards Grid ───────────────────────────────────── */
+    .results-header-bar-clean {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid #f1f5f9;
+    }
+
+    .results-count-title-text {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+    }
+
+    .results-subtitle-text {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 3px;
+    }
+
+    .jobs-grid-clean {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 22px;
+      margin-bottom: 32px;
+    }
+
+    .job-card-clean {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+      transition: all 0.2s ease;
+    }
+
+    .job-card-clean:hover {
+      border-color: #0284c7;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(2, 132, 199, 0.1);
+    }
+
+    .card-top-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .badge-tag {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-institution {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+    }
+
+    .badge-region {
+      background: rgba(2, 132, 199, 0.08);
+      color: #0284c7;
+      border: 1px solid rgba(2, 132, 199, 0.2);
+    }
+
+    .badge-urgent {
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .badge-primer-empleo {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-match-score {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(124, 58, 237, 0.15));
+      color: #7c3aed;
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      font-weight: 900;
+    }
+
+    .job-title-clean {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.35;
+      margin: 0 0 8px;
+    }
+
+    .job-institution-text-clean {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 14px;
+      font-weight: 500;
+    }
+
+    .salary-box-clean {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+
+    .salary-bruto-clean {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0284c7;
+      line-height: 1.2;
+    }
+
+    .salary-liquido-clean {
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .job-footer-row-clean {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 14px;
+      margin-top: auto;
+    }
+
+    .closing-info-clean {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .closing-info-clean strong {
+      color: #0f172a;
+    }
+
+    .btn-apply-job-clean {
+      background: #0284c7;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+
+    .btn-apply-job-clean:hover {
+      background: #0369a1;
+    }
+
+    /* ── Radar Paywall Lock Banner ───────────────────────────────────────────── */
+    .radar-lock-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      margin-bottom: 44px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.15);
+      border: 2px solid #38bdf8;
+    }
+
+    .btn-unlock-pro {
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #7c3aed 100%);
+      color: #ffffff;
+      border: none;
+      padding: 15px 32px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 18px;
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45);
+      transition: transform 0.15s, filter 0.2s;
+    }
+
+    .btn-unlock-pro:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    /* ── Subscription Plans Matrix ─────────────────────────────────────────── */
+    .pricing-section {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 22px;
+      padding: 40px 28px;
+      margin-bottom: 44px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .pricing-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .pricing-card.featured {
+      border: 2.5px solid #0284c7;
+      box-shadow: 0 12px 32px rgba(2, 132, 199, 0.14);
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0284c7;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 14px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .plan-title {
+      font-size: 18px;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .plan-price {
+      font-size: 28px;
+      font-weight: 900;
+      color: #0284c7;
+      margin: 12px 0;
+    }
+
+    .plan-price span {
+      font-size: 13px;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 24px;
+      font-size: 13px;
+      color: #334155;
+    }
+
+    .plan-features li {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .btn-plan-action {
+      background: #0f172a;
+      color: #ffffff;
+      text-decoration: none;
+      text-align: center;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 13.5px;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .btn-plan-action.btn-plan-featured {
+      background: #0284c7;
+    }
+
+    .btn-plan-action:hover {
+      background: #0369a1;
+    }
+
+    /* ── Comparison Table ───────────────────────────────────────────────────── */
+    .comparison-section {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 22px;
+      padding: 36px 28px;
+      margin-bottom: 40px;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
+    .comparison-table th, .comparison-table td {
+      padding: 14px 18px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 13.5px;
+    }
+
+    .comparison-table th {
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    /* ── Subscription Modal ─────────────────────────────────────────────────── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border-radius: 22px;
+      max-width: 860px;
+      width: 100%;
+      padding: 36px;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 26px;
+      cursor: pointer;
+      color: #64748b;
+      line-height: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .stats-strip-clean {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .filters-row-clean {
+        grid-template-columns: 1fr 1fr;
+      }
+      .search-primary-row {
+        flex-direction: column;
+      }
+      .btn-search-submit {
+        width: 100%;
+        justify-content: center;
+      }
+      .tag-btn-reset {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stats-strip-clean {
+        grid-template-columns: 1fr;
+      }
+      .filters-row-clean {
+        grid-template-columns: 1fr;
+      }
+      .jobs-grid-clean {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- HEADER INSTITUCIONAL OFICIAL QUANTUS -->
+  {% set active_module = 'empleos' %}
+  {% include "partials/nav_header.html" %}
+
+  <!-- ── HERO SECTION CENTRADO CON INTELIGENCIA QUANTUS ─────────────────────── -->
+  <header class="hero-section-clean">
+    <div class="app-container">
+      
+      <!-- Pill Badge -->
+      <div class="hero-pill-badge">
+        <span>🇨🇱 Conectado al Servicio Civil en Vivo</span>
+        <span class="dot-separator">•</span>
+        <span>Purga Automática Post-Cierre</span>
+      </div>
+
+      <!-- Main Title con Gradiente Impecable -->
+      <h1 class="hero-main-title">
+        Encuentra tu próximo cargo en el Estado con<br>
+        <span class="gradient-text">Inteligencia Quantus</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="hero-main-subtitle">
+        Monitoreo 24/7 de empleos públicos en Chile. Sueldos transparentes, cálculo de renta líquida, 
+        fechas de cierre y alertas tempranas antes de que expiren las bases.
+      </p>
+
+      <!-- CTA CARGAR CV Y ACTIVAR ALERTAS 24/7 -->
+      <div style="margin: 22px 0 32px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+        <button type="button" onclick="abrirModalCargarCV()" style="background: #0284c7; color: #ffffff; font-weight: 800; font-size: 15px; padding: 13px 26px; border-radius: 12px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); display: inline-flex; align-items: center; gap: 8px;">
+          <span>📄 Cargar mi CV y Activar Alertas 24/7</span>
+        </button>
+        <a href="#buscador" style="background: #ffffff; color: #0f172a; border: 1px solid #cbd5e1; font-weight: 700; font-size: 15px; padding: 13px 22px; border-radius: 12px; text-decoration: none; display: inline-flex; align-items: center;">
+          🔍 Explorar 450+ Convocatorias
+        </a>
+      </div>
+
+      <!-- MODAL PÚBLICO DE CARGA DE CV -->
+      <div id="modal-cargar-cv" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(15,23,42,0.85); backdrop-filter:blur(8px); z-index:999999; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;">
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:20px; padding:32px 28px; max-width:540px; width:100%; text-align:left; box-shadow:0 24px 60px rgba(0,0,0,0.25); position:relative; max-height:90vh; overflow-y:auto; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;">
+          <button type="button" onclick="cerrarModalCargarCV()" style="position:absolute; top:16px; right:20px; background:none; border:none; color:#64748b; font-size:26px; cursor:pointer;">&times;</button>
+          
+          <div style="color:#0284c7; font-size:12px; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;">SERVICIO GRATUITO DE EMPLEABILIDAD</div>
+          <h3 style="color:#0f172a; font-size:21px; font-weight:800; margin:0 0 10px;">Cargar CV y Activar Alertas Automáticas</h3>
+          <p style="color:#475569; font-size:13.5px; line-height:1.5; margin:0 0 20px;">
+            Sube tu currículum (PDF o DOCX). Nuestro motor extraerá tu especialidad y te enviará alertas por correo cada vez que una institución del Estado publique una vacante compatible.
+          </p>
+
+          <form id="form-public-cv-upload" onsubmit="enviarCargaPublicaCV(event)" enctype="multipart/form-data">
+            <div style="background:#f8fafc; border:2px dashed #93c5fd; border-radius:12px; padding:20px; text-align:center; margin-bottom:16px;">
+              <label for="cv-file-input" style="cursor:pointer; display:block;">
+                <div style="font-size:32px; margin-bottom:6px;">📎</div>
+                <strong style="color:#0369a1; font-size:14px; display:block;">Seleccionar archivo CV (PDF o DOCX)*</strong>
+                <span id="cv-filename-display" style="color:#64748b; font-size:12.5px; display:block; margin-top:4px;">Tamaño máximo 10MB</span>
+              </label>
+              <input type="file" id="cv-file-input" name="cv_file" accept=".pdf,.docx,.doc" required style="display:none;" onchange="mostrarNombreArchivoCV(this)">
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+              <div>
+                <label style="display:block; color:#334155; font-size:12.5px; font-weight:700; margin-bottom:4px;">Tu Nombre Completo*</label>
+                <input type="text" id="cv-nombre" name="nombre" placeholder="Ej: Felipe Mejías" required style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:8px; padding:0 12px; box-sizing:border-box; font-size:13.5px; color:#0f172a;">
+              </div>
+              <div>
+                <label style="display:block; color:#334155; font-size:12.5px; font-weight:700; margin-bottom:4px;">RUT (Opcional si viene en CV)</label>
+                <input type="text" id="cv-rut" name="rut" placeholder="Ej: 14.011.762-5" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:8px; padding:0 12px; box-sizing:border-box; font-size:13.5px; color:#0f172a;">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+              <div>
+                <label style="display:block; color:#334155; font-size:12.5px; font-weight:700; margin-bottom:4px;">Correo para Alertas*</label>
+                <input type="email" id="cv-email" name="email" placeholder="tu_correo@gmail.com" required style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:8px; padding:0 12px; box-sizing:border-box; font-size:13.5px; color:#0f172a;">
+              </div>
+              <div>
+                <label style="display:block; color:#334155; font-size:12.5px; font-weight:700; margin-bottom:4px;">Teléfono WhatsApp</label>
+                <input type="tel" id="cv-telefono" name="telefono" placeholder="+56 9 7548 0746" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:8px; padding:0 12px; box-sizing:border-box; font-size:13.5px; color:#0f172a;">
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+              <div>
+                <label style="display:block; color:#334155; font-size:12.5px; font-weight:700; margin-bottom:4px;">Región de Residencia</label>
+                <select id="cv-region" name="region" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:8px; padding:0 10px; box-sizing:border-box; font-size:13px; color:#0f172a;">
+                  <option value="Región Metropolitana de Santiago">Región Metropolitana</option>
+                  <option value="Región del Libertador General Bernardo O'Higgins">Región de O'Higgins</option>
+                  <option value="Región del Maule">Región del Maule</option>
+                  <option value="Región de Valparaíso">Región de Valparaíso</option>
+                  <option value="Región del Biobío">Región del Biobío</option>
+                  <option value="Región de Antofagasta">Región de Antofagasta</option>
+                  <option value="Todo Chile">Disponible para todo Chile</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block; color:#334155; font-size:12.5px; font-weight:700; margin-bottom:4px;">Renta Líquida Mínima</label>
+                <select id="cv-renta-minima" name="renta_minima" style="width:100%; height:40px; border:1px solid #cbd5e1; border-radius:8px; padding:0 10px; box-sizing:border-box; font-size:13px; color:#0f172a;">
+                  <option value="0">Cualquier renta</option>
+                  <option value="1000000">Desde $1.000.000 líquido</option>
+                  <option value="1500000">Desde $1.500.000 líquido</option>
+                  <option value="2000000">Desde $2.000.000 líquido</option>
+                  <option value="3000000">Sobre $3.000.000 líquido</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="background:#f1f5f9; border:1px solid #e2e8f0; border-radius:8px; padding:10px 12px; margin-bottom:18px;">
+              <label style="display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#64748b; cursor:pointer;">
+                <input type="checkbox" required checked style="margin-top:2px; accent-color:#0284c7;">
+                <span>Autorizo el almacenamiento seguro y el procesamiento automatizado de mi currículum para recibir oportunidades laborales compatibles (Ley N° 21.719).</span>
+              </label>
+            </div>
+
+            <button type="submit" id="btn-upload-cv-submit" style="width:100%; background:#0284c7; color:#ffffff; font-weight:800; font-size:15px; padding:13px; border-radius:10px; border:none; cursor:pointer;">
+              Guardar CV y Activar Monitoreo 24/7 &rarr;
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <script>
+        function abrirModalCargarCV() {
+          document.getElementById('modal-cargar-cv').style.display = 'flex';
+        }
+        function cerrarModalCargarCV() {
+          document.getElementById('modal-cargar-cv').style.display = 'none';
+        }
+        function mostrarNombreArchivoCV(input) {
+          if (input.files && input.files[0]) {
+            document.getElementById('cv-filename-display').textContent = '✓ Archivo seleccionado: ' + input.files[0].name;
+            document.getElementById('cv-filename-display').style.color = '#047857';
+            document.getElementById('cv-filename-display').style.fontWeight = '700';
+          }
+        }
+        async function enviarCargaPublicaCV(e) {
+          e.preventDefault();
+          const btn = document.getElementById('btn-upload-cv-submit');
+          btn.disabled = true;
+          btn.textContent = 'Analizando y extrayendo competencias...';
+          
+          const formData = new FormData(document.getElementById('form-public-cv-upload'));
+          
+          try {
+            const res = await fetch('/api/empleos/upload-cv', {
+              method: 'POST',
+              body: formData
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+              alert('🎉 ¡CV registrado con éxito! Tu perfil ha sido activado y recibirás alertas automáticas cuando aparezcan convocatorias compatibles.');
+              cerrarModalCargarCV();
+            } else {
+              alert('Aviso: ' + (data.message || 'CV guardado con éxito.'));
+              cerrarModalCargarCV();
+            }
+          } catch(err) {
+            alert('CV enviado para procesamiento. Recibirás tu confirmación en el correo ingresado.');
+            cerrarModalCargarCV();
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'Guardar CV y Activar Monitoreo 24/7 →';
+          }
+        }
+      </script>
+      <div class="stats-strip-clean">
+        <div class="stat-card-clean">
+          <div class="stat-card-label">Convocatorias Abiertas</div>
+          <div id="stat-total-jobs" class="stat-card-value">365</div>
+          <div class="stat-card-sub">100% Vigentes en BD</div>
+        </div>
+
+        <div class="stat-card-clean">
+          <div class="stat-card-label">Renta Promedio</div>
+          <div id="stat-avg-salary" class="stat-card-value" style="color: #0284c7;">$1.455.502</div>
+          <div class="stat-card-sub">Sueldo bruto mensual</div>
+        </div>
+
+        <div class="stat-card-clean">
+          <div class="stat-card-label">Renta Máxima Detectada</div>
+          <div id="stat-max-salary" class="stat-card-value" style="color: #059669;">$6.769.285</div>
+          <div class="stat-card-sub">Alta Dirección / Especialistas</div>
+        </div>
+
+        <div class="stat-card-clean">
+          <div class="stat-card-label">Cierran Hoy</div>
+          <div id="stat-closing-today" class="stat-card-value" style="color: #dc2626;">37</div>
+          <div class="stat-card-sub">Última oportunidad para postular</div>
+        </div>
+      </div>
+
+      <!-- BLOQUE EDITORIAL ESTÁTICO DE ALTO VALOR E-E-A-T -->
+      <section class="editorial-intro-box" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 32px 36px; margin: 32px auto 40px; max-width: 1100px; text-align: left; line-height: 1.7; color: #334155; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);">
+        <h2 style="font-size: 24px; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 14px; letter-spacing: -0.01em;">
+          Portal de Convocatorias Laborales de Chile
+        </h2>
+        <p style="margin-bottom: 16px;">
+          El mercado laboral chileno mueve miles de vacantes al mes entre grandes mineras, empresas del Estado, organismos de seguridad y el sector salud — pero encontrarlas a tiempo suele significar revisar decenas de portales distintos, cada uno con su propio formato y plazo de cierre.
+        </p>
+        <p style="margin-bottom: 16px;">
+          Quantus centraliza estas convocatorias en un solo radar: Codelco, BHP, Anglo American y otras mineras de gran escala; Carabineros y PDI; el Poder Judicial y la Fiscalía; empresas públicas como BancoEstado y EFE; y los concursos de servicios de salud y educación bajo el sistema SLEP. El sistema actualiza la base de datos de forma continua y calcula el sueldo líquido estimado de cada vacante, no solo el bruto publicado.
+        </p>
+        <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; margin-top: 24px; margin-bottom: 10px;">
+          ¿Cómo funciona el monitoreo?
+        </h3>
+        <p style="margin-bottom: 16px;">
+          Cada convocatoria detectada pasa por un proceso de clasificación por sector, región y nivel de renta, de forma que puedas filtrar directamente por lo que te interesa en vez de revisar listados genéricos. El radar también identifica cierres próximos, para que no pierdas el plazo de postulación por enterarte tarde.
+        </p>
+        <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; margin-top: 24px; margin-bottom: 12px;">
+          Preguntas frecuentes
+        </h3>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 22px; margin-bottom: 14px;">
+          <strong style="color: #0f172a; font-size: 15px; display: block; margin-bottom: 4px;">¿Con qué frecuencia se actualizan las convocatorias?</strong>
+          <span style="color: #475569; font-size: 14px;">La base de datos se actualiza de forma continua a medida que los organismos públicos y empresas mineras publican nuevas vacantes.</span>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 22px; margin-bottom: 14px;">
+          <strong style="color: #0f172a; font-size: 15px; display: block; margin-bottom: 4px;">¿Cubre todas las regiones de Chile?</strong>
+          <span style="color: #475569; font-size: 14px;">Sí, el radar cubre las 16 regiones del país, con filtro específico por región.</span>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px 22px;">
+          <strong style="color: #0f172a; font-size: 15px; display: block; margin-bottom: 4px;">¿Qué significa el cálculo de renta líquida?</strong>
+          <span style="color: #475569; font-size: 14px;">A diferencia de la mayoría de los portales de empleo que muestran solo el sueldo bruto, Quantus estima el líquido aproximado a recibir, descontando las cotizaciones obligatorias correspondientes.</span>
+        </div>
+      </section>
+
+      <!-- ── Consola de Búsqueda y Filtros Pulida ───────────────────────────── -->
+      <div class="search-console-wrapper" id="buscador">
+        <form id="search-form" onsubmit="event.preventDefault(); window.handleSearchSubmit();">
+          
+          <!-- Primary Search Bar -->
+          <div class="search-primary-row">
+            <div class="search-input-wrap">
+              <span class="search-icon-left">🔍</span>
+              <input 
+                type="text" 
+                id="search-input" 
+                class="main-search-input" 
+                placeholder="Buscar por cargo, profesión, ministerio o palabra clave (ej. Analista, Abogado, Informática, Salud)..."
+                autocomplete="off"
+              >
+            </div>
+            <button type="submit" id="btn-search-trigger" class="btn-search-submit">
+              <span>Buscar Empleos</span>
+            </button>
+          </div>
+
+          <!-- Filters Row (4 Selects) -->
+          <div class="filters-row-clean">
+            <div class="filter-group-clean">
+              <label for="filter-region">Región</label>
+              <select id="filter-region" class="filter-select-clean">
+                <option value="">Todas las Regiones</option>
+                <option value="Región Metropolitana de Santiago">Región Metropolitana de Santiago</option>
+                <option value="Región de Valparaíso">Región de Valparaíso</option>
+                <option value="Región del Biobío">Región del Biobío</option>
+                <option value="Región de Antofagasta">Región de Antofagasta</option>
+                <option value="Región de Coquimbo">Región de Coquimbo</option>
+                <option value="Región del Libertador General Bernardo O'Higgins">Región de O'Higgins</option>
+                <option value="Región del Maule">Región del Maule</option>
+                <option value="Región de La Araucanía">Región de La Araucanía</option>
+                <option value="Región de Los Lagos">Región de Los Lagos</option>
+                <option value="Región de Tarapacá">Región de Tarapacá</option>
+                <option value="Región de Atacama">Región de Atacama</option>
+                <option value="Región de Los Ríos">Región de Los Ríos</option>
+                <option value="Región de Arica y Parinacota">Región de Arica y Parinacota</option>
+                <option value="Región de Ñuble">Región de Ñuble</option>
+                <option value="Región de Aysén del General Carlos Ibáñez del Campo">Región de Aysén</option>
+                <option value="Región de Magallanes y de la Antártica Chilena">Región de Magallanes</option>
+                <option value="RM o Regiones">Nacional / Multirregión</option>
+              </select>
+            </div>
+
+            <div class="filter-group-clean">
+              <label for="filter-ministerio">Ministerio</label>
+              <select id="filter-ministerio" class="filter-select-clean">
+                <option value="">Todos los ministerios</option>
+              </select>
+            </div>
+
+            <div class="filter-group-clean">
+              <label for="filter-renta">Renta Bruta Mínima</label>
+              <select id="filter-renta" class="filter-select-clean">
+                <option value="0">Cualquier sueldo</option>
+                <option value="1000000">Desde $1.000.000 Pesos</option>
+                <option value="1500000">Desde $1.500.000 Pesos</option>
+                <option value="2000000">Desde $2.000.000 Pesos</option>
+                <option value="3000000">Desde $3.000.000 Pesos</option>
+                <option value="4000000">Sobre $4.000.000 Pesos</option>
+              </select>
+            </div>
+
+            <div class="filter-group-clean">
+              <label for="filter-sort">Régimen / Ordenar</label>
+              <select id="filter-sort" class="filter-select-clean">
+                <option value="cierre_asc">⏱️ Próximos a cerrar</option>
+                <option value="renta_desc">💰 Mayor sueldo</option>
+                <option value="renta_asc">💵 Menor sueldo</option>
+                <option value="cierre_desc">📅 Publicación reciente</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Quick Tag Toggles -->
+          <div class="quick-tags-row-clean">
+            <span class="quick-label-text">Filtros Rápidos:</span>
+            <button type="button" class="tag-btn-clean" id="tag-primer-empleo" onclick="toggleTag('primer_empleo')">
+              🌱 Sin experiencia previa
+            </button>
+            <button type="button" class="tag-btn-clean" id="tag-urgente" onclick="toggleTag('urgente')">
+              ⏳ Cierran en 48 hrs
+            </button>
+            <button type="button" class="tag-btn-clean" id="tag-alta-renta" onclick="applyPresetRenta(2500000)">
+              💎 Renta Alta (+2.5M)
+            </button>
+            <button type="button" class="tag-btn-clean tag-btn-reset" id="chip-reset" onclick="resetFilters()">
+              🔄 Restablecer
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ── CONTENEDOR PRINCIPAL DE RESULTADOS ─────────────────────────────────── -->
+  <main class="app-container">
+
+    <!-- Header de Resultados -->
+    <div class="results-header-bar-clean">
+      <div>
+        <div id="results-count-title" class="results-count-title-text">Cargando convocatorias...</div>
+        <div id="results-subtitle" class="results-subtitle-text">
+          Datos sincronizados y purgados automáticamente según fecha de cierre + 1 día.
+        </div>
+      </div>
+      <div style="font-size: 13px; color: #0284c7; font-weight: 800;">
+        ⚡ Vista Previa del Radar
+      </div>
+    </div>
+
+    <!-- Grid de Tarjetas (Hasta 4 vacantes en vista libre) -->
+    <section class="jobs-grid-clean" id="jobs-container">
+      <!-- Inyectado dinámicamente vía JS -->
+    </section>
+
+    <!-- BANNER DE BLOQUEO / LLAMADA A SUSCRIPCIÓN -->
+    <section class="radar-lock-banner">
+      <div style="font-size: 36px; margin-bottom: 10px;">🔒</div>
+      <h2 style="font-size: 26px; font-weight: 900; margin: 0 0 12px; letter-spacing: -0.02em;">
+        Has visto las primeras 4 vacantes de <span style="color: #38bdf8;">365+ convocatorias activas</span>
+      </h2>
+      <p style="font-size: 15.5px; color: #cbd5e1; max-width: 680px; margin: 0 auto 20px; line-height: 1.6;">
+        El portal del Estado cierra concursos en 3 a 5 días y la mayoría de los postulantes llega tarde. Con <strong>Quantus PRO</strong> recibes alertas inmediatas en tu WhatsApp, buscas sin límites y postulas en el minuto 1.
+      </p>
+      <button class="btn-unlock-pro" onclick="openSubscriptionModal()">
+        ✨ Desbloquear las 365+ Vacantes y Alertas WhatsApp →
+      </button>
+    </section>
+
+    <!-- MÓDULO DE PLANES Y SUSCRIPCIÓN -->
+    <section class="pricing-section" id="planes">
+      <div style="text-align: center; max-width: 720px; margin: 0 auto 24px;">
+        <div class="hero-pill-badge" style="margin-bottom: 10px;">💎 PLANES DE ACCESO</div>
+        <h2 style="font-size: 28px; font-weight: 900; color: #0f172a; margin: 0 0 10px; letter-spacing: -0.02em;">
+          Activa tu Radar de Empleos Públicos 24/7
+        </h2>
+        <p style="font-size: 15px; color: #64748b; margin: 0;">
+          Con solo ganar 1 concurso público, la suscripción se paga 100 veces.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        
+        <!-- Plan 1: Búsqueda Ilimitada -->
+        <div class="pricing-card">
+          <div>
+            <div class="plan-title">Búsqueda Ilimitada</div>
+            <div style="font-size: 13px; color: #64748b;">Para profesionales que revisan activamente vacantes diarias.</div>
+            <div class="plan-price">$4.990 <span>/ mes</span></div>
+            <ul class="plan-features">
+              <li><span>✓</span> Búsquedas y filtros ilimitados 24/7</li>
+              <li><span>✓</span> Acceso al universo completo de 365+ vacantes</li>
+              <li><span>✓</span> Cálculo de Renta Líquida real de bolsillo</li>
+              <li><span>✓</span> Enlace directo a bases oficiales en 1 clic</li>
+            </ul>
+          </div>
+          <a href="https://mpago.la/2daVsra" target="_blank" rel="noopener" class="btn-plan-action">
+            Suscribirme ($4.990)
+          </a>
+        </div>
+
+        <!-- Plan 2: Alertas VIP WhatsApp (Destacado) -->
+        <div class="pricing-card featured">
+          <div class="popular-badge">⭐ Más Elegido</div>
+          <div>
+            <div class="plan-title" style="color: #0284c7;">Radar 24/7 WhatsApp</div>
+            <div style="font-size: 13px; color: #64748b;">El bot vigila el Estado y te avisa al celular en el minuto 1.</div>
+            <div class="plan-price">$9.990 <span>/ mes</span></div>
+            <ul class="plan-features">
+              <li><span>✓</span> <strong>Todo lo del plan Búsqueda Ilimitada</strong></li>
+              <li><span>✓</span> <strong>Alertas instantáneas a WhatsApp y Telegram</strong></li>
+              <li><span>✓</span> Alertas de convocatorias que cierran en 24h</li>
+              <li><span>✓</span> Filtro inteligente por tu profesión y región</li>
+            </ul>
+          </div>
+          <a href="https://mpago.la/2HTASA9" target="_blank" rel="noopener" class="btn-plan-action btn-plan-featured">
+            Activar Radar VIP ($9.990)
+          </a>
+        </div>
+
+        <!-- Plan 3: Postulación Pro -->
+        <div class="pricing-card">
+          <div>
+            <div class="plan-title">Postulación Pro</div>
+            <div style="font-size: 13px; color: #64748b;">Maximiza tus opciones de quedar en terna con IA de antecedentes.</div>
+            <div class="plan-price">$19.990 <span>/ mes</span></div>
+            <ul class="plan-features">
+              <li><span>✓</span> Todo lo de Radar 24/7 WhatsApp</li>
+              <li><span>✓</span> Resumen IA de requisitos excluyentes y puntaje</li>
+              <li><span>✓</span> Plantillas de CV optimizadas para el Estado</li>
+              <li><span>✓</span> Soporte prioritario Quantus</li>
+            </ul>
+          </div>
+          <a href="https://mpago.la/12SMxyW" target="_blank" rel="noopener" class="btn-plan-action">
+            Contratar Pro ($19.990)
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TABLA COMPARATIVA COMERCIAL OFICIAL -->
+    <section class="comparison-section">
+      <div style="text-align: center; max-width: 760px; margin: 0 auto 24px;">
+        <div class="hero-pill-badge" style="margin-bottom: 8px;">🥊 COMPARATIVA DE SERVICIO</div>
+        <h2 style="font-size: 26px; font-weight: 900; color: #0f172a; margin: 0 0 8px;">
+          Portal Oficial vs. Quantus Empleos Públicos 24/7
+        </h2>
+        <p style="font-size: 14.5px; color: #64748b; margin: 0;">
+          El portal del Estado publica vacantes; Quantus te da la ventaja estratégica para ganar el concurso.
+        </p>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th style="width: 24%;">Característica</th>
+              <th style="width: 38%;">Portal Oficial (empleospublicos.cl)</th>
+              <th style="width: 38%; background: #0284c7;">Quantus Empleos Públicos (SaaS)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Monitoreo</strong></td>
+              <td>❌ Tienes que entrar manualmente todos los días a revisar.</td>
+              <td>⚡ <strong>Radar 24/7</strong> que te avisa a WhatsApp / Telegram en cuanto se abre una vacante.</td>
+            </tr>
+            <tr>
+              <td><strong>Velocidad</strong></td>
+              <td>❌ Convocatorias cierran en 3 a 5 días; la mayoría llega tarde.</td>
+              <td>⏱️ <strong>Alerta en el minuto 1</strong> para preparar documentos con calma y sin errores.</td>
+            </tr>
+            <tr>
+              <td><strong>Bases Legales</strong></td>
+              <td>❌ Tienes que leer PDFs legales densos de 15 a 30 páginas.</td>
+              <td>🤖 <strong>Resumen con IA:</strong> Requisitos clave, años de experiencia y títulos excluyentes.</td>
+            </tr>
+            <tr>
+              <td><strong>Sueldo Real</strong></td>
+              <td>❌ Muestra solo Renta Bruta confusa (sin descuentos previsionales).</td>
+              <td>💰 <strong>Calculadora de Renta Líquida:</strong> Dinero real que llegará a tu bolsillo.</td>
+            </tr>
+            <tr>
+              <td><strong>Calce de Perfil</strong></td>
+              <td>❌ Ninguno; postulas a ciegas arriesgando descarte en admisibilidad.</td>
+              <td>🎯 <strong>Score de Compatibilidad:</strong> Evalúa si cumples el 100% de los requisitos.</td>
+            </tr>
+            <tr>
+              <td><strong>Experiencia</strong></td>
+              <td>❌ Portal antiguo, tosco y que suele saturarse en cierres.</td>
+              <td>🚀 <strong>Interfaz ultra rápida</strong>, filtros instantáneos y adaptada a celular.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE SUSCRIPCIÓN -->
+  <div class="modal-backdrop" id="subscription-modal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeSubscriptionModal()">&times;</button>
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span style="font-size: 11px; font-weight: 800; color: #0284c7; background: rgba(2, 132, 199, 0.1); padding: 4px 12px; border-radius: 999px; text-transform: uppercase;">
+          🔒 Acceso Completo al Radar
+        </span>
+        <h2 style="font-size: 26px; font-weight: 900; color: #0f172a; margin: 12px 0 6px;">
+          Desbloquea las 365+ Vacantes y Alertas 24/7
+        </h2>
+        <p style="font-size: 14px; color: #64748b; margin: 0;">
+          Elige tu plan y comienza a recibir las convocatorias en tu WhatsApp antes del cierre.
+        </p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="plan-title">Búsqueda Ilimitada</div>
+          <div class="plan-price">$4.990 <span>/ mes</span></div>
+          <p style="font-size: 12.5px; color: #64748b;">Acceso completo sin censura a todas las vacantes de Chile.</p>
+          <a href="https://mpago.la/2daVsra" target="_blank" rel="noopener" class="btn-plan-action">Contratar ($4.990)</a>
+        </div>
+        <div class="pricing-card featured">
+          <div class="popular-badge">Recomendado</div>
+          <div class="plan-title" style="color: #0284c7;">Radar WhatsApp</div>
+          <div class="plan-price">$9.990 <span>/ mes</span></div>
+          <p style="font-size: 12.5px; color: #64748b;">Alertas directas a tu celular apenas se abre tu cargo ideal.</p>
+          <a href="https://mpago.la/2HTASA9" target="_blank" rel="noopener" class="btn-plan-action btn-plan-featured">Activar Ahora ($9.990)</a>
+        </div>
+        <div class="pricing-card">
+          <div class="plan-title">Postulación Pro</div>
+          <div class="plan-price">$19.990 <span>/ mes</span></div>
+          <p style="font-size: 12.5px; color: #64748b;">Maximiza opciones en terna con resumen IA y soporte pericial.</p>
+          <a href="https://mpago.la/12SMxyW" target="_blank" rel="noopener" class="btn-plan-action">Contratar Pro ($19.990)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER INSTITUCIONAL OFICIAL QUANTUS -->
+  {% include "partials/legal_footer.html" %}
+
+  <!-- JAVASCRIPT DEL RADAR -->
+  <script src="{{ url_for('static', filename='js/empleos_publicos.js') }}?v=20260820-v25-pesos-{{ range(1000, 9999) | random }}"></script>
+</body>
+</html>

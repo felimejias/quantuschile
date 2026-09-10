@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salud de entregas - Centro Maestro</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-maestro">
+  <style>
+    .health-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 16px 0; }
+    .health-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(148,163,184,0.2); border-radius: 14px; padding: 16px; }
+    .health-card h3 { margin: 0 0 10px; font-size: 13px; letter-spacing: 1px; color: #94a3b8; text-transform: uppercase; }
+    .health-card .big { font-size: 28px; font-weight: 800; color: #f8fafc; }
+    .health-card .big.ok { color: #34d399; }
+    .health-card .big.bad { color: #f87171; }
+    .health-card small { color: #64748b; }
+    .health-list { list-style: none; margin: 8px 0 0; padding: 0; font-size: 13px; color: #cbd5e1; }
+    .health-list li { padding: 6px 0; border-bottom: 1px solid rgba(148,163,184,0.12); }
+    .badge-status { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+    .badge-status.sent { background: rgba(52,211,153,0.15); color: #34d399; }
+    .badge-status.failed { background: rgba(248,113,113,0.15); color: #f87171; }
+    .badge-status.pending_config { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  </style>
+</head>
+<body>
+  <div class="app-container" style="max-width: 960px;">
+    <header class="app-header master-header">
+      <a class="brand-link" href="/maestro">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Centro Maestro · Salud de entregas</div>
+        </div>
+      </a>
+      <nav class="header-actions">
+        <a class="cta-button btn-secondary" href="/maestro">Volver al maestro</a>
+        <a class="cta-button" href="/maestro/logout">Salir</a>
+      </nav>
+    </header>
+
+    <h1 style="margin: 24px 0 4px; font-size: 26px;">Salud de entregas</h1>
+    <p style="color:#94a3b8; font-size:13px; margin:0 0 16px;">
+      Monitor de envíos de correo y WhatsApp. Revisión automática cada hora con alarma interna al administrador. Generado: {{ snapshot.generado }}
+    </p>
+
+    {% if salud_ok %}
+      <div style="background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.4); color:#a7f3d0; padding:14px 18px; border-radius:12px; font-weight:700;">
+        ✓ {{ motivo }}
+      </div>
+    {% else %}
+      <div style="background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.4); color:#fecaca; padding:14px 18px; border-radius:12px; font-weight:700;">
+        ✕ {{ motivo }}
+      </div>
+    {% endif %}
+
+    <div class="health-grid">
+      <div class="health-card">
+        <h3>Correo SMTP</h3>
+        {% if snapshot.smtp.configured %}
+          <div class="big ok">OK</div>
+          <small>Desde {{ snapshot.smtp.user }}</small>
+        {% else %}
+          <div class="big bad">Sin configurar</div>
+          <small>Falta GMAIL_APP_PASSWORD en .env</small>
+        {% endif %}
+      </div>
+      <div class="health-card">
+        <h3>WhatsApp API</h3>
+        {% if snapshot.whatsapp.configured %}
+          <div class="big ok">OK</div>
+          <small>{{ snapshot.whatsapp.clientes_config }} cliente(s) con Meta configurado</small>
+        {% else %}
+          <div class="big bad">Sin configurar</div>
+          <small>Faltan credenciales Meta (.env o por cliente)</small>
+        {% endif %}
+      </div>
+      <div class="health-card">
+        <h3>Correos enviados</h3>
+        <div class="big">{{ snapshot.email.totals.sent or 0 }}</div>
+        <small>fallidos: {{ snapshot.email.totals.failed or 0 }} · pendientes: {{ snapshot.email.totals.pending or 0 }}</small>
+      </div>
+      <div class="health-card">
+        <h3>Outbox WhatsApp</h3>
+        <div class="big">{{ snapshot.outbox.sent or 0 }}</div>
+        <small>total: {{ snapshot.outbox.total or 0 }} · atascados: {{ snapshot.outbox.stuck|length }}</small>
+      </div>
+    </div>
+
+    <div class="health-grid">
+      <div class="health-card">
+        <h3>Envios fallidos recientes</h3>
+        {% if snapshot.failed_recent %}
+          <ul class="health-list">
+            {% for item in snapshot.failed_recent %}
+              <li>
+                <span class="badge-status failed">{{ item.status }}</span>
+                <strong>{{ item.client_name or "?" }}</strong> ({{ item.module }} / {{ item.channel }})
+                <br><small>{{ item.provider_response or "" }} · {{ item.created_at or "" }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <small>Ninguno en el historial reciente.</small>
+        {% endif %}
+      </div>
+      <div class="health-card">
+        <h3>WhatsApp atascados (pending_config / error)</h3>
+        {% if snapshot.outbox.stuck %}
+          <ul class="health-list">
+            {% for item in snapshot.outbox.stuck %}
+              <li>
+                <span class="badge-status pending_config">{{ item.status }}</span>
+                <strong>{{ item.client_name or "?" }}</strong>
+                <br><small>{{ item.whatsapp }} · {{ item.created_at or "" }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <small>Ninguno atascado.</small>
+        {% endif %}
+      </div>
+    </div>
+
+    {% include "partials/legal_footer.html" %}
+  </div>
+</body>
+</html>

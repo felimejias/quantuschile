@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funcionalidades — Quantus ERP Chile</title>
+  <meta name="description" content="Matriz completa de funcionalidades de Quantus ERP: Ventas, Inventario, Contabilidad SII, Compras, Tesorería e Inteligencia Operativa.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root { var(--bg-white): #ffffff; var(--quantus-navy): #06101f; var(--primary-cyan): #0284c7; var(--cyan-bright): #38bdf8; }
+    body { background: #ffffff; color: #334155; margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .top-ribbon-quantus { background: #06101f; border-bottom: 1px solid rgba(56,189,248,0.2); color: #fff; padding: 9px 0; font-size: 12.5px; font-weight: 700; }
+    .ribbon-flex { width: min(calc(100% - 64px), 1280px); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .main-header { background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
+    .header-shell { width: min(calc(100% - 64px), 1280px); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .brand-quantus-official { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-symbol-img { width: 42px; height: 42px; object-fit: contain; border-radius: 10px; }
+    .brand-text-block { display: flex; flex-direction: column; }
+    .brand-name-quantus { font-size: 19px; font-weight: 900; color: #0f172a; letter-spacing: -0.03em; line-height: 1.1; }
+    .brand-name-accent { color: #0284c7; }
+    .brand-tagline-quantus { font-size: 10px; font-weight: 800; color: #64748b; letter-spacing: 0.1em; text-transform: uppercase; }
+    .nav-links-menu { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+    .nav-link-item { color: #0f172a; font-size: 14.5px; font-weight: 600; text-decoration: none; }
+    .nav-link-item.active { color: #0284c7; font-weight: 800; }
+    .btn-cyan-quantus-cta { padding: 11px 22px; border-radius: 10px; background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); color: #fff; font-weight: 800; text-decoration: none; }
+    .section-padding { padding: 80px 0; }
+    .container { width: min(calc(100% - 64px), 1280px); margin: 0 auto; }
+    .title-box { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+    .title-box h1 { font-size: 42px; font-weight: 900; color: #0f172a; margin: 0 0 16px; }
+    .title-box p { font-size: 16px; color: #64748b; }
+    .grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .func-box { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 32px; }
+    .func-box h3 { font-size: 22px; font-weight: 800; color: #0f172a; margin: 0 0 12px; }
+    .func-box p { font-size: 14.5px; color: #64748b; line-height: 1.6; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main class="section-padding">
+    <div class="container">
+      <div class="title-box">
+        <h1>Funcionalidades avanzadas para la gestión de tu negocio</h1>
+        <p>Explora cada módulo diseñado para cumplir con la normativa chilena e impulsar la productividad.</p>
+      </div>
+
+      <div class="grid-2col">
+        <div class="func-box">
+          <h3>🛒 Punto de Venta (POS) & Ventas</h3>
+          <p>Terminal multitienda ultra rápido para registro de ventas de mostrador. Soporte para medios de pago mixtos, descuentos por perfil de cliente, control de ventas y cierres de caja en segundos.</p>
+        </div>
+        <div class="func-box">
+          <h3>📦 Inventario Multibodega & Stock</h3>
+          <p>Control de existencias en tiempo real con alertas automáticas de reorden. Trazabilidad completa por número de lote, mermas y lector de código de barras USB/Bluetooth.</p>
+        </div>
+        <div class="func-box">
+          <h3>📚 Control de Compras y Flujo Operativo</h3>
+          <p>Registro ordenado de compras a proveedores, control de gastos, insumos y balances operativos para la toma de decisiones del negocio.</p>
+        </div>
+        <div class="func-box">
+          <h3>💵 Conciliación Bancaria & Tesorería</h3>
+          <p>Sincronización automatizada con las cartolas de la banca chilena (BancoEstado, Banco de Chile, Santander, Bci, Scotiabank). Control estricto de ingresos, egresos y cuentas por cobrar.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+</body>
+</html>

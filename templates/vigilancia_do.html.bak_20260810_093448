@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta name="description" content="Quantus Radar del Diario Oficial de Chile — Sistema de alerta preventiva 24/7 que te notifica si tu Nombre, RUT o Empresa aparece en edictos, citaciones judiciales, marcas o boletines oficiales.">
+  <meta name="keywords" content="Diario Oficial Chile, Alertas RUT, Edictos Judiciales, Notificaciones Judiciales, Ley 21.719, Quantus Intelligence">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vigilancia del Diario Oficial | Quantus Chile</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(6, 16, 31, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .modal-card {
+      background: #0f172a;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      padding: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
+      position: relative;
+      color: #f8fafc;
+      font-family: inherit;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 16px; right: 16px;
+      background: none; border: none;
+      color: #94a3b8; font-size: 26px;
+      cursor: pointer; line-height: 1;
+    }
+    .modal-close-btn:hover { color: #fff; }
+    .do-mobile-paybar { display: none; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 6px; }
+    .form-control {
+      width: 100%; padding: 12px 14px;
+      background: #1e293b; border: 1px solid rgba(148,163,184,0.3);
+      border-radius: 10px; color: #fff; font-size: 14px;
+      box-sizing: border-box; outline: none; transition: border-color 0.2s;
+    }
+    .form-control:focus { border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56,189,248,0.2); }
+    .btn-submit-pre {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #009ee3 0%, #007eb5 100%);
+      color: #fff; border: none; border-radius: 12px;
+      font-weight: 700; font-size: 15px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 20px; box-shadow: 0 4px 14px rgba(0,158,227,0.4);
+    }
+    .btn-submit-pre:hover { opacity: 0.95; transform: translateY(-1px); }
+    .pay-option-card {
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+      background: #1e293b;
+    }
+	    .pay-option-card:hover, .pay-option-card.active {
+	      border-color: #38bdf8;
+	      background: rgba(56, 189, 248, 0.1);
+	    }
+	    .do-intel-hero {
+	      position: relative;
+	      isolation: isolate;
+	      overflow: hidden;
+	      min-height: calc(100vh - 80px);
+	      padding: 54px 0 80px;
+	      background: #ffffff;
+	      color: #0f172a;
+	    }
+	    .do-intel-hero::before {
+	      display: none;
+	    }
+	    .do-intel-hero::after {
+	      display: none;
+	    }
+	    .do-intel-shell {
+	      width: min(calc(100% - 64px), 1320px);
+	      margin: 0 auto;
+	      display: grid;
+	      grid-template-columns: minmax(0, 1fr) minmax(430px, 0.82fr);
+	      gap: clamp(58px, 6vw, 96px);
+	      align-items: start;
+	    }
+	    .do-intel-copy {
+	      align-self: start;
+	      padding-top: 0;
+	      max-width: 720px;
+	    }
+	    .do-intel-copy h1 {
+	      margin: 0 0 24px;
+	      max-width: 720px;
+	      color: #0f172a;
+	      font-size: clamp(52px, 5vw, 76px);
+	      line-height: 1.02;
+	      letter-spacing: -0.04em;
+	      text-wrap: balance;
+	    }
+	    .do-intel-copy h1 span {
+	      color: #0284c7;
+	    }
+	    .do-intel-lead {
+	      max-width: 640px;
+	      margin: 0;
+	      color: #475569;
+	      font-size: clamp(17px, 1.8vw, 21px);
+	      line-height: 1.55;
+	      font-weight: 650;
+	    }
+	    .do-intel-actions {
+	      display: flex;
+	      align-items: center;
+	      gap: 12px;
+	      flex-wrap: wrap;
+	      margin-top: 24px;
+	    }
+	    .do-primary-action,
+	    .do-secondary-action {
+	      min-height: 48px;
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      border-radius: 14px;
+	      padding: 0 18px;
+	      font-size: 14px;
+	      font-weight: 900;
+	      text-decoration: none;
+	    }
+	    .do-primary-action {
+	      background: #0284c7;
+	      color: #ffffff;
+	      box-shadow: 0 12px 30px rgba(2,132,199,0.3);
+	    }
+	    .do-secondary-action {
+	      color: #0f172a;
+	      border: 1.5px solid #cbd5e1;
+	      background: #f8fafc;
+	    }
+	    .do-hero-proof {
+	      display: grid;
+	      grid-template-columns: repeat(3, minmax(0, 1fr));
+	      gap: 10px;
+	      margin-top: 26px;
+	      max-width: 690px;
+	    }
+	    .do-proof-card {
+	      border: 1.5px solid #e2e8f0;
+	      background: #f8fafc;
+	      border-radius: 16px;
+	      padding: 14px;
+	      min-height: 112px;
+	      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+	    }
+	    .do-proof-card strong {
+	      display: block;
+	      color: #0f172a;
+	      font-size: 15px;
+	      line-height: 1.2;
+	      margin-bottom: 7px;
+	    }
+	    .do-proof-card span {
+	      display: block;
+	      color: #64748b;
+	      font-size: 13px;
+	      line-height: 1.38;
+	      font-weight: 650;
+	    }
+	    .do-command {
+	      display: grid;
+	      gap: 14px;
+	      align-self: center;
+	      width: 100%;
+	      max-width: 520px;
+	      justify-self: end;
+	    }
+	    .do-signal-card,
+	    .do-ai-card,
+	    .do-lawyer-card {
+	      border: 1px solid rgba(125, 211, 252, 0.24);
+	      background: rgba(8, 20, 38, 0.82);
+	      box-shadow: 0 28px 70px rgba(2, 8, 23, 0.36);
+	      backdrop-filter: blur(14px);
+	      border-radius: 22px;
+	      padding: 16px;
+	    }
+	    .do-signal-top,
+	    .do-ai-top,
+	    .do-lawyer-top {
+	      display: flex;
+	      align-items: center;
+	      justify-content: space-between;
+	      gap: 12px;
+	      margin-bottom: 12px;
+	    }
+	    .do-signal-title,
+	    .do-ai-title,
+	    .do-lawyer-title {
+	      color: #f8fafc;
+	      font-size: 15px;
+	      font-weight: 900;
+	    }
+	    .do-status-pill {
+	      border-radius: 999px;
+	      padding: 7px 10px;
+	      background: rgba(34, 197, 94, 0.14);
+	      border: 1px solid rgba(34, 197, 94, 0.32);
+	      color: #bbf7d0;
+	      font-size: 11px;
+	      font-weight: 900;
+	      letter-spacing: .4px;
+	      text-transform: uppercase;
+	    }
+	    .do-signal-list {
+	      display: grid;
+	      gap: 9px;
+	    }
+	    .do-radar-dial {
+	      position: relative;
+	      width: min(190px, 48vw);
+	      aspect-ratio: 1;
+	      margin: 8px auto 2px;
+	      border-radius: 999px;
+	      border: 1px solid rgba(125, 211, 252, 0.28);
+	      background:
+	        linear-gradient(rgba(125, 211, 252, 0.13) 1px, transparent 1px),
+	        linear-gradient(90deg, rgba(125, 211, 252, 0.13) 1px, transparent 1px),
+	        radial-gradient(circle, rgba(14,165,233,0.24) 0 2px, transparent 3px),
+	        radial-gradient(circle, rgba(8,145,178,0.16), rgba(15,23,42,0.22) 62%, transparent 63%);
+	      background-size: 32px 32px, 32px 32px, auto, auto;
+	      overflow: hidden;
+	      box-shadow: inset 0 0 38px rgba(14,165,233,0.16), 0 18px 44px rgba(2,8,23,0.26);
+	    }
+	    .do-radar-dial::before {
+	      content: "";
+	      position: absolute;
+	      inset: 50% 0 0 50%;
+	      width: 50%;
+	      height: 50%;
+	      transform-origin: 0 0;
+	      background: conic-gradient(from -18deg, rgba(56,189,248,0.58), rgba(56,189,248,0.12), transparent 46deg);
+	      animation: doRadarSweep 4s linear infinite;
+	    }
+	    .do-radar-dial::after {
+	      content: "";
+	      position: absolute;
+	      inset: 18%;
+	      border-radius: inherit;
+	      border: 1px solid rgba(125, 211, 252, 0.24);
+	      box-shadow: 0 0 0 28px rgba(14,165,233,0.04), 0 0 0 58px rgba(14,165,233,0.025);
+	      animation: doRadarPulse 2.8s ease-in-out infinite;
+	    }
+	    .do-radar-dot {
+	      position: absolute;
+	      width: 8px;
+	      height: 8px;
+	      border-radius: 999px;
+	      background: #7dd3fc;
+	      box-shadow: 0 0 16px rgba(125, 211, 252, 0.95);
+	    }
+	    .do-radar-dot.one { left: 63%; top: 31%; }
+	    .do-radar-dot.two { left: 35%; top: 58%; }
+	    .do-radar-dot.three { left: 72%; top: 68%; }
+	    .do-signal-row {
+	      display: grid;
+	      grid-template-columns: 38px 1fr auto;
+	      gap: 10px;
+	      align-items: center;
+	      padding: 10px;
+	      border-radius: 15px;
+	      background: rgba(15, 23, 42, 0.72);
+	      border: 1px solid rgba(148, 163, 184, 0.16);
+	      animation: signalLift 5.2s ease-in-out infinite;
+	    }
+	    .do-signal-row:nth-child(2) { animation-delay: .5s; }
+	    .do-signal-row:nth-child(3) { animation-delay: 1s; }
+	    .do-signal-icon {
+	      width: 38px;
+	      height: 38px;
+	      display: grid;
+	      place-items: center;
+	      border-radius: 12px;
+	      background: #e0f2fe;
+	      color: #075985;
+	      font-weight: 900;
+	    }
+	    .do-signal-row strong,
+	    .do-signal-row span {
+	      display: block;
+	    }
+	    .do-signal-row strong {
+	      color: #f8fafc;
+	      font-size: 14px;
+	      line-height: 1.1;
+	    }
+	    .do-signal-row span {
+	      color: #94a3b8;
+	      font-size: 12px;
+	      font-weight: 650;
+	      line-height: 1.35;
+	      margin-top: 3px;
+	    }
+	    .do-risk-badge {
+	      border-radius: 999px;
+	      padding: 7px 9px;
+	      background: rgba(251, 191, 36, 0.16);
+	      color: #fde68a;
+	      font-size: 11px;
+	      font-weight: 900;
+	      white-space: nowrap;
+	    }
+	    .do-ai-flow {
+	      display: grid;
+	      grid-template-columns: repeat(3, minmax(0, 1fr));
+	      gap: 8px;
+	    }
+	    .do-ai-step {
+	      min-height: 76px;
+	      border-radius: 14px;
+	      padding: 12px;
+	      background: rgba(2, 132, 199, 0.12);
+	      border: 1px solid rgba(56, 189, 248, 0.2);
+	      color: #dbeafe;
+	      font-size: 12px;
+	      font-weight: 800;
+	      line-height: 1.28;
+	    }
+	    .do-ai-step strong {
+	      display: block;
+	      color: #7dd3fc;
+	      font-size: 11px;
+	      text-transform: uppercase;
+	      letter-spacing: .6px;
+	      margin-bottom: 5px;
+	    }
+	    .do-lawyer-card {
+	      display: grid;
+	      grid-template-columns: minmax(0, 1fr) 126px;
+	      gap: 12px;
+	      align-items: center;
+	    }
+	    .do-lawyer-card p {
+	      margin: 0;
+	      color: #cbd5e1;
+	      font-size: 13px;
+	      line-height: 1.45;
+	      font-weight: 650;
+	    }
+	    .do-mini-video {
+	      width: 100%;
+	      border-radius: 18px;
+	      padding: 6px;
+	      background: #020617;
+	      border: 1px solid rgba(148, 163, 184, 0.18);
+	    }
+	    .do-mini-video video {
+	      display: block;
+	      width: 100%;
+	      aspect-ratio: 9 / 16;
+	      object-fit: cover;
+	      border-radius: 13px;
+	    }
+	    @keyframes signalLift {
+	      0%, 100% { transform: translateY(0); border-color: rgba(148,163,184,0.16); }
+	      50% { transform: translateY(-4px); border-color: rgba(56,189,248,0.34); }
+	    }
+	    @keyframes doRadarSweep {
+	      from { transform: rotate(0deg); }
+	      to { transform: rotate(360deg); }
+	    }
+	    @keyframes doRadarPulse {
+	      0%, 100% { opacity: .7; transform: scale(.96); }
+	      50% { opacity: 1; transform: scale(1.02); }
+	    }
+	    .do-tip-hero {
+	      margin-top: 26px;
+	      display: grid;
+	      grid-template-columns: 1fr auto;
+	      gap: 18px;
+	      align-items: center;
+	      background: linear-gradient(135deg, rgba(56,189,248,0.14), rgba(16,185,129,0.09));
+	      border: 1px solid rgba(56,189,248,0.34);
+	      border-radius: 22px;
+	      padding: 18px;
+	      box-shadow: 0 22px 60px rgba(2, 132, 199, 0.16);
+	      text-align: left;
+	    }
+	    .do-tip-hero strong {
+	      display: block;
+	      color: #f8fafc;
+	      font-size: clamp(18px, 2vw, 24px);
+	      line-height: 1.18;
+	      margin-bottom: 6px;
+	    }
+	    .do-tip-hero span {
+	      display: block;
+	      color: #cbd5e1;
+	      font-size: 14px;
+	      line-height: 1.55;
+	      font-weight: 650;
+	    }
+	    .do-tip-hero a {
+	      display: inline-flex;
+	      align-items: center;
+	      justify-content: center;
+	      min-height: 46px;
+	      padding: 0 16px;
+	      border-radius: 14px;
+	      background: #38bdf8;
+	      color: #082f49;
+	      text-decoration: none;
+	      font-weight: 900;
+	      white-space: nowrap;
+	      box-shadow: 0 16px 34px rgba(56,189,248,0.24);
+	    }
+	    .do-demo-section {
+	      padding: clamp(42px, 6vw, 74px) 0;
+	      background: #f8fbff;
+	      color: #0f172a;
+	    }
+	    .do-demo-shell {
+	      max-width: 1120px;
+	      margin: 0 auto;
+	      padding: 0 20px;
+	      display: grid;
+	      grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+	      gap: 34px;
+	      align-items: center;
+	    }
+	    .do-demo-copy { max-width: 650px; }
+	    .do-demo-label {
+	      display: inline-flex;
+	      align-items: center;
+	      min-height: 34px;
+	      padding: 0 12px;
+	      border-radius: 999px;
+	      background: #e0f2fe;
+	      color: #075985;
+	      font-size: 12px;
+	      font-weight: 900;
+	      letter-spacing: .7px;
+	      text-transform: uppercase;
+	    }
+	    .do-demo-copy h2 {
+	      margin: 16px 0 12px;
+	      color: #06101f;
+	      font-size: clamp(30px, 4vw, 52px);
+	      line-height: 1;
+	      letter-spacing: 0;
+	    }
+	    .do-demo-copy p {
+	      margin: 0;
+	      color: #475569;
+	      font-size: 17px;
+	      line-height: 1.65;
+	      font-weight: 650;
+	    }
+	    .do-demo-points {
+	      display: grid;
+	      grid-template-columns: repeat(2, minmax(0, 1fr));
+	      gap: 12px;
+	      margin-top: 22px;
+	    }
+	    .do-demo-point {
+	      border: 1px solid #dbeafe;
+	      background: #fff;
+	      border-radius: 14px;
+	      padding: 14px;
+	      color: #334155;
+	      font-size: 14px;
+	      font-weight: 750;
+	      line-height: 1.35;
+	      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.05);
+	    }
+	    .do-video-frame {
+	      width: 100%;
+	      max-width: 360px;
+	      justify-self: center;
+	      border-radius: 28px;
+	      padding: 10px;
+	      background: #06101f;
+	      box-shadow: 0 30px 70px rgba(2, 8, 23, 0.22);
+	      border: 1px solid rgba(14, 165, 233, 0.25);
+	    }
+	    .do-video-frame video {
+	      display: block;
+	      width: 100%;
+	      aspect-ratio: 9 / 16;
+	      object-fit: cover;
+	      border-radius: 20px;
+	      background: #06101f;
+	    }
+	    .do-tips-section {
+	      padding: clamp(42px, 7vw, 82px) 0;
+	      border-top: 1px solid rgba(255,255,255,0.08);
+	      border-bottom: 1px solid rgba(255,255,255,0.08);
+	    }
+	    .do-tips-shell {
+	      max-width: 1180px;
+	      margin: 0 auto;
+	      padding: 0 20px;
+	    }
+	    .do-tips-head {
+	      display: grid;
+	      grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.62fr);
+	      gap: 28px;
+	      align-items: end;
+	      margin-bottom: 26px;
+	    }
+	    .do-kicker {
+	      color: #38bdf8;
+	      font-size: 12px;
+	      letter-spacing: 1.5px;
+	      text-transform: uppercase;
+	      font-weight: 900;
+	      margin-bottom: 10px;
+	    }
+	    .do-tips-head h2 {
+	      margin: 0;
+	      color: #f8fafc;
+	      font-size: clamp(34px, 5vw, 62px);
+	      line-height: 1.02;
+	      letter-spacing: 0;
+	    }
+	    .do-tips-head p,
+	    .do-source-note p {
+	      margin: 0;
+	      color: #cbd5e1;
+	      font-size: 16px;
+	      line-height: 1.6;
+	      font-weight: 650;
+	    }
+	    .do-source-note {
+	      border: 1px solid rgba(148,163,184,0.22);
+	      border-radius: 18px;
+	      background: rgba(15,23,42,0.72);
+	      padding: 18px;
+	    }
+	    .do-source-note strong {
+	      display: block;
+	      color: #f8fafc;
+	      font-size: 15px;
+	      margin-bottom: 8px;
+	    }
+	    .do-tip-grid {
+	      display: grid;
+	      grid-template-columns: repeat(4, minmax(0, 1fr));
+	      gap: 14px;
+	    }
+	    .do-tip-card {
+	      min-height: 238px;
+	      display: flex;
+	      flex-direction: column;
+	      justify-content: space-between;
+	      border: 1px solid rgba(148,163,184,0.2);
+	      border-radius: 18px;
+	      background: rgba(15,23,42,0.82);
+	      padding: 18px;
+	      box-shadow: 0 22px 54px rgba(0,0,0,0.22);
+	    }
+	    .do-tip-card .tag {
+	      width: fit-content;
+	      color: #bae6fd;
+	      border: 1px solid rgba(56,189,248,0.34);
+	      background: rgba(56,189,248,0.1);
+	      border-radius: 999px;
+	      padding: 6px 9px;
+	      font-size: 11px;
+	      font-weight: 900;
+	      margin-bottom: 14px;
+	    }
+	    .do-tip-card h3 {
+	      margin: 0;
+	      color: #f8fafc;
+	      font-size: 19px;
+	      line-height: 1.15;
+	    }
+	    .do-tip-card p {
+	      color: #cbd5e1;
+	      font-size: 14px;
+	      line-height: 1.55;
+	      font-weight: 620;
+	      margin: 12px 0 0;
+	    }
+	    .do-tip-card .action {
+	      margin-top: 18px;
+	      color: #7dd3fc;
+	      font-size: 13px;
+	      font-weight: 900;
+	    }
+	    .do-timeline {
+	      margin-top: 18px;
+	      display: grid;
+	      grid-template-columns: repeat(3, minmax(0, 1fr));
+	      gap: 12px;
+	    }
+	    #planes .pricing-grid {
+	      align-items: stretch;
+	    }
+	    #planes .plan-card {
+	      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+	    }
+	    #planes .plan-card:hover {
+	      transform: translateY(-4px);
+	      box-shadow: 0 24px 54px rgba(14, 165, 233, 0.16);
+	    }
+	    .do-time-chip {
+	      border: 1px solid rgba(16,185,129,0.32);
+	      border-radius: 16px;
+	      background: rgba(16,185,129,0.1);
+	      padding: 14px;
+	    }
+	    .do-time-chip strong {
+	      display: block;
+	      color: #bbf7d0;
+	      font-size: 15px;
+	      margin-bottom: 5px;
+	    }
+	    .do-time-chip span {
+	      display: block;
+	      color: #cbd5e1;
+	      font-size: 13px;
+	      line-height: 1.45;
+	      font-weight: 650;
+	    }
+	    body .app-container {
+	      width: 100%;
+	      max-width: none;
+	      padding: 0;
+	    }
+	    #planes .container {
+	      width: min(1200px, calc(100% - 48px));
+	      margin: 0 auto;
+	    }
+	    section[id] {
+	      scroll-margin-top: 96px;
+	    }
+	    @media (max-width: 1200px) {
+	      .do-intel-shell {
+	        grid-template-columns: minmax(0, 1fr) minmax(390px, 0.8fr);
+	        gap: 48px;
+	      }
+	    }
+	    @media (max-width: 1024px) {
+	      .do-intel-shell { grid-template-columns: 1fr; gap: 52px; }
+	      .do-hero-proof { grid-template-columns: 1fr; }
+	      .do-command {
+	        max-width: none;
+	        justify-self: stretch;
+	      }
+	      .do-tips-head,
+	      .do-tip-hero { grid-template-columns: 1fr; }
+	      .do-demo-shell { grid-template-columns: 1fr; }
+	      .do-demo-copy { max-width: none; }
+	      .do-tip-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	      .do-timeline { grid-template-columns: 1fr; }
+	      .do-tip-hero a { width: 100%; }
+	    }
+	    @media (max-width: 640px) {
+	      body { padding-bottom: 92px; }
+	      .do-intel-hero {
+	        min-height: 0;
+	        padding: 40px 0 64px;
+	      }
+	      .do-intel-hero::before {
+	        background-image:
+	          linear-gradient(rgba(73, 163, 221, 0.05) 1px, transparent 1px),
+	          linear-gradient(90deg, rgba(73, 163, 221, 0.05) 1px, transparent 1px);
+	        background-size: 60px 60px;
+	      }
+	      .do-intel-shell { width: min(100% - 32px, 1320px); }
+	      .modal-overlay {
+	        align-items: flex-end;
+	        padding: 10px;
+	      }
+	      .modal-card {
+	        max-height: 92dvh;
+	        padding: 18px;
+	        border-radius: 20px 20px 16px 16px;
+	      }
+	      .form-control {
+	        min-height: 48px;
+	        font-size: 16px;
+	      }
+	      .btn-submit-pre,
+	      .mp-pay-button {
+	        min-height: 50px;
+	      }
+	      .do-mobile-paybar {
+	        position: fixed;
+	        left: 10px;
+	        right: 10px;
+	        bottom: calc(8px + env(safe-area-inset-bottom));
+	        z-index: 80;
+	        display: grid;
+	        grid-template-columns: 1.1fr .9fr;
+	        gap: 8px;
+	        padding: 6px;
+	        border-radius: 18px;
+	        background: rgba(6, 16, 31, 0.9);
+	        border: 1px solid rgba(125, 211, 252, 0.28);
+	        backdrop-filter: blur(16px);
+	        box-shadow: 0 18px 44px rgba(2, 8, 23, 0.34);
+	      }
+	      .do-mobile-paybar a,
+	      .do-mobile-paybar button {
+	        min-height: 42px;
+	        display: inline-flex;
+	        align-items: center;
+	        justify-content: center;
+	        border-radius: 13px;
+	        border: 0;
+	        text-decoration: none;
+	        font-size: 13px;
+	        font-weight: 950;
+	        text-align: center;
+	      }
+	      .do-mobile-paybar button {
+	        background: #38bdf8;
+	        color: #082f49;
+	      }
+	      .do-mobile-paybar a {
+	        background: rgba(255,255,255,0.08);
+	        color: #e0f2fe;
+	        border: 1px solid rgba(255,255,255,0.12);
+	      }
+	      .do-intel-actions { display: none; }
+	      .do-ai-flow { grid-template-columns: 1fr; }
+	      .do-lawyer-card { grid-template-columns: 1fr; }
+	      .do-mini-video { max-width: 170px; }
+	      .do-demo-points { grid-template-columns: 1fr; }
+	      .do-video-frame { max-width: 315px; border-radius: 24px; }
+	      .do-tip-grid { grid-template-columns: 1fr; }
+	      .do-tip-card { min-height: 0; }
+	    }
+	  </style>
+</head>
+<body class="dark-theme">
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <section class="do-intel-hero" id="tips-diario-oficial">
+        <div class="do-intel-shell">
+          <div class="do-intel-copy">
+            <h1>No esperes a que alguien te llame: <span>entiende tu publicación hoy.</span></h1>
+            <p class="do-intel-lead">
+              Quantus detecta si tu RUT, nombre o empresa aparece en el Diario Oficial, analiza el PDF con IA, lo explica en simple y deja pasos concretos con abogado recomendado cuando corresponde.
+            </p>
+            <div class="do-intel-actions">
+              <a class="do-primary-action" href="#planes">Activar Radar Diario Oficial</a>
+              <a class="do-secondary-action" href="#demo-ia">Ver demo IA</a>
+            </div>
+            <div class="do-hero-proof" aria-label="Razones principales para contratar el Radar Diario Oficial">
+              <div class="do-proof-card">
+                <strong>Plazos cortos</strong>
+                <span>Algunas publicaciones pueden activar ventanas de 3 a 5 días hábiles u otros plazos específicos.</span>
+              </div>
+              <div class="do-proof-card">
+                <strong>Lectura simple</strong>
+                <span>La IA separa hechos, riesgos posibles, datos a verificar y acciones sugeridas.</span>
+              </div>
+              <div class="do-proof-card">
+                <strong>Respaldo profesional</strong>
+                <span>El informe incluye fuente, evidencia y contacto de abogado recomendado por Quantus.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="do-command" aria-label="Centro de señales Quantus Diario Oficial">
+            <div class="do-signal-card">
+              <div class="do-signal-top">
+                <div class="do-signal-title">Centro de señales Quantus</div>
+                <div class="do-status-pill">Monitoreo 24/7</div>
+              </div>
+              <div class="do-signal-list">
+                <div class="do-signal-row">
+                  <div class="do-signal-icon">DO</div>
+                  <div>
+                    <strong>Publicación detectada</strong>
+                    <span>Coincidencia por RUT, razón social, nombre o alias.</span>
+                  </div>
+                  <div class="do-risk-badge">Revisar</div>
+                </div>
+                <div class="do-signal-row">
+                  <div class="do-signal-icon">IA</div>
+                  <div>
+                    <strong>PDF explicado en simple</strong>
+                    <span>Resumen ejecutivo, plazos posibles y datos faltantes.</span>
+                  </div>
+                  <div class="do-risk-badge">Contexto</div>
+                </div>
+                <div class="do-signal-row">
+                  <div class="do-signal-icon">AB</div>
+                  <div>
+                    <strong>Acción recomendada</strong>
+                    <span>Pasos y abogado sugerido cuando hay riesgo jurídico.</span>
+                  </div>
+                  <div class="do-risk-badge">Actuar</div>
+                </div>
+              </div>
+              <div class="do-radar-dial" aria-label="Radar Diario Oficial buscando publicaciones">
+                <span class="do-radar-dot one"></span>
+                <span class="do-radar-dot two"></span>
+                <span class="do-radar-dot three"></span>
+              </div>
+            </div>
+
+            <div class="do-ai-card">
+              <div class="do-ai-top">
+                <div class="do-ai-title">Cómo piensa el informe</div>
+                <div class="do-status-pill">IA asistida</div>
+              </div>
+              <div class="do-ai-flow">
+                <div class="do-ai-step"><strong>1. Detecta</strong>Busca coincidencias relevantes y marca si son exactas o preventivas.</div>
+                <div class="do-ai-step"><strong>2. Traduce</strong>Convierte lenguaje legal en una explicación que cualquiera pueda leer.</div>
+                <div class="do-ai-step"><strong>3. Ordena</strong>Propone próximos pasos y cuándo conviene consultar abogado.</div>
+              </div>
+            </div>
+
+            <div class="do-lawyer-card" id="demo-ia">
+              <div>
+                <div class="do-lawyer-top">
+                  <div class="do-lawyer-title">Demo visual del servicio</div>
+                </div>
+                <p>La demo muestra la promesa central: no solo encontrar la publicación, sino entenderla rápido y actuar con respaldo.</p>
+              </div>
+              <div class="do-mini-video">
+                <video controls preload="metadata" playsinline poster="{{ url_for('static', filename='video-quantus-diario-oficial-demo-ia-poster.jpg') }}">
+                  <source src="{{ url_for('static', filename='video-quantus-diario-oficial-demo-ia.mp4') }}" type="video/mp4">
+                  Tu navegador no puede reproducir este video.
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <div class="app-container" style="background:#ffffff; color:#0f172a; padding:60px 0;">
+	      <!-- Planes de Vigilancia -->
+	      <section id="planes" class="pricing-section">
+        <div class="container">
+          <h2 class="section-title text-center" style="color:#0f172a; font-size:38px; font-weight:900; margin-bottom:12px;">Compra margen de reacción, no solo una alerta.</h2>
+          <p class="section-subtitle text-center" style="color:#64748b; font-size:16px; max-width:750px; margin:0 auto 36px;">Si el Diario Oficial publica algo vinculado a tu RUT, nombre o empresa, Quantus te ayuda a entenderlo antes de que el plazo, la oportunidad o el riesgo avance sin ti.</p>
+
+          <div class="pricing-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:24px; margin-top:36px;">
+            
+            <!-- Plan Mensual / Prueba -->
+            <div class="plan-card" style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 8px 30px rgba(15,23,42,0.05);">
+              <div>
+                <div class="plan-badge" style="font-size:11px; font-weight:800; color:#0284c7; letter-spacing:0.05em;">SUSCRIPCIÓN MENSUAL</div>
+                <h3 style="font-size:22px; color:#0f172a; font-weight:900; margin:10px 0 6px;">Suscripción mensual</h3>
+                <div class="plan-price" style="font-size:32px; font-weight:900; color:#0284c7;">$2.990 <span style="font-size:14px; font-weight:600; color:#64748b;">/mes</span></div>
+                <p style="font-size:13px; color:#64748b; margin-top:6px; line-height:1.45;">Cobro mensual simple para monitoreo del Diario Oficial.</p>
+	                <ul style="list-style:none; padding:0; margin:20px 0; color:#334155; font-size:14px; line-height:2;">
+	                  <li>✓ Monitoreo activo del Diario Oficial</li>
+	                  <li>✓ Alerta con edición y coincidencia</li>
+	                  <li>✓ IA explica el PDF en simple</li>
+	                </ul>
+              </div>
+              <button type="button" data-plan="mensual" onclick="abrirModalPrePago('mensual')" class="mp-pay-button" style="width:100%; height:48px; padding:0 16px; background:#009ee3; color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+	                <img src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="" aria-hidden="true" style="height:18px;"> Pagar con Mercado Pago
+              </button>
+            </div>
+
+            <!-- Plan Anual -->
+            <div class="plan-card featured" style="background:#ffffff; border:2.5px solid #0284c7; border-radius:20px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:visible !important; box-shadow:0 14px 40px rgba(2,132,199,0.12);">
+              <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); background:#0284c7; color:#ffffff; font-weight:900; font-size:11px; padding:5px 16px; border-radius:999px; letter-spacing:0.8px; box-shadow:0 4px 14px rgba(2,132,199,0.4); z-index:999; white-space:nowrap; text-transform:uppercase;">RECOMENDADO</div>
+              <div>
+                <div class="plan-badge" style="font-size:11px; font-weight:800; color:#0284c7; letter-spacing:0.05em;">AHORRA 66%</div>
+                <h3 style="font-size:22px; color:#0f172a; font-weight:900; margin:10px 0 6px;">Plan Anual</h3>
+                <div class="plan-price" style="font-size:32px; font-weight:900; color:#0284c7;">$20.000 <span style="font-size:14px; font-weight:600; color:#64748b;">/año</span></div>
+                <p style="font-size:12.5px; color:#64748b; margin-top:2px;">(Precio normal: <s style="color:#ef4444;">$29.990</s>)</p>
+	                <ul style="list-style:none; padding:0; margin:20px 0; color:#334155; font-size:14px; line-height:2;">
+	                  <li>✓ Protección preventiva 365 días</li>
+	                  <li>✓ PDF oficial + pasos sugeridos</li>
+	                  <li>✓ Enlace a abogado recomendado</li>
+	                </ul>
+              </div>
+              <button type="button" data-plan="anual" onclick="abrirModalPrePago('anual')" class="mp-pay-button" style="width:100%; height:48px; padding:0 16px; background:#009ee3; color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+	                <img src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="" aria-hidden="true" style="height:18px;"> Pagar con Mercado Pago
+              </button>
+            </div>
+
+            <!-- Plan Empresa Inicial -->
+            <div class="plan-card" style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 8px 30px rgba(15,23,42,0.05);">
+              <div>
+                <div class="plan-badge" style="font-size:11px; font-weight:800; color:#0284c7; letter-spacing:0.05em;">PYME</div>
+                <h3 style="font-size:22px; color:#0f172a; font-weight:900; margin:10px 0 6px;">Empresa Inicial</h3>
+                <div class="plan-price" style="font-size:32px; font-weight:900; color:#0284c7;">$19.990 <span style="font-size:14px; font-weight:600; color:#64748b;">/mes</span></div>
+	                <ul style="list-style:none; padding:0; margin:20px 0; color:#334155; font-size:14px; line-height:2;">
+	                  <li>✓ Hasta 3 RUTs o empresas</li>
+	                  <li>✓ Alertas con contexto ejecutivo</li>
+	                  <li>✓ Informes para revisar con abogado</li>
+	                </ul>
+              </div>
+              <button type="button" data-plan="empresa_inicial" onclick="abrirModalPrePago('empresa_inicial')" class="mp-pay-button" style="width:100%; height:48px; padding:0 16px; background:#009ee3; color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+	                <img src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="" aria-hidden="true" style="height:18px;"> Pagar con Mercado Pago
+              </button>
+            </div>
+
+            <!-- Plan Empresa -->
+            <div class="plan-card" style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:28px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:0 8px 30px rgba(15,23,42,0.05);">
+              <div>
+                <div class="plan-badge" style="font-size:11px; font-weight:800; color:#0284c7; letter-spacing:0.05em;">CORPORATIVO</div>
+                <h3 style="font-size:22px; color:#0f172a; font-weight:900; margin:10px 0 6px;">Plan Empresa</h3>
+                <div class="plan-price" style="font-size:32px; font-weight:900; color:#0284c7;">$49.990 <span style="font-size:14px; font-weight:600; color:#64748b;">/mes</span></div>
+	                <ul style="list-style:none; padding:0; margin:20px 0; color:#334155; font-size:14px; line-height:2;">
+	                  <li>✓ Hasta 10 RUTs o sociedades</li>
+	                  <li>✓ Alertas prioritarias y carpeta privada</li>
+	                  <li>✓ Derivación jurídica recomendada</li>
+	                </ul>
+              </div>
+              <button type="button" data-plan="empresa" onclick="abrirModalPrePago('empresa')" class="mp-pay-button" style="width:100%; height:48px; padding:0 16px; background:#009ee3; color:#fff; border:none; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-sizing:border-box;">
+	                <img src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="" aria-hidden="true" style="height:18px;"> Pagar con Mercado Pago
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {% include "law_21719.html" %}
+    
+    
+    <!-- Franja Institucional de Integraciones Oficiales (Fuentes de Información y Pago en Chile) -->
+    <section style="padding: 3rem 0; border-top: 1px solid rgba(255, 255, 255, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: transparent; margin: 4rem 0 2rem; color: #94a3b8;">
+      <div style="max-width: 1240px; margin: 0 auto; padding: 0 1.5rem;">
+        <p style="text-align: center; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin-bottom: 2rem; font-weight: 800;">
+          OPERAMOS CON LAS FUENTES OFICIALES Y LOS CANALES DE PAGO DE CHILE
+        </p>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 2.5rem; flex-wrap: wrap;">
+          <img src="/static/gob.svg" alt="Gobierno de Chile" style="height: 34px; width: auto; object-fit: contain;">
+          <img src="/static/diariooficial.jpg" alt="Diario Oficial de la República de Chile" style="height: 34px; width: auto; object-fit: contain; border-radius: 4px;">
+          <img src="/static/mercadopublico.png" alt="ChileCompra Mercado Público" style="height: 34px; width: auto; object-fit: contain;">
+          <img src="/static/inapi.svg" alt="INAPI Instituto Nacional de Propiedad Industrial" style="height: 34px; width: auto; object-fit: contain;">
+          <img src="/static/redcompra.svg" alt="RedCompra Transbank" style="height: 34px; width: auto; object-fit: contain;">
+          <img src="/static/webpay.svg" alt="WebPay Transbank" style="height: 34px; width: auto; object-fit: contain;">
+          <img src="/static/mercadopago.svg" alt="Mercado Pago Chile" style="height: 30px; width: auto; object-fit: contain;">
+          <img src="/static/applepay.svg" alt="Apple Pay" style="height: 30px; width: auto; object-fit: contain; filter: invert(1);">
+          <img src="/static/mastercard.svg" alt="Mastercard" style="height: 28px; width: auto; object-fit: contain;">
+        </div>
+        <p style="text-align: center; font-size: 12px; color: #64748b; margin-top: 1.5rem; max-width: 780px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+          Módulo de registro manual auditable para máquinas de pago existentes del cliente. Integración automática con adquirentes y emisión tributaria SII: próximas integraciones.
+        </p>
+      </div>
+    </section>
+
+    {% include "partials/legal_footer.html" %}
+
+    </div><!-- /.app-container -->
+  </main>
+    <div class="do-mobile-paybar" aria-label="Accion rapida movil Diario Oficial">
+      <button type="button" onclick="abrirModalPrePago('anual')">Activar anual</button>
+      <a href="#planes">Ver planes</a>
+    </div>
+
+    <!-- Modal Pre-Pago & Consentimiento Expreso Ley 21.719 -->
+    <div id="modal-pre-pago" class="modal-overlay">
+      <div class="modal-card">
+        <button type="button" class="modal-close-btn" onclick="cerrarModalPrePago()">&times;</button>
+        
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <span style="background:rgba(16,185,129,0.2); color:#10b981; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:800;">PASO 01 DE 02</span>
+          <h3 style="font-size:18px; color:#f8fafc; margin:0;">Ingresa tus datos de Vigilancia</h3>
+        </div>
+        
+        <p style="color:#94a3b8; font-size:13px; margin-bottom:16px; line-height:1.5;">
+          Validaremos que tus datos ingresados no se encuentren ya registrados activamente en Quantus Chile antes de continuar al pago.
+        </p>
+
+        <form id="form-pre-pago" action="/contratar_vigilancia" method="POST" onsubmit="return procesarPrePago(event)">
+          {{ csrf_input()|safe }}
+          <input type="hidden" id="pre-plan" name="plan" value="mensual">
+          
+          <div class="form-group">
+            <label for="pre-rut">RUT Persona o Empresa *</label>
+            <input type="text" id="pre-rut" name="rut" class="form-control" placeholder="Ej: 76.930.987-K" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pre-nombre">Nombre Completo o Razón Social *</label>
+            <input type="text" id="pre-nombre" name="nombre" class="form-control" placeholder="Ej: MCR Seguridad SpA" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pre-email">Correo Electrónico (para Alertas) *</label>
+            <input type="email" id="pre-email" name="email" class="form-control" placeholder="cliente@mcrseguridad.cl" required>
+          </div>
+
+          <div class="form-group">
+            <label for="pre-telefono">Teléfono WhatsApp (Opcional)</label>
+            <input type="tel" id="pre-telefono" name="telefono" class="form-control" placeholder="+569 1234 5678">
+          </div>
+
+          <!-- Selección de Medio y Modalidad de Pago -->
+          <div class="form-group" style="margin-top:16px;">
+            <label style="color:#cbd5e1; font-weight:700; margin-bottom:8px; display:block;">Selecciona tu Medio de Pago Preferido:</label>
+            
+            <label class="pay-option-card active" onclick="setPaymentMode('one_time')">
+              <input type="radio" name="payment_mode" value="one_time" checked style="accent-color:#38bdf8;">
+              <div>
+                <strong style="color:#fff; font-size:13px; display:block;">Debito / Webpay / Apple Pay / Todos los Bancos</strong>
+                <span style="color:#94a3b8; font-size:11px;">Pago unico sin renovacion automatica. Ideal para probar 30 dias.</span>
+              </div>
+            </label>
+
+            <label class="pay-option-card" onclick="setPaymentMode('subscription')">
+              <input type="radio" name="payment_mode" value="subscription" style="accent-color:#38bdf8;">
+              <div>
+                <strong style="color:#fff; font-size:13px; display:block;">Suscripcion recurrente automatica</strong>
+                <span style="color:#94a3b8; font-size:11px;">Cobro mensual/anual automatico cuando el cliente quiere continuidad.</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Consentimiento Expreso e Informado Ley 21.719 -->
+          <div class="form-group" style="margin-top:16px; margin-bottom:16px; background:rgba(15,23,42,0.6); border:1px solid rgba(56,189,248,0.25); padding:12px; border-radius:12px;">
+            <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:12px; color:#cbd5e1; font-weight:normal; line-height:1.4; margin-bottom:0;">
+              <input type="checkbox" id="pre-consent" name="data_consent" value="1" required style="width:18px; height:18px; margin-top:2px; accent-color:#38bdf8; cursor:pointer;">
+              <span>
+                He leído y acepto expresamente la <a href="#" onclick="abrirModalLey21719(event)" style="color:#38bdf8; text-decoration:underline; font-weight:700;">Política de Tratamiento de Datos Personales (Ley 21.719)</a>. Autorizo a Quantus Chile a monitorear las publicaciones del Diario Oficial para el RUT ingresado. *
+              </span>
+            </label>
+          </div>
+
+          <div class="form-group" style="margin-top:16px; margin-bottom:16px; background:rgba(245,158,11,0.10); border:1px solid rgba(245,158,11,0.45); padding:12px; border-radius:12px;">
+            <label style="display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:12px; color:#fde68a; font-weight:normal; line-height:1.45; margin-bottom:0;">
+              <input type="checkbox" id="pre-source-limits" name="source_limitation_ack" value="1" required style="width:18px; height:18px; margin-top:2px; accent-color:#f59e0b; cursor:pointer;">
+              <span>
+                Entiendo que el Diario Oficial u organismos publicadores pueden emitir datos con RUT errado, RUT omitido, nombres incompletos, abreviaturas, tildes distintas o referencias a representantes legales. Quantus aplicará búsqueda por RUT, nombre, razón social, alias y coincidencias aproximadas, pero pueden existir alertas preventivas por posible coincidencia y también casos no detectables si la fuente oficial no permite vinculación razonable. *
+              </span>
+            </label>
+          </div>
+
+          <div id="pre-msg-error" style="display:none; padding:12px; background:rgba(239,68,68,0.15); border:1px solid #ef4444; border-radius:10px; color:#fca5a5; font-size:13px; margin-bottom:16px; line-height:1.45;"></div>
+
+          <button type="submit" id="btn-pre-submit" class="btn-submit-pre">
+            <img src="{{ url_for('static', filename='mercado-pago-mark.svg') }}" alt="" aria-hidden="true" style="height:20px;"> Validar Datos & Continuar al Pago
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Informativo Legal Ley 21.719 -->
+    <div id="modal-ley-21719" class="modal-overlay">
+      <div class="modal-card">
+        <button type="button" class="modal-close-btn" onclick="cerrarModalLey21719()">&times;</button>
+        
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <span style="background:rgba(56,189,248,0.2); color:#38bdf8; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:800;">NORMATIVA OFICIAL CHILE</span>
+          <h3 style="font-size:18px; color:#f8fafc; margin:0;">Política de Datos Personales Ley 21.719</h3>
+        </div>
+
+        <div style="color:#cbd5e1; font-size:13px; line-height:1.6;">
+          <p><strong>1. Finalidad Exclusiva del Tratamiento:</strong><br>
+          Los datos personales recopilados (RUT, Nombre/Razón Social, Correo Electrónico y WhatsApp) serán tratados por <strong>Quantus Chile SpA</strong> únicamente para ejecutar el servicio automatizado de escaneo en el Diario Oficial de Chile y remitir alertas preventivas sobre publicaciones asociadas al RUT del titular.</p>
+          
+          <p><strong>2. Legitimidad y Consentimiento Expreso:</strong><br>
+          De conformidad con la Ley N° 21.719 que modifica la Ley N° 19.628 de Protección de la Vida Privada, el titular otorga su autorización previa, explícita e informada al marcar la casilla de verificación correspondiente.</p>
+          
+          <p><strong>3. Derechos ARCO (Acceso, Rectificación, Cancelación y Oposición):</strong><br>
+          El titular podrá ejercer en todo momento sus derechos legales escribiendo a nuestro correo oficial de protección de datos: <a href="mailto:privacidad@quantuschile.cl" style="color:#38bdf8; font-weight:700;">privacidad@quantuschile.cl</a>.</p>
+
+          <p><strong>4. Advertencia sobre calidad de la fuente Diario Oficial:</strong><br>
+          Las publicaciones oficiales pueden contener RUT mal digitado, omitir RUT, abreviar nombres, usar razones sociales antiguas o referirse a representantes legales. Quantus usa búsqueda multicriterio y puede enviar alertas por coincidencia parcial o alta probabilidad, pero no puede garantizar cero falsos positivos ni cero falsos negativos cuando la publicación oficial impide una vinculación razonable.</p>
+        </div>
+
+        <button type="button" onclick="cerrarModalLey21719()" style="width:100%; padding:12px; background:#38bdf8; color:#0f172a; border:none; border-radius:10px; font-weight:800; font-size:14px; cursor:pointer; margin-top:20px;">
+          Entendido / Cerrar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='rut-validator.js') }}?v=20260729-rut"></script>
+  <script>
+    function setPaymentMode(mode) {
+      var cards = document.querySelectorAll('.pay-option-card');
+      cards.forEach(function(c) { c.classList.remove('active'); });
+      var selectedRadio = document.querySelector('input[name="payment_mode"][value="' + mode + '"]');
+      if (selectedRadio) {
+        selectedRadio.checked = true;
+        selectedRadio.closest('.pay-option-card').classList.add('active');
+      }
+    }
+
+    function abrirModalPrePago(plan) {
+      console.log("Abriendo modal para plan:", plan);
+      var modal = document.getElementById("modal-pre-pago");
+      var planInput = document.getElementById("pre-plan");
+      if (planInput) planInput.value = plan;
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    }
+
+    function cerrarModalPrePago() {
+      var modal = document.getElementById("modal-pre-pago");
+      if (modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    function abrirModalLey21719(event) {
+      if (event) event.preventDefault();
+      var modal = document.getElementById("modal-ley-21719");
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    }
+
+    function cerrarModalLey21719() {
+      var modal = document.getElementById("modal-ley-21719");
+      if (modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    async function procesarPrePago(event) {
+      event.preventDefault();
+      var btn = document.getElementById("btn-pre-submit");
+      var errDiv = document.getElementById("pre-msg-error");
+      var form = document.getElementById("form-pre-pago");
+      var consentChk = document.getElementById("pre-consent");
+      var sourceLimitsChk = document.getElementById("pre-source-limits");
+
+      function showPreMessage(type, html) {
+        if (!errDiv) return;
+        var styles = {
+          error: ["rgba(239,68,68,0.22)", "#ef4444", "#ffffff"],
+          alert_red: ["rgba(239,68,68,0.25)", "#ef4444", "#ffffff"],
+          warn: ["rgba(245,158,11,0.20)", "#f59e0b", "#fde68a"],
+          ok: ["rgba(16,185,129,0.20)", "#10b981", "#bbf7d0"]
+        };
+        var selected = styles[type] || styles.error;
+        errDiv.style.display = "block";
+        errDiv.style.background = selected[0];
+        errDiv.style.borderColor = selected[1];
+        errDiv.style.color = selected[2];
+        errDiv.style.borderWidth = "1.5px";
+        errDiv.style.borderStyle = "solid";
+        errDiv.style.padding = "14px 18px";
+        errDiv.style.borderRadius = "14px";
+        errDiv.style.fontSize = "13.5px";
+        errDiv.style.lineHeight = "1.45";
+        errDiv.innerHTML = html;
+      }
+
+      if (consentChk && !consentChk.checked) {
+        showPreMessage("warn", "<strong>Debes aceptar expresamente la Política de Datos Personales (Ley 21.719) para continuar.</strong>");
+        return false;
+      }
+
+      if (sourceLimitsChk && !sourceLimitsChk.checked) {
+        showPreMessage("warn", "<strong>Debes aceptar la advertencia sobre posibles errores u omisiones del Diario Oficial para continuar.</strong>");
+        return false;
+      }
+
+      if (errDiv) errDiv.style.display = "none";
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Validando suscripción...";
+      }
+
+      var formData = new FormData(form);
+      var csrfToken = form.querySelector('input[name="_csrf_token"]')?.value || "";
+
+      try {
+        var res = await fetch("/api/validar_suscripcion_previa", {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrfToken
+          },
+          body: formData
+        });
+        var data = await res.json();
+
+        if (!res.ok && !data.registrado) {
+          showPreMessage("error", "<strong>" + (data.message || "No pudimos validar los datos. Revisa el formulario e inténtalo nuevamente.") + "</strong>");
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<img src="/static/mercado-pago-mark.svg" alt="" aria-hidden="true" style="height:20px;"> Validar Datos & Continuar al Pago';
+          }
+          return false;
+        }
+
+        if (data.registrado && data.status === "ya_registrado") {
+          showPreMessage("alert_red", "<strong>" + (data.message || "Este RUT o correo ya tiene una vigilancia activa. No realizaremos un nuevo cobro.") + "</strong>");
+          if (btn) {
+            btn.disabled = false;
+            btn.style.background = "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)";
+            btn.style.color = "#ffffff";
+            btn.style.borderColor = "#ef4444";
+            btn.style.boxShadow = "0 6px 20px rgba(239, 68, 68, 0.4)";
+            btn.innerHTML = "Vigilancia ya activa";
+          }
+          return false;
+        }
+
+        if (data.status === "pago_pendiente") {
+          showPreMessage("warn", "<strong>" + (data.message || "Ya existe una solicitud pendiente de pago.") + "</strong><br>Si ya pagaste, no vuelvas a pagar: espera la confirmación de activación.");
+          if (data.checkout_url) {
+            setTimeout(function() { window.location.href = data.checkout_url; }, 1800);
+          }
+          return false;
+        }
+
+        if (data.checkout_url) {
+          showPreMessage("ok", "<strong>" + (data.message || "Datos validados. Redirigiendo al pago seguro...") + "</strong>");
+          setTimeout(function() { window.location.href = data.checkout_url; }, 700);
+          return false;
+        }
+
+        showPreMessage("error", "<strong>No recibimos un enlace de pago válido. Te contactaremos para completar la activación.</strong>");
+        if (btn) {
+          btn.disabled = false;
+	          btn.innerHTML = '<img src="/static/mercado-pago-mark.svg" alt="" aria-hidden="true" style="height:20px;"> Validar Datos & Continuar al Pago';
+        }
+        return false;
+      } catch (err) {
+        console.error("Error validando:", err);
+        showPreMessage("error", "<strong>No pudimos validar la suscripción en este momento.</strong><br>Revisa tu conexión e inténtalo nuevamente.");
+        if (btn) {
+          btn.disabled = false;
+	          btn.innerHTML = '<img src="/static/mercado-pago-mark.svg" alt="" aria-hidden="true" style="height:20px;"> Validar Datos & Continuar al Pago';
+        }
+        return false;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      var btns = document.querySelectorAll(".mp-pay-button");
+      btns.forEach(function(b) {
+        b.addEventListener("click", function(e) {
+          e.preventDefault();
+          var p = b.getAttribute("data-plan") || "mensual";
+          abrirModalPrePago(p);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

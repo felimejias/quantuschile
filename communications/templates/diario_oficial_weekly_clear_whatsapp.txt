@@ -1,0 +1,8 @@
+Radar Diario Oficial activo
+
+Esta semana no detectamos publicaciones asociadas a:
+{{ nombre }}{% if rut and rut != "No informado" %} / {{ rut }}{% endif %}
+
+Seguimos monitoreando nuevas ediciones y coincidencias por RUT, nombre, razon social y alias registrados.
+
+Si aparece una coincidencia relevante, recibiras una alerta distinta y prioritaria con informe PDF.

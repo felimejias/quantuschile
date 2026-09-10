@@ -1,0 +1,3 @@
+N° Proyecto / Sistema,Tipo de Datos Tratados,Peligro / Riesgo Identificado,Nivel de Riesgo (Alto/Medio/Bajo),Medida de Seguridad y Mitigación,Estado
+1,Software de Ventas Web,Nombres - RUT - Tarjetas de Crédito,Alto (Fuga de datos por clave débil),Exigir clave de 10 dígitos y cifrado SSL HTTPS,ACTIVADO
+2,Fichas de Clientes en Bodega,Nombres - Contratos firmados en Papel,Medio (Acceso no autorizado de visitas),Instalar chapa con llave en bodega y mueble,ACTIVADO

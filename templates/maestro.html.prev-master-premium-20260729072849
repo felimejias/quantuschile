@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro Maestro Quantus | Analytics</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <meta name="theme-color" content="#06101f">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=20260729-maestro">
+</head>
+<body>
+  <div class="app-container master-shell">
+    <header class="app-header master-header">
+      <a class="brand-link" href="/maestro">
+        <img class="brand-logo" src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <div class="logo-text">QUANTUS CHILE</div>
+          <div class="logo-subtitle">Centro Maestro</div>
+        </div>
+      </a>
+      <nav class="header-actions">
+        <a class="cta-button btn-secondary" href="https://demo.quantuschile.cl/app?superadmin=1">ERP SuperAdmin</a>
+        <a class="cta-button btn-secondary" href="/inapi">INAPI</a>
+        <a class="cta-button btn-secondary" href="/do">Diario Oficial</a>
+        <a class="cta-button btn-secondary" href="/licitaciones">Licitaciones</a>
+        <a class="cta-button btn-secondary" href="/maestro/cambiar-clave">Cambiar contraseña</a>
+        <button class="cta-button btn-secondary" type="button" data-passkey-register>Registrar Touch ID</button>
+        <a class="cta-button" href="/maestro/logout">Salir</a>
+      </nav>
+    </header>
+
+    <section class="master-hero">
+      <div>
+        <span class="eyebrow"><span class="eyebrow-dot"></span> Operación ejecutiva privada</span>
+        <h1 class="hero-title">Control maestro <span>Quantus Intelligence</span></h1>
+        <p class="hero-subtitle">
+          Vista unificada de Diario Oficial, INAPI, Licitaciones, ERP y agentes IA. Los ingresos se muestran como estimación operativa hasta conectar confirmación automática de Mercado Pago.
+        </p>
+      </div>
+      <div class="master-status-panel">
+        <span>Sesión</span>
+        <strong>{{ user }}</strong>
+        <small>Actualizado {{ snapshot.generated_at }}</small>
+        <small data-passkey-status>Touch ID disponible como passkey del navegador.</small>
+      </div>
+    </section>
+
+    <section class="master-kpi-grid">
+      <article class="metric-card">
+        <span>Clientes / perfiles</span>
+        <strong>{{ snapshot.totals.clients }}</strong>
+        <p>Perfiles activos entre vigilancia, marcas y módulos.</p>
+      </article>
+      <article class="metric-card">
+        <span>Informes IA</span>
+        <strong>{{ snapshot.totals.reports }}</strong>
+        <p>PDFs y análisis generados por los agentes.</p>
+      </article>
+      <article class="metric-card">
+        <span>Riesgo alto</span>
+        <strong>{{ snapshot.totals.high_risk }}</strong>
+        <p>Alertas que requieren acción comercial o legal.</p>
+      </article>
+      <article class="metric-card featured-kpi">
+        <span>MRR estimado</span>
+        <strong>{{ snapshot.totals.mrr|clp }}</strong>
+        <p>Recurrencia mensual modelada según planes activos.</p>
+      </article>
+      <article class="metric-card featured-kpi">
+        <span>Pipeline estimado</span>
+        <strong>{{ snapshot.totals.pipeline|clp }}</strong>
+        <p>Oportunidad comercial pendiente de confirmación.</p>
+      </article>
+      <article class="metric-card">
+        <span>Preparación comercial</span>
+        <strong>{{ snapshot.totals.conversion_readiness }}%</strong>
+        <p>Módulos listos para venta controlada.</p>
+      </article>
+      <article class="metric-card">
+        <span>WhatsApp pendiente</span>
+        <strong>{{ snapshot.totals.whatsapp_pending }}</strong>
+        <p>Alertas listas para enviar cuando Meta Business quede configurado.</p>
+      </article>
+      <article class="metric-card">
+        <span>RUT maestro</span>
+        <strong>{{ snapshot.totals.registry_ruts }}</strong>
+        <p>Identificadores cruzados entre ERP, INAPI y Diario Oficial.</p>
+      </article>
+    </section>
+
+    <section class="master-grid">
+      <div class="proof-panel master-module-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Rendimiento por unidad</h2>
+            <p>Clientes, informes, riesgo e ingreso estimado por línea de negocio.</p>
+          </div>
+        </div>
+        <div class="master-module-list">
+          {% for module in snapshot.modules %}
+          <article class="master-module-card">
+            <div class="master-module-top">
+              <div>
+                <span class="badge badge-info">{{ module.status }}</span>
+                <h3>{{ module.name }}</h3>
+              </div>
+              <strong>{{ module.quality }}%</strong>
+            </div>
+            <p>{{ module.insight }}</p>
+            <div class="master-module-metrics">
+              <span>{{ module.clients }} clientes</span>
+              <span>{{ module.reports }} informes</span>
+              <span>{{ module.high_risk }} riesgo alto</span>
+              <span>{{ module.mrr|clp }} MRR</span>
+            </div>
+            <div class="master-bar"><span style="width: {{ module.report_share }}%"></span></div>
+            <div class="master-money-bar"><span style="width: {{ module.money_share }}%"></span></div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+
+      <aside class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Rubros y segmentos</h2>
+            <p>Distribución comercial actual.</p>
+          </div>
+        </div>
+        <div class="segment-list">
+          {% for rubro in snapshot.rubros %}
+          <div class="segment-item">
+            <div>
+              <strong>{{ rubro.name }}</strong>
+              <span>{{ rubro.count }} perfiles</span>
+            </div>
+            <div class="segment-bar"><span style="width: {{ rubro.share }}%"></span></div>
+          </div>
+          {% else %}
+          <p class="muted">Aún no hay rubros persistidos.</p>
+          {% endfor %}
+        </div>
+      </aside>
+    </section>
+
+    <section class="dashboard-columns">
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Clientes y cuentas</h2>
+            <p>Separado por módulo, rubro, plan y valor mensual estimado.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <input class="form-control master-search" id="clientSearch" placeholder="Buscar por RUT, cliente, rubro, plan o módulo">
+          <table class="quantus-table" id="clientsTable">
+            <thead>
+              <tr>
+                <th>RUT</th>
+                <th>Cliente</th>
+                <th>Módulo</th>
+                <th>Rubro</th>
+                <th>Plan</th>
+                <th>Valor</th>
+                <th>Carpeta</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for client in snapshot.clients %}
+              <tr>
+                <td>{{ client.rut or "Sin RUT" }}</td>
+                <td>{{ client.name }}</td>
+                <td>{{ client.module }}</td>
+                <td>{{ client.rubro }}</td>
+                <td>{{ client.plan }}</td>
+                <td>{{ client.monthly_value|clp }}</td>
+                <td><a class="cta-button btn-secondary compact-link" href="/maestro/cliente/{{ client.key }}">Abrir</a></td>
+              </tr>
+              {% else %}
+              <tr><td colspan="7">Aún no hay clientes registrados.</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Decisiones inteligentes</h2>
+            <p>Acciones sugeridas para subir conversión y control.</p>
+          </div>
+        </div>
+        <div class="recommendation-list">
+          {% for item in snapshot.recommendations %}
+          <article class="recommendation-item">
+            <span class="badge {{ 'badge-danger' if item.priority == 'Alta' else 'badge-warning' }}">{{ item.priority }}</span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.impact }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard-columns">
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Canal WhatsApp</h2>
+            <p>Consentimiento, cola de salida y trazabilidad de alertas críticas.</p>
+          </div>
+          <span class="badge badge-info">{{ snapshot.whatsapp.total }} registros</span>
+        </div>
+        <div class="master-module-metrics whatsapp-summary">
+          <span>{{ snapshot.whatsapp.sent }} enviadas</span>
+          <span>{{ snapshot.whatsapp.pending }} pendientes</span>
+          <span>{{ snapshot.whatsapp.error }} con error</span>
+          <span>Meta API {{ "activa" if snapshot.whatsapp.sent else "por validar" }}</span>
+        </div>
+        <div class="report-list">
+          {% for item in snapshot.whatsapp["items"] %}
+          <div class="report-item">
+            <div>
+              <strong>{{ snapshot.module_labels.get(item.module, item.module) }}</strong>
+              <span>{{ item.client_name or "Cliente" }} · {{ item.whatsapp }}</span>
+              <p>{{ item.created_at }} · estado {{ item.status }}</p>
+            </div>
+            {% if item.report_url %}
+            <a class="cta-button btn-secondary" href="{{ item.report_url }}">Informe</a>
+            {% endif %}
+          </div>
+          {% else %}
+          <p class="muted">Todavía no hay alertas WhatsApp en cola.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Operación biométrica</h2>
+            <p>Acceso maestro con passkey del navegador y verificación local del Mac.</p>
+          </div>
+        </div>
+        <div class="recommendation-list">
+          <article class="recommendation-item">
+            <span class="badge badge-info">Touch ID</span>
+            <h3>Registro por dispositivo</h3>
+            <p>Primero se entra con usuario maestro y luego se registra la huella desde este panel. La llave queda asociada al dominio seguro.</p>
+          </article>
+          <article class="recommendation-item">
+            <span class="badge badge-warning">Seguridad</span>
+            <h3>No guarda huellas</h3>
+            <p>Quantus solo almacena la clave pública de la passkey; la biometría permanece en el Secure Enclave del Mac.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-panel">
+      <div class="panel-title">
+        <div>
+          <h2>Registro Maestro RUT</h2>
+          <p>Base transversal para cruzar clientes ERP, marcas, vigilancia y apariciones en Diario Oficial.</p>
+        </div>
+        <span class="badge badge-info">{{ snapshot.registry.totals.total or 0 }} registros</span>
+      </div>
+      <div class="master-module-metrics">
+        <span>{{ snapshot.registry.totals.valid_ruts or 0 }} RUT válidos</span>
+        <span>{{ snapshot.registry.totals.erp or 0 }} ERP</span>
+        <span>{{ snapshot.registry.totals.inapi or 0 }} INAPI</span>
+        <span>{{ snapshot.registry.totals.diario_oficial or 0 }} Diario Oficial</span>
+      </div>
+      {% if snapshot.registry_sync.errors %}
+      <p class="payment-note">Sincronización parcial: {{ snapshot.registry_sync.errors[0] }}</p>
+      {% endif %}
+      <div class="table-wrap">
+        <table class="quantus-table">
+          <thead>
+            <tr>
+              <th>RUT</th>
+              <th>Cliente</th>
+              <th>Origen</th>
+              <th>Correo</th>
+              <th>Alertas DO</th>
+              <th>Última alerta</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in snapshot.registry.rows %}
+            <tr>
+              <td>{{ item.rut or item.clean_rut or "Sin RUT" }}</td>
+              <td>{{ item.display_name or "Cliente sin nombre" }}</td>
+              <td>{{ snapshot.module_labels.get(item.source_module, item.source_module) }}</td>
+              <td>{{ item.email or "-" }}</td>
+              <td>{{ item.alert_count }}</td>
+              <td>{{ item.last_alert_at or "-" }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6">Aún no hay RUT consolidados.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="dashboard-columns">
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Últimos informes IA</h2>
+            <p>Resumen operativo de análisis recientes.</p>
+          </div>
+        </div>
+        <div class="report-list">
+          {% for report in snapshot.reports %}
+          <div class="report-item">
+            <div>
+              <strong>{{ snapshot.module_labels.get(report.module, report.module) }}</strong>
+              <span>{{ report.client_name or "Sin cliente" }} · {{ report.publication_type or "sin tipo" }}</span>
+              <p>{{ report.created_at }} · urgencia {{ report.urgency or "media" }}</p>
+            </div>
+            <a class="cta-button btn-secondary" href="/informes/{{ report.id }}.pdf">PDF</a>
+          </div>
+          {% else %}
+          <p class="muted">Aún no hay informes IA.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="proof-panel">
+        <div class="panel-title">
+          <div>
+            <h2>Memoria IA por cliente</h2>
+            <p>Historial consolidado de señales y riesgo acumulado.</p>
+          </div>
+        </div>
+        <div class="report-list">
+          {% for item in snapshot.memory %}
+          <div class="report-item">
+            <div>
+              <strong>{{ item.display_name or "Sin nombre" }}</strong>
+              <span>{{ item.rut or "Sin RUT" }} · {{ item.total_alerts }} alertas</span>
+              <p>{{ item.last_summary or "Sin resumen disponible." }}</p>
+            </div>
+            <span class="badge {{ 'badge-danger' if item.high_risk_alerts else 'badge-success' }}">{{ item.high_risk_alerts }} altas</span>
+          </div>
+          {% else %}
+          <p class="muted">Aún no hay memoria IA acumulada.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="proof-panel master-actions">
+      <a class="cta-button" href="/admin/ia?token=">Dashboard IA por token</a>
+      <a class="cta-button btn-secondary" href="/do/admin?token=">Admin Diario Oficial por token</a>
+      <a class="cta-button btn-secondary" href="/do/prospeccion">Prospección Diario Oficial</a>
+      <a class="cta-button btn-secondary" href="/licitaciones#analizador-licitaciones">Analizador licitaciones</a>
+    </section>
+
+    {% include "partials/law_21719.html" %}
+
+    <footer class="footer">
+      <p>&copy; 2026 Quantus Chile — Centro Maestro privado para analítica, KPI y control comercial.</p>
+    </footer>
+  </div>
+  <script>
+    const clientSearch = document.getElementById("clientSearch");
+    const clientsTable = document.getElementById("clientsTable");
+    if (clientSearch && clientsTable) {
+      clientSearch.addEventListener("input", () => {
+        const query = clientSearch.value.trim().toLowerCase();
+        clientsTable.querySelectorAll("tbody tr").forEach((row) => {
+          row.style.display = row.textContent.toLowerCase().includes(query) ? "" : "none";
+        });
+      });
+    }
+  </script>
+  <script src="{{ url_for('static', filename='passkeys.js') }}?v=20260729-passkeys"></script>
+</body>
+</html>

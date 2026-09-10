@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog & Guías Regulatorias PYME | Quantus Chile SpA</title>
+  <meta name="description" content="Centro de conocimiento técnico y legal para PYMEs chilenas: Diario Oficial, Licitaciones Mercado Público, Remates Judiciales, Marcas INAPI, Ley 21.719 y Control ERP.">
+  <link rel="canonical" href="https://www.quantuschile.cl/blog">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD for Google AdSense & SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Centro de Conocimiento Legal y Regulatorio — Quantus Chile SpA",
+    "description": "Publicaciones y análisis sobre derecho procesal, compras públicas, propiedad industrial y cumplimiento normativo en Chile.",
+    "url": "https://www.quantuschile.cl/blog",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Quantus Chile SpA",
+      "url": "https://www.quantuschile.cl",
+      "logo": "https://www.quantuschile.cl/static/quantus-logo-clean.png"
+    }
+  }
+  </script>
+
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --bg-white: #ffffff;
+      --bg-slate: #f8fafc;
+      --border-color: #e2e8f0;
+      --cyan-bright: #0284c7;
+      --cyan-dark: #0369a1;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: var(--text-main);
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.6;
+    }
+
+    .shell {
+      width: min(calc(100% - 48px), 1280px);
+      margin: 0 auto;
+    }
+
+    /* HERO BLANCO INSTITUCIONAL */
+    .page-hero {
+      position: relative;
+      padding: 70px 0 60px;
+      isolation: isolate;
+      overflow: hidden;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    .page-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(2, 132, 199, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(2, 132, 199, 0.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 85%);
+    }
+
+    .kicker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .hero-h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin: 0 0 16px;
+      max-width: 900px;
+      margin-inline: auto;
+    }
+
+    .hero-lead-text {
+      font-size: clamp(15px, 1.8vw, 17px);
+      color: #475569;
+      max-width: 760px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* GRID DE ARTÍCULOS */
+    .blog-section {
+      padding: 48px 0 80px;
+      background: #ffffff;
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 28px;
+    }
+
+    @media (max-width: 640px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    .article-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    }
+
+    .article-card:hover {
+      transform: translateY(-4px);
+      border-color: #0284c7;
+      box-shadow: 0 16px 32px rgba(2, 132, 199, 0.08), 0 2px 6px rgba(15, 23, 42, 0.04);
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-size: 12px;
+      gap: 12px;
+    }
+
+    .card-badge {
+      display: inline-block;
+      font-weight: 700;
+      color: #0284c7;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-read_time {
+      color: #64748b;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .card-title {
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.35;
+      color: #0f172a;
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
+      transition: color 0.15s;
+    }
+
+    .article-card:hover .card-title {
+      color: #0284c7;
+    }
+
+    .card-summary {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #475569;
+      margin: 0 0 20px;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 13px;
+    }
+
+    .card-cta {
+      color: #0284c7;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap 0.2s;
+    }
+
+    .article-card:hover .card-cta {
+      gap: 8px;
+    }
+
+    .card-date {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* BANNER CTA INFORMATIVO */
+    .blog-cta-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 20px;
+      padding: 40px;
+      color: #ffffff;
+      margin-top: 56px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-cta-banner {
+        grid-template-columns: 1fr;
+        padding: 28px;
+      }
+    }
+
+    .blog-cta-banner h3 {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .blog-cta-banner p {
+      color: #94a3b8;
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .btn-white-cta {
+      background: #0284c7;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-white-cta:hover {
+      background: #0369a1;
+      transform: translateY(-2px);
+    }
+  </style>
+
+  <style>
+    html, body {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+      color: #0f172a !important;
+    }
+    body::before {
+      display: none !important;
+      content: none !important;
+    }
+  </style>
+
+</head>
+<body>
+
+  {% set active_module = 'blog' %}
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <!-- HERO -->
+    <section class="page-hero">
+      <div class="shell">
+        <div class="kicker-pill">
+          <span>📚 Centro de Conocimiento & Normativa PYME</span>
+        </div>
+        <h1 class="hero-h1">
+          Guías Técnicas, Análisis Legal y Estrategias para Empresas en Chile
+        </h1>
+        <p class="hero-lead-text">
+          Artículos periciales sobre compras públicas, resoluciones del Diario Oficial, remates judiciales, marcas comerciales y normativas de protección de datos para tomar decisiones con ventaja.
+        </p>
+      </div>
+    </section>
+
+    <!-- LISTADO DE ARTÍCULOS -->
+    <section class="blog-section">
+      <div class="shell">
+        <div class="blog-grid">
+          {% for article in articles %}
+          <a href="/blog/{{ article.slug }}" class="article-card">
+            <div>
+              <div class="card-meta">
+                <span class="card-badge">{{ article.category }}</span>
+                <span class="card-read_time">⏱️ {{ article.read_time_min }} min</span>
+              </div>
+              <h2 class="card-title">{{ article.title }}</h2>
+              <p class="card-summary">{{ article.summary }}</p>
+            </div>
+            <div class="card-footer">
+              <span class="card-cta">Leer guía completa →</span>
+              <span class="card-date">{{ article.published_at }}</span>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+        <!-- BANNER INFORMATIVO QUANTUS -->
+        <div class="blog-cta-banner">
+          <div>
+            <h3>¿Quieres automatizar la vigilancia normativa de tu negocio?</h3>
+            <p>Conoce los 7 módulos de Quantus Chile SpA: Diario Oficial, Licitaciones 24/7, Remates Judiciales, Marcas INAPI, Ley 21.719 y Control ERP.</p>
+          </div>
+          <div>
+            <a href="/como-funciona" class="btn-white-cta">Ver cómo trabaja Quantus →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+</body>
+</html>

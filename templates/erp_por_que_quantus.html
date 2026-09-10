@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Por Qué Elegir Quantus ERP — Comparativa Corporativa</title>
+  <meta name="description" content="Descubre por qué las empresas en Chile eligen Quantus ERP frente a los sistemas tradicionales.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { background: #ffffff; color: #334155; margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .top-ribbon-quantus { background: #06101f; border-bottom: 1px solid rgba(56,189,248,0.2); color: #fff; padding: 9px 0; font-size: 12.5px; font-weight: 700; }
+    .ribbon-flex { width: min(calc(100% - 64px), 1280px); margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .main-header { background: #fff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; }
+    .header-shell { width: min(calc(100% - 64px), 1280px); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 76px; }
+    .brand-quantus-official { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-symbol-img { width: 42px; height: 42px; object-fit: contain; border-radius: 10px; }
+    .brand-text-block { display: flex; flex-direction: column; }
+    .brand-name-quantus { font-size: 19px; font-weight: 900; color: #0f172a; letter-spacing: -0.03em; line-height: 1.1; }
+    .brand-name-accent { color: #0284c7; }
+    .brand-tagline-quantus { font-size: 10px; font-weight: 800; color: #64748b; letter-spacing: 0.1em; text-transform: uppercase; }
+    .nav-links-menu { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+    .nav-link-item { color: #0f172a; font-size: 14.5px; font-weight: 600; text-decoration: none; }
+    .nav-link-item.active { color: #0284c7; font-weight: 800; }
+    .btn-cyan-quantus-cta { padding: 11px 22px; border-radius: 10px; background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%); color: #fff; font-weight: 800; text-decoration: none; }
+    .section-padding { padding: 80px 0; }
+    .container { width: min(calc(100% - 64px), 1280px); margin: 0 auto; }
+    .title-box { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+    .title-box h1 { font-size: 42px; font-weight: 900; color: #0f172a; margin: 0 0 16px; }
+    .title-box p { font-size: 16px; color: #64748b; }
+    .reasons-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .reason-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 20px; padding: 32px; }
+    .reason-card h3 { font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 10px; }
+    .reason-card p { font-size: 14.5px; color: #64748b; line-height: 1.65; margin: 0; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main class="section-padding">
+    <div class="container">
+      <div class="title-box">
+        <h1>Por qué las pymes eligen Quantus ERP en Chile</h1>
+        <p>Una comparación transparente de valor, tecnología y acompañamiento continuo.</p>
+      </div>
+
+      <div class="reasons-grid">
+        <div class="reason-card">
+          <h3>⚡ Implementación Rápida</h3>
+          <p>Comienza a operar en menos de 24 horas con la carga asistida de tu catálogo de productos, clientes e inventario inicial.</p>
+        </div>
+        <div class="reason-card">
+          <h3>🤖 Inteligencia Operativa Integrada</h3>
+          <p>A diferencia de un ERP tradicional, Quantus incluye agentes de Inteligencia Artificial que vigilan el Diario Oficial y licitaciones públicas por ti.</p>
+        </div>
+        <div class="reason-card">
+          <h3>🛡️ Acompañamiento Normativo</h3>
+          <p>Herramientas y guías diseñadas para apoyar la adecuación a la Ley 21.719 de Protección de Datos y el monitoreo de marcas ante INAPI.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+</body>
+</html>

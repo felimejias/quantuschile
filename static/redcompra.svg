@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 90" width="340" height="90">
+  <!-- Bloque Rojo itálico con 3 líneas blancas -->
+  <g>
+    <polygon points="0,0 160,0 145,90 0,90" fill="#E4002B"/>
+    <rect x="0" y="15" width="55" height="8" fill="#FFFFFF"/>
+    <rect x="0" y="41" width="75" height="8" fill="#FFFFFF"/>
+    <rect x="0" y="67" width="55" height="8" fill="#FFFFFF"/>
+    <text x="62" y="64" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="bold" font-style="italic" font-size="52" fill="#FFFFFF">Red</text>
+  </g>
+  <!-- Bloque Azul itálico con texto compra -->
+  <g>
+    <polygon points="147,0 340,0 325,90 132,90" fill="#002D72"/>
+    <text x="148" y="64" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="bold" font-style="italic" font-size="50" fill="#FFFFFF">compra</text>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80">
+  <g>
+    <rect x="10" y="15" width="22" height="22" rx="4" fill="#00A8B5"/>
+    <rect x="36" y="15" width="22" height="22" rx="4" fill="#0071E3"/>
+    <rect x="10" y="41" width="22" height="22" rx="4" fill="#0039A6"/>
+    <rect x="36" y="41" width="22" height="22" rx="4" fill="#00A8B5"/>
+    <text x="70" y="45" font-family="'Inter', 'Helvetica', sans-serif" font-weight="900" font-size="28" fill="#FFFFFF" letter-spacing="1px">INAPI</text>
+    <text x="70" y="58" font-family="'Inter', 'Helvetica', sans-serif" font-weight="600" font-size="9" fill="#00A8B5" letter-spacing="0.5px">INSTITUTO NACIONAL DE</text>
+    <text x="70" y="68" font-family="'Inter', 'Helvetica', sans-serif" font-weight="600" font-size="9" fill="#00A8B5" letter-spacing="0.5px">PROPIEDAD INDUSTRIAL</text>
+  </g>
+</svg>

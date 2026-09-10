@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantus Agenda Estetica | Demo vertical</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <style>
+    :root {
+      --page: #f4f0ea;
+      --paper: #fffdf9;
+      --soft: #ebe4da;
+      --ink: #25251f;
+      --muted: #746f66;
+      --line: #ddd3c7;
+      --sage: #62786c;
+      --sage-dark: #354a40;
+      --gold: #b89762;
+      --clay: #a66f58;
+      --cream: #f8f4ed;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255,253,249,.82), rgba(244,240,234,.92)),
+        radial-gradient(circle at 20% 0%, rgba(184,151,98,.16), transparent 32%),
+        var(--page);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .shell {
+      width: min(1340px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 26px 0 52px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 0 26px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      filter: saturate(.86);
+    }
+    .brand strong {
+      display: block;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .brand span {
+      display: block;
+      color: var(--sage);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .demo-badge {
+      border: 1px solid rgba(98, 120, 108, .28);
+      background: rgba(255, 253, 249, .72);
+      color: var(--sage-dark);
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+    }
+
+    .view-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 18px 0 0;
+    }
+
+    .view-tab {
+      border: 1px solid rgba(98, 120, 108, .24);
+      background: rgba(255,253,249,.62);
+      color: var(--sage-dark);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .view-tab.active {
+      background: var(--sage-dark);
+      border-color: var(--sage-dark);
+      color: #fffdf9;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 390px;
+      gap: 18px;
+      padding: 28px 0 18px;
+      align-items: stretch;
+    }
+
+    .hero-main, .ops-panel, .section {
+      background: rgba(255, 253, 249, .84);
+      border: 1px solid rgba(184, 151, 98, .24);
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 18px 44px rgba(55, 45, 35, .06);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-main {
+      position: relative;
+      overflow: hidden;
+      padding: 34px;
+      background:
+        linear-gradient(135deg, rgba(255,253,249,.96), rgba(246,240,231,.9)),
+        var(--paper);
+    }
+
+    .hero-main:after {
+      content: "";
+      position: absolute;
+      right: 28px;
+      top: 28px;
+      width: 96px;
+      height: 96px;
+      border: 1px solid rgba(184,151,98,.22);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--clay);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    h1 {
+      position: relative;
+      max-width: 820px;
+      margin: 14px 0 16px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 4.7vw, 70px);
+      font-weight: 500;
+      line-height: .96;
+      letter-spacing: 0;
+      color: #26231f;
+    }
+
+    .lead {
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.8;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .contract {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 22px;
+    }
+
+    .chip {
+      border: 1px solid rgba(98, 120, 108, .2);
+      background: rgba(255, 253, 249, .72);
+      color: var(--sage-dark);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .daily-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .daily-card {
+      background: rgba(255,253,249,.76);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .daily-card strong {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .daily-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .progress-track {
+      height: 7px;
+      margin-top: 12px;
+      border-radius: 999px;
+      background: #e5dbcf;
+      overflow: hidden;
+    }
+
+    .progress-track i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--sage), var(--gold));
+    }
+
+    .kpi {
+      background: rgba(248, 244, 237, .74);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 88px;
+    }
+
+    .kpi label {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    .kpi strong {
+      display: block;
+      margin-top: 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 27px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .ops-panel h2, .section h2 {
+      margin: 0 0 16px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 25px;
+      font-weight: 500;
+      letter-spacing: 0;
+      color: var(--ink);
+    }
+
+    .alert-list, .wait-list, .pro-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .alert-row, .wait-row, .pro-row {
+      background: rgba(248, 244, 237, .72);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .alert-row strong, .wait-row strong, .pro-row strong {
+      display: block;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .alert-row span, .wait-row span, .pro-row span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    .view-section {
+      display: block;
+    }
+
+    .view-section.hidden-view {
+      display: none;
+    }
+
+    .agenda-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .toolbar-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .toolbar-label {
+      width: 100%;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .filter-btn, .soft-action {
+      border: 1px solid rgba(98, 120, 108, .22);
+      background: rgba(255, 253, 249, .8);
+      color: var(--sage-dark);
+      border-radius: 999px;
+      padding: 9px 11px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: var(--sage-dark);
+      border-color: var(--sage-dark);
+      color: #fffdf9;
+    }
+
+    .schedule-grid {
+      display: grid;
+      gap: 9px;
+    }
+
+    .appt {
+      display: grid;
+      grid-template-columns: 68px 1fr 190px 100px;
+      gap: 12px;
+      align-items: center;
+      background: rgba(255, 253, 249, .76);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      cursor: pointer;
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .appt:hover, .appt.selected {
+      border-color: rgba(98, 120, 108, .42);
+      box-shadow: 0 12px 28px rgba(55, 45, 35, .08);
+      transform: translateY(-1px);
+    }
+
+    .appt.hidden {
+      display: none;
+    }
+
+    .time {
+      color: var(--clay);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+      font-weight: 500;
+    }
+
+    .appt h3 {
+      margin: 0;
+      font-size: 15px;
+      color: var(--ink);
+    }
+
+    .appt p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status {
+      justify-self: start;
+      border-radius: 999px;
+      padding: 7px 9px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      background: rgba(98, 120, 108, .12);
+      color: var(--sage-dark);
+    }
+
+    .status.atendiendo { background: rgba(98, 120, 108, .18); color: var(--sage-dark); }
+    .status.pendiente { background: rgba(184, 151, 98, .18); color: #735a2e; }
+    .status.confirmada { background: rgba(98, 120, 108, .12); color: var(--sage-dark); }
+    .status.pagada { background: rgba(53, 74, 64, .92); color: #fffdf9; }
+
+    .booking-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .booking-card {
+      background: linear-gradient(145deg, rgba(255,253,249,.94), rgba(248,244,237,.86));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .booking-card small {
+      color: var(--clay);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .booking-card h3 {
+      margin: 8px 0 7px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 500;
+    }
+
+    .booking-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .client-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 11px;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .primary-action, .secondary-action {
+      min-height: 42px;
+      border: 1px solid var(--sage-dark);
+      border-radius: 8px;
+      background: var(--sage-dark);
+      color: #fffdf9;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .secondary-action {
+      background: rgba(255, 253, 249, .76);
+      color: var(--sage-dark);
+    }
+
+    .ai-note {
+      border-left: 2px solid var(--gold);
+      background: rgba(248, 244, 237, .78);
+      padding: 12px 13px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .cash-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .cash-card, .ai-action-card {
+      background: rgba(248,244,237,.72);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .cash-card label, .ai-action-card label {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .cash-card strong {
+      display: block;
+      margin-top: 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 25px;
+      font-weight: 500;
+    }
+
+    .ledger {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .ledger-row {
+      display: grid;
+      grid-template-columns: 76px 1fr 120px 120px;
+      gap: 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,253,249,.72);
+      font-size: 12px;
+    }
+
+    .ledger-row strong { font-size: 13px; }
+    .ledger-row span { color: var(--muted); }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .ai-action-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    .ai-action-card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .service-matrix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .service-card {
+      background: rgba(248, 244, 237, .72);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .service-card strong {
+      display: block;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .service-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .avatars {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(98, 120, 108, .12);
+      border: 1px solid rgba(98, 120, 108, .25);
+      color: var(--sage-dark);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+      margin-top: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .hero, .grid-2 { grid-template-columns: 1fr; }
+      .kpi-grid, .service-matrix, .daily-board, .cash-grid, .ai-grid { grid-template-columns: 1fr 1fr; }
+      .agenda-toolbar { flex-direction: column; }
+      .appt, .ledger-row { grid-template-columns: 62px 1fr; }
+      .status { justify-self: start; }
+    }
+
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 22px, 1340px); }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .kpi-grid, .service-matrix, .daily-board, .cash-grid, .ai-grid { grid-template-columns: 1fr; }
+      .hero-main { padding: 24px; }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile">
+        <div>
+          <strong>Quantus Agenda Estetica</strong>
+          <span>Vertical peluqueria, barberia y estetica</span>
+        </div>
+      </div>
+      <div class="demo-badge">Demo comercial con datos ficticios</div>
+    </header>
+
+    <nav class="view-tabs" data-view-tabs="true">
+      <button class="view-tab active" data-view-target="agenda">Agenda</button>
+      <button class="view-tab" data-view-target="clientes">Clientes</button>
+      <button class="view-tab" data-view-target="caja">Caja</button>
+      <button class="view-tab" data-view-target="ia">IA operativa</button>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">Basado en agenda inteligente tipo BIOBELLE, separado del POS</div>
+        <h1>Agenda, caja, profesionales, comisiones e insumos en una sola vista.</h1>
+        <p class="lead">
+          Este vertical cubre peluquerias, barberias, centros esteticos y estudios de belleza. No es farmacia ni POS generico: la venta parte desde la agenda, el servicio define profesional habilitado, duracion, comision, consumo de insumos y cobro.
+        </p>
+        <div class="kpi-grid">
+          <div class="kpi"><label>Reservas hoy</label><strong>{{ demo.kpis.appointments }}</strong></div>
+          <div class="kpi"><label>Ocupacion</label><strong>{{ demo.kpis.occupancy }}%</strong></div>
+          <div class="kpi"><label>Caja pagada</label><strong>${{ "{:,}".format(demo.kpis.revenue).replace(",", ".") }}</strong></div>
+          <div class="kpi"><label>Por cobrar</label><strong>${{ "{:,}".format(demo.kpis.pending_revenue).replace(",", ".") }}</strong></div>
+        </div>
+        <div class="daily-board" data-daily-board="true">
+          {% for professional in demo.professional_summary %}
+          {% set load = (professional.appointments / 6 * 100)|round|int %}
+          <div class="daily-card">
+            <strong>{{ professional.name.split(" ")[0] }}</strong>
+            <span>{{ professional.appointments }} reservas · ${{ "{:,}".format(professional.commission).replace(",", ".") }} comision</span>
+            <div class="progress-track"><i style="width: {{ load }}%;"></i></div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="contract">
+          {% for item in demo.data_contract %}
+          <span class="chip">{{ item|replace("_", " ") }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <aside class="ops-panel">
+        <h2>Alertas IA operativas</h2>
+        <div class="alert-list">
+          {% for item in demo.inventory_alerts[:5] %}
+          <div class="alert-row">
+            <strong>{{ item.name }}</strong>
+            <span>Stock {{ item.stock }} · uso dia {{ item.daily_usage }} · {% if item.days_left is not none %}quiebre proyectado {{ item.days_left }} dia{{ "s" if item.days_left != 1 else "" }}{% else %}uso bajo control{% endif %}</span>
+          </div>
+          {% endfor %}
+        </div>
+        <p class="footer-note">Las alertas usan agenda del dia, servicios reservados e insumos asociados. No usa datos personales reales.</p>
+      </aside>
+    </section>
+
+    <section class="grid-2 view-section" data-view="agenda">
+      <div class="section">
+        <div class="agenda-toolbar" data-agenda-controls="interactive">
+          <div class="toolbar-group" id="professional-filters">
+            <div class="toolbar-label">Profesional</div>
+            <button class="filter-btn active" data-filter-type="professional" data-filter-value="all">Todas</button>
+            {% for professional in demo.professionals %}
+            <button class="filter-btn" data-filter-type="professional" data-filter-value="{{ professional.id }}">{{ professional.name.split(" ")[0] }}</button>
+            {% endfor %}
+          </div>
+          <div class="toolbar-group" id="status-filters">
+            <div class="toolbar-label">Estado</div>
+            <button class="filter-btn active" data-filter-type="status" data-filter-value="all">Todos</button>
+            <button class="filter-btn" data-filter-type="status" data-filter-value="confirmada">Confirmadas</button>
+            <button class="filter-btn" data-filter-type="status" data-filter-value="atendiendo">Atendiendo</button>
+            <button class="filter-btn" data-filter-type="status" data-filter-value="pendiente">Pendientes</button>
+          </div>
+        </div>
+        <h2>Agenda diaria por profesional</h2>
+        <div class="schedule-grid">
+          {% for item in demo.schedule %}
+          <div class="appt"
+               data-booking-card="true"
+               data-professional="{{ item.professional_id }}"
+               data-professional-name="{{ item.professional.name }}"
+               data-status="{{ item.status }}"
+               data-paid="{{ '1' if item.paid else '0' }}"
+               data-price="{{ item.service.price }}"
+               data-time="{{ item.time }}"
+               data-client="{{ item.client }}"
+               data-service="{{ item.service.name }}"
+               data-duration="{{ item.service.duration }}"
+               data-balance="{{ item.balance }}"
+               data-deposit="{{ item.deposit }}"
+               data-method="{{ item.payment_method }}"
+               data-visits="{{ item.client_profile.visits }}"
+               data-last-visit="{{ item.client_profile.last_visit }}"
+               data-risk="{{ item.client_profile.no_show_risk }}"
+               data-notes="{{ item.client_profile.notes }}"
+               data-tags="{{ item.client_profile.tags|join(', ') }}">
+            <div class="time">{{ item.time }}</div>
+            <div>
+              <h3>{{ item.service.name }}</h3>
+              <p>{{ item.client }} · {{ item.service.duration }} min · {{ item.professional.name }}</p>
+            </div>
+            <div class="payment-cell">
+              <span class="chip">${{ "{:,}".format(item.service.price).replace(",", ".") }}</span>
+              {% if item.paid %}<span class="chip payment-chip">pagado</span>{% else %}<span class="chip payment-chip">por cobrar</span>{% endif %}
+            </div>
+            <span class="status {{ item.status }}">{{ item.status }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <aside class="section">
+        <h2>Ficha operativa</h2>
+        <div class="booking-panel" data-booking-panel="true">
+          <div class="booking-card">
+            <small id="detail-time">Selecciona una reserva</small>
+            <h3 id="detail-service">Agenda interactiva</h3>
+            <p id="detail-copy">Elige una hora para confirmar, iniciar atencion, marcar cobro o simular reagendamiento. Esta es una demo local, sin guardar datos personales reales.</p>
+            <div class="client-tags" id="detail-tags"></div>
+          </div>
+          <div class="action-grid">
+            <button class="primary-action" id="action-checkin" type="button">Iniciar atencion</button>
+            <button class="secondary-action" id="action-confirm" type="button">Confirmar</button>
+            <button class="secondary-action" id="action-paid" type="button">Marcar cobro</button>
+            <button class="secondary-action" id="action-reschedule" type="button">+15 min</button>
+          </div>
+          <div class="ai-note" id="ai-assistant-note">
+            IA agenda: prioriza cobrar reservas pendientes, proteger insumos con quiebre cercano y llenar espacios con lista de espera.
+          </div>
+          <button class="soft-action" id="action-ai-summary" type="button">Generar resumen IA demo</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid-2 view-section" data-view="clientes">
+      <div class="section">
+        <h2>Matriz servicio / profesional habilitado</h2>
+        <div class="service-matrix">
+          {% for item in demo.eligibility %}
+          <div class="service-card">
+            <strong>{{ item.service.name }}</strong>
+            <span>{{ item.service.category }} · {{ item.service.duration }} min · ${{ "{:,}".format(item.service.price).replace(",", ".") }}</span>
+            <div class="avatars">
+              {% for professional in item.professionals %}
+              <div class="avatar" title="{{ professional.name }}">{{ professional.avatar }}</div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <aside class="section">
+        <h2>Lista de espera</h2>
+        <div class="wait-list">
+          {% for item in demo.waitlist %}
+          <div class="wait-row" data-wait-service="{{ item.service.name }}" data-wait-client="{{ item.client }}" data-wait-preference="{{ item.preference }}">
+            <strong>{{ item.client }}</strong>
+            <span>{{ item.service.name }} · {{ item.preference }}</span>
+            <button class="soft-action wait-action" type="button">Sugerir cupo</button>
+          </div>
+          {% endfor %}
+        </div>
+        <p class="footer-note">Siguiente etapa: convertir esta demo en flujo con crear reserva, bloquear horario, cobrar abono y recordatorio WhatsApp.</p>
+      </aside>
+    </section>
+
+    <section class="view-section hidden-view" data-view="caja">
+      <div class="section">
+        <h2>Caja, abonos y comisiones</h2>
+        <div class="cash-grid" data-cash-dashboard="true">
+          <div class="cash-card"><label>Pagado</label><strong>${{ "{:,}".format(demo.cash_summary.paid).replace(",", ".") }}</strong></div>
+          <div class="cash-card"><label>Por cobrar</label><strong>${{ "{:,}".format(demo.cash_summary.pending).replace(",", ".") }}</strong></div>
+          <div class="cash-card"><label>Abonos</label><strong>${{ "{:,}".format(demo.cash_summary.deposits).replace(",", ".") }}</strong></div>
+          <div class="cash-card"><label>Total esperado</label><strong>${{ "{:,}".format(demo.cash_summary.expected_total).replace(",", ".") }}</strong></div>
+        </div>
+        <div class="ledger">
+          {% for item in demo.schedule %}
+          <div class="ledger-row">
+            <strong>{{ item.time }}</strong>
+            <div><strong>{{ item.client }}</strong><span>{{ item.service.name }} · {{ item.professional.name }}</span></div>
+            <span>{{ item.payment_method }}</span>
+            <strong>{% if item.paid %}Pagado{% else %}Saldo ${{ "{:,}".format(item.balance).replace(",", ".") }}{% endif %}</strong>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="view-section hidden-view" data-view="ia">
+      <div class="section">
+        <h2>IA operativa del dia</h2>
+        <div class="ai-grid" data-ai-command-center="true">
+          {% for action in demo.ai_actions %}
+          <div class="ai-action-card">
+            <label>Accion sugerida</label>
+            <strong>{{ action.title }}</strong>
+            <p>{{ action.detail }}</p>
+            <button class="soft-action" type="button">Marcar como revisada</button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const agendaState = {
+      professional: "all",
+      status: "all",
+      selected: null,
+    };
+
+    const money = new Intl.NumberFormat("es-CL");
+    const bookingCards = Array.from(document.querySelectorAll("[data-booking-card='true']"));
+    const detailTime = document.getElementById("detail-time");
+    const detailService = document.getElementById("detail-service");
+    const detailCopy = document.getElementById("detail-copy");
+    const aiNote = document.getElementById("ai-assistant-note");
+
+    function updateFilters(type, value, button) {
+      agendaState[type] = value;
+      document.querySelectorAll(`[data-filter-type="${type}"]`).forEach((item) => item.classList.remove("active"));
+      button.classList.add("active");
+      applyFilters();
+    }
+
+    function applyFilters() {
+      bookingCards.forEach((card) => {
+        const professionalOk = agendaState.professional === "all" || card.dataset.professional === agendaState.professional;
+        const statusOk = agendaState.status === "all" || card.dataset.status === agendaState.status;
+        card.classList.toggle("hidden", !(professionalOk && statusOk));
+      });
+      const visible = bookingCards.filter((card) => !card.classList.contains("hidden")).length;
+      aiNote.textContent = `Vista filtrada: ${visible} reserva${visible === 1 ? "" : "s"} visibles. IA recomienda revisar cobros pendientes antes de cerrar caja.`;
+    }
+
+    function selectBooking(card) {
+      agendaState.selected = card;
+      bookingCards.forEach((item) => item.classList.remove("selected"));
+      card.classList.add("selected");
+      const paid = card.dataset.paid === "1" ? "pagado" : "por cobrar";
+      const balance = Number(card.dataset.balance || 0);
+      const deposit = Number(card.dataset.deposit || 0);
+      detailTime.textContent = `${card.dataset.time} · ${card.dataset.professionalName}`;
+      detailService.textContent = card.dataset.service;
+      detailCopy.textContent = `${card.dataset.client} · ${card.dataset.duration} min · $${money.format(Number(card.dataset.price))} · ${card.dataset.status} · ${paid}. ${card.dataset.visits} visitas previas · ultima visita ${card.dataset.lastVisit} · riesgo ${card.dataset.risk}. Abono $${money.format(deposit)} · saldo $${money.format(balance)}. Nota: ${card.dataset.notes}`;
+      const tagBox = document.getElementById("detail-tags");
+      tagBox.innerHTML = "";
+      (card.dataset.tags || "").split(",").map((item) => item.trim()).filter(Boolean).forEach((tag) => {
+        const span = document.createElement("span");
+        span.className = "chip";
+        span.textContent = tag;
+        tagBox.appendChild(span);
+      });
+    }
+
+    function setStatus(status) {
+      const card = agendaState.selected;
+      if (!card) return;
+      card.dataset.status = status;
+      const badge = card.querySelector(".status");
+      badge.className = `status ${status}`;
+      badge.textContent = status;
+      selectBooking(card);
+      applyFilters();
+    }
+
+    function markPaid() {
+      const card = agendaState.selected;
+      if (!card) return;
+      card.dataset.paid = "1";
+      card.dataset.balance = "0";
+      card.dataset.method = "demo";
+      const chip = card.querySelector(".payment-chip");
+      chip.textContent = "pagado";
+      setStatus("pagada");
+    }
+
+    function reschedulePlus15() {
+      const card = agendaState.selected;
+      if (!card) return;
+      const [hour, minute] = card.dataset.time.split(":").map(Number);
+      const date = new Date();
+      date.setHours(hour, minute + 15, 0, 0);
+      const next = `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+      card.dataset.time = next;
+      card.querySelector(".time").textContent = next;
+      selectBooking(card);
+      aiNote.textContent = `Reagendamiento demo aplicado: ${card.dataset.client} queda a las ${next}. En produccion esto debe registrar historial y enviar WhatsApp.`;
+    }
+
+    function generateAiSummary() {
+      const pending = bookingCards.filter((card) => card.dataset.paid !== "1").length;
+      const active = bookingCards.filter((card) => ["confirmada", "atendiendo"].includes(card.dataset.status)).length;
+      const waitlist = document.querySelectorAll(".wait-row").length;
+      aiNote.textContent = `Resumen IA demo: ${active} reservas activas, ${pending} cobros pendientes y ${waitlist} personas en lista de espera. Prioridad: cerrar caja pendiente, ofrecer cupos liberados y reponer insumos marcados en alerta.`;
+    }
+
+    document.querySelectorAll(".filter-btn").forEach((button) => {
+      button.addEventListener("click", () => updateFilters(button.dataset.filterType, button.dataset.filterValue, button));
+    });
+
+    document.querySelectorAll(".view-tab").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".view-tab").forEach((tab) => tab.classList.remove("active"));
+        document.querySelectorAll(".view-section").forEach((section) => section.classList.add("hidden-view"));
+        button.classList.add("active");
+        document.querySelector(`[data-view="${button.dataset.viewTarget}"]`).classList.remove("hidden-view");
+      });
+    });
+
+    bookingCards.forEach((card) => {
+      card.addEventListener("click", () => selectBooking(card));
+    });
+
+    document.getElementById("action-checkin").addEventListener("click", () => setStatus("atendiendo"));
+    document.getElementById("action-confirm").addEventListener("click", () => setStatus("confirmada"));
+    document.getElementById("action-paid").addEventListener("click", markPaid);
+    document.getElementById("action-reschedule").addEventListener("click", reschedulePlus15);
+    document.getElementById("action-ai-summary").addEventListener("click", generateAiSummary);
+
+    document.querySelectorAll(".wait-action").forEach((button) => {
+      button.addEventListener("click", () => {
+        const row = button.closest(".wait-row");
+        detailTime.textContent = "Sugerencia lista de espera";
+        detailService.textContent = row.dataset.waitService;
+        detailCopy.textContent = `${row.dataset.waitClient} · preferencia: ${row.dataset.waitPreference}. IA sugiere ofrecer cupo si una reserva pendiente no confirma.`;
+        aiNote.textContent = "Sugerencia IA demo preparada. En produccion esto abre WhatsApp y registra trazabilidad del contacto.";
+      });
+    });
+
+    if (bookingCards[0]) selectBooking(bookingCards[0]);
+  </script>
+</body>
+</html>

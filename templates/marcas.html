@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registra tu Marca y Vigilancia INAPI | Quantus Chile</title>
+  <meta name="description" content="Registra tu marca ante el INAPI y vigila solicitudes similares con inteligencia de Quantus: búsqueda en vivo, clases NIZA y alertas preventivas.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.quantuschile.cl/marcas">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Quantus Chile SpA">
+  <meta property="og:title" content="Registra tu Marca y Vigilancia INAPI | Quantus Chile">
+  <meta property="og:description" content="Registra tu marca ante el INAPI y vigila solicitudes similares con inteligencia de Quantus.">
+  <meta property="og:url" content="https://www.quantuschile.cl/marcas">
+  <meta property="og:image" content="https://www.quantuschile.cl/static/quantus-logo-clean.png">
+  <meta property="og:locale" content="es_CL">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Registra tu Marca y Vigilancia INAPI | Quantus Chile">
+  <meta name="twitter:description" content="Registra tu marca ante el INAPI y vigila solicitudes similares con inteligencia de Quantus.">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --navy-bg: #06101f;
+      --card-bg: #0b172b;
+      --card-border: rgba(56, 189, 248, 0.22);
+      --cyan-bright: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    body {
+      background-color: var(--navy-bg);
+      color: var(--text-main);
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .dark-hero {
+      position: relative;
+      padding: 40px 0 70px;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.12), transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.08), transparent 45%),
+        linear-gradient(180deg, #06101f 0%, #081426 100%);
+    }
+
+    .dark-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.06) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8), transparent 85%);
+    }
+
+    .dark-hero-shell {
+      width: min(calc(100% - 48px), 1320px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(440px, 1fr);
+      gap: 40px;
+      align-items: start;
+    }
+
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow-pill::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #38bdf8;
+      box-shadow: 0 0 10px #38bdf8;
+    }
+
+    .hero-title {
+      font-size: clamp(34px, 3.8vw, 50px);
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      margin: 0 0 18px;
+    }
+
+    .hero-lead {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin: 0 0 24px;
+      max-width: 620px;
+      font-weight: 450;
+    }
+
+    .feature-pills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .feature-pill-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.16);
+      color: #e2e8f0;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+
+    .pill-icon-svg {
+      width: 16px;
+      height: 16px;
+      color: #38bdf8;
+      flex-shrink: 0;
+    }
+
+    .feature-pill-item span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cyan-banner-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #0ea5e9;
+      color: #03172e;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      box-shadow: 0 10px 25px rgba(14, 165, 233, 0.25);
+    }
+
+    .hero-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary-cyan {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 22px;
+      border-radius: 12px;
+      background: #38bdf8;
+      color: #03172e;
+      font-size: 13.5px;
+      font-weight: 900;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary-cyan:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(56, 189, 248, 0.5);
+    }
+
+    .btn-secondary-dark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 20px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #f1f5f9;
+      font-size: 13.5px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-secondary-dark:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    /* ─── TARJETA DEL BUSCADOR DE MARCAS (COLUMNA DERECHA) ─── */
+    .marca-search-box-card {
+      background: rgba(11, 23, 43, 0.94);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 20px;
+      padding: 26px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), 0 0 30px rgba(56, 189, 248, 0.12);
+      backdrop-filter: blur(12px);
+      position: relative;
+    }
+
+    .search-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .search-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #38bdf8;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(56, 189, 248, 0.12);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulse-dot 1.8s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .quota-badge {
+      font-size: 11px;
+      color: #f59e0b;
+      font-weight: 800;
+      background: rgba(245, 158, 11, 0.12);
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 158, 11, 0.28);
+    }
+
+    .search-card-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 6px;
+      line-height: 1.25;
+    }
+
+    .search-card-desc {
+      font-size: 13px;
+      color: #94a3b8;
+      margin: 0 0 18px;
+      line-height: 1.5;
+    }
+
+    .search-form-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-box-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      width: 18px;
+      height: 18px;
+      color: #38bdf8;
+      pointer-events: none;
+    }
+
+    .marca-main-input {
+      width: 100%;
+      background: #06101f;
+      border: 1.5px solid rgba(56, 189, 248, 0.35);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 13px 14px 13px 44px;
+      outline: none;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .marca-main-input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.22);
+      background: #08152a;
+    }
+
+    .marca-main-input::placeholder {
+      color: #64748b;
+      font-weight: 400;
+    }
+
+    .search-options-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+    }
+
+    .clase-select {
+      background: #06101f;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 12px;
+      color: #cbd5e1;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 11px 12px;
+      outline: none;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .clase-select:focus {
+      border-color: #38bdf8;
+    }
+
+    .btn-submit-search {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+      color: #03172e;
+      border: none;
+      border-radius: 12px;
+      padding: 11px 18px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
+    }
+
+    .btn-submit-search:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(14, 165, 233, 0.45);
+    }
+
+    .search-footer-note {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ─── BLOQUE DE RESULTADOS / RATE LIMIT ─── */
+    .results-dynamic-mount {
+      margin-top: 18px;
+    }
+
+    .loading-state-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .spinner-ring {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(56, 189, 248, 0.2);
+      border-top-color: #38bdf8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .rate-limit-card {
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      margin-top: 14px;
+    }
+
+    .rate-limit-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fbbf24;
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .rate-limit-desc {
+      font-size: 12.5px;
+      color: #e2e8f0;
+      line-height: 1.5;
+      margin: 0 0 12px;
+    }
+
+    .rate-limit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: #f59e0b;
+      color: #03172e;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .viability-card {
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      margin-top: 14px;
+    }
+
+    .viability-score-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .score-circle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      font-size: 18px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .score-circle.score-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 2px solid #10b981;
+    }
+
+    .score-circle.score-warning {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 2px solid #f59e0b;
+    }
+
+    .score-circle.score-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 2px solid #ef4444;
+    }
+
+    .score-label-small {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.85;
+      margin-top: -2px;
+    }
+
+    .viability-summary-text {
+      flex: 1;
+    }
+
+    .viability-summary-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 3px;
+    }
+
+    .viability-summary-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .metaphone-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-top: 6px;
+      font-family: monospace;
+    }
+
+    .inapi-mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      margin-top: 12px;
+    }
+
+    .inapi-mini-table th {
+      text-align: left;
+      padding: 6px 8px;
+      color: #64748b;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .inapi-mini-table td {
+      padding: 8px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      color: #cbd5e1;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .status-badge.registered { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+    .status-badge.pending { background: rgba(245, 158, 11, 0.2); color: #fde047; }
+    .status-badge.rejected { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+
+    .action-row-card {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Additional landing sections */
+    .ecosystem-section {
+      padding: 80px 0;
+      background: #040a14;
+      border-top: 1px solid rgba(56, 189, 248, 0.12);
+    }
+
+    .section-shell {
+      width: min(calc(100% - 48px), 1320px);
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 50px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0 0 14px;
+    }
+
+    .section-lead {
+      font-size: 15px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .mod-card {
+      background: #091526;
+      border: 1px solid rgba(56, 189, 248, 0.18);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+    }
+
+    .mod-card h3 {
+      font-size: 18px;
+      color: #ffffff;
+      margin: 12px 0 8px;
+    }
+
+    .mod-card p {
+      font-size: 13.5px;
+      color: #94a3b8;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .mod-link {
+      color: #38bdf8;
+      font-weight: 800;
+      font-size: 13px;
+      text-decoration: none;
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1024px) {
+      .dark-hero-shell {
+        grid-template-columns: 1fr;
+      }
+      .grid-3col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
+</head>
+<body>
+  {% include "partials/nav_header.html" %}
+
+  <main>
+    <!-- HERO SECTION CON BUSCADOR EN VIVO -->
+    <section class="dark-hero">
+      <div class="dark-hero-shell">
+        <!-- COLUMNA IZQUIERDA: PROPUESTA DE VALOR -->
+        <div>
+          <div class="eyebrow-pill">
+            Registro y Vigilancia de Marcas INAPI
+          </div>
+          <h1 class="hero-title">
+            Registra tu marca y mantén a la competencia lejos de tu nombre.
+          </h1>
+          <p class="hero-lead">
+            Quantus te ayuda en todo el proceso: buscamos disponibilidad en tiempo real ante el INAPI,
+            preparamos tu solicitud con las clases NIZA correctas, y vigilamos cada día si alguien intenta
+            registrar un signo igual o similar al tuyo para que puedas oponerte a tiempo.
+          </p>
+
+          <div class="feature-pills-grid">
+            <div class="feature-pill-item">
+              <svg class="pill-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>Búsqueda de marcas en vivo ante INAPI</span>
+            </div>
+            <div class="feature-pill-item">
+              <svg class="pill-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>Solicitud asistida de registro</span>
+            </div>
+            <div class="feature-pill-item">
+              <svg class="pill-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+              <span>Clasificación NIZA correcta</span>
+            </div>
+            <div class="feature-pill-item">
+              <svg class="pill-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              <span>Vigilancia preventiva 24/7 de solicitudes similares</span>
+            </div>
+          </div>
+
+          <div class="cyan-banner-pill">
+            <span>💡 Tu marca es tu activo más valioso. Quantus vigila, analiza y trabaja por ti.</span>
+          </div>
+
+          <div class="hero-actions-row">
+            <a href="/inapi/registro" class="btn-primary-cyan">
+              Registrar mi marca con Quantus →
+            </a>
+            <button type="button" onclick="focusSearchInput()" class="btn-secondary-dark">
+              🔍 Probar disponibilidad gratis
+            </button>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: BUSCADOR INAPI EN VIVO -->
+        <div id="buscador" class="marca-search-box-card">
+          <div class="search-card-header">
+            <div class="search-badge">
+              <span class="live-dot"></span> BÚSQUEDA OFICIAL INAPI
+            </div>
+            <span class="quota-badge">1 consulta gratuita al día</span>
+          </div>
+
+          <h2 class="search-card-title">Verifica si tu marca está libre</h2>
+          <p class="search-card-desc">Consulta disponibilidad en tiempo real ante la base de datos de INAPI con análisis fonético y detección de colisiones.</p>
+
+          <form id="marcaSearchForm" action="/search" method="GET" class="search-form-wrap" onsubmit="handleMarcaSearch(event)">
+            <div class="input-box-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+              <input
+                type="text"
+                name="q"
+                id="marcaSearchInput"
+                class="marca-main-input"
+                placeholder="Escribe el nombre de tu marca (ej: Biobelle, Quantus)..."
+                value="{{ search_query or '' }}"
+                required
+                autocomplete="off"
+              >
+            </div>
+
+            <div class="search-options-grid">
+              <select name="clase" id="marcaClaseSelect" class="clase-select">
+                <option value="" {% if not search_clase %}selected{% endif %}>Cualquier Clase NIZA (Búsqueda General)</option>
+                <option value="3" {% if search_clase == 3 %}selected{% endif %}>Clase 3 — Cosméticos, Perfumes y Belleza</option>
+                <option value="5" {% if search_clase == 5 %}selected{% endif %}>Clase 5 — Farmacéuticos y Suplementos</option>
+                <option value="9" {% if search_clase == 9 %}selected{% endif %}>Clase 9 — Software, Apps y Equipos</option>
+                <option value="16" {% if search_clase == 16 %}selected{% endif %}>Clase 16 — Papelería e Imprenta</option>
+                <option value="25" {% if search_clase == 25 %}selected{% endif %}>Clase 25 — Ropa, Calzado y Vestuario</option>
+                <option value="29" {% if search_clase == 29 %}selected{% endif %}>Clase 29 — Alimentos Procesados y Carnes</option>
+                <option value="30" {% if search_clase == 30 %}selected{% endif %}>Clase 30 — Café, Panadería y Pastelería</option>
+                <option value="32" {% if search_clase == 32 %}selected{% endif %}>Clase 32 — Cervezas, Bebidas y Aguas</option>
+                <option value="33" {% if search_clase == 33 %}selected{% endif %}>Clase 33 — Vinos, Licores y Destilados</option>
+                <option value="35" {% if search_clase == 35 %}selected{% endif %}>Clase 35 — Comercio, Publicidad y Tiendas</option>
+                <option value="36" {% if search_clase == 36 %}selected{% endif %}>Clase 36 — Finanzas e Inmobiliarias</option>
+                <option value="37" {% if search_clase == 37 %}selected{% endif %}>Clase 37 — Construcción y Reparaciones</option>
+                <option value="41" {% if search_clase == 41 %}selected{% endif %}>Clase 41 — Educación y Entretención</option>
+                <option value="42" {% if search_clase == 42 %}selected{% endif %}>Clase 42 — Desarrollo de Software y TI</option>
+                <option value="43" {% if search_clase == 43 %}selected{% endif %}>Clase 43 — Restaurantes, Cafés y Hoteles</option>
+                <option value="44" {% if search_clase == 44 %}selected{% endif %}>Clase 44 — Servicios Médicos y Estética</option>
+                <option value="45" {% if search_clase == 45 %}selected{% endif %}>Clase 45 — Servicios Legales y Seguridad</option>
+              </select>
+
+              <button type="submit" id="btnBuscarMarca" class="btn-submit-search">
+                <span>🔍 Consultar Gratis</span>
+              </button>
+            </div>
+          </form>
+
+          <div class="search-footer-note">
+            <span>🔒 Conexión oficial directa contra la base de datos pública del INAPI.</span>
+          </div>
+
+          <!-- CONTENEDOR DINÁMICO DE RESULTADOS -->
+          <div id="marcaResultsMount" class="results-dynamic-mount">
+            {% if search_rate_limited %}
+            <!-- TARJETA AMIGABLE DE LÍMITE DIARIO -->
+            <div class="rate-limit-card">
+              <div class="rate-limit-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Límite de Consulta Gratuita Alcanzado</span>
+              </div>
+              <p class="rate-limit-desc">
+                {{ search_error }}
+              </p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="/inapi/registro" class="rate-limit-btn" style="background: #38bdf8; color: #03172e;">
+                  Iniciar Registro Oficial →
+                </a>
+                <a href="mailto:contacto@quantuschile.cl?subject=Consulta%20Marca" class="rate-limit-btn" style="background: rgba(15,23,42,0.8); color: #fff; border: 1px solid rgba(148,163,184,0.3);">
+                  Contactar Abogado Quantus
+                </a>
+              </div>
+            </div>
+            {% elif search_error %}
+            <div class="rate-limit-card" style="background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.35);">
+              <div class="rate-limit-header" style="color: #f87171;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>Aviso de Búsqueda</span>
+              </div>
+              <p class="rate-limit-desc">{{ search_error }}</p>
+            </div>
+            {% elif search_query %}
+            <!-- TARJETA DE RESULTADOS INAPI -->
+            <div class="viability-card">
+              <div class="viability-score-header">
+                <div class="score-circle score-{{ search_viability_class }}">
+                  {{ search_score }}%
+                  <span class="score-label-small">Viable</span>
+                </div>
+                <div class="viability-summary-text">
+                  <h4 class="viability-summary-title">Análisis para "{{ search_query }}"</h4>
+                  <p class="viability-summary-desc">{{ search_viability_text }}</p>
+                  {% if search_metaphone %}
+                  <span class="metaphone-pill">🔊 Código Fonético: {{ search_metaphone }}</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              {% if search_marcas and search_marcas|length > 0 %}
+              <div style="font-size: 11.5px; color: #94a3b8; margin: 8px 0 4px;">
+                Marcas similares encontradas: <strong>{{ search_total }}</strong> (Coincidencias exactas: {{ search_exact_count }} | Activas: {{ search_vigentes_count }})
+              </div>
+              <div style="max-height: 200px; overflow-y: auto; border: 1px solid rgba(148,163,184,0.15); border-radius: 8px; margin-top: 6px;">
+                <table class="inapi-mini-table">
+                  <thead>
+                    <tr>
+                      <th>Denominación</th>
+                      <th>Clase</th>
+                      <th>Estado</th>
+                      <th>Titular</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for m in search_marcas[:15] %}
+                    <tr>
+                      <td style="font-weight: 700; color: #ffffff;">{{ m.denominacion }}</td>
+                      <td>Cl. {{ m.clase }}</td>
+                      <td>
+                        {% set est = (m.estado or '')|lower %}
+                        {% if 'registrada' in est or 'concedida' in est %}
+                        <span class="status-badge registered">Registrada</span>
+                        {% elif 'trámite' in est or 'publicada' in est or 'aceptada' in est %}
+                        <span class="status-badge pending">En Trámite</span>
+                        {% else %}
+                        <span class="status-badge rejected">{{ m.estado }}</span>
+                        {% endif %}
+                      </td>
+                      <td style="font-size: 11px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ m.titular }}">{{ m.titular }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <div style="padding: 14px; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); border-radius: 10px; margin-top: 10px; text-align: center;">
+                <span style="color: #34d399; font-weight: 800; font-size: 13px;">✅ ¡Sin marcas conflictivas idénticas en INAPI!</span>
+                <p style="font-size: 12px; color: #94a3b8; margin: 4px 0 0;">Esta marca presenta el máximo potencial para ser registrada sin oposiciones previas.</p>
+              </div>
+              {% endif %}
+
+              <div class="action-row-card">
+                <a href="/inapi/registro?q={{ search_query }}" class="btn-primary-cyan" style="width: 100%; justify-content: center;">
+                  Registrar "{{ search_query }}" ante INAPI con Quantus →
+                </a>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN DE VALOR: POR QUÉ VIGILAR TU MARCA -->
+    <section class="ecosystem-section" id="por-que">
+      <div class="section-shell">
+        <h2 class="section-title">¿Por qué vigilar tu marca?</h2>
+        <p class="section-lead">Una marca no registrada y vigilada es un riesgo para tu negocio: alguien puede registrar tu nombre y hacerte re-diseñar todo.</p>
+
+        <div class="grid-3col">
+          <div class="mod-card">
+            <div>
+              <h3>Derecho preferente</h3>
+              <p>El registro ante el INAPI te da el derecho legal de uso exclusivo del signo para tus productos y servicios.</p>
+            </div>
+            <a href="/inapi/registro" class="mod-link">Solicitar registro →</a>
+          </div>
+
+          <div class="mod-card">
+            <div>
+              <h3>Clases NIZA correctas</h3>
+              <p>Elegimos la clasificación correcta de las 45 clases para que tu marca proteja exactamente lo que vendes.</p>
+            </div>
+            <a href="/inapi/registro" class="mod-link">Empezar solicitud →</a>
+          </div>
+
+          <div class="mod-card">
+            <div>
+              <h3>Oposición preventiva</h3>
+              <p>Detectamos solicitudes similares a la tuya y te avisamos del plazo de oposición para defenderte a tiempo.</p>
+            </div>
+            <a href="#como" class="mod-link">Ver cómo funciona →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN CÓMO FUNCIONA -->
+    <section class="ecosystem-section" id="como">
+      <div class="section-shell">
+        <h2 class="section-title">Cómo funciona</h2>
+        <p class="section-lead">Tres pasos simples y nosotros hacemos el trabajo pesado.</p>
+
+        <div class="grid-3col">
+          <div class="mod-card">
+            <div>
+              <h3>1. Busca disponibilidad</h3>
+              <p>Consulta en vivo si tu marca está disponible ante el INAPI con 1 búsqueda gratuita diaria por IP.</p>
+            </div>
+            <a href="javascript:void(0)" onclick="focusSearchInput()" class="mod-link">Buscar ahora →</a>
+          </div>
+
+          <div class="mod-card">
+            <div>
+              <h3>2. Prepara y Registra</h3>
+              <p>Completas una solicitud sencilla; Quantus prepara la documentación, clases y el poder, y se encarga del ingreso.</p>
+            </div>
+            <a href="/inapi/registro" class="mod-link">Completar solicitud →</a>
+          </div>
+
+          <div class="mod-card">
+            <div>
+              <h3>3. Vigila activamente</h3>
+              <p>Una vez inscrita, vigilamos el boletín de marcas y te avisamos de cualquier solicitud igual o similar en el plazo de 30 días.</p>
+            </div>
+            <a href="mailto:contacto@quantuschile.cl?subject=Vigilancia%20de%20marca" class="mod-link">Consultar vigilancia →</a>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px; text-align: center;">
+          <a href="/inapi/registro" class="btn-primary-cyan">Comenzar mi registro de marca →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GUÍA DE MARCAS -->
+    <div class="section-shell" style="margin-top: 40px; margin-bottom: 40px;">
+      <div style="background: rgba(11,23,43,0.8); border: 1px solid rgba(56,189,248,0.2); border-radius: 18px; padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <strong style="color: #ffffff; font-size: 15px; display: block; margin-bottom: 4px;">📖 Guía de Registro de Marcas y Propiedad Industrial</strong>
+          <span style="color: #94a3b8; font-size: 13px;">Conoce los plazos fatales de oposición (30 días corridos Ley 19.039) y la clasificación NIZA adecuada.</span>
+        </div>
+        <div>
+          <a href="/blog/ventana-oposicion-30-dias-registro-marcas-inapi" style="color: #38bdf8; font-weight: 700; font-size: 13.5px; text-decoration: none;">Leer Guía Ventana de Oposición INAPI →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  {% include "partials/legal_footer.html" %}
+
+  <script>
+    function focusSearchInput() {
+      const input = document.getElementById('marcaSearchInput');
+      if (input) {
+        input.focus();
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    async function handleMarcaSearch(event) {
+      event.preventDefault();
+      const input = document.getElementById('marcaSearchInput');
+      const claseSelect = document.getElementById('marcaClaseSelect');
+      const mount = document.getElementById('marcaResultsMount');
+      const btn = document.getElementById('btnBuscarMarca');
+
+      const query = (input.value || '').trim();
+      const clase = claseSelect.value || '';
+
+      if (!query) {
+        input.focus();
+        return;
+      }
+
+      // Estado de carga
+      btn.disabled = true;
+      btn.innerHTML = '<span>Consultando...</span>';
+      mount.innerHTML = `
+        <div class="loading-state-card">
+          <div class="spinner-ring"></div>
+          <span>Consultando base de datos oficial del INAPI en tiempo real...</span>
+        </div>
+      `;
+
+      try {
+        const url = '/search?q=' + encodeURIComponent(query) + '&clase=' + encodeURIComponent(clase) + '&ajax=1';
+        const res = await fetch(url, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          }
+        });
+
+        const data = await res.json();
+
+        if (res.status === 429 || data.rate_limited) {
+          // Límite alcanzado
+          mount.innerHTML = `
+            <div class="rate-limit-card">
+              <div class="rate-limit-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Límite de Consulta Gratuita Alcanzado</span>
+              </div>
+              <p class="rate-limit-desc">
+                ${data.error || 'Has alcanzado el límite de 1 consulta gratuita cada 24 horas por IP.'}
+              </p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="/inapi/registro" class="rate-limit-btn" style="background: #38bdf8; color: #03172e;">
+                  Iniciar Registro Oficial →
+                </a>
+                <a href="mailto:contacto@quantuschile.cl?subject=Consulta%20Marca" class="rate-limit-btn" style="background: rgba(15,23,42,0.8); color: #fff; border: 1px solid rgba(148,163,184,0.3);">
+                  Contactar Abogado Quantus
+                </a>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        if (!res.ok || data.error) {
+          mount.innerHTML = `
+            <div class="rate-limit-card" style="background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.35);">
+              <div class="rate-limit-header" style="color: #f87171;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>Aviso de Búsqueda</span>
+              </div>
+              <p class="rate-limit-desc">${data.error || 'Ocurrió un error consultando el INAPI.'}</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Renderizar resultados exitosos
+        let tableRows = '';
+        if (data.search_marcas && data.search_marcas.length > 0) {
+          data.search_marcas.slice(0, 15).forEach(m => {
+            const est = (m.estado || '').toLowerCase();
+            let badgeClass = 'rejected';
+            let badgeText = m.estado || 'No especificado';
+            if (est.includes('registrada') || est.includes('concedida')) {
+              badgeClass = 'registered';
+              badgeText = 'Registrada';
+            } else if (est.includes('trámite') || est.includes('publicada') || est.includes('aceptada')) {
+              badgeClass = 'pending';
+              badgeText = 'En Trámite';
+            }
+            tableRows += `
+              <tr>
+                <td style="font-weight: 700; color: #ffffff;">${escapeHtml(m.denominacion || '')}</td>
+                <td>Cl. ${m.clase || '-'}</td>
+                <td><span class="status-badge ${badgeClass}">${badgeText}</span></td>
+                <td style="font-size: 11px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(m.titular || '')}">${escapeHtml(m.titular || '-')}</td>
+              </tr>
+            `;
+          });
+        }
+
+        let tableHtml = '';
+        if (tableRows) {
+          tableHtml = `
+            <div style="font-size: 11.5px; color: #94a3b8; margin: 8px 0 4px;">
+              Marcas similares en INAPI: <strong>${data.search_total}</strong> (Exactas: ${data.search_exact_count} | Activas: ${data.search_vigentes_count})
+            </div>
+            <div style="max-height: 200px; overflow-y: auto; border: 1px solid rgba(148,163,184,0.15); border-radius: 8px; margin-top: 6px;">
+              <table class="inapi-mini-table">
+                <thead>
+                  <tr>
+                    <th>Denominación</th>
+                    <th>Clase</th>
+                    <th>Estado</th>
+                    <th>Titular</th>
+                  </tr>
+                </thead>
+                <tbody>${tableRows}</tbody>
+              </table>
+            </div>
+          `;
+        } else {
+          tableHtml = `
+            <div style="padding: 14px; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); border-radius: 10px; margin-top: 10px; text-align: center;">
+              <span style="color: #34d399; font-weight: 800; font-size: 13px;">✅ ¡Sin marcas conflictivas en INAPI!</span>
+              <p style="font-size: 12px; color: #94a3b8; margin: 4px 0 0;">Esta denominación presenta alta viabilidad para ser registrada.</p>
+            </div>
+          `;
+        }
+
+        mount.innerHTML = `
+          <div class="viability-card">
+            <div class="viability-score-header">
+              <div class="score-circle score-${data.search_viability_class || 'info'}">
+                ${data.search_score || 0}%
+                <span class="score-label-small">Viable</span>
+              </div>
+              <div class="viability-summary-text">
+                <h4 class="viability-summary-title">Análisis para "${escapeHtml(data.search_query || query)}"</h4>
+                <p class="viability-summary-desc">${data.search_viability_text || ''}</p>
+                ${data.search_metaphone ? `<span class="metaphone-pill">🔊 Fonética: ${data.search_metaphone}</span>` : ''}
+              </div>
+            </div>
+
+            ${tableHtml}
+
+            <div class="action-row-card">
+              <a href="/inapi/registro?q=${encodeURIComponent(query)}" class="btn-primary-cyan" style="width: 100%; justify-content: center;">
+                Registrar "${escapeHtml(query)}" ante INAPI con Quantus →
+              </a>
+            </div>
+          </div>
+        `;
+      } catch (err) {
+        mount.innerHTML = `
+          <div class="rate-limit-card" style="background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.35);">
+            <div class="rate-limit-header" style="color: #f87171;">
+              <span>Error de Conexión</span>
+            </div>
+            <p class="rate-limit-desc">No fue posible consultar la base de datos en este instante. Intenta nuevamente en unos segundos.</p>
+          </div>
+        `;
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🔍 Consultar Gratis</span>';
+      }
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Centro Maestro — Auditoría de Cumplimiento Ley 21.719 | Quantus Private</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: #1e293b;
+      --accent-blue: #38bdf8;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-orange: #f59e0b;
+    }
+    body { background: var(--bg-dark); color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 0; margin: 0; -webkit-tap-highlight-color: transparent; }
+    .header-bar { background: rgba(15,23,42,0.95); border-bottom: 1px solid rgba(56,189,248,0.2); padding: 12px 20px; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 16px; }
+    
+    .company-card { background: var(--card-bg); border: 1px solid rgba(56,189,248,0.3); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 12px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+    .form-group input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 10px; font-size: 14px; box-sizing: border-box; }
+    
+    .progress-bar-container { background: #0f172a; border: 1px solid #334155; border-radius: 12px; padding: 16px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; sticky; top: 60px; z-index: 900; }
+    .progress-track { flex: 1; height: 14px; background: #334155; border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #38bdf8, #10b981); transition: width 0.3s ease; }
+    
+    .module-section { background: #0f172a; border: 1px solid #334155; border-radius: 14px; margin-bottom: 20px; overflow: hidden; }
+    .module-header { background: #1e293b; padding: 14px 20px; font-weight: 800; font-size: 15px; color: #38bdf8; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; }
+    .check-item { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: flex-start; gap: 14px; cursor: pointer; transition: background 0.15s; }
+    .check-item:last-child { border-bottom: none; }
+    .check-item:hover { background: rgba(56,189,248,0.05); }
+    .check-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: #10b981; margin-top: 2px; cursor: pointer; flex-shrink: 0; }
+    .item-content { flex: 1; }
+    .item-title { font-size: 14px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
+    .item-desc { font-size: 12px; color: #94a3b8; line-height: 1.4; }
+    
+    .badge-prio { font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .prio-alta { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); }
+    .prio-media { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.4); }
+    .prio-baja { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.4); }
+    
+    .action-bar { display: flex; gap: 12px; margin-top: 24px; padding-bottom: 40px; flex-wrap: wrap; }
+    .btn-action { flex: 1; min-width: 160px; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 13px; text-align: center; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+    .btn-save { background: #10b981; color: #0f172a; }
+    .btn-cert { background: linear-gradient(90deg, #f59e0b, #eab308); color: #0f172a; font-weight: 900; }
+    .btn-next { background: #38bdf8; color: #0f172a; }
+    .btn-delete { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); }
+
+    .custom-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(6, 16, 31, 0.88); backdrop-filter: blur(8px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; }
+    .custom-modal-card { background: #0f172a; border: 1px solid #38bdf8; padding: 24px; border-radius: 16px; max-width: 650px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.8); max-height: 90vh; overflow-y: auto; }
+
+    /* Tabs de Cumplimiento Ley 21.719 */
+    .nav-tabs-compliance { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 10px; overflow-x: auto; }
+    .tab-btn { background: #0f172a; border: 1px solid #334155; color: #94a3b8; padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .tab-btn:hover { background: #1e293b; color: #fff; border-color: #38bdf8; }
+    .tab-btn.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35); }
+
+    /* Tabla ARCOP & Consent Hub */
+    .table-container { background: #0f172a; border: 1px solid #334155; border-radius: 14px; overflow: hidden; margin-bottom: 24px; }
+    .compliance-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    .compliance-table th { background: #1e293b; color: #38bdf8; padding: 12px 16px; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #334155; }
+    .compliance-table td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; }
+    .compliance-table tr:hover { background: rgba(56,189,248,0.04); }
+
+    .badge-status { padding: 4px 10px; border-radius: 999px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 4px; }
+    .status-urgente { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid #ef4444; }
+    .status-advertencia { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid #f59e0b; }
+    .status-normal { background: rgba(16,185,129,0.2); color: #6ee7b7; border: 1px solid #10b981; }
+    .status-resuelta { background: rgba(148,163,184,0.15); color: #94a3b8; border: 1px solid #475569; }
+
+    .pii-toggle-btn { background: #1e293b; border: 1px solid rgba(56,189,248,0.4); color: #38bdf8; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+    .pii-toggle-btn:hover { background: #38bdf8; color: #0f172a; }
+  </style>
+
+  <style>
+    /* Estilo Estándar Premium Quantus - Navegación y Botones */
+    .quantus-nav-bar {
+      background: rgba(15, 23, 42, 0.95) !important;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.25) !important;
+      padding: 12px 24px !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 99999 !important;
+      backdrop-filter: blur(12px) !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+    }
+    .quantus-nav-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      background: #1e293b !important;
+      color: #38bdf8 !important;
+      border: 1px solid rgba(56, 189, 248, 0.4) !important;
+      padding: 8px 14px !important;
+      border-radius: 10px !important;
+      font-weight: 800 !important;
+      font-size: 11px !important;
+      text-decoration: none !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
+      transition: all 0.2s ease !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+      cursor: pointer !important;
+    }
+    .quantus-nav-btn:hover {
+      background: #38bdf8 !important;
+      color: #0f172a !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4) !important;
+    }
+    .quantus-nav-btn-pdf {
+      background: linear-gradient(90deg, #ef4444, #dc2626) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255,255,255,0.3) !important;
+    }
+    .quantus-nav-btn-pdf:hover {
+      background: #f87171 !important;
+      color: #ffffff !important;
+    }
+  </style>
+
+</head>
+<body>
+
+    {% include "partials/nav_header.html" %}
+
+  <main class="container">
+
+    <div class="company-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h2 style="margin:0; font-size:18px; color:#fff;">📋 Ficha de Auditoría de Cumplimiento Ley 21.719 & Conexas (24 Controles)</h2>
+        <span id="correlativo-display" style="background:#38bdf8; color:#0f172a; padding:4px 12px; border-radius:8px; font-weight:900; font-size:13px;">CORRELATIVO #1</span>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>N° Registro Correlativo Interno</label>
+          <input type="text" id="audit_correlativo" readonly style="background:#1e293b; color:#38bdf8; font-weight:800;">
+        </div>
+        <div class="form-group">
+          <label>Nombre de la Empresa / Razón Social *</label>
+          <input type="text" id="emp_nombre" placeholder="Ej: Clínica Santa María / Colegio Saint George" oninput="autoGuardarDatos()">
+        </div>
+        <div class="form-group">
+          <label>RUT Empresa *</label>
+          <input type="text" id="emp_rut" placeholder="Ej: 78.478.612-9" oninput="autoGuardarDatos()">
+        </div>
+        <div class="form-group">
+          <label>Nombre del Responsable / DPO *</label>
+          <input type="text" id="emp_responsable" placeholder="Ej: Carlos Silva (Gerente Legal)" oninput="autoGuardarDatos()">
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico *</label>
+          <input type="email" id="emp_email" placeholder="ejemplo@empresa.cl" oninput="autoGuardarDatos()">
+        </div>
+        <div class="form-group">
+          <label>Teléfono / WhatsApp *</label>
+          <input type="tel" id="emp_phone" placeholder="+56 9 1234 5678" oninput="autoGuardarDatos()">
+        </div>
+        
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Sector / Tipo de Institución Obligada por Ley N° 21.719 *</label>
+          <select id="emp_rubro" onchange="autoGuardarDatos()" style="width:100%; padding:12px; background:#0f172a; border:1px solid #38bdf8; color:#38bdf8; font-weight:800; border-radius:10px; font-size:13px;">
+            <option value="">-- Selecciona el Rubro o Tipo de Institución Cliente --</option>
+            
+            <optgroup label="🚨 GRUPO 1: APLICACIÓN EXIGIBLE Y MULTAS DESDE 1 DIC 2026 (Datos Sensibles, Niños o Ventas > $960M)">
+              <option value="Colegios Particulares y Subvencionados (Rige 1 Dic 2026 - Datos Menores Art. 34°)">Colegios Particulares y Subvencionados (Rige 1 Dic 2026 - Datos Menores Art. 34°)</option>
+              <option value="Jardines Infantiles y Salas Cuna (Rige 1 Dic 2026 - Datos Menores Art. 34°)">Jardines Infantiles y Salas Cuna (Rige 1 Dic 2026 - Datos Menores Art. 34°)</option>
+              <option value="Clínicas, Centros Médicos y Dentales (Rige 1 Dic 2026 - Datos Salud Art. 32°)">Clínicas, Centros Médicos y Dentales (Rige 1 Dic 2026 - Datos Salud Art. 32°)</option>
+              <option value="Bancos, Financieras, AFPs e Isapres (Rige 1 Dic 2026 - Grandes Corporaciones)">Bancos, Financieras, AFPs e Isapres (Rige 1 Dic 2026 - Grandes Corporaciones)</option>
+              <option value="Grandes Cadenas de Retail y Supermercados (Rige 1 Dic 2026 - Facturación > $960M)">Grandes Cadenas de Retail y Supermercados (Rige 1 Dic 2026 - Facturación > $960M)</option>
+              <option value="Universidades y Grandes Institutos (Rige 1 Dic 2026 - Matrículas Masivas)">Universidades y Grandes Institutos (Rige 1 Dic 2026 - Matrículas Masivas)</option>
+              <option value="Inmobiliarias Grandes y Telecomunicaciones (Rige 1 Dic 2026)">Inmobiliarias Grandes y Telecomunicaciones (Rige 1 Dic 2026)</option>
+              <option value="Organismos Públicos y Municipalidades (Rige 1 Dic 2026)">Organismos Públicos y Municipalidades (Rige 1 Dic 2026)</option>
+            </optgroup>
+
+            <optgroup label="🛡️ GRUPO 2: PERÍODO DE GRACIA PEDAGÓGICO DE 1 AÑO (Solo PyMEs de Datos Generales de Adultos)">
+              <option value="Tiendas E-Commerce PyME y Emprendimientos (Año Gracia Pedagógico)">Tiendas E-Commerce PyME y Emprendimientos (Año Gracia Pedagógico)</option>
+              <option value="Corredoras de Propiedades PyME y Condominios (Año Gracia Pedagógico)">Corredoras de Propiedades PyME y Condominios (Año Gracia Pedagógico)</option>
+              <option value="Estudios de Abogados y Contadores PyME (Año Gracia Pedagógico)">Estudios de Abogados y Contadores PyME (Año Gracia Pedagógico)</option>
+              <option value="Agencias Marketing, OTECs y Servicios PyME (Año Gracia Pedagógico)">Agencias Marketing, OTECs y Servicios PyME (Año Gracia Pedagógico)</option>
+              <option value="Gimnasios y Automotoras PyME (Año Gracia Pedagógico)">Gimnasios y Automotoras PyME (Año Gracia Pedagógico)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Dirección Legal Completa *</label>
+          <input type="text" id="emp_direccion" placeholder="Ej: Av. Andrés Bello 2457, Providencia, Santiago" oninput="autoGuardarDatos()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs de Navegación Maestro -->
+    <div class="nav-tabs-compliance">
+      <button type="button" class="tab-btn active" id="tab-btn-audit" onclick="switchComplianceTab('audit')">📋 24 Controles de Auditoría</button>
+      <button type="button" class="tab-btn" id="tab-btn-arcop" onclick="switchComplianceTab('arcop')">🛡️ Bandeja ARCOP en Vivo & Plazos (10 Días)</button>
+      <button type="button" class="tab-btn" id="tab-btn-consents" onclick="switchComplianceTab('consents')">📝 Consent Hub & Trazabilidad</button>
+      <button type="button" class="tab-btn" id="tab-btn-rat" onclick="switchComplianceTab('rat')">📊 RAT Oficial & DPIA (IA)</button>
+    </div>
+
+    <!-- Panel 1: Checklist de Auditoría -->
+    <div id="panel-audit">
+      <div class="progress-bar-container">
+        <div>
+          <div style="font-size:11px; color:#94a3b8; font-weight:800; text-transform:uppercase;">Nivel de Cumplimiento Registrado</div>
+          <div id="porcentaje-num" style="font-size:24px; font-weight:900; color:#10b981;">0% COMPLETADO</div>
+        </div>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div id="checklist-modules-container"></div>
+
+      <div class="action-bar" style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:24px; padding-bottom:40px; flex-wrap:wrap;">
+        <div style="display:flex; gap:10px; flex:1; flex-wrap:wrap;">
+          <button type="button" class="btn-action btn-save" onclick="guardarAuditoriaActual()">💾 Guardar Auditoría</button>
+          <button type="button" class="btn-action btn-cert" onclick="descargarCertificadoOficial()">🏆 Emitir Certificado PDF</button>
+          <button type="button" class="btn-action btn-next" onclick="siguienteCorrelativo()">➡️ Crear Siguiente (#+1)</button>
+        </div>
+        <div style="margin-left:auto;">
+          <button type="button" class="btn-action btn-delete" onclick="borrarAuditoriaActual()" style="background:rgba(239,68,68,0.15); border:1px solid #ef4444; color:#fca5a5;">🗑️ Borrar Ficha</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Bandeja de Solicitudes ARCOP -->
+    <div id="panel-arcop" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h3 style="margin:0; color:#fff; font-size:16px;">🛡️ Solicitudes de Titulares ARCOP (Ley 21.719)</h3>
+          <p style="margin:4px 0 0; color:#94a3b8; font-size:12px;">Plazo máximo de respuesta legal obligatorio: <strong style="color:#38bdf8;">10 días hábiles</strong>.</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button type="button" class="pii-toggle-btn" id="btn-toggle-pii" onclick="togglePIIMask()">🔒 Modo Privacidad: PII Oculto</button>
+          <button type="button" class="tab-btn" style="padding:8px 14px;" onclick="cargarSolicitudesArcop()">🔄 Actualizar</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="compliance-table" id="table-arcop">
+          <thead>
+            <tr>
+              <th>Folio</th>
+              <th>Titular & RUT</th>
+              <th>Derecho Ejercido</th>
+              <th>Ingreso</th>
+              <th>Plazo Restante</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="arcop-tbody">
+            <tr><td colspan="7" style="text-align:center; padding:24px;">Cargando solicitudes...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Panel 3: Consent Hub -->
+    <div id="panel-consents" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h3 style="margin:0; color:#fff; font-size:16px;">📝 Consent Hub & Trazabilidad de Consentimientos</h3>
+          <p style="margin:4px 0 0; color:#94a3b8; font-size:12px;">Registro auditable de autorizaciones expresas (Art. 13° Ley 21.719) con sello Hash SHA-256.</p>
+        </div>
+        <button type="button" class="tab-btn" style="padding:8px 14px;" onclick="cargarConsentHub()">🔄 Actualizar</button>
+      </div>
+
+      <div class="table-container">
+        <table class="compliance-table" id="table-consents">
+          <thead>
+            <tr>
+              <th>ID Consentimiento</th>
+              <th>Titular / Servicio</th>
+              <th>Canal</th>
+              <th>Base Legal</th>
+              <th>Hash SHA-256</th>
+              <th>Estado</th>
+              <th>Fecha Registro</th>
+            </tr>
+          </thead>
+          <tbody id="consents-tbody">
+            <tr><td colspan="7" style="text-align:center; padding:24px;">Cargando consentimientos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Panel 4: RAT Oficial & DPIA (IA) -->
+    <div id="panel-rat" style="display:none;">
+      <!-- Sección RAT -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h3 style="margin:0; color:#fff; font-size:16px;">📊 Registro de Actividades de Tratamiento (RAT Oficial)</h3>
+          <p style="margin:4px 0 0; color:#94a3b8; font-size:12px;">Inventario oficial exigible ante la Agencia de Protección de Datos Personales.</p>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="tab-btn" onclick="abrirModalNuevoRAT()" style="background:#10b981; color:#0f172a; border:none;">➕ Agregar Tratamiento</button>
+          <button type="button" class="tab-btn" onclick="exportarRATCSV()">📥 Exportar CSV / Excel</button>
+          <button type="button" class="tab-btn" onclick="imprimirRATOficial()">🖨️ Imprimir RAT</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="compliance-table" id="table-rat">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Actividad & Finalidad</th>
+              <th>Base Legal (Art. 13°)</th>
+              <th>Titulares & Datos</th>
+              <th>Destinatarios</th>
+              <th>Retención</th>
+              <th>Seguridad</th>
+            </tr>
+          </thead>
+          <tbody id="rat-tbody">
+            <tr><td colspan="7" style="text-align:center; padding:24px;">Cargando RAT oficial...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sección DPIA con IA -->
+      <div style="background:#1e293b; border:1px solid rgba(56,189,248,0.3); border-radius:16px; padding:24px; margin-top:28px;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px;">
+          <span style="font-size:20px;">🤖</span>
+          <div>
+            <h3 style="margin:0; color:#fff; font-size:16px;">Asistente IA para Evaluaciones de Impacto (DPIA / EIPD)</h3>
+            <p style="margin:2px 0 0; color:#94a3b8; font-size:12px;">Evalúa tratamientos de alto riesgo (IA, biometría, salud, menores, scoring) bajo la Ley 21.719.</p>
+          </div>
+        </div>
+
+        <form id="dpia-form" onsubmit="generarEvaluacionDPIA(event)">
+          <div class="form-grid" style="margin-bottom:16px;">
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label>Nombre del Proyecto / Software / Tratamiento *</label>
+              <input type="text" id="dpia-proyecto" placeholder="Ej: Implementación de Cámaras con Reconocimiento Facial / Motor IA Scoring" required>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label>Finalidad y Justificación del Tratamiento *</label>
+              <input type="text" id="dpia-finalidad" placeholder="Ej: Control de acceso seguro a bodegas y prevención de pérdidas" required>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; display:block; margin-bottom:8px;">Categorías de Datos Tratados:</label>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:8px; font-size:12px; color:#cbd5e1;">
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" name="dpia_data" value="generales" checked> Datos Generales (RUT, Email)</label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" name="dpia_data" value="sensibles"> 🏥 Datos de Salud / Médicos</label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" name="dpia_data" value="biometricos"> 👤 Datos Biométricos / Faciales</label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" name="dpia_data" value="menores"> 👶 Niños, Niñas o Adolescentes</label>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; display:block; margin-bottom:8px;">Tecnologías y Métodos Aplicados:</label>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:8px; font-size:12px; color:#cbd5e1;">
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" name="dpia_tech" value="ia_scoring"> 🤖 Algoritmos IA / Perfilamiento</label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" name="dpia_tech" value="camaras_faciales"> 🎥 Videovigilancia Masiva</label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;"><input type="checkbox" name="dpia_tech" value="cloud_externo"> ☁️ Servidores Cloud en el Extranjero</label>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-dpia-submit" class="btn-action" style="background:linear-gradient(90deg, #38bdf8, #0284c7); color:#090d16; font-weight:900; width:100%;">
+            ⚡ Evaluar Riesgo y Generar Dictamen DPIA con IA
+          </button>
+        </form>
+
+        <!-- Resultado de Evaluación DPIA -->
+        <div id="dpia-result-box" style="display:none; background:#0f172a; border:1px solid #38bdf8; border-radius:12px; padding:20px; margin-top:20px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <h4 style="margin:0; color:#fff; font-size:15px;" id="dpia-res-title">Dictamen de Evaluación de Impacto</h4>
+            <span class="badge-status" id="dpia-res-badge" style="font-size:12px; padding:6px 14px;">NIVEL DE RIESGO</span>
+          </div>
+
+          <p style="font-size:13px; color:#cbd5e1; line-height:1.5; margin-bottom:14px;" id="dpia-res-conclusion"></p>
+
+          <div style="background:#1e293b; padding:12px; border-radius:8px; margin-bottom:14px;">
+            <div style="font-size:11px; font-weight:800; color:#f59e0b; text-transform:uppercase; margin-bottom:4px;">⚖️ Exigencia de Consulta Previa a la Agencia:</div>
+            <div style="font-size:12px; color:#fff;" id="dpia-res-consulta"></div>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <div style="font-size:11px; font-weight:800; color:#38bdf8; text-transform:uppercase; margin-bottom:6px;">🛡️ Medidas Mitigadoras Obligatorias:</div>
+            <ul style="margin:0; padding-left:20px; font-size:12px; color:#94a3b8; line-height:1.6;" id="dpia-res-mitigaciones"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="modal-item-guide" class="custom-modal-overlay">
+    <div class="custom-modal-card">
+      <button type="button" onclick="cerrarModalGuia()" style="float:right; background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer;">&times;</button>
+      <span style="background:rgba(56,189,248,0.2); color:#38bdf8; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:800;">GUÍA DE EJECUCIÓN Y REMEDIACIÓN TÉCNICA</span>
+      <h3 id="modal-guide-title" style="font-size:18px; color:#fff; margin-top:10px; margin-bottom:12px;"></h3>
+      
+      <div style="background:#1e293b; border-left:4px solid #38bdf8; padding:14px; border-radius:8px; margin-bottom:16px;">
+        <h4 style="margin:0 0 6px 0; color:#38bdf8; font-size:13px; text-transform:uppercase;">⚖️ Requisito Exigido por Ley N° 21.719 & Conexas:</h4>
+        <p id="modal-guide-req" style="margin:0; font-size:13px; color:#cbd5e1; line-height:1.5;"></p>
+      </div>
+
+      <div id="interactive-rat-section" style="display:none; margin-bottom:16px; background:#1e293b; border:1px solid #38bdf8; border-radius:12px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h4 style="margin:0; color:#38bdf8; font-size:14px;">📝 Generador Directo RAT (Opción Fácil)</h4>
+          <a href="/static/Plantilla_Oficial_RAT_Ley21719_Quantus.xlsx" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Excel RAT Oficial (.xlsx)</a>
+        </div>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+          <input type="text" id="rat_nombre_lista" placeholder="Nombre de la Lista (Ej: Excel Clientes)" style="padding:8px; background:#0f172a; border:1px solid #475569; color:#fff; border-radius:6px; font-size:12px;">
+          <select id="rat_soporte" style="padding:8px; background:#0f172a; border:1px solid #475569; color:#fff; border-radius:6px; font-size:12px;">
+            <option value="Digital (Excel / Software / Web)">Digital (Excel / Software / Web)</option>
+            <option value="Físico (Papel en Archivador)">Físico (Papel en Archivador)</option>
+          </select>
+          <input type="text" id="rat_datos" placeholder="Datos que guarda (Ej: RUT, Salud, Nombres)" style="padding:8px; background:#0f172a; border:1px solid #475569; color:#fff; border-radius:6px; font-size:12px;">
+          <input type="text" id="rat_finalidad" placeholder="Para qué los usan (Ej: Fichas clínicas)" style="padding:8px; background:#0f172a; border:1px solid #475569; color:#fff; border-radius:6px; font-size:12px;">
+        </div>
+
+        <button type="button" onclick="agregarFilaRAT()" style="width:100%; padding:8px; background:#38bdf8; color:#0f172a; font-weight:800; border:none; border-radius:6px; cursor:pointer; font-size:12px;">+ Agregar Registro al RAT de esta Empresa</button>
+        
+        <div id="rat-records-list" style="margin-top:12px; font-size:11px; color:#cbd5e1; max-height:120px; overflow-y:auto;"></div>
+      </div>
+
+      <div style="background:#1e293b; border-left:4px solid #10b981; padding:14px; border-radius:8px;">
+        <h4 style="margin:0 0 6px 0; color:#10b981; font-size:13px; text-transform:uppercase;">🛠️ Trabajo Técnico / Pasos para Auditar en la Empresa:</h4>
+        <div id="modal-guide-work" style="font-size:13px; color:#cbd5e1; line-height:1.5;"></div>
+      </div>
+
+      <button type="button" onclick="cerrarModalGuia()" style="width:100%; margin-top:20px; padding:12px; background:#38bdf8; color:#0f172a; font-weight:900; border:none; border-radius:10px; cursor:pointer;">Entendido — Volver al Checklist</button>
+    </div>
+  </div>
+
+  <script>
+    const checklistData = [
+      {
+        modulo: "MÓDULO 1: GOBERNANZA Y REGISTRO DE TRATAMIENTO (RAT)",
+        items: [
+          { id: "c1", prio: "alta", title: "1. Registro de Actividades de Tratamiento (RAT)", desc: "Mapeo documentado de todas las bases de datos de clientes, empleados y proveedores." },
+          { id: "c2", prio: "alta", title: "2. Designación de Responsable de Datos / DPO", desc: "Nombramiento formal del encargado interno o externo de protección de datos." },
+          { id: "c3", prio: "media", title: "3. Evaluación de Impacto en Protección de Datos (PIA)", desc: "Matriz de riesgos para nuevos proyectos o sistemas que manejen datos masivos." }
+        ]
+      },
+      {
+        modulo: "MÓDULO 2: CONSENTIMIENTO Y PORTAL WEB",
+        items: [
+          { id: "c4", prio: "alta", title: "4. Aceptación Expresa sin Pre-marcado", desc: "Casillas de verificación de política de privacidad desmarcadas por defecto en todos los formularios." },
+          { id: "c5", prio: "alta", title: "5. Respaldo Criptográfico de Permisos (SHA-256)", desc: "Guardado de IP, fecha, hora y versión exacta de términos aceptados por cada cliente." },
+          { id: "c6", prio: "alta", title: "6. Portal ARCO (SLA 10 Días Hábiles - Art. 12°)", desc: "Formulario web exclusivo para tramitar solicitudes de borrado o acceso en máximo 10 días hábiles." }
+        ]
+      },
+      {
+        modulo: "MÓDULO 3: DOCUMENTACIÓN FÍSICA Y ARCHIVADORES EN PAPEL",
+        items: [
+          { id: "c7", prio: "alta", title: "7. Inventario y Etiquetado QR de Archivadores Físicos", desc: "Identificación de carpetas físicas en papel con código QR y fecha de expiración." },
+          { id: "c8", prio: "media", title: "8. Protocolo de Destrucción Física Registrada", desc: "Trituración certificada de documentos en papel cumplidos los plazos legales (6 años SII)." },
+          { id: "c9", prio: "baja", title: "9. Control de Acceso Físico a Bodegas y Ficheros", desc: "Llaves o tarjeta de acceso restringido a salas de archivo en papel." }
+        ]
+      },
+      {
+        modulo: "MÓDULO 4: CIBERSEGURIDAD Y CONEXIDAD NORMATIVA",
+        items: [
+          { id: "c10", prio: "alta", title: "10. Cifrado de Datos en Tránsito y Reposo (HTTPS/AES-256)", desc: "Protección de bases de datos y comunicaciones (Cumplimiento Ley 21.663 de Ciberseguridad)." },
+          { id: "c11", prio: "alta", title: "11. Protocolo de Notificación de Brechas (3 horas)", desc: "Plan de respuesta ante hackeo o filtración para avisar a la ANCI y a la Agencia de Datos." },
+          { id: "c12", prio: "media", title: "12. Control de Accesos por Roles (RBAC)", desc: "Permisos diferenciados por empleado para evitar filtraciones internas (Ley 21.459)." }
+        ]
+      },
+      {
+        modulo: "MÓDULO 5: PURGA Y RETENCIÓN DE DATOS (CICLO DE VIDA)",
+        items: [
+          { id: "c13", prio: "alta", title: "13. Motor de Purga Inmediata tras Cancelación", desc: "Desactivación instantánea de listas de WhatsApp y marketing al pedir la baja el cliente." },
+          { id: "c14", prio: "alta", title: "14. Bóveda de Bloqueo Legal Exclusivo (6 años SII)", desc: "Aislamiento de facturas y contratos sin uso comercial durante el plazo de prescripción." },
+          { id: "c15", prio: "media", title: "15. Destrucción Definitiva Automática a los 6 Años", desc: "Borrado físico e irreversible de respaldos una vez vencido el plazo máximo legal." }
+        ]
+      },
+      {
+        modulo: "MÓDULO 6: DATOS SENSIBLES, SALUD Y MENORES DE EDAD",
+        items: [
+          { id: "c16", prio: "alta", title: "16. Consentimiento Escrito para Datos Sensibles (Art. 2° lit. g)", desc: "Consentimiento formal para fichas clínicas, datos de salud, huellas biométricas o aflicción religiosa." },
+          { id: "c17", prio: "alta", title: "17. Protección de Datos de Niños, Niñas y Adolescentes (Art. 14°)", desc: "Tratamiento sujeto al interés superior y autonomía progresiva. Consentimiento obligatorio del representante legal para menores de 14 años." },
+          { id: "c18", prio: "alta", title: "18. Declaración de Transferencia Internacional de Nubes (Art. 26°)", desc: "Registro formal si la empresa usa servidores extranjeros como Google, AWS, Mailchimp o WhatsApp." }
+        ]
+      },
+      {
+        modulo: "MÓDULO 7: PORTABILIDAD Y DECISIONES CON IA (ARCOP+)",
+        items: [
+          { id: "c19", prio: "alta", title: "19. Derecho a la Portabilidad de Datos (Art. 7° bis)", desc: "Mecanismo para exportar los datos del cliente en formato estándar estructurado (JSON/CSV)." },
+          { id: "c20", prio: "alta", title: "20. Oposición a Decisiones Automatizadas e IA (Art. 15°)", desc: "Derecho a solicitar intervención humana si un algoritmo o IA aprueba/rechaza un crédito o evalúa a una persona." },
+          { id: "c21", prio: "media", title: "21. Transparencia de Perfilamiento Digital (Art. 14°)", desc: "Deber de informar si se rastrea la navegación para publicidad personalizada." },
+          { id: "c22", prio: "baja", title: "22. Registro de Período de Gracia PyME (Art. Transitorio)", desc: "Identificación de PyMEs elegibles para el año de acompañamiento sin multas de la Agencia (diciembre 2026 a 2027)." }
+        ]
+      },
+      {
+        modulo: "MÓDULO 8: RECURSOS HUMANOS Y VIDEOVIGILANCIA (NUEVO)",
+        items: [
+          { id: "c23", prio: "alta", title: "23. Protección de Datos de Trabajadores y Anexo RRHH", desc: "Cláusula de privacidad laboral en liquidaciones, licencias médicas y contratos de trabajo." },
+          { id: "c24", prio: "alta", title: "24. Carteles y Protocolo de Cuestionamiento a Cámaras", desc: "Carteles físicos de videovigilancia obligatorios y prohibición de usar grabaciones para persecución laboral." }
+        ]
+      }
+    ];
+
+        const guiasTecnicas = {
+      c1: {
+        title: "1. Registro de Actividades de Tratamiento (RAT)",
+        req: "La Ley 21.719 exige tener un mapa o lista de todas las partes donde la empresa guarda nombres, RUTs o teléfonos.",
+        toolHtml: `<div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8;">
+          <span style="font-size:12px; color:#38bdf8; font-weight:800;">🛠️ Herramienta Rápida:</span>
+          <a href="/static/Plantilla_Oficial_RAT_Ley21719_Quantus.xlsx" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Excel RAT Oficial (.xlsx)</a>
+        </div>`,
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Imagina que tienes una libreta secreta con los números de todos tus amigos. La ley te pide anotarle una etiqueta que diga: <em>'Tengo esta lista para invitarlos a mi cumpleaños y solo la guardo yo'</em>.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Pregúntale a la secretaria o vendedor: <em>'¿Dónde guardan la lista de clientes?'</em> (Excels, cuadernos, archivadores en la bodega).<br>
+        2. Descarga el Excel verde de arriba o usa el formulario rápido y anota cada lista encontrada.`
+      },
+      c2: {
+        title: "2. Designación de Responsable de Datos / DPO",
+        req: "Elegir por escrito a un encargado con nombre y apellido que responda si un cliente reclama o la fiscalía pregunta.",
+        toolHtml: `<div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8;">
+          <span style="font-size:12px; color:#38bdf8; font-weight:800;">🛠️ Herramienta Rápida:</span>
+          <a href="/static/Plantilla_Carta_Nombramiento_DPO_Ley21719.txt" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Carta de Nombramiento DPO</a>
+        </div>`,
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como nombrar al 'Capitán del Equipo'. Si alguien rompe una ventana con la pelota, la ley quiere saber quién es el Capitán que va a dar la cara y ordenar las cosas.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Descarga la Carta Modelo de arriba, escribe el nombre del Gerente o Encargado y hazlo firmar.<br>
+        2. Pon el correo <code>privacidad@empresa.cl</code> abajo en su página web.`
+      },
+      c3: {
+        title: "3. Evaluación de Impacto en Protección de Datos (PIA)",
+        req: "Un estudio de peligros obligatorios antes de usar programas nuevos o manejar datos delicados.",
+        toolHtml: `<div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8;">
+          <span style="font-size:12px; color:#38bdf8; font-weight:800;">🛠️ Herramienta Rápida:</span>
+          <a href="/static/Plantilla_Matriz_PIA_Evaluacion_Riesgos_Ley21719.xlsx" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Matriz PIA en Excel (.xlsx) en Excel</a>
+        </div>`,
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como revisar si la bicicleta tiene frenos antes de tirarte por una bajada. Te preguntas: <em>'¿Qué pasa si me caigo y cómo me protejo con casco?'</em>.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Descarga la Matriz de arriba y revisa qué pasaría si se pierde un computador con datos.<br>
+        2. Ponle clave difícil de 10 números al computador para protegerlo.`
+      },
+      c4: {
+        title: "4. Aceptación Expresa sin Pre-marcado",
+        req: "Las casillas de 'Acepto los términos' NUNCA pueden nacer con el tick azul marcado automáticamente.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Imagina que vas a comprar un helado de vainilla y el vendedor ya te puso chispas de chocolate sin preguntarte y te las cobra. La ley dice que tú debes elegir poner la chispa con tu propia mano.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Entra a su página web. Si la casilla de términos ya viene con el tick puesto, dile al informático que borre la palabra <em>checked</em> del código HTML para que nazca vacía.`
+      },
+      c5: {
+        title: "5. Respaldo Criptográfico de Permisos (SHA-256)",
+        req: "Guardar un comprobante digital inalterable de la fecha e IP exacta en que cada cliente dio permiso.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como sacarle una foto con fecha y hora al recibo de una compra para que nadie pueda mentir diciendo que nunca pagó.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Conecta el script Quantus al botón de envío web. Cada clic guardará una foto digital con fecha, hora e IP inalterables.`
+      },
+      c6: {
+        title: "6. Portal ARCO (SLA 10 Días Hábiles - Art. 12°)",
+        req: "Tener un botón web obligatorio para responder si alguien pide borrar sus datos en máximo 10 días hábiles.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como un buzón de reclamos rápido. Si un cliente dice <em>'Borren mi número de su lista'</em>, la empresa tiene 10 días para decirle <em>'Listo, ya te borramos'</em>.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Pega la línea de código del Widget Quantus en la web del cliente. Aparecerá el botón azul 'Protección de Datos & Derechos ARCO'.`
+      },
+      c7: {
+        title: "7. Inventario y Etiquetado QR de Archivadores Físicos",
+        req: "La ley exige rotular y cuidar las carpetas de papel que contengan fichas de clientes o contratos.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como ponerle una etiqueta con tu nombre y curso a tus cuadernos del colegio para que no se pierdan en el recreo.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Ve a la bodega o estantes de papel.<br>
+        2. Imprime el sticker QR de Quantus y pégalo en el lomo del archivador físico. Al escanearlo con el celular mostrará qué papeles guarda y cuándo vence.`
+      },
+      c8: {
+        title: "8. Protocolo de Destrucción Física Registrada",
+        req: "Prohibido botar papeles con datos de clientes a la basura común. Deben triturarse en confeti.",
+        toolHtml: `<div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8;">
+          <span style="font-size:12px; color:#38bdf8; font-weight:800;">🛠️ Herramienta Rápida:</span>
+          <a href="/static/Plantilla_Acta_Destruccion_Fisica_Papel_Ley21719.txt" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Acta Trituración</a>
+        </div>`,
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Si tiras un dibujo con tu nombre a la basura de la calle, cualquiera puede recogerlo. Tienes que romperlo en pedacitos chiquititos antes de botarlo.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Pasar las hojas viejas vencidas de 6 años por una máquina trituradora de papel.<br>
+        2. Descargar el Acta verde de arriba y hacerla firmar.`
+      },
+            c9: {
+        title: "9. Control de Acceso Físico a Bodegas y Ficheros",
+        req: "Poner chapa con llave en los armarios de archivos y nombrar formalmente por contrato al Custodio de Llaves.",
+        toolHtml: `<div style="margin-bottom:12px; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8; font-size:12px; color:#38bdf8;">
+          🔐 <strong>Custodio de Llaves:</strong> Se nombra oficialmente al encargado de las llaves del mueble de archivo por contrato de responsabilidad.
+        </div>`,
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como cerrarle la puerta con llave a tu pieza cuando vienen visitas a tu casa y entregarle la llave únicamente a la persona responsable nombrada por contrato.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Ponle candado o chapa con clave al mueble donde guardan los contratos.<br>
+        2. Nombrar formalmente al Custodio de Llaves (DPO, Gerente o Encargado autorizado) con su firma de responsabilidad.`
+      },
+c10: {
+        title: "10. Cifrado de Datos (HTTPS / AES-256)",
+        req: "Proteger la página web con el candado HTTPS y cifrar las bases de datos con clave secreta.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como enviar una carta guardada adentro de un cofre metálico con candado en vez de mandar una tarjeta postal transparente que todos pueden leer.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Revisa que su web empiece con <code>https://</code> y tenga el candado gris de seguridad.`
+      },
+      c11: {
+        title: "11. Protocolo de Notificación de Brechas (3 horas)",
+        req: "Si roban un computador o sufre un hackeo, la ley exige avisar al gobierno en menos de 3 horas.",
+        toolHtml: `<div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8;">
+          <span style="font-size:12px; color:#38bdf8; font-weight:800;">🛠️ Herramienta Rápida:</span>
+          <a href="/static/Plantilla_Protocolo_Notificacion_Brechas_Ciberseguridad.txt" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Protocolo Crisis 3 Horas</a>
+        </div>`,
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Si se te pierde la llave de tu casa, le avisas de inmediato a tus papás para cambiar la chapa antes de que alguien entre.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Descarga el manual de pánico verde de arriba y pégalo en la pared de la oficina de computación.`
+      },
+      c12: {
+        title: "12. Control de Accesos por Roles (RBAC)",
+        req: "Cada empleado debe ver solo lo que necesita para su trabajo y borrar las claves de ex-empleados.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        El profesor tiene la llave de la sala de profesores, pero los alumnos no. Cada persona tiene permiso solo para su espacio.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Revisa que los vendedores no puedan ver los sueldos ni las cuentas del banco de la empresa.<br>
+        2. Borra las claves de los trabajadores que fueron despedidos.`
+      },
+      c13: {
+        title: "13. Motor de Purga Inmediata tras Cancelación",
+        req: "Si un cliente dice 'no me manden más publicidad', hay que sacarlo al instante del sistema.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Si le dices a un amigo <em>'ya no quiero jugar más'</em>, tu amigo debe dejar de llamarte a jugar ese día.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Conecta el botón de desuscripción a la API Quantus para que el bot de WhatsApp deje de mandar ofertas en el segundo exacto.`
+      },
+      c14: {
+        title: "14. Bóveda de Bloqueo Legal Exclusivo (6 años SII)",
+        req: "Guardar las boletas y facturas 6 años por exigencia del SII, pero sin usarlas para vender nada.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como guardar las pruebas de tus exámenes del año pasado en un cajón cerrado: están ahí por si el profesor pregunta, pero no las usas para hacer tareas nuevas.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Mueve las facturas viejas a la carpeta <code>/boveda_legal_bloqueada/</code> y quítale el acceso al equipo de ventas.`
+      },
+      c15: {
+        title: "15. Destrucción Definitiva Automática a los 6 Años",
+        req: "Borrado permanente e irreversible de archivos digitales cumplidos los 6 años tributarios.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como usar una goma de borrar mágica que desintegra el papel de forma que nadie en el mundo pueda volver a leerlo.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Activa el programa automático <code>boveda_purger_cron.py</code> que mide las fechas y borra los archivos viejos.`
+      },
+      c16: {
+        title: "16. Consentimiento Escrito para Datos Sensibles (Art. 32°)",
+        req: "Permiso firmado en papel o digital explícito para fichas médicas, fotos de salud o huellas.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Si vas al doctor, le das permiso firmado para que revise tu cuerpo y anote qué remedio necesitas.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Si es clínica o laboratorio, haz firmar el anexo impreso de salud antes de tomar exámenes o fichas.`
+      },
+                        c17: {
+        title: "17. Datos de Niños, Niñas y Adolescentes (Art. 14° Ley 21.719)",
+        req: "El Artículo 14° exige que los datos de menores se traten siempre para su propio bien (Interés Superior). Si el niño tiene menos de 14 años, es OBLIGATORIO que los papás firmen la autorización por escrito.",
+        toolHtml: `<div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8;">
+          <span style="font-size:12px; color:#38bdf8; font-weight:800;">🛠️ Herramienta Rápida:</span>
+          <a href="/static/Plantilla_Autorizacion_Opcional_Fotos_Ninos_RedesSociales.txt" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Permiso Firmado de Apoderados (Art. 14°)</a>
+        </div>`,
+        work: `<strong>Explicación ultra fácil y detallada en 4 puntos simples:</strong><br><br>
+
+        1. <strong>¿Qué son los datos de un niño?</strong><br>
+        Son su RUT, su nombre, su certificado de nacimiento, su ficha de salud, sus notas y sus fotos o videos.<br><br>
+
+        2. <strong>Regla de los 14 años (Lo que manda la Ley):</strong><br>
+        - <strong>Menores de 14 años:</strong> La ley prohíbe usar sus datos a menos que el papá, la mamá o el apoderado legal firme una hoja de autorización express.<br>
+        - <strong>Adolescentes (14 a 17 años):</strong> Pueden opinar y dar permiso para ciertas cosas sencillas de su edad, pero si es algo delicado o sensible, igual se exige la firma de los papás.<br><br>
+
+        3. <strong>Prohibición Total de Vender o Hacer Publicidad (Art. 15°):</strong><br>
+        Queda estrictamente prohibido usar la información de los niños para enviarles anuncios comerciales, venderles productos o rastrear qué miran en internet.<br><br>
+
+        4. <strong>Pasos para auditar en un Colegio, Jardín o Club Deportivo:</strong><br>
+        - <strong>Paso 1:</strong> Revisa las fichas de matrícula o inscripción. Debe existir una hoja independiente donde el apoderado autorice por escrito el uso de los datos del alumno.<br>
+        - <strong>Paso 2:</strong> Verifica que no se vendan ni compartan las listas de alumnos con empresas externas de fotos, paseos o uniformes.<br>
+        - <strong>Paso 3:</strong> Si un papá manda un correo pidiendo borrar los datos de su hijo, la institución tiene 10 días hábiles para responder e informarle que ya se eliminaron.`
+      },
+c18: {
+        title: "18. Declaración de Nubes Extranjeras (AWS/Google - Art. 26°)",
+        req: "Avisar si la empresa guarda los datos en servidores ubicados fuera de Chile.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Si dejas tu mochila encargada en la casa de tu vecino, tienes que avisarle a tus papás en qué casa está guardada.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Escribe en su política web: <em>'Tus datos están guardados en servidores seguros de Google/AWS en Estados Unidos'</em>.`
+      },
+      c19: {
+        title: "19. Portabilidad de Datos en JSON (Art. 7° bis)",
+        req: "Permitir al cliente descargar toda su información en un archivo digital para llevárselo.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como cuando te cambias de colegio y pides tu carpeta de notas en una bolsa para entregársela al director del colegio nuevo.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Activa el botón 'Descargar Mis Datos en JSON' en la web para que el usuario descargue su archivo comprimido.`
+      },
+      c20: {
+        title: "20. Oposición a Decisiones por Algoritmos/IA (Art. 15°)",
+        req: "Derecho a exigir que una persona humana revise si un robot o IA rechazó una solicitud.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Si un juego de computador te dice <em>'Perdiste'</em> por error, tú pides que un árbitro humano venga a mirar la jugada para corregir el resultado.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Si usan robots o IA para evaluar clientes, pon un botón que diga: <em>'Solicitar que un Ejecutivo Humano revise mi caso'</em>.`
+      },
+      c21: {
+        title: "21. Transparencia de Perfilamiento Digital (Art. 14°)",
+        req: "Informar al usuario si se le rastrea la navegación web para enviarle publicidad.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como avisar con un letrero que hay un detective mirando qué juguetes te gustan en la tienda.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Activa el Banner de Cookies de Quantus que pide permiso antes de rastrear la web.`
+      },
+      c22: {
+        title: "22. Registro de Período de Gracia PyME (Art. Transitorio)",
+        req: "Las PyMEs que venden menos de $960 Millones CLP tienen 1 año de acompañamiento sin multas de dinero.",
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Es como cuando juegas un juego nuevo y la primera partida es 'de prueba' sin perder puntos para que aprendas las reglas.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Revisa el F29 del SII. Si vende menos de $960.000.000 CLP al año, emite el Certificado PyME Quantus.`
+      },
+      c23: {
+        title: "23. Protección de Datos de Trabajadores y Anexo RRHH",
+        req: "Proteger las liquidaciones de sueldo y hacer firmar anexo laboral a los empleados.",
+        toolHtml: `<div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8;">
+          <span style="font-size:12px; color:#38bdf8; font-weight:800;">🛠️ Herramienta Rápida:</span>
+          <a href="/static/Plantilla_Anexo_Contrato_Trabajo_Proteccion_Datos_Ley21719.txt" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Anexo Trabajo RRHH</a>
+        </div>`,
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Los sueldos y fichas médicas de los trabajadores son secretos. No se pueden dejar tirados encima del escritorio del jefe.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Descarga el Anexo de Trabajo de arriba y hazlo firmar a todos los empleados de la empresa.`
+      },
+      c24: {
+        title: "24. Carteles Informativos de Cámaras y Videovigilancia",
+        req: "Obligación de instalar carteles informativos avisando que las cámaras graban rostros a clientes y trabajadores.",
+        toolHtml: `<div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; background:#0f172a; padding:10px; border-radius:8px; border:1px solid #38bdf8;">
+          <span style="font-size:12px; color:#38bdf8; font-weight:800;">🛠️ Herramienta Rápida:</span>
+          <a href="/static/Plantilla_Cartel_Oficial_Videovigilancia_Camaras.txt" download style="background:#10b981; color:#0f172a; padding:6px 12px; border-radius:8px; font-weight:800; font-size:11px; text-decoration:none;">📥 Descargar Cartel Oficial Cámaras</a>
+        </div>`,
+        work: `<strong>Explicación ultra fácil (Ejemplo):</strong><br>
+        Si pones un ojo mágico o cámara en tu puerta, tienes que poner un cartel brillante que diga: <em>'Atención, te estamos sonriendo y grabando por seguridad'</em>.<br><br>
+        <strong>Pasos para auditar en la empresa:</strong><br>
+        1. Descarga el cartel de arriba, imprímelo y pégalo en la puerta de entrada de los locales u oficinas.`
+      }
+    };
+
+    let currentCorrelativo = 1;
+    let ratItems = [];
+    let auditStore = JSON.parse(localStorage.getItem('quantus_audits_db') || '{}');
+
+    function initChecklist() {
+      const keys = Object.keys(auditStore).map(k => parseInt(k)).filter(n => !isNaN(n));
+      if (keys.length > 0) {
+        currentCorrelativo = Math.max(...keys);
+      }
+      cargarCorrelativo(currentCorrelativo);
+    }
+
+    function renderModules(checkedStates = {}) {
+      const container = document.getElementById('checklist-modules-container');
+      container.innerHTML = '';
+
+      checklistData.forEach(group => {
+        const modDiv = document.createElement('div');
+        modDiv.className = 'module-section';
+        
+        let itemsHtml = '';
+        group.items.forEach(item => {
+          const isChecked = checkedStates[item.id] ? 'checked' : '';
+          itemsHtml += `
+            <div class="check-item" onclick="toggleCheck('${item.id}')">
+              <input type="checkbox" id="${item.id}" ${isChecked} onclick="event.stopPropagation(); calcularProgreso();">
+              <div class="item-content">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <div class="item-title">${item.title}</div>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <span class="badge-prio prio-${item.prio}">${item.prio}</span>
+                    <button type="button" onclick="event.stopPropagation(); abrirGuiaTecnica('${item.id}')" style="background:rgba(56,189,248,0.15); border:1px solid #38bdf8; color:#38bdf8; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:800; cursor:pointer;">🔍 ¿Cómo Auditar?</button>
+                  </div>
+                </div>
+                <div class="item-desc">${item.desc}</div>
+              </div>
+            </div>
+          `;
+        });
+
+        modDiv.innerHTML = `
+          <div class="module-header">${group.modulo}</div>
+          <div>${itemsHtml}</div>
+        `;
+        container.appendChild(modDiv);
+      });
+
+      calcularProgreso();
+    }
+
+    function toggleCheck(id) {
+      const chk = document.getElementById(id);
+      if (chk) {
+        chk.checked = !chk.checked;
+        calcularProgreso();
+      }
+    }
+
+    function calcularProgreso() {
+      let total = 0;
+      let checked = 0;
+
+      checklistData.forEach(g => {
+        g.items.forEach(item => {
+          total++;
+          const chk = document.getElementById(item.id);
+          if (chk && chk.checked) checked++;
+        });
+      });
+
+      const pct = Math.round((checked / total) * 100);
+      document.getElementById('porcentaje-num').innerText = pct + '% COMPLETADO';
+      document.getElementById('progress-fill').style.width = pct + '%';
+      
+      autoGuardarDatos();
+    }
+
+    function abrirGuiaTecnica(id) {
+      const g = guiasTecnicas[id];
+      if (g) {
+        document.getElementById('modal-guide-title').innerText = g.title;
+        document.getElementById('modal-guide-req').innerText = g.req;
+        
+        let fullWorkHtml = (g.toolHtml || '') + '<br>' + g.work;
+        document.getElementById('modal-guide-work').innerHTML = fullWorkHtml;
+        
+        const ratSec = document.getElementById('interactive-rat-section');
+        if (id === 'c1') {
+          ratSec.style.display = 'block';
+          renderRatRecords();
+        } else {
+          ratSec.style.display = 'none';
+        }
+
+        document.getElementById('modal-item-guide').style.display = 'flex';
+      }
+    }
+
+    function cerrarModalGuia() {
+      document.getElementById('modal-item-guide').style.display = 'none';
+    }
+
+    function agregarFilaRAT() {
+      const nombre = document.getElementById('rat_nombre_lista').value;
+      const soporte = document.getElementById('rat_soporte').value;
+      const datos = document.getElementById('rat_datos').value;
+      const finalidad = document.getElementById('rat_finalidad').value;
+
+      if (!nombre) { alert('Ingresa el nombre de la lista'); return; }
+
+      ratItems.push({ nombre, soporte, datos, finalidad });
+      document.getElementById('rat_nombre_lista').value = '';
+      document.getElementById('rat_datos').value = '';
+      document.getElementById('rat_finalidad').value = '';
+      renderRatRecords();
+    }
+
+    function renderRatRecords() {
+      const listDiv = document.getElementById('rat-records-list');
+      if (ratItems.length === 0) {
+        listDiv.innerHTML = '<em style="color:#64748b;">No hay registros de listas agregados todavía.</em>';
+        return;
+      }
+      let html = '<ul style="margin:0; padding-left:16px;">';
+      ratItems.forEach((r, idx) => {
+        html += `<li><strong>${r.nombre}</strong> (${r.soporte}) - Datos: ${r.datos} | Uso: ${r.finalidad}</li>`;
+      });
+      html += '</ul>';
+      listDiv.innerHTML = html;
+    }
+
+    function descargarCertificadoOficial() {
+      const payload = {
+        empresa: document.getElementById('emp_nombre').value || 'Empresa Cliente',
+        rut: document.getElementById('emp_rut').value || 'N/A',
+        responsable: document.getElementById('emp_responsable').value || 'N/A',
+        pct: document.getElementById('porcentaje-num').innerText,
+        correlativo: currentCorrelativo
+      };
+
+      fetch('/api/generar_certificado_cumplimiento_pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': '{{ csrf_token() }}' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          const win = window.open('', '_blank');
+          win.document.write(data.certificate_html);
+          win.document.close();
+        } else {
+          alert('Error al emitir certificado: ' + data.message);
+        }
+      });
+    }
+
+    function autoGuardarDatos() {
+      const checkedStates = {};
+      checklistData.forEach(g => {
+        g.items.forEach(item => {
+          const chk = document.getElementById(item.id);
+          if (chk) checkedStates[item.id] = chk.checked;
+        });
+      });
+
+      auditStore[currentCorrelativo] = {
+        correlativo: currentCorrelativo,
+        empresa: document.getElementById('emp_nombre').value,
+        rut: document.getElementById('emp_rut').value,
+        responsable: document.getElementById('emp_responsable').value,
+        email: document.getElementById('emp_email').value,
+        phone: document.getElementById('emp_phone').value,
+        direccion: document.getElementById('emp_direccion').value,
+        rubro: document.getElementById('emp_rubro').value,
+        checks: checkedStates,
+        pct: document.getElementById('porcentaje-num').innerText,
+        fecha: new Date().toLocaleString()
+      };
+
+      localStorage.setItem('quantus_audits_db', JSON.stringify(auditStore));
+    }
+
+    function cargarCorrelativo(num) {
+      currentCorrelativo = num;
+      document.getElementById('audit_correlativo').value = `#${currentCorrelativo}`;
+      document.getElementById('correlativo-display').innerText = `CORRELATIVO #${currentCorrelativo}`;
+
+      const data = auditStore[currentCorrelativo] || {};
+      document.getElementById('emp_nombre').value = data.empresa || '';
+      document.getElementById('emp_rut').value = data.rut || '';
+      document.getElementById('emp_responsable').value = data.responsable || '';
+      document.getElementById('emp_email').value = data.email || '';
+      document.getElementById('emp_phone').value = data.phone || '';
+      document.getElementById('emp_direccion').value = data.direccion || '';
+      document.getElementById('emp_rubro').value = data.rubro || '';
+
+      renderModules(data.checks || {});
+    }
+
+    function guardarAuditoriaActual() {
+      autoGuardarDatos();
+      alert(`✅ Auditoría #${currentCorrelativo} guardada con éxito en la base de datos privada maestro.`);
+    }
+
+    function siguienteCorrelativo() {
+      autoGuardarDatos();
+      currentCorrelativo++;
+      cargarCorrelativo(currentCorrelativo);
+    }
+
+    function borrarAuditoriaActual() {
+      if (confirm(`⚠️ ¿Estás seguro de borrar la ficha de auditoría #${currentCorrelativo}?`)) {
+        delete auditStore[currentCorrelativo];
+        localStorage.setItem('quantus_audits_db', JSON.stringify(auditStore));
+        cargarCorrelativo(currentCorrelativo);
+      }
+    }
+
+    /* === LÓGICA DE TABS, ARCOP, CONSENT HUB Y RAT/DPIA (LEY 21.719) === */
+    let piiMasked = true;
+    let arcopDataCache = [];
+    let ratDataCache = [];
+
+    function switchComplianceTab(tabName) {
+      document.getElementById('panel-audit').style.display = (tabName === 'audit') ? 'block' : 'none';
+      document.getElementById('panel-arcop').style.display = (tabName === 'arcop') ? 'block' : 'none';
+      document.getElementById('panel-consents').style.display = (tabName === 'consents') ? 'block' : 'none';
+      document.getElementById('panel-rat').style.display = (tabName === 'rat') ? 'block' : 'none';
+
+      document.getElementById('tab-btn-audit').className = 'tab-btn' + (tabName === 'audit' ? ' active' : '');
+      document.getElementById('tab-btn-arcop').className = 'tab-btn' + (tabName === 'arcop' ? ' active' : '');
+      document.getElementById('tab-btn-consents').className = 'tab-btn' + (tabName === 'consents' ? ' active' : '');
+      document.getElementById('tab-btn-rat').className = 'tab-btn' + (tabName === 'rat' ? ' active' : '');
+
+      if (tabName === 'arcop') cargarSolicitudesArcop();
+      if (tabName === 'consents') cargarConsentHub();
+      if (tabName === 'rat') cargarRATOficial();
+    }
+
+    async function cargarRATOficial() {
+      const tbody = document.getElementById('rat-tbody');
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:24px;">⏳ Obteniendo RAT Oficial...</td></tr>';
+      try {
+        const res = await fetch('/api/privacy/rat');
+        const data = await res.json();
+        if (data.status === 'success') {
+          ratDataCache = data.rat || [];
+          renderRATTable(ratDataCache);
+        } else {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#ef4444; padding:24px;">Error: ${data.message}</td></tr>`;
+        }
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#ef4444; padding:24px;">Error al cargar el RAT.</td></tr>';
+      }
+    }
+
+    function renderRATTable(records) {
+      const tbody = document.getElementById('rat-tbody');
+      if (!records || records.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#94a3b8; padding:24px;">No hay actividades registradas en el RAT.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = records.map(r => `
+        <tr>
+          <td><strong style="color:#38bdf8;">${r.id}</strong></td>
+          <td>
+            <div style="font-weight:700; color:#fff;">${r.actividad}</div>
+            <div style="font-size:11px; color:#94a3b8;">${r.finalidad}</div>
+          </td>
+          <td><span style="font-size:11px; color:#cbd5e1;">${r.base_legal}</span></td>
+          <td>
+            <div style="font-size:11px; color:#38bdf8;">${r.titulares}</div>
+            <div style="font-size:10px; color:#94a3b8;">${r.datos_tratados}</div>
+          </td>
+          <td style="font-size:11px; color:#cbd5e1;">${r.destinatarios}</td>
+          <td style="font-size:11px; color:#f59e0b;">${r.retencion}</td>
+          <td style="font-size:10px; color:#6ee7b7;">${r.seguridad}</td>
+        </tr>
+      `).join('');
+    }
+
+    function exportarRATCSV() {
+      if (!ratDataCache || ratDataCache.length === 0) {
+        alert('No hay datos en el RAT para exportar.');
+        return;
+      }
+      const headers = ["ID", "Actividad", "Finalidad", "Base Legal", "Titulares", "Datos Tratados", "Destinatarios", "Plazo Retencion", "Medidas Seguridad", "Transferencia Internacional"];
+      const rows = ratDataCache.map(r => [
+        `"${r.id}"`,
+        `"${r.actividad.replace(/"/g, '""')}"`,
+        `"${r.finalidad.replace(/"/g, '""')}"`,
+        `"${r.base_legal.replace(/"/g, '""')}"`,
+        `"${r.titulares.replace(/"/g, '""')}"`,
+        `"${r.datos_tratados.replace(/"/g, '""')}"`,
+        `"${r.destinatarios.replace(/"/g, '""')}"`,
+        `"${r.retencion.replace(/"/g, '""')}"`,
+        `"${r.seguridad.replace(/"/g, '""')}"`,
+        `"${r.transferencia_int || 'No'}"`
+      ]);
+
+      const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `RAT_Oficial_Ley21719_${document.getElementById('emp_rut').value || 'Quantus'}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function imprimirRATOficial() {
+      window.print();
+    }
+
+    function abrirModalNuevoRAT() {
+      document.getElementById('modal-nuevo-rat').style.display = 'flex';
+    }
+
+    function cerrarModalNuevoRAT() {
+      document.getElementById('modal-nuevo-rat').style.display = 'none';
+    }
+
+    async function guardarNuevoRAT() {
+      const actividad = document.getElementById('nuevo-rat-actividad').value.trim();
+      const finalidad = document.getElementById('nuevo-rat-finalidad').value.trim();
+      const base_legal = document.getElementById('nuevo-rat-base').value;
+      const titulares = document.getElementById('nuevo-rat-titulares').value.trim();
+      const datos = document.getElementById('nuevo-rat-datos').value.trim();
+      const destinatarios = document.getElementById('nuevo-rat-destinatarios').value.trim();
+      const retencion = document.getElementById('nuevo-rat-retencion').value.trim();
+      const seguridad = document.getElementById('nuevo-rat-seguridad').value.trim();
+
+      if (!actividad || !finalidad || !datos) {
+        alert('Por favor completa los campos requeridos (Actividad, Finalidad y Datos).');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/privacy/rat/guardar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            actividad, finalidad, base_legal, titulares, datos_tratados: datos, destinatarios, retencion, seguridad
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert('✅ Actividad agregada al RAT Oficial.');
+          cerrarModalNuevoRAT();
+          cargarRATOficial();
+        } else {
+          alert('Error: ' + data.message);
+        }
+      } catch (err) {
+        alert('Error al guardar en el RAT');
+      }
+    }
+
+    async function generarEvaluacionDPIA(event) {
+      event.preventDefault();
+      const btn = document.getElementById('btn-dpia-submit');
+      btn.disabled = true;
+      btn.innerText = "🤖 Analizando riesgos y ponderando algoritmos...";
+
+      const dataChecks = Array.from(document.querySelectorAll('input[name="dpia_data"]:checked')).map(el => el.value);
+      const techChecks = Array.from(document.querySelectorAll('input[name="dpia_tech"]:checked')).map(el => el.value);
+
+      const payload = {
+        proyecto: document.getElementById('dpia-proyecto').value.trim(),
+        finalidad: document.getElementById('dpia-finalidad').value.trim(),
+        tipo_datos: dataChecks,
+        tecnologias: techChecks,
+        volumen: "medio"
+      };
+
+      try {
+        const res = await fetch('/api/privacy/dpia/generar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === 'success' && data.dpia) {
+          const d = data.dpia;
+          const box = document.getElementById('dpia-result-box');
+          box.style.display = 'block';
+
+          document.getElementById('dpia-res-title').innerText = `Dictamen DPIA: ${d.proyecto}`;
+          const badge = document.getElementById('dpia-res-badge');
+          badge.innerText = `${d.nivel_riesgo} (${d.score_riesgo}/100)`;
+          badge.style.color = d.color_badge;
+          badge.style.borderColor = d.color_badge;
+          badge.style.background = `${d.color_badge}22`;
+
+          document.getElementById('dpia-res-conclusion').innerText = d.conclusion;
+          document.getElementById('dpia-res-consulta').innerText = d.consulta_previa;
+
+          document.getElementById('dpia-res-mitigaciones').innerHTML = d.mitigaciones_obligatorias.map(m => `<li>${m}</li>`).join('');
+          box.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          alert('Error al generar DPIA');
+        }
+      } catch (err) {
+        alert('Error de conexión con el motor IA');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "⚡ Evaluar Riesgo y Generar Dictamen DPIA con IA";
+      }
+    }
+
+    window.onload = initChecklist;
+  </script>
+
+  <!-- Modal para Agregar Tratamiento al RAT -->
+  <div id="modal-nuevo-rat" class="custom-modal-overlay">
+    <div class="custom-modal-card">
+      <button type="button" onclick="cerrarModalNuevoRAT()" style="float:right; background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer;">&times;</button>
+      <span style="background:rgba(56,189,248,0.2); color:#38bdf8; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:800;">REGISTRO DE ACTIVIDADES (ART. 30° GDPR / LEY 21.719)</span>
+      <h3 style="font-size:18px; color:#fff; margin-top:10px; margin-bottom:12px;">Nueva Actividad de Tratamiento</h3>
+
+      <div class="form-grid" style="margin-bottom:14px;">
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Nombre de la Actividad *</label>
+          <input type="text" id="nuevo-rat-actividad" placeholder="Ej: Plataforma de E-commerce / Canal de Reclamos" required>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Finalidad Específica *</label>
+          <input type="text" id="nuevo-rat-finalidad" placeholder="Ej: Venta de productos y despacho a domicilio" required>
+        </div>
+        <div class="form-group">
+          <label>Base Legal de Licitud</label>
+          <select id="nuevo-rat-base" style="width:100%; padding:12px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:10px; font-size:13px;">
+            <option value="Art. 13° N° 1 (Consentimiento Expreso)">Art. 13° N° 1 (Consentimiento Expreso)</option>
+            <option value="Art. 13° N° 2 (Ejecución Contractual)">Art. 13° N° 2 (Ejecución Contractual)</option>
+            <option value="Art. 13° N° 3 (Obligación Legal / Tributaria)">Art. 13° N° 3 (Obligación Legal / Tributaria)</option>
+            <option value="Art. 13° N° 4 (Interés Legítimo)">Art. 13° N° 4 (Interés Legítimo)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Categoría de Titulares</label>
+          <input type="text" id="nuevo-rat-titulares" placeholder="Ej: Clientes Web, Compradores">
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Datos Personales Tratados *</label>
+          <input type="text" id="nuevo-rat-datos" placeholder="Ej: Nombre, RUT, Correo, Dirección de Despacho, Teléfono" required>
+        </div>
+        <div class="form-group">
+          <label>Destinatarios / Encargados</label>
+          <input type="text" id="nuevo-rat-destinatarios" placeholder="Ej: Empresa de Courier, Pasarela de Pago">
+        </div>
+        <div class="form-group">
+          <label>Plazo de Conservación</label>
+          <input type="text" id="nuevo-rat-retencion" placeholder="Ej: 6 años tributarios / Fin de la relación">
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Medidas de Seguridad Aplicadas</label>
+          <input type="text" id="nuevo-rat-seguridad" placeholder="Ej: Cifrado TLS, Hash SHA-256, Control por roles">
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="cerrarModalNuevoRAT()" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:10px 18px; border-radius:8px; font-weight:800; cursor:pointer;">Cancelar</button>
+        <button type="button" onclick="guardarNuevoRAT()" style="background:#10b981; color:#0f172a; border:none; padding:10px 20px; border-radius:8px; font-weight:900; cursor:pointer;">💾 Guardar en RAT Oficial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Resolver Solicitud ARCOP -->
+  <div id="modal-resolver-arcop" class="custom-modal-overlay">
+    <div class="custom-modal-card">
+      <button type="button" onclick="cerrarModalResolverArcop()" style="float:right; background:none; border:none; color:#94a3b8; font-size:24px; cursor:pointer;">&times;</button>
+      <span style="background:rgba(16,185,129,0.2); color:#10b981; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:800;">GESTIÓN OFICIAL ARCOP (LEY 21.719)</span>
+      <h3 style="font-size:18px; color:#fff; margin-top:10px; margin-bottom:6px;">Resolución de Requerimiento</h3>
+      <div style="font-size:12px; color:#94a3b8; margin-bottom:16px;">Folio: <strong id="modal-arcop-folio-display" style="color:#38bdf8;"></strong></div>
+
+      <input type="hidden" id="modal-arcop-folio">
+
+      <div style="background:#1e293b; padding:12px; border-radius:8px; margin-bottom:14px; font-size:12px; line-height:1.6;">
+        <div><strong>Titular:</strong> <span id="modal-arcop-titular">-</span></div>
+        <div><strong>Derecho Solicitado:</strong> <span id="modal-arcop-tipo" style="color:#38bdf8;">-</span></div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; margin-bottom:4px; display:block;">Dictamen / Estado de la Solicitud</label>
+        <select id="modal-arcop-estado" style="width:100%; padding:10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; font-weight:700;">
+          <option value="EN_TRAMITE">🟡 EN TRÁMITE / REQUIRIENDO ANTECEDENTES</option>
+          <option value="RESUELTA">🟢 RESUELTA / ACCIÓN EJECUTADA</option>
+          <option value="RECHAZADA_CON_FUNDAMENTO">🔴 RECHAZADA CON FUNDAMENTO LEGAL (Excepción Art. 18°)</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom:20px;">
+        <label style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; margin-bottom:4px; display:block;">Fundamento y Respuesta Oficial al Titular *</label>
+        <textarea id="modal-arcop-respuesta" style="width:100%; min-height:90px; padding:10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; font-family:inherit; font-size:12px; box-sizing:border-box;" placeholder="Describe la acción ejecutada (ej: se procedió a la purga de datos o entrega de reporte de acceso)..."></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" onclick="cerrarModalResolverArcop()" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:10px 18px; border-radius:8px; font-weight:800; cursor:pointer;">Cancelar</button>
+        <button type="button" onclick="guardarResolucionArcop()" style="background:#10b981; color:#0f172a; border:none; padding:10px 20px; border-radius:8px; font-weight:900; cursor:pointer;">💾 Registrar Resolución Oficial</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
