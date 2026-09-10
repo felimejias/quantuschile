@@ -1,0 +1,7 @@
+templates/*.bak_amontonado
+templates/*.bak_before_infra
+templates/*.bak_*.html
+app.py.bak*
+*.pyc
+__pycache__/
+data/*.db
