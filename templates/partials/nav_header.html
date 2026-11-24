@@ -5,7 +5,7 @@
       <div class="brand__symbol">
         <img src="{{ url_for('static', filename='quantus-logo-clean.png') }}" alt="Quantus Chile SpA">
       </div>
-      <div class="brand__text">
+      <div>
         <div class="brand__name">
           QUANTUS <span class="brand__name-accent">CHILE SpA</span>
         </div>
@@ -17,24 +17,13 @@
 
     <nav class="main-navigation" aria-label="Navegación principal">
       <div class="header-dropdown">
-        <span class="nav-item header-dropdown-btn">Soluciones <span class="nav-caret">▾</span></span>
+        <span class="nav-item header-dropdown-btn">Soluciones <span class="caret">▾</span></span>
         <div class="header-dropdown-menu">
-          <a href="/punto-de-venta" class="dropdown-link">
-            <span class="dropdown-link-label">
-              <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-              Punto de Venta
-            </span>
-          </a>
+          <div class="dropdown-category-title">Legal & Riesgo</div>
           <a href="/do" class="dropdown-link {% if active_module == 'do' %}active{% endif %}">
             <span class="dropdown-link-label">
               <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
               Diario Oficial
-            </span>
-          </a>
-          <a href="/licitaciones" class="dropdown-link {% if active_module == 'licitaciones' %}active{% endif %}">
-            <span class="dropdown-link-label">
-              <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
-              Mercado Público
             </span>
           </a>
           <a href="/inapi" class="dropdown-link {% if active_module == 'inapi' %}active{% endif %}">
@@ -43,16 +32,24 @@
               Marcas INAPI
             </span>
           </a>
+          <a href="/checklist-ley-21719" class="dropdown-link {% if active_module == 'ley21719' %}active{% endif %}">
+            <span class="dropdown-link-label">
+              <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+              Ley 21.719 (Privacidad)
+            </span>
+          </a>
+
+          <div class="dropdown-category-title" style="margin-top:8px;">Oportunidades Comerciales</div>
+          <a href="/licitaciones" class="dropdown-link {% if active_module == 'licitaciones' %}active{% endif %}">
+            <span class="dropdown-link-label">
+              <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+              Mercado Público
+            </span>
+          </a>
           <a href="/remates" class="dropdown-link {% if active_module == 'remates' %}active{% endif %}">
             <span class="dropdown-link-label">
               <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 12.5-8 8a2.119 2.119 0 1 1-3-3l8-8"/><path d="m16 16 6-6"/><path d="m8 8 6-6"/><path d="m9 7 8 8"/><path d="m21 11-8-8"/></svg>
               Remates Judiciales
-            </span>
-          </a>
-          <a href="/checklist-ley-21719" class="dropdown-link {% if active_module == 'ley21719' %}active{% endif %}">
-            <span class="dropdown-link-label">
-              <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-              Ley 21.719
             </span>
           </a>
           <a href="/empleos-publicos" class="dropdown-link {% if active_module == 'empleos' %}active{% endif %}">
@@ -61,17 +58,36 @@
               Empleos Públicos
             </span>
           </a>
+
+          <div class="dropdown-category-title" style="margin-top:8px;">Operación & Ventas</div>
+          <a href="/static/demos/gestion-escolar.html" class="dropdown-link"><span class="dropdown-link-label">Gestión Escolar · Demo</span></a>
+          <a href="/punto-de-venta" class="dropdown-link">
+            <span class="dropdown-link-label">
+              <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              Punto de Venta & ERP
+            </span>
+          </a>
+          <a href="/diseno-web" class="dropdown-link {% if active_module == 'diseno_web' %}active{% endif %}">
+            <span class="dropdown-link-label">
+              <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              Diseño Web & Apps
+            </span>
+            <span class="badge-pronto" style="background:rgba(2,132,199,0.15); border-color:#38bdf8; color:#0284c7;">PRO</span>
+          </a>
         </div>
       </div>
+      <a href="/diseno-web" class="nav-item nav-item--highlight {% if active_module == 'diseno_web' %}active{% endif %}">Diseño Web <span class="nav-badge-pro">PRO</span></a>
       <a href="/blog" class="nav-item {% if active_module == 'blog' %}active{% endif %}">Blog & Guías</a>
       <a href="/quienes-somos" class="nav-item {% if active_module == 'quienes_somos' %}active{% endif %}">Quiénes somos</a>
       <a href="/como-funciona" class="nav-item {% if active_module == 'como_funciona' %}active{% endif %}">Cómo trabaja Quantus</a>
       <a href="/seguridad-confianza" class="nav-item {% if active_module == 'seguridad' %}active{% endif %}">Seguridad y confianza</a>
-      <a href="/contacto" class="nav-item {% if active_module == 'contacto' %}active{% endif %}">Contacto</a>
+      <a href="mailto:contacto@quantuschile.cl" class="nav-item">Contacto</a>
     </nav>
 
     <div class="header-actions">
-      <a href="/punto-de-venta/acceso?logout=1" class="header-client-access">Acceso Clientes</a>
+      {% if active_module == 'pos' or (request and request.path and (request.path.startswith('/punto-de-venta') or request.path.startswith('/pos') or request.path.startswith('/erp'))) %}
+      <a href="/punto-de-venta/acceso?logout=1" class="header-client-access">Acceso POS / ERP</a>
+      {% endif %}
       <button type="button" class="burger-btn" aria-label="Abrir menú" aria-expanded="false" onclick="document.querySelector('.mobile-menu').classList.toggle('open'); this.setAttribute('aria-expanded', document.querySelector('.mobile-menu').classList.contains('open'));">
         <span></span><span></span><span></span>
       </button>
@@ -79,6 +95,14 @@
   </div>
 
   <div class="mobile-menu">
+    <a href="/static/demos/gestion-escolar.html" class="dropdown-link" style="color:#f1f5f9;background:rgba(56,189,248,0.12);"><span class="dropdown-link-label">Gestión Escolar · Demo</span></a>
+    <a href="/diseno-web" class="dropdown-link {% if active_module == 'diseno_web' %}active{% endif %}" style="background:rgba(2,132,199,0.06); border:1px solid rgba(56,189,248,0.2);">
+      <span class="dropdown-link-label">
+        <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Diseño Web & Apps
+      </span>
+      <span class="badge-pronto" style="background:rgba(2,132,199,0.15); border-color:#38bdf8; color:#0284c7;">PRO</span>
+    </a>
     <a href="/punto-de-venta" class="dropdown-link">
       <span class="dropdown-link-label">
         <svg class="dropdown-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
@@ -125,8 +149,10 @@
     <a href="/quienes-somos" class="nav-item {% if active_module == 'quienes_somos' %}active{% endif %}">Quiénes somos</a>
     <a href="/como-funciona" class="nav-item {% if active_module == 'como_funciona' %}active{% endif %}">Cómo trabaja Quantus</a>
     <a href="/seguridad-confianza" class="nav-item {% if active_module == 'seguridad' %}active{% endif %}">Seguridad y confianza</a>
-    <a href="/contacto" class="nav-item">Contacto</a>
-    <a href="/punto-de-venta/acceso?logout=1" class="header-client-access mobile">Acceso Clientes</a>
+    <a href="mailto:contacto@quantuschile.cl" class="nav-item">Contacto</a>
+    {% if active_module == 'pos' or (request and request.path and (request.path.startswith('/punto-de-venta') or request.path.startswith('/pos') or request.path.startswith('/erp'))) %}
+    <a href="/punto-de-venta/acceso?logout=1" class="header-client-access mobile">Acceso POS / ERP</a>
+    {% endif %}
   </div>
 </header>
 
@@ -135,55 +161,54 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(255, 255, 255, 0.96);
     border-bottom: 1px solid #e2e8f0;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
 
   .public-header__inner {
-    width: min(calc(100% - 48px), 1360px);
-    min-height: 76px;
+    width: min(calc(100% - 64px), 1320px);
+    min-height: 80px;
     margin-inline: auto;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    gap: 38px;
   }
 
   .brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     min-width: max-content;
     text-decoration: none;
-    flex-shrink: 0;
   }
 
   .brand__symbol {
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    border-radius: 14px;
     background: #06101e;
     border: 1.5px solid #0284c7;
-    box-shadow: 0 0 18px rgba(2, 132, 199, 0.45);
-    padding: 3px;
+    box-shadow: 0 0 24px rgba(2, 132, 199, 0.75), 0 0 10px rgba(56, 189, 248, 0.5);
+    padding: 4px;
   }
 
   .brand__symbol img {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    border-radius: 6px;
+    border-radius: 8px;
   }
 
   .brand__name {
-    font-size: 19px;
-    line-height: 1.1;
+    font-size: 21px;
+    line-height: 1.05;
     font-weight: 900;
     letter-spacing: 0.02em;
     color: #0f172a;
@@ -196,11 +221,11 @@
   }
 
   .brand__tagline {
-    margin-top: 2px;
-    font-size: 9px;
+    margin-top: 4px;
+    font-size: 9.5px;
     line-height: 1;
     font-weight: 800;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
     color: #0284c7;
     white-space: nowrap;
   }
@@ -208,78 +233,85 @@
   .main-navigation {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 34px;
     justify-content: center;
-    flex-grow: 1;
-    white-space: nowrap;
   }
 
   .nav-item {
-    font-size: 14px;
+    font-size: 14.5px;
     font-weight: 600;
-    color: #334155;
+    color: #0f172a;
     text-decoration: none;
-    transition: color 0.15s ease;
+    transition: color 0.2s;
     cursor: pointer;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 10px 0;
   }
 
-  .nav-item:hover, .nav-item.active {
+  .nav-item:hover {
     color: #0284c7;
   }
 
-  .nav-caret {
-    font-size: 10px;
-    opacity: 0.7;
-    transition: transform 0.2s ease;
+  .nav-item.active {
+    color: #0284c7;
+    font-weight: 800;
   }
 
-  /* Dropdown persistente: puente invisible de hover para que NUNCA se cierre antes de llegar */
-  .header-dropdown {
-    position: relative;
+  .nav-item--highlight {
     display: inline-flex;
     align-items: center;
-    padding: 10px 0;
+    gap: 6px;
   }
 
-  .header-dropdown:hover .nav-caret {
-    transform: rotate(180deg);
+  .nav-badge-pro {
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0284c7, #38bdf8);
+    color: #ffffff;
+    letter-spacing: 0.05em;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  }
+
+  .caret {
+    font-size: 10px;
+    margin-left: 3px;
+  }
+
+  .header-dropdown {
+    position: relative;
   }
 
   .header-dropdown-menu {
     display: none;
     position: absolute;
-    top: calc(100% - 4px);
+    top: 100%;
     left: 0;
     background: #ffffff;
     border: 1.5px solid #e2e8f0;
     border-radius: 14px;
-    padding: 10px;
+    padding: 12px;
     min-width: 260px;
     box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
-    z-index: 1000;
+    z-index: 10;
     flex-direction: column;
-    gap: 4px;
-  }
-
-  /* Puente invisible de hover: evita que el mouse se caiga al pasar del botón al menú */
-  .header-dropdown::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    height: 12px;
-    display: block;
+    gap: 6px;
   }
 
   .header-dropdown:hover .header-dropdown-menu,
   .header-dropdown:focus-within .header-dropdown-menu {
     display: flex;
+  }
+
+  .dropdown-category-title {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.06);
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin: 2px 0 2px;
   }
 
   .dropdown-link {
@@ -288,12 +320,12 @@
     justify-content: space-between;
     gap: 10px;
     padding: 9px 12px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 13.5px;
-    font-weight: 600;
-    color: #1e293b;
+    font-weight: 700;
+    color: #0f172a;
     text-decoration: none;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.2s, color 0.2s;
   }
 
   .dropdown-link-label {
@@ -303,8 +335,8 @@
   }
 
   .dropdown-icon-svg {
-    width: 16px;
-    height: 16px;
+    width: 17px;
+    height: 17px;
     flex-shrink: 0;
     color: #0284c7;
     stroke-width: 2;
@@ -320,11 +352,23 @@
     background: rgba(2, 132, 199, 0.12);
   }
 
+  .badge-pronto {
+    font-size: 9.5px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: rgba(245, 158, 11, 0.16);
+    border: 1.5px solid rgba(245, 158, 11, 0.4);
+    color: #d97706;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
   .header-actions {
     display: flex;
     align-items: center;
     gap: 12px;
-    flex-shrink: 0;
   }
 
   .header-client-access {
@@ -332,7 +376,7 @@
     color: #ffffff !important;
     padding: 9px 20px;
     border-radius: 999px;
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 800;
     text-decoration: none;
     transition: all 0.2s ease;
@@ -348,58 +392,90 @@
 
   .burger-btn {
     display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
     flex-direction: column;
+    justify-content: center;
     gap: 5px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid rgba(83, 195, 255, 0.3);
+    background: rgba(15, 23, 42, 0.7);
+    cursor: pointer;
+    align-items: center;
+    padding: 0;
   }
 
   .burger-btn span {
     display: block;
-    width: 22px;
+    width: 18px;
     height: 2px;
-    background: #0f172a;
     border-radius: 2px;
+    background: #55c8ff;
   }
 
   .mobile-menu {
     display: none;
-    flex-direction: column;
-    padding: 16px 24px;
-    background: #ffffff;
-    border-top: 1px solid #e2e8f0;
-    gap: 8px;
   }
 
-  .mobile-menu.open {
-    display: flex;
-  }
-
-  .header-client-access.mobile {
-    margin-top: 8px;
-    text-align: center;
-  }
-
-  @media (max-width: 1080px) {
+  @media (max-width: 1200px) {
+    .public-header__inner {
+      gap: 24px;
+    }
     .main-navigation {
-      gap: 16px;
-    }
-    .nav-item {
-      font-size: 13.5px;
+      gap: 22px;
     }
   }
 
-  @media (max-width: 960px) {
+  @media (max-width: 1024px) {
+    .public-header__inner {
+      grid-template-columns: auto auto;
+      justify-content: space-between;
+    }
     .main-navigation {
       display: none;
     }
     .burger-btn {
       display: flex;
     }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 20px 20px;
+      border-top: 1px solid rgba(83, 195, 255, 0.15);
+      background: rgba(8, 18, 39, 0.98);
+    }
+    .mobile-menu.open {
+      display: flex;
+    }
+    .mobile-menu .nav-item,
+    .mobile-menu .dropdown-link {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+  }
+
+  @media (max-width: 640px) {
     .public-header__inner {
-      width: calc(100% - 32px);
+      width: min(calc(100% - 32px), 1320px);
+      min-height: 70px;
+    }
+    .brand__symbol {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+    }
+    .brand__symbol img {
+      width: 34px !important;
+      height: 34px !important;
+    }
+    .brand__name {
+      font-size: 17px;
+    }
+    .brand__tagline {
+      font-size: 9px;
     }
   }
 </style>
