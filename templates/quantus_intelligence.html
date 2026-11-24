@@ -4,80 +4,66 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quantus Chile SpA | Inteligencia Empresarial & Monitoreo 24/7</title>
-  <meta name="description" content="Quantus combina gestión empresarial, automatización e inteligencia artificial en un solo ecosistema para pymes chilenas.">
+  <meta name="description" content="Quantus combina vigilancia del Diario Oficial, licitaciones de Mercado Público y marcas INAPI en un solo ecosistema inteligente para empresas chilenas.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.quantuschile.cl/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Quantus Chile SpA">
   <meta property="og:title" content="Quantus Chile SpA | Inteligencia Empresarial & Monitoreo 24/7">
-  <meta property="og:description" content="Vigilancia del Diario Oficial, licitaciones, marcas y automatización con IA para pymes chilenas. Observamos, analizamos y trabajamos por tu empresa las 24 horas.">
+  <meta property="og:description" content="Vigilancia del Diario Oficial, licitaciones, marcas y alertas directas a tu celular antes de que venzan los plazos legales.">
   <meta property="og:url" content="https://www.quantuschile.cl/">
   <meta property="og:image" content="https://www.quantuschile.cl/static/quantus-logo-clean.png">
   <meta property="og:locale" content="es_CL">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Quantus Chile SpA | Inteligencia Empresarial & Monitoreo 24/7">
-  <meta name="twitter:description" content="Vigilancia del Diario Oficial, licitaciones, marcas y automatización con IA para pymes chilenas.">
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='quantus-logo-clean.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306242057672839" crossorigin="anonymous"></script>
   <style>
+
     :root {
       --bg-white: #ffffff;
       --bg-slate: #f8fafc;
       --card-border: #e2e8f0;
       --cyan-bright: #0284c7;
+      --cyan-dark: #0369a1;
       --text-main: #0f172a;
       --text-muted: #64748b;
     }
 
+    * { box-sizing: border-box; }
+
     body {
       background: #ffffff !important;
-      background-color: #ffffff !important;
-      background-image: none !important;
       color: #0f172a !important;
       margin: 0;
       font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
+      overflow-x: hidden;
     }
 
-    body::before {
-      display: none !important;
+    .shell {
+      width: min(calc(100% - 48px), 1280px);
+      margin: 0 auto;
     }
 
-    main {
-      background: #ffffff !important;
-      background-color: #ffffff !important;
-      background-image: none !important;
-      color: #0f172a !important;
-    }
-
-    /* SECCIÓN PRINCIPAL SPLIT (DOBLE COLUMNA ORIGINAL) */
-    .main-landing-section {
-      padding: 40px 0 60px;
+    /* ── MINIMAL HERO SECTION ───────────────────────── */
+    .minimal-hero-section {
+      padding: 50px 0 70px;
       background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
       border-bottom: 1px solid #e2e8f0;
     }
 
-    .main-landing-shell {
-      width: min(calc(100% - 48px), 1320px);
-      margin: 0 auto;
-    }
-
-    .hero-split-grid {
+    .hero-grid {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 48px;
-      align-items: start;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 56px;
+      align-items: center;
     }
 
-    /* COLUMNA IZQUIERDA ORIGINAL */
-    .hero-left-col {
-      text-align: left;
-    }
-
-    .eyebrow-pill {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -90,11 +76,10 @@
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
-    .eyebrow-pill::before {
-      content: "";
+    .badge-dot {
       width: 7px;
       height: 7px;
       border-radius: 999px;
@@ -102,258 +87,498 @@
       box-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
     }
 
-    .hero-h1-title {
-      font-size: clamp(38px, 4.4vw, 58px);
-      line-height: 1.1;
+    .hero-title {
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: 1.12;
       font-weight: 900;
       letter-spacing: -0.035em;
       color: #0f172a;
       margin: 0 0 20px;
     }
 
-    .hero-gradient-text {
+    .hero-gradient {
       background: linear-gradient(135deg, #0284c7 0%, #2563eb 45%, #7e22ce 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       color: #0284c7;
-      font-weight: 900;
       display: inline-block;
     }
 
-    .hero-lead-paragraph {
-      font-size: 17.5px;
-      line-height: 1.55;
+    .hero-lead {
+      font-size: 17px;
+      line-height: 1.6;
       color: #475569;
-      margin: 0 0 24px;
+      margin: 0 0 28px;
       font-weight: 500;
-      max-width: 660px;
+      max-width: 620px;
     }
 
-    /* 4 PILLS RÁPIDAS ORIGINALES */
-    .quick-pills-row {
+    .hero-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 14px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 34px;
     }
 
-    .quick-pill {
+    .btn-primary {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 15px;
-      border-radius: 999px;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      color: #0284c7;
-      font-size: 13px;
-      font-weight: 750;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 12px;
+      background: #0284c7;
+      color: #ffffff;
+      font-size: 14.5px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
+      transition: all 0.2s ease;
     }
 
-    /* 4 CTAs POR DOLOR EN HERO (COMPLEMENTO NUEVO) */
-    .hero-ctas-row {
-      display: flex;
+    .btn-primary:hover {
+      background: #0369a1;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-
-    .hero-cta-btn {
-      padding: 10px 18px;
+      gap: 8px;
+      padding: 13px 24px;
       border-radius: 12px;
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
       color: #0f172a;
-      font-size: 13.5px;
+      font-size: 14.5px;
       font-weight: 800;
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
       transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    .hero-cta-btn:hover {
+    .btn-secondary:hover {
       border-color: #0284c7;
       color: #0284c7;
       background: rgba(2, 132, 199, 0.04);
       transform: translateY(-2px);
     }
 
-    /* BLOQUE DE MONITOREO INTEGRADO ORIGINAL */
-    .left-monitoring-block {
-      margin-top: 10px;
+    /* 3 Micro-Widgets Educativos Hero */
+    .hero-widgets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 24px;
     }
 
-    .monitoring-h2 {
-      font-size: clamp(26px, 3vw, 36px);
-      line-height: 1.18;
+    .hero-widget-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+      transition: all 0.2s ease;
+    }
+
+    .hero-widget-card:hover {
+      border-color: #0284c7;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.08);
+    }
+
+    .widget-tag {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+
+    .tag-amber { background: #fef3c7; color: #b45309; }
+    .tag-cyan { background: #e0f2fe; color: #0369a1; }
+    .tag-purple { background: #f3e8ff; color: #7e22ce; }
+    .tag-emerald { background: #dcfce7; color: #15803d; }
+
+    .widget-stat {
+      font-size: 18px;
       font-weight: 900;
       color: #0f172a;
-      letter-spacing: -0.025em;
-      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
     }
 
-    .monitoring-lead {
-      font-size: 15.5px;
-      line-height: 1.55;
+    .widget-desc {
+      font-size: 11.5px;
       color: #64748b;
-      margin: 0 0 28px;
-      font-weight: 500;
-    }
-
-    /* 4 BULLETS GRID ORIGINAL */
-    .bullets-4grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .bullet-card-item {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 20px 18px;
-      border: 1.5px solid #e2e8f0;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .bullet-card-item:hover {
-      border-color: #0284c7;
-      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .bullet-icon-box {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: rgba(2, 132, 199, 0.08);
-      border: 1px solid rgba(2, 132, 199, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-
-    .bullet-text-box h4 {
-      font-size: 15.5px;
-      font-weight: 800;
-      color: #0f172a;
-      margin: 0 0 6px;
-    }
-
-    .bullet-text-box p {
-      font-size: 12.5px;
       line-height: 1.45;
-      color: #64748b;
       margin: 0;
       font-weight: 500;
     }
 
-    /* BARRA CTA IZQUIERDA ORIGINAL */
-    .left-cta-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+    /* ── SECCIÓN PILARES BENTO GRID ──────────────────── */
+    .section-pillars {
+      padding: 70px 0;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section-header {
+      margin-bottom: 44px;
+    }
+
+    .text-center { text-align: center; }
+
+    .section-badge {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #0284c7;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 3.2vw, 40px);
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+      margin: 0 0 12px;
+      line-height: 1.2;
+    }
+
+    .section-lead {
+      font-size: 16px;
+      color: #64748b;
+      margin: 0 auto;
+      max-width: 680px;
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .bento-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .bento-card {
       background: #ffffff;
       border: 1.5px solid #e2e8f0;
       border-radius: 20px;
-      padding: 20px 24px;
-      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
-    }
-
-    .cta-left-content {
+      padding: 30px;
+      box-shadow: 0 6px 24px rgba(15, 23, 42, 0.03);
+      transition: all 0.25s ease;
       display: flex;
-      align-items: center;
-      gap: 16px;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    .cta-bar-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      background: rgba(2, 132, 199, 0.1);
-      border: 1.5px solid rgba(2, 132, 199, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
+    .bento-card:hover {
+      border-color: #0284c7;
+      box-shadow: 0 14px 34px rgba(2, 132, 199, 0.1);
+      transform: translateY(-3px);
     }
 
-    .cta-bar-text h5 {
-      font-size: 16px;
+    .card-icon-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      width: fit-content;
+      margin-bottom: 16px;
+    }
+
+    .icon-cyan { background: #e0f2fe; color: #0284c7; }
+    .icon-blue { background: #dbeafe; color: #1d4ed8; }
+    .icon-purple { background: #f3e8ff; color: #7e22ce; }
+    .icon-emerald { background: #dcfce7; color: #15803d; }
+
+    .card-metric {
+      font-size: 26px;
       font-weight: 900;
       color: #0f172a;
-      margin: 0 0 4px;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
     }
 
-    .cta-bar-text p {
-      font-size: 13px;
-      color: #64748b;
-      margin: 0;
+    .card-headline {
+      font-size: 18px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 10px;
+      line-height: 1.3;
+    }
+
+    .card-body {
+      font-size: 14.5px;
+      color: #475569;
+      line-height: 1.6;
+      margin: 0 0 20px;
       font-weight: 500;
+      flex-grow: 1;
     }
 
-    .btn-cta-secondary {
+    .card-footer {
+      border-top: 1px solid #f1f5f9;
+      padding-top: 16px;
+    }
+
+    .card-link {
+      color: #0284c7;
+      font-weight: 800;
+      font-size: 14px;
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 12px 22px;
-      border-radius: 12px;
+      transition: gap 0.2s ease;
+    }
+
+    .card-link:hover {
+      gap: 10px;
+      color: #0369a1;
+    }
+
+    /* ── SECCIÓN SIMULADOR INTERACTIVO ───────────────── */
+    .section-simulator {
+      padding: 70px 0;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .simulator-card {
       background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      color: #0f172a;
-      font-size: 13.5px;
+      border: 2px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 36px;
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.05);
+    }
+
+    .sim-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .sim-badge {
+      display: inline-block;
+      font-size: 11px;
       font-weight: 800;
-      text-decoration: none;
-      white-space: nowrap;
+      letter-spacing: 0.06em;
+      color: #0284c7;
+      background: rgba(2, 132, 199, 0.08);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .sim-title {
+      font-size: clamp(24px, 2.6vw, 32px);
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 8px;
+    }
+
+    .sim-lead {
+      font-size: 15px;
+      color: #64748b;
+      margin: 0 auto;
+      max-width: 620px;
+      line-height: 1.5;
+    }
+
+    .sim-selector-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .sim-tab {
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      color: #334155;
+      font-size: 13.5px;
+      font-weight: 750;
+      cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .btn-cta-secondary:hover {
+    .sim-tab:hover {
       border-color: #0284c7;
       color: #0284c7;
-      background: rgba(2, 132, 199, 0.04);
     }
 
-    /* COLUMNA DERECHA (IPHONE MOCKUP CON 5 CARDS ORIGINAL) */
-    .hero-right-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .sim-tab.active {
+      background: #0284c7;
+      border-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
 
-    .iphone-header-intro {
-      text-align: center;
-      margin-bottom: 20px;
+    .sim-results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 24px;
     }
 
-    .iphone-header-intro h3 {
-      font-size: 20px;
+    .sim-metric-box {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .metric-tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .text-amber { color: #b45309; }
+    .text-cyan { color: #0284c7; }
+    .text-purple { color: #7e22ce; }
+    .text-success { color: #16a34a; }
+    .text-danger { color: #dc2626; }
+
+    .metric-highlight {
+      font-size: 19px;
       font-weight: 900;
       color: #0f172a;
-      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      line-height: 1.3;
     }
 
-    .iphone-header-intro p {
+    .metric-desc {
       font-size: 13px;
       color: #64748b;
+      line-height: 1.5;
       margin: 0;
-      max-width: 380px;
       font-weight: 500;
     }
 
-        /* IPHONE 18 PRO MAX HARDWARE MOCKUP (TITANIUM GRADE 5 · ULTRA-THIN BEZELS) */
+    .sim-action-banner {
+      background: #f0f9ff;
+      border: 1.5px solid #bae6fd;
+      border-radius: 14px;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .banner-text {
+      font-size: 14px;
+      color: #0369a1;
+      font-weight: 600;
+    }
+
+    .btn-sim-action {
+      background: #0284c7;
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    /* ── TABLA COMPARATIVA MINIMALISTA ───────────────── */
+    .section-compare {
+      padding: 70px 0;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .compare-table-shell {
+      max-width: 900px;
+      margin: 0 auto;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(15, 23, 42, 0.03);
+    }
+
+    .clean-compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .clean-compare-table th {
+      padding: 18px 24px;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #0f172a;
+      background: #f8fafc;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .clean-compare-table td {
+      padding: 18px 24px;
+      font-size: 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #475569;
+    }
+
+    .clean-compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .col-manual {
+      background: #fff;
+    }
+
+    .col-quantus {
+      background: rgba(2, 132, 199, 0.03);
+      color: #0f172a !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .bento-grid-4 {
+        grid-template-columns: 1fr;
+      }
+      .hero-widgets-grid {
+        grid-template-columns: 1fr;
+      }
+      .sim-results-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+/* IPHONE 18 PRO MAX HARDWARE MOCKUP (TITANIUM GRADE 5 · ULTRA-THIN BEZELS) */
     .iphone-frame-wrapper {
       position: relative;
       perspective: 1200px;
@@ -1358,132 +1583,69 @@
         width: 100%;
       }
     }
+  
   </style>
 </head>
 <body>
-
   {% include "partials/nav_header.html" %}
 
   <main>
-    <!-- SECCIÓN PRINCIPAL SPLIT (HERO ORIGINAL + IPHONE MOCKUP 100% INTACTO) -->
-    <section class="main-landing-section">
-      <div class="main-landing-shell">
-        
-        <!-- GRID DOBLE COLUMNA HERO ORIGINAL -->
-        <div class="hero-split-grid">
+    <!-- ── MINIMAL HERO SECTION ───────────────────────── -->
+    <section class="minimal-hero-section">
+      <div class="shell">
+        <div class="hero-grid">
           
-          <!-- COLUMNA IZQUIERDA ORIGINAL -->
-          <div class="hero-left-col">
-            <div class="eyebrow-pill">
-              PLATAFORMA 100% CLOUD · HECHA EN CHILE
+          <!-- Left Column: High-Impact Minimalist & Educational -->
+          <div class="hero-left">
+            <div class="hero-badge">
+              <span class="badge-dot"></span>
+              <span>PLATAFORMA DE INTELIGENCIA EMPRESARIAL · CHILE 24/7</span>
             </div>
 
-            <h1 class="hero-h1-title">
-              El sistema de gestión<br>
-              <span class="hero-gradient-text">inteligente para tu negocio</span>
+            <h1 class="hero-title">
+              Inteligencia legal y de mercado,<br>
+              <span class="hero-gradient">directo a tu celular.</span>
             </h1>
 
-            <p class="hero-lead-paragraph">
-              Monitoreamos lo que importa, conectamos tu operación y te entregamos información clara para decidir mejor.
+            <p class="hero-lead">
+              Monitoreamos el Diario Oficial, licitaciones de Mercado Público y marcas INAPI en tiempo real. Alertas estratégicas en lenguaje claro para actuar antes de que expiren los plazos perentorios de la ley.
             </p>
 
-            <!-- 4 PILLS RÁPIDAS ORIGINALES -->
-            <div class="quick-pills-row">
-              <span class="quick-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><rect width="18" height="12" x="3" y="6" rx="2"/><path d="M9 14v1"/><path d="M15 14v1"/><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2v4"/><path d="M2 10v4"/><path d="M22 10v4"/></svg>
-                Agentes de IA 24/7
-              </span>
-              <span class="quick-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-                Alertas inteligentes
-              </span>
-              <span class="quick-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                Decisiones más rápidas
-              </span>
-              <span class="quick-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                Todo en una plataforma
-              </span>
+            <!-- Action Buttons -->
+            <div class="hero-actions">
+              <a href="/do" class="btn-primary">
+                <span>Activar Monitoreo en tu RUT</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="#radares" class="btn-secondary">
+                <span>Explorar los 4 Radares</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+              </a>
             </div>
 
-            <!-- CTAS DIRECTOS A SOLUCIONES ESTRATÉGICAS -->
-            <div class="hero-ctas-row">
-              <a href="/empleos-publicos" class="hero-cta-btn" style="border-color: #0284c7; background: rgba(2, 132, 199, 0.1); font-weight: 800; color: #0284c7;">Radar Empleos Públicos</a>
-              <a href="/capital-radar" class="hero-cta-btn">Capital Radar B2B</a>
-              <a href="/verificador-empresas" class="hero-cta-btn">Verificador KYB Proveedores</a>
-              <a href="/licitaciones" class="hero-cta-btn">Vendo al Estado</a>
-              <a href="/marcas" class="hero-cta-btn">Vigilancia de Marcas</a>
-              <a href="/remates" class="hero-cta-btn">Remates Judiciales</a>
-            </div>
-
-            <!-- BLOQUE DE MONITOREO INTEGRADO ORIGINAL -->
-            <div class="left-monitoring-block">
-              <h2 class="monitoring-h2">Tu empresa bajo monitoreo inteligente, todos los días.</h2>
-              <p class="monitoring-lead">
-                Quantus combina gestión, automatización y agentes de IA para detectar señales importantes antes de que se conviertan en problemas u oportunidades perdidas.
-              </p>
-
-              <!-- 4 CARDS (2x2 / 4-COL ORIGINAL) -->
-              <div class="bullets-4grid">
-                <div class="bullet-card-item">
-                  <div class="bullet-icon-box">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1"/></svg>
-                  </div>
-                  <div class="bullet-text-box">
-                    <h4>Radares que trabajan por ti</h4>
-                    <p>Diario Oficial, licitaciones, marcas, remates y eventos relevantes bajo vigilancia continua.</p>
-                  </div>
-                </div>
-
-                <div class="bullet-card-item">
-                  <div class="bullet-icon-box">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                  </div>
-                  <div class="bullet-text-box">
-                    <h4>Alertas simples, no ruido</h4>
-                    <p>Recibe avisos claros con el dato importante, la fuente y la acción sugerida.</p>
-                  </div>
-                </div>
-
-                <div class="bullet-card-item">
-                  <div class="bullet-icon-box">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-                  </div>
-                  <div class="bullet-text-box">
-                    <h4>Gestión conectada</h4>
-                    <p>Caja, stock, ventas, agenda e inventario pueden convivir en una sola plataforma.</p>
-                  </div>
-                </div>
-
-                <div class="bullet-card-item">
-                  <div class="bullet-icon-box">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                  </div>
-                  <div class="bullet-text-box">
-                    <h4>Decisiones más rápidas</h4>
-                    <p>Quantus ordena señales dispersas para que puedas actuar antes, no después.</p>
-                  </div>
-                </div>
+            <!-- 3 Micro-Widgets Educativos Puntuales -->
+            <div class="hero-widgets-grid">
+              <div class="hero-widget-card">
+                <div class="widget-tag tag-amber">⚖️ ART. 54 CPC</div>
+                <div class="widget-stat">3 Días Hábiles</div>
+                <p class="widget-desc">Las notificaciones por aviso se entienden legales a los 3 días de publicadas. Te alertamos el día 1.</p>
               </div>
 
-              <!-- BARRA CTA IZQUIERDA ORIGINAL -->
-              <div class="left-cta-bar">
-                <div class="cta-left-content">
-                  <div class="cta-bar-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
-                  </div>
-                  <div class="cta-bar-text">
-                    <h5>Empieza con un radar. Crece hacia una plataforma completa.</h5>
-                    <p>Puedes partir con módulos específicos y luego conectar gestión, alertas y operación en un solo ecosistema.</p>
-                  </div>
-                </div>
-                <a href="/como-funciona" class="btn-cta-secondary">Ver cómo trabaja Quantus →</a>
+              <div class="hero-widget-card">
+                <div class="widget-tag tag-cyan">🏛️ MERCADO PÚBLICO</div>
+                <div class="widget-stat">42% Ocultas</div>
+                <p class="widget-desc">Compras públicas descritas con sinónimos no indexados. La IA cruza todas las palabras clave.</p>
+              </div>
+
+              <div class="hero-widget-card">
+                <div class="widget-tag tag-purple">®️ INAPI</div>
+                <div class="widget-stat">30 Días Límite</div>
+                <p class="widget-desc">Ventana legal de oposición para frenar a terceros que intenten registrar marcas similares a la tuya.</p>
               </div>
             </div>
           </div>
 
-          <!-- COLUMNA DERECHA (IPHONE MOCKUP CON 5 CARDS INTACTO) -->
+          <!-- Right Column: iPhone 18 Pro Max Hardware Mockup 100% Intacto -->
           <div class="hero-right-col">
             <div class="iphone-header-intro">
               <h3>Alertas que llegan cuando importan</h3>
@@ -1522,338 +1684,168 @@
 
         </div>
 
-        <!-- BARRA DE MÉTRICAS INFERIOR ORIGINAL (3 COLUMNAS HORIZONTALES) -->
-        <div class="bottom-metrics-grid">
-          <div class="metric-card">
-            <div class="metric-icon-circle">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
-            </div>
-            <div>
-              <div class="metric-number">5</div>
-              <div class="metric-label">Rubros disponibles</div>
-              <div class="metric-sub">Comercio, Servicios, Inmobiliarias, Constructoras y más.</div>
-            </div>
-          </div>
-
-          <div class="metric-card">
-            <div class="metric-icon-circle">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
-            </div>
-            <div>
-              <div class="metric-number">100%</div>
-              <div class="metric-label">Cloud · Sin instalación</div>
-              <div class="metric-sub">Accede desde cualquier lugar. Actualizaciones automáticas.</div>
-            </div>
-          </div>
-
-          <div class="metric-card">
-            <div class="metric-icon-circle">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
-            </div>
-            <div>
-              <div class="metric-number">24/7</div>
-              <div class="metric-label">Monitoreo continuo</div>
-              <div class="metric-sub">Agentes trabajando mientras tú te enfocas en tu negocio.</div>
-            </div>
-          </div>
         </div>
-
-        <!-- WIDGET PREMIUM DIARIO OFICIAL ORIGINAL -->
-        <div class="premium-widgets-section">
-          <div class="do-square-card">
-            <img src="{{ url_for('static', filename='logo_real_diario_oficial.jpg') }}" alt="Diario Oficial" class="do-square-logo">
-            <div class="do-square-title">Radar Diario Oficial</div>
-            <p class="do-square-subtitle">Monitoreo continuo y alertas inteligentes de publicaciones societarias, citaciones y notificaciones legales por RUT.</p>
-            <a href="/do" class="btn-do-action-square">Ver Radar Diario Oficial →</a>
-          </div>
-        </div>
-
-        <!-- TICKER DE ACTIVIDAD EN VIVO (COMPLEMENTO NUEVO SOLICITADO) -->
-        <div class="live-ticker-bar">
-          <span class="live-dot"></span>
-          <span>Licitación detectada hace 3 min · Remate en RM hace 12 min · Publicación Diario Oficial hace 8 min</span>
-        </div>
-
-        <!-- TARJETAS RESUMEN DE LAS VERTICALES -->
-        <div class="verticals-wire-grid">
-          <a href="/empleos-publicos" class="vertical-wire-card" style="border-color: rgba(2, 132, 199, 0.4); background: rgba(2, 132, 199, 0.04);">
-            <div>
-              <span class="vertical-card-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-              </span>
-              <div class="vertical-card-title" style="color: #0284c7;">Empleos Públicos</div>
-              <p class="vertical-card-subtitle">Radar 24/7 · 370+ vacantes</p>
-            </div>
-          </a>
-
-          <a href="#licitaciones" class="vertical-wire-card">
-            <div>
-              <span class="vertical-card-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
-              </span>
-              <div class="vertical-card-title">Licitaciones</div>
-              <p class="vertical-card-subtitle">30-50% se te escapan buscando solo</p>
-            </div>
-          </a>
-
-          <a href="#remates" class="vertical-wire-card">
-            <div>
-              <span class="vertical-card-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="m14 13-7.5 7.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L11 10"/><path d="m16 16 6-6"/><path d="m8 8 6-6"/><path d="m9 7 8 8"/><path d="m21 11-8-8"/></svg>
-              </span>
-              <div class="vertical-card-title">Remates</div>
-              <p class="vertical-card-subtitle">Hasta 50% bajo valor de mercado</p>
-            </div>
-          </a>
-
-          <a href="#diario-oficial" class="vertical-wire-card">
-            <div>
-              <span class="vertical-card-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
-              </span>
-              <div class="vertical-card-title">Diario oficial</div>
-              <p class="vertical-card-subtitle">Plazos legales que corren igual</p>
-            </div>
-          </a>
-
-          <a href="#marcas" class="vertical-wire-card">
-            <div>
-              <span class="vertical-card-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0284c7;"><path d="m12 15 2 5 2-3 3-2-5-2z"/><path d="M12 15V3"/><path d="m19 12-7-9-7 9"/></svg>
-              </span>
-              <div class="vertical-card-title">Marcas INAPI</div>
-              <p class="vertical-card-subtitle">Ventana de oposición limitada</p>
-            </div>
-          </a>
-        </div>
-
       </div>
     </section>
 
-    <!-- SECCIÓN DESTACADA: RADAR EMPLEOS PÚBLICOS 24/7 -->
-    <section class="detail-section" style="background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%); border-bottom: 1px solid #e2e8f0;">
-      <div class="main-landing-shell">
-        <div class="detail-grid">
-          <div class="detail-copy">
-            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: rgba(2, 132, 199, 0.12); color: #0284c7; font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 12px;">
-              ⚡ NUEVO MÓDULO QUANTUS 24/7
-            </div>
-            <h2 style="font-size: 28px; font-weight: 900; color: #0f172a; margin-bottom: 14px; line-height: 1.2;">
-              No pierdas vacantes en el Estado por enterarte tarde.
-            </h2>
-            <p style="font-size: 15px; color: #475569; line-height: 1.6; margin-bottom: 20px;">
-              Las convocatorias públicas del Estado cierran en pocos días y las bases legales son densas. Nuestro radar 24/7 vigila <strong>más de 370 concursos activos</strong>, calcula tu sueldo líquido real y te avisa a tu celular apenas se abre una vacante compatible con tu CV.
-            </p>
-            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
-              <a href="/empleos-publicos" class="btn-detail-action" style="background: #0284c7; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 10px; font-weight: 800; font-size: 14px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);">
-                Explorar Radar de Empleos Públicos →
-              </a>
-            </div>
-          </div>
+    <!-- ── SECCIÓN PILARES BENTO GRID ──────────────────── -->
+    <section class="section-pillars" id="radares">
+      <div class="shell">
+        <div class="section-header text-center">
+          <div class="section-badge">COBERTURA INTEGRAL 24/7</div>
+          <h2 class="section-title">4 Radares que Trabajan por ti Mientras Gestionas tu Empresa</h2>
+          <p class="section-lead">Reemplazamos horas de búsqueda manual por inteligencia continua y alertas directas a tu celular.</p>
+        </div>
 
-          <div style="background: #ffffff; border: 2px solid #e2e8f0; border-radius: 20px; padding: 24px; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 12px;">
-              <div style="font-weight: 900; font-size: 15px; color: #0f172a;">📊 Estadísticas de Convocatorias en Vivo</div>
-              <span style="background: #ecfdf5; color: #059669; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: 6px;">370+ Activas</span>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
-              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; text-align: center;">
-                <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Sueldo Promedio</div>
-                <div style="font-size: 20px; font-weight: 900; color: #0284c7; margin-top: 4px;">$1.473.436</div>
-                <div style="font-size: 10.5px; color: #94a3b8;">CLP mensual</div>
+        <div class="bento-grid-4">
+          <!-- Card 1: Diario Oficial -->
+          <div class="bento-card">
+            <div>
+              <div class="card-icon-pill icon-cyan">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+                <span>DIARIO OFICIAL & QUIEBRAS</span>
               </div>
+              <div class="card-metric">3 Días para Oponerte</div>
+              <h3 class="card-headline">Protección Patrimonial y Notificaciones por Aviso</h3>
+              <p class="card-body">Si un acreedor, juzgado civil o laboral publica un aviso judicial, la ley asume que fuiste notificado. Te avisamos a primera hora con el extracto legal traducido y PDF adjunto para ejercer tu defensa antes de cualquier embargo.</p>
+            </div>
+            <div class="card-footer">
+              <a href="/do" class="card-link">Vigilar mi RUT en el Diario Oficial →</a>
+            </div>
+          </div>
 
-              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; text-align: center;">
-                <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase;">Sueldo Máximo</div>
-                <div style="font-size: 20px; font-weight: 900; color: #059669; margin-top: 4px;">$6.769.285</div>
-                <div style="font-size: 10.5px; color: #94a3b8;">CLP mensual</div>
+          <!-- Card 2: Mercado Público -->
+          <div class="bento-card">
+            <div>
+              <div class="card-icon-pill icon-blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                <span>MERCADO PÚBLICO & LICITACIONES</span>
               </div>
+              <div class="card-metric">$15 Billones al Año</div>
+              <h3 class="card-headline">Ventas al Estado sin Perder Concursos por Sinónimos</h3>
+              <p class="card-body">Los organismos públicos nombran los mismos servicios de formas diferentes (ej. "limpieza", "aseo", "sanitización"). Nuestro algoritmo semántico cruza tus competencias con más de 12.000 convocatorias y Compra Ágil (&lt; 30 UTM) para que cotices primero.</p>
             </div>
-
-            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 12px; font-size: 12.5px; color: #166534; font-weight: 600; line-height: 1.4;">
-              ✓ Alertas inmediatas con IA · Calculadora de renta líquida · Filtro de primer empleo.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECCIONES DE DETALLE POR VERTICAL (COMPLEMENTO NUEVO SOLICITADO) -->
-    <!-- 1. LICITACIONES -->
-    <section class="detail-section" id="licitaciones">
-      <div class="main-landing-shell">
-        <div class="detail-grid">
-          <div class="detail-copy">
-            <h2>El 30-50% de las licitaciones para tu rubro no las vas a encontrar solo.</h2>
-            <p>El Estado compra más de $15 billones al año en Mercado Público, con más de 12.000 procesos abiertos. El problema: cada organismo describe lo mismo con palabras distintas. Si buscas "aseo" te pierdes las que dicen "limpieza" o "higienización". Nosotros cruzamos todas las variantes por ti.</p>
-            <a href="/licitaciones" class="btn-detail-action">Configurar mi radar de licitaciones →</a>
-          </div>
-
-          <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:28px; box-shadow:0 12px 32px rgba(15,23,42,0.05);">
-            <div style="font-weight:900; font-size:16px; color:#0f172a; margin-bottom:14px;">🔎 Radar de Licitaciones en Tiempo Real</div>
-            <div style="margin-bottom:12px;">
-              <label style="font-size:13px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Selecciona tu Rubro Principal:</label>
-              <select id="rubro-select" aria-label="Seleccionar rubro comercial" style="width:100%; padding:10px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#0f172a;" onchange="actualizarContadorLicitaciones()">
-                <option value="18">Construcción e Infraestructura</option>
-                <option value="24" selected>Servicios de Limpieza y Aseo</option>
-                <option value="12">Tecnología e Informática</option>
-                <option value="15">Transporte y Logística</option>
-                <option value="20">Seguridad Privada y Vigilancia</option>
-              </select>
-            </div>
-            <div style="margin-bottom:14px;">
-              <label style="font-size:13px; font-weight:700; color:#475569; display:block; margin-bottom:4px;">Región de Cobertura:</label>
-              <select id="region-select" aria-label="Seleccionar región de cobertura" style="width:100%; padding:10px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#0f172a;" onchange="actualizarContadorLicitaciones()">
-                <option value="RM" selected>Región Metropolitana</option>
-                <option value="VI">O'Higgins (6ª Región)</option>
-                <option value="V">Valparaíso (5ª Región)</option>
-                <option value="VIII">Bío Bío (8ª Región)</option>
-                <option value="TODAS">Todo Chile</option>
-              </select>
-            </div>
-            <div id="licitaciones-resultado" style="padding:14px; border-radius:12px; background:rgba(2,132,199,0.08); border:1.5px solid rgba(2,132,199,0.25); color:#0284c7; font-weight:800; font-size:14px; text-align:center;">
-              ⚡ 24 licitaciones activas ahora mismo calzan contigo
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. REMATES JUDICIALES -->
-    <section class="detail-section alt" id="remates">
-      <div class="main-landing-shell">
-        <div class="detail-grid">
-          <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:28px; box-shadow:0 12px 30px rgba(15,23,42,0.04);">
-            <div style="color:#16a34a; font-weight:900; font-size:12px; text-transform:uppercase; margin-bottom:8px;">ALERTA DE REMATE PÚBLICO</div>
-            <h3 style="font-size:20px; font-weight:900; color:#0f172a; margin:0 0 10px;">Inmueble Comercial en Santiago Centro</h3>
-            <p style="font-size:13.5px; color:#64748b; margin:0 0 12px;">Avalúo Comercial: $180.000.000 · Mínimo de Subasta: $92.000.000 (51% DSCTO)</p>
-            <div style="background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; padding:10px; border-radius:10px; font-size:12px; font-weight:700;">
-              ✓ Aviso legal detectado hoy con margen de postura previa.
+            <div class="card-footer">
+              <a href="/licitaciones" class="card-link">Configurar Radar de Licitaciones →</a>
             </div>
           </div>
 
-          <div class="detail-copy">
-            <h2>Un remate puede publicarse el mismo día de la subasta. Si te enteraste tarde, ya perdiste.</h2>
-            <p>Los remates judiciales suelen partir desde dos tercios del avalúo fiscal — descuentos que a veces superan el 50% del valor de mercado. Pero el aviso legal aparece con poco margen. Te avisamos apenas se publica, no cuando ya cerró la subasta.</p>
-            <a href="/remates" class="btn-detail-action">Activar radar de remates →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. DIARIO OFICIAL -->
-    <section class="detail-section" id="diario-oficial">
-      <div class="main-landing-shell">
-        <div class="detail-grid">
-          <div class="detail-copy">
-            <h2>Citaciones, publicaciones y notificaciones legales tienen plazo. Perderlo tiene costo.</h2>
-            <p>Juntas societarias, quiebras, notificaciones — todo se publica en el Diario Oficial con plazos que corren aunque no te enteres. Vigilamos tu RUT todos los días hábiles.</p>
-            <a href="/do" class="btn-detail-action">Vigilar mi RUT →</a>
-          </div>
-
-          <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:28px; box-shadow:0 12px 30px rgba(15,23,42,0.04);">
-            <div style="color:#0284c7; font-weight:900; font-size:12px; text-transform:uppercase; margin-bottom:8px;">ALERTA PREVENTIVA REGISTRO OFICIAL</div>
-            <h3 style="font-size:20px; font-weight:900; color:#0f172a; margin:0 0 10px;">Notificación por Aviso Detectada</h3>
-            <p style="font-size:13.5px; color:#64748b; margin:0 0 12px;">Ley entiende practicada la notificación a los 3 días de publicada (Art. 54 CPC).</p>
-            <div style="background:#f0f9ff; border:1px solid #bae6fd; color:#0369a1; padding:10px; border-radius:10px; font-size:12px; font-weight:700;">
-              ⚡ Explicación en lenguaje simple generada por la IA de Quantus.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. MARCAS INAPI -->
-    <section class="detail-section alt" id="marcas">
-      <div class="main-landing-shell">
-        <div class="detail-grid">
-          <div style="background:#ffffff; border:2px solid #e2e8f0; border-radius:20px; padding:28px; box-shadow:0 12px 30px rgba(15,23,42,0.04);">
-            <div style="color:#d97706; font-weight:900; font-size:12px; text-transform:uppercase; margin-bottom:8px;">INAPI ALERTA DE PROPIEDAD INDUSTRIAL</div>
-            <h3 style="font-size:20px; font-weight:900; color:#0f172a; margin:0 0 10px;">Solicitud de Marca Fonéticamente Similar</h3>
-            <p style="font-size:13.5px; color:#64748b; margin:0 0 12px;">Publicación en boletín oficial de propiedad industrial.</p>
-            <div style="background:#fffbeb; border:1px solid #fde68a; color:#b45309; padding:10px; border-radius:10px; font-size:12px; font-weight:700;">
-              ⚠️ Ventana de oposición abierta por 30 días hábiles.
-            </div>
-          </div>
-
-          <div class="detail-copy">
-            <h2>Si alguien registra una marca parecida a la tuya, tienes un plazo legal para oponerte. Si no te enteras, lo pierdes.</h2>
-            <p>Cada solicitud de marca se publica antes de aprobarse, con una ventana de oposición para terceros. Después de esa ventana, es tarde. Te avisamos apenas aparece algo similar a tu marca.</p>
-            <a href="/marcas" class="btn-detail-action">Proteger mi marca →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. CALCULADORA: COSTO DE NO SABER (COMPLEMENTO NUEVO SOLICITADO) -->
-    <div class="main-landing-shell">
-      <section class="calc-wire-box" id="costo-no-saber">
-        <div style="text-align:center;">
-          <span class="calc-badge">Nuevo · calculadora</span>
-          <h2 class="calc-title">¿Cuánto te está costando no saber?</h2>
-          <p class="calc-sub">Ingresa tu rubro y te mostramos lo que te perdiste en 4 semanas</p>
-
-          <div class="calc-row">
-            <select id="rubro-calc" class="calc-select-input" aria-label="Seleccionar rubro para calcular costo de no saber">
-              <option value="construccion">Construcción y Mantención de Obras</option>
-              <option value="aseo" selected>Servicios Generales, Aseo e Higienización</option>
-              <option value="tecnologia">Tecnología, Software y Consultoría IT</option>
-              <option value="salud">Insumos Médicos y Salud</option>
-              <option value="transporte">Transporte, Flotas y Logística</option>
-            </select>
-            <button type="button" class="btn-calc-submit" onclick="calcularCostoNoSaber()">Calcular</button>
-          </div>
-
-          <div id="calc-resultado-card" style="display:none; background:#ffffff; border:1.5px solid rgba(2,132,199,0.35); border-radius:20px; padding:24px; text-align:left; margin-top:28px;">
-            <h3 style="font-size:20px; color:#0284c7; font-weight:900; margin:0 0 12px;">Resumen Estimado de las Últimas 4 Semanas</h3>
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-top:14px;">
-              <div style="background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #cbd5e1;">
-                <strong style="color:#0284c7; font-size:22px; display:block;" id="calc-licitaciones">18</strong>
-                <span style="font-size:12.5px; color:#475569;">Licitaciones compatibles ($240M total)</span>
+          <!-- Card 3: Custodia Marcas INAPI -->
+          <div class="bento-card">
+            <div>
+              <div class="card-icon-pill icon-purple">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 15 2 5 2-3 3-2-5-2z"/><path d="M12 15V3"/><path d="m19 12-7-9-7 9"/></svg>
+                <span>PROPIEDAD INDUSTRIAL INAPI</span>
               </div>
-              <div style="background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #cbd5e1;">
-                <strong style="color:#d97706; font-size:22px; display:block;" id="calc-marcas">4</strong>
-                <span style="font-size:12.5px; color:#475569;">Marcas INAPI en conflicto potencial</span>
+              <div class="card-metric">30 Días de Oposición</div>
+              <h3 class="card-headline">Blindaje de Marca y Nombres Comerciales</h3>
+              <p class="card-body">Cada miércoles el Diario Oficial publica solicitudes de marcas en trámite. Si un tercero intenta registrar un nombre fonéticamente parecido al tuyo en tu misma clase, tienes una ventana legal única de 30 días para frenarlo antes del registro definitivo.</p>
+            </div>
+            <div class="card-footer">
+              <a href="/marcas" class="card-link">Proteger mi Marca Comercial →</a>
+            </div>
+          </div>
+
+          <!-- Card 4: Radar Empleos Públicos -->
+          <div class="bento-card">
+            <div>
+              <div class="card-icon-pill icon-emerald">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                <span>EMPLEOS PÚBLICOS 24/7</span>
               </div>
-              <div style="background:#f8fafc; padding:14px; border-radius:12px; border:1px solid #cbd5e1;">
-                <strong style="color:#dc2626; font-size:22px; display:block;" id="calc-publicaciones">3</strong>
-                <span style="font-size:12.5px; color:#475569;">Publicaciones legales en Diario Oficial</span>
-              </div>
+              <div class="card-metric">370+ Concursos Activos</div>
+              <h3 class="card-headline">Vacantes del Estado con Calce Curricular IA</h3>
+              <p class="card-body">Monitoreo 24/7 de empleos públicos de alta renta en ministerios, municipalidades y hospitales. Calculamos tu sueldo líquido real y evaluamos con IA si tu experiencia y títulos cumplen con las bases del concurso antes de que cierre el plazo.</p>
+            </div>
+            <div class="card-footer">
+              <a href="/empleos-publicos" class="card-link">Explorar Convocatorias del Estado →</a>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
 
-    <!-- 6. TABLA COMPARATIVA BUSCAR MANUAL VS CON QUANTUS (COMPLEMENTO NUEVO SOLICITADO) -->
-    <section class="compare-table-section">
-      <div class="main-landing-shell">
-        <h2 class="table-title">Buscar manual vs. Con Quantus</h2>
-        <div class="compare-table-wrapper">
-          <table class="compare-table">
+    <!-- ── SECCIÓN SIMULADOR INTERACTIVO ───────────────── -->
+    <section class="section-simulator" id="simulador">
+      <div class="shell">
+        <div class="simulator-card">
+          <div class="sim-header">
+            <span class="sim-badge">WIDGET EDUCATIVO INTERACTIVO</span>
+            <h2 class="sim-title">¿Qué impacto tiene el monitoreo en tu rubro?</h2>
+            <p class="sim-lead">Selecciona tu actividad comercial para visualizar el riesgo legal evitado y las oportunidades de contratación detectadas en las últimas 4 semanas.</p>
+          </div>
+
+          <div class="sim-selector-row">
+            <button type="button" class="sim-tab active" onclick="setSimRubro('construccion', this)">🏗️ Construcción & Obras</button>
+            <button type="button" class="sim-tab" onclick="setSimRubro('aseo', this)">🧹 Servicios & Aseo</button>
+            <button type="button" class="sim-tab" onclick="setSimRubro('tecnologia', this)">💻 Software & IT</button>
+            <button type="button" class="sim-tab" onclick="setSimRubro('salud', this)">🏥 Insumos Médicos & Salud</button>
+            <button type="button" class="sim-tab" onclick="setSimRubro('transporte', this)">🚚 Transporte & Flotas</button>
+          </div>
+
+          <div class="sim-results-grid">
+            <div class="sim-metric-box">
+              <span class="metric-tag text-amber">⚖️ RIESGO LEGAL FRECUENTE</span>
+              <div class="metric-highlight" id="simRiesgoVal">Notificación Judicial por Aviso</div>
+              <p class="metric-desc" id="simRiesgoDesc">3 días para comparecencia tras publicación en Diario Oficial antes de declaración de rebeldía.</p>
+            </div>
+
+            <div class="sim-metric-box">
+              <span class="metric-tag text-cyan">🏛️ OPORTUNIDAD EN LICITACIONES</span>
+              <div class="metric-highlight" id="simLicVal">28 Concursos ($340M CLP)</div>
+              <p class="metric-desc" id="simLicDesc">Licitaciones de conservación y obras públicas vigentes con cierre en los próximos 7 días.</p>
+            </div>
+
+            <div class="sim-metric-box">
+              <span class="metric-tag text-purple">®️ CUSTODIA DE MARCA</span>
+              <div class="metric-highlight" id="simMarcaVal">5 Conflictos Detectados</div>
+              <p class="metric-desc" id="simMarcaDesc">Marcas fonéticamente similares publicadas en la misma clase comercial con plazo de oposición abierto.</p>
+            </div>
+          </div>
+
+          <div class="sim-action-banner">
+            <div class="banner-text">
+              <strong>Protege tu empresa hoy mismo.</strong> Configura tu RUT y recibe alertas inmediatas.
+            </div>
+            <a href="/do" class="btn-primary" id="simBtnAction" style="padding: 10px 22px; font-size: 13.5px;">Activar Radar para este Rubro →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TABLA COMPARATIVA MINIMALISTA ───────────────── -->
+    <section class="section-compare">
+      <div class="shell">
+        <div class="section-header text-center">
+          <div class="section-badge">EFICIENCIA OPERATIVA</div>
+          <h2 class="section-title">Buscar Manualmente vs. Con Quantus</h2>
+          <p class="section-lead">La diferencia entre enterarse cuando ya venció el plazo o actuar el primer día.</p>
+        </div>
+
+        <div class="compare-table-shell">
+          <table class="clean-compare-table">
             <thead>
               <tr>
-                <th>Criterio de Vigilancia</th>
-                <th style="text-align:center;">Buscar manual</th>
-                <th class="highlight-col" style="text-align:center;">Con Quantus</th>
+                <th>Capacidad Operativa</th>
+                <th class="col-manual">Buscar Manualmente</th>
+                <th class="col-quantus">Con Quantus 24/7</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>Revisar 4 portales al día</strong></td>
-                <td style="text-align:center; color:#dc2626; font-size:16px;">✓ (manual pesado)</td>
-                <td style="text-align:center; color:#0284c7; font-weight:900;">Automático 24/7</td>
+                <td><strong>Tiempo dedicado al día</strong></td>
+                <td class="col-manual">2 a 3 horas revisando 4 portales dispersos</td>
+                <td class="col-quantus"><strong>0 horas</strong> (Alertas directo a tu celular)</td>
               </tr>
               <tr>
-                <td><strong>Detecta sinónimos y variantes</strong></td>
-                <td style="text-align:center; color:#dc2626; font-size:16px;">no</td>
-                <td style="text-align:center; color:#16a34a; font-weight:900; font-size:18px;">✓</td>
+                <td><strong>Detección de sinónimos</strong></td>
+                <td class="col-manual text-danger">❌ Solo coincidencias exactas de texto</td>
+                <td class="col-quantus text-success"><strong>✓ Cruce semántico con IA</strong> (Detecta variantes)</td>
               </tr>
               <tr>
-                <td><strong>Alerta al celular en minutos</strong></td>
-                <td style="text-align:center; color:#dc2626; font-size:16px;">no</td>
-                <td style="text-align:center; color:#16a34a; font-weight:900; font-size:18px;">✓</td>
+                <td><strong>Respuesta ante plazos legales</strong></td>
+                <td class="col-manual text-danger">❌ Te enteras cuando la cuenta está embargada</td>
+                <td class="col-quantus text-success"><strong>✓ Alerta el día 1 de publicación</strong> con PDF y extracto</td>
               </tr>
             </tbody>
           </table>
@@ -1861,40 +1853,95 @@
       </div>
     </section>
 
-    <!-- SECCIÓN FORMULARIO SUSCRIPCIÓN NEWSLETTER ORIGINAL -->
-    <div style="width: min(calc(100% - 48px), 1320px); margin: 0 auto;">
-      <div class="newsletter-section">
-        <div class="newsletter-shell">
-          <h3>Suscríbete para informaciones &amp; alertas</h3>
-          <p>Ingresa tu nombre y correo para recibir en tu bandeja novedades sobre licitaciones, publicaciones oficiales, marcas y actualizaciones operativas para tu negocio.</p>
-          
-          <form id="subscribeForm" class="newsletter-form" onsubmit="handleSubscribe(event)">
-            <input type="text" id="subNombre" name="nombre" class="newsletter-input" placeholder="Tu nombre o empresa" required>
-            <input type="email" id="subCorreo" name="correo" class="newsletter-input" placeholder="tu.correo@empresa.cl" required>
-            <button type="submit" class="btn-subscribe">Suscribirme gratis →</button>
-          </form>
-
-          <div id="subFeedback" class="subscription-feedback"></div>
-          <p class="newsletter-privacy-note">Respetamos tu privacidad. Cumplimiento Ley 21.719. Cancela cuando quieras.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECCIÓN GUÍAS RELACIONADAS -->
-    <div class="main-landing-shell" style="margin-top: 30px; margin-bottom: 20px;">
+    <!-- ── NEWSLETTER & BLOG ────────────────────────────── -->
+    <div class="shell" style="padding: 40px 0;">
       <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; padding:24px 28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 4px 16px rgba(15,23,42,0.03);">
         <div>
-          <strong style="color:#0f172a; font-size:15px; display:block; margin-bottom:4px;">📖 Blog & Centro de Recursos Estratégicos</strong>
-          <span style="color:#64748b; font-size:13.5px;">Accede a nuestras 12 guías sobre Diario Oficial, Mercado Público, Ley 21.719, Remates e INAPI.</span>
+          <strong style="color:#0f172a; font-size:15px; display:block; margin-bottom:4px;">📖 Centro de Recursos &amp; Guías Legales</strong>
+          <span style="color:#64748b; font-size:13.5px;">Accede a nuestras guías sobre Diario Oficial, Mercado Público, Ley 21.719 e INAPI.</span>
         </div>
         <div>
-          <a href="/blog" style="color:#0284c7; font-weight:700; font-size:13.5px; text-decoration:underline;">Ver todas las guías del Blog →</a>
+          <a href="/blog" style="color:#0284c7; font-weight:800; font-size:14px; text-decoration:none;">Ver todas las guías del Blog →</a>
         </div>
       </div>
     </div>
   </main>
 
   {% include "partials/legal_footer.html" %}
+
+  <script>
+    const simData = {
+      construccion: {
+        riesgo: 'Notificación Judicial por Aviso',
+        riesgoDesc: '3 días para comparecencia tras publicación en Diario Oficial antes de declaración de rebeldía.',
+        lic: '28 Concursos ($340M CLP)',
+        licDesc: 'Licitaciones de conservación y obras públicas vigentes con cierre en los próximos 7 días.',
+        marca: '5 Conflictos Detectados',
+        marcaDesc: 'Marcas fonéticamente similares publicadas en la misma clase comercial con plazo de oposición abierto.',
+        url: '/licitaciones'
+      },
+      aseo: {
+        riesgo: 'Resolución de Sanción Sanitaria',
+        riesgoDesc: 'Publicaciones del SEREMI en Diario Oficial con plazos de descargos de 5 días hábiles.',
+        lic: '34 Concursos ($185M CLP)',
+        licDesc: 'Compras Ágiles y licitaciones de aseo, higienización y manejo de residuos activos hoy.',
+        marca: '3 Conflictos Detectados',
+        marcaDesc: 'Solicitudes en Clase 37 con fonética idéntica bajo ventana de oposición de 30 días.',
+        url: '/licitaciones'
+      },
+      tecnologia: {
+        riesgo: 'Infracción Ley 21.719 (Datos)',
+        riesgoDesc: 'Notificaciones sobre denuncias ARCOP y transferencias internacionales de bases de datos.',
+        lic: '22 Concursos ($420M CLP)',
+        licDesc: 'Desarrollo de software, soporte y licencias en Mercado Público y Convenio Marco.',
+        marca: '8 Conflictos Detectados',
+        marcaDesc: 'Clase 42 y 9 con alto volumen de solicitudes de nombres tecnológicos similares.',
+        url: '/marcas'
+      },
+      salud: {
+        riesgo: 'Alerta ISP en Diario Oficial',
+        riesgoDesc: 'Resoluciones de registro sanitario y decomisos publicados con vigencia inmediata.',
+        lic: '41 Concursos ($560M CLP)',
+        licDesc: 'Adquisiciones de insumos clínicos para hospitales y municipalidades con plazo abierto.',
+        marca: '4 Conflictos Detectados',
+        marcaDesc: 'Marcas de dispositivos médicos en Clase 5 y 10 observadas en el boletín INAPI.',
+        url: '/licitaciones'
+      },
+      transporte: {
+        riesgo: 'Citación MTT / Multas Registro',
+        riesgoDesc: 'Notificaciones sobre concesiones de transporte público y revisiones de cartolas.',
+        lic: '19 Concursos ($210M CLP)',
+        licDesc: 'Servicios de traslado de personal, arriendo de furgones y distribución regional.',
+        marca: '2 Conflictos Detectados',
+        marcaDesc: 'Clase 39 de logística y fletes monitoreada contra duplicidad de nombres.',
+        url: '/do'
+      }
+    };
+
+    function setSimRubro(key, btn) {
+      document.querySelectorAll('.sim-tab').forEach(t => t.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const d = simData[key];
+      if (!d) return;
+
+      const rVal = document.getElementById('simRiesgoVal');
+      const rDesc = document.getElementById('simRiesgoDesc');
+      const lVal = document.getElementById('simLicVal');
+      const lDesc = document.getElementById('simLicDesc');
+      const mVal = document.getElementById('simMarcaVal');
+      const mDesc = document.getElementById('simMarcaDesc');
+      const bAction = document.getElementById('simBtnAction');
+
+      if (rVal) rVal.textContent = d.riesgo;
+      if (rDesc) rDesc.textContent = d.riesgoDesc;
+      if (lVal) lVal.textContent = d.lic;
+      if (lDesc) lDesc.textContent = d.licDesc;
+      if (mVal) mVal.textContent = d.marca;
+      if (mDesc) mDesc.textContent = d.marcaDesc;
+      if (bAction) bAction.href = d.url;
+    }
+  </script>
 
   <script>
     function actualizarContadorLicitaciones() {
@@ -2164,6 +2211,5 @@
     setInterval(pushNotif, 3800);
   })();
   </script>
-
 </body>
 </html>
