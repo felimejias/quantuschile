@@ -1,0 +1,162 @@
+{
+  "direct": {
+    "oracle": [
+      {
+        "path": "/preator/da/login",
+        "status": 200,
+        "size": 10256,
+        "sha256": "b972f999fcd4a4c4d767a4fce044ee4c593c0164e3fdfb7f93744f750e4c0604",
+        "login": true
+      },
+      {
+        "path": "/preator/static/glassy-v1/login.css?v=3",
+        "status": 200,
+        "size": 21693,
+        "sha256": "4650465ff954756b923fcd18be322f35ceca6a5fd21aab7c05e8f10de0430452",
+        "login": false
+      },
+      {
+        "path": "/preator/static/glassy-v1/preator_logo_dark_nobg.png",
+        "status": 200,
+        "size": 81502,
+        "sha256": "5dde8ae2775965bb743cd5cc106280890ed31db8f12f45b66483324835094272",
+        "login": false
+      },
+      {
+        "path": "/",
+        "status": 200,
+        "size": 93232,
+        "sha256": "094ccd2b3a581fedaa8963a363720cb7f499b240edf04db49da804a3673e4d2f",
+        "login": false
+      },
+      {
+        "path": "/app",
+        "status": 200,
+        "size": 1921,
+        "sha256": "0ad95f8b3c30f59384b5a1737f2b379559857d4d8df437b3385dadd853f9ff02",
+        "login": false
+      }
+    ],
+    "azure": [
+      {
+        "path": "/preator/da/login",
+        "status": 200,
+        "size": 10256,
+        "sha256": "b972f999fcd4a4c4d767a4fce044ee4c593c0164e3fdfb7f93744f750e4c0604",
+        "login": true
+      },
+      {
+        "path": "/preator/static/glassy-v1/login.css?v=3",
+        "status": 200,
+        "size": 21693,
+        "sha256": "4650465ff954756b923fcd18be322f35ceca6a5fd21aab7c05e8f10de0430452",
+        "login": false
+      },
+      {
+        "path": "/preator/static/glassy-v1/preator_logo_dark_nobg.png",
+        "status": 200,
+        "size": 81502,
+        "sha256": "5dde8ae2775965bb743cd5cc106280890ed31db8f12f45b66483324835094272",
+        "login": false
+      },
+      {
+        "path": "/",
+        "status": 200,
+        "size": 93230,
+        "sha256": "8799e29341b22b3e1d253d0e25cdaf1c9c3c80ba400d40203493230099ea4526",
+        "login": false
+      },
+      {
+        "path": "/app",
+        "status": 200,
+        "size": 1921,
+        "sha256": "0ad95f8b3c30f59384b5a1737f2b379559857d4d8df437b3385dadd853f9ff02",
+        "login": false
+      }
+    ],
+    "gateway": [
+      {
+        "path": "/preator/da/login",
+        "status": 200,
+        "size": 10256,
+        "sha256": "b972f999fcd4a4c4d767a4fce044ee4c593c0164e3fdfb7f93744f750e4c0604",
+        "login": true
+      },
+      {
+        "path": "/preator/static/glassy-v1/login.css?v=3",
+        "status": 200,
+        "size": 21693,
+        "sha256": "4650465ff954756b923fcd18be322f35ceca6a5fd21aab7c05e8f10de0430452",
+        "login": false
+      },
+      {
+        "path": "/preator/static/glassy-v1/preator_logo_dark_nobg.png",
+        "status": 200,
+        "size": 81502,
+        "sha256": "5dde8ae2775965bb743cd5cc106280890ed31db8f12f45b66483324835094272",
+        "login": false
+      },
+      {
+        "path": "/",
+        "status": 200,
+        "size": 92002,
+        "sha256": "78e80928ec766525c0cd436e09370ab432ec6412ed96b9840c391285e8622e29",
+        "login": false
+      },
+      {
+        "path": "/app",
+        "status": 200,
+        "size": 1921,
+        "sha256": "0ad95f8b3c30f59384b5a1737f2b379559857d4d8df437b3385dadd853f9ff02",
+        "login": false
+      }
+    ]
+  },
+  "public": [
+    {
+      "path": "/preator/da/login",
+      "headers": [
+        "HTTP/2 200 ",
+        "cf-cache-status: DYNAMIC"
+      ]
+    },
+    {
+      "path": "/preator/da/login/",
+      "headers": [
+        "HTTP/2 302 ",
+        "location: /preator/da/login",
+        "cf-cache-status: DYNAMIC",
+        "HTTP/2 200 ",
+        "cf-cache-status: DYNAMIC"
+      ]
+    },
+    {
+      "path": "/preator/static/glassy-v1/login.css?v=3",
+      "headers": [
+        "HTTP/2 200 ",
+        "cf-cache-status: BYPASS"
+      ]
+    },
+    {
+      "path": "/preator/static/glassy-v1/preator_logo_dark_nobg.png",
+      "headers": [
+        "HTTP/2 200 ",
+        "cf-cache-status: BYPASS"
+      ]
+    },
+    {
+      "path": "/preator/static/glassy-v1/user.svg",
+      "headers": [
+        "HTTP/2 200 ",
+        "cf-cache-status: BYPASS"
+      ]
+    },
+    {
+      "path": "/preator/static/glassy-v1/eye.svg",
+      "headers": [
+        "HTTP/2 200 ",
+        "cf-cache-status: BYPASS"
+      ]
+    }
+  ]
+}

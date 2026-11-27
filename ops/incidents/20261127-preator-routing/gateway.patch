@@ -1,0 +1,87 @@
+--- quantus.before.conf
++++ quantus.candidate.conf
+@@ -266,6 +266,84 @@
+     listen [::]:80 default_server;
+     server_name www.quantuschile.cl _;
+ 
++    # ── PREATOR Plataforma Privada (proxy hardened -> Azure 100.99.23.68:8767) ──
++    location = /preator {
++        proxy_pass http://100.99.23.68:8767/;
++        proxy_http_version 1.1;
++        proxy_set_header Host www.quantuschile.cl;
++        proxy_set_header X-Forwarded-Proto https;
++        proxy_set_header CF-Connecting-IP $http_cf_connecting_ip;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++        proxy_set_header Connection "";
++        proxy_buffering off;
++    }
++    location = /preator/ {
++        proxy_pass http://100.99.23.68:8767/;
++        proxy_http_version 1.1;
++        proxy_set_header Host www.quantuschile.cl;
++        proxy_set_header X-Forwarded-Proto https;
++        proxy_set_header CF-Connecting-IP $http_cf_connecting_ip;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++        proxy_set_header Connection "";
++        proxy_buffering off;
++    }
++    location = /preator/da {
++        return 302 https://www.quantuschile.cl/preator/da/;
++    }
++
++    location ^~ /preator/da/ {
++        proxy_pass http://100.99.23.68:8767/da/;
++        proxy_http_version 1.1;
++        proxy_set_header Host www.quantuschile.cl;
++        proxy_set_header X-Forwarded-Proto https;
++        proxy_set_header CF-Connecting-IP $http_cf_connecting_ip;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++        proxy_set_header Connection "";
++        proxy_buffering off;
++        client_max_body_size 25m;
++    }
++
++    location ^~ /preator/api/ {
++        proxy_pass http://100.99.23.68:8767/api/;
++        proxy_http_version 1.1;
++        proxy_set_header Host www.quantuschile.cl;
++        proxy_set_header X-Forwarded-Proto https;
++        proxy_set_header CF-Connecting-IP $http_cf_connecting_ip;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++        proxy_set_header Connection "";
++        proxy_buffering off;
++        client_max_body_size 25m;
++    }
++
++    location ^~ /preator/static/ {
++        proxy_pass http://100.99.23.68:8767/static/;
++        proxy_http_version 1.1;
++        proxy_set_header Host www.quantuschile.cl;
++        proxy_set_header X-Forwarded-Proto https;
++        proxy_set_header CF-Connecting-IP $http_cf_connecting_ip;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++        proxy_set_header Connection "";
++    }
++
++    location ^~ /preator/word/ {
++        proxy_pass http://100.99.23.68:8767/word/;
++        proxy_http_version 1.1;
++        proxy_set_header Host www.quantuschile.cl;
++        proxy_set_header X-Forwarded-Proto https;
++        proxy_set_header CF-Connecting-IP $http_cf_connecting_ip;
++        proxy_set_header X-Real-IP $remote_addr;
++        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
++        proxy_set_header Connection "";
++    }
++
++
++
++
+     # Quantus Flota operativo: autenticacion y datos en el portal fisico.
+     location = /flota { return 308 https://www.quantuschile.cl/flota/; }
+     location ^~ /flota/ {
